@@ -30,10 +30,16 @@ set( GEOEXPLORE_COORDINATE_HEADERS
     ../src/coordinate/CoordinateBase.hpp
 )
 
+#   Utility Module
+set( GEOEXPLORE_UTILITIES_HEADERS
+    ../src/utilities/StringUtilities.hpp
+)
+
 #  Combine modules
 set( GEOEXPLORE_HEADERS
     ${GEOEXPLORE_CORE_HEADERS}
     ${GEOEXPLORE_COORDINATE_HEADERS}
+    ${GEOEXPLORE_UTILITIES_HEADERS}
 )
 
 
@@ -46,10 +52,15 @@ set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/coordinate/CoordinateBase.cpp
 )
 
+#   Utilities Module
+set( GEOEXPLORE_UTILITIES_SOURCES
+    ../src/utilities/StringUtilities.cpp
+)
 
 #   Combine Modules
 set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_COORDINATE_SOURCES}
+    ${GEOEXPLORE_UTILITIES_SOURCES}
 )
 
 #-----------------------------------------#

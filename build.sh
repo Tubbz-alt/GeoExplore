@@ -18,6 +18,7 @@ usage(){
     echo ''
     echo '    -h, --help    : Print usage instructions.'
     echo '    -m, --make    : Build GeoExplore.'
+    echo '    -t, --test    : Build and run unit tests.'
     echo '    -i, --install : Deploy GeoExplore to $PREFIX'
     echo "                    Note: PREFIX=$PREFIX"
     echo '    --headers     : Create deployable include directory.'
@@ -74,6 +75,52 @@ build_software(){
     popd
 }
 
+#----------------------------#
+#-       Test Software      -#
+#----------------------------#
+test_software(){
+    
+    #  Get the cmake file
+    CMAKE_LOCATION=$1
+
+    #  Get the build type
+    BUILD_TYPE=$2
+
+    #  Get the number of threads
+    NUM_THREADS=$3
+    
+    #  Get the build directory
+    BUILD_DIRECTORY="${BUILD_TYPE}/${4}"
+
+    #  Create the directory
+    mkdir -p ${BUILD_DIRECTORY}
+
+    #  Enter directory
+    pushd ${BUILD_DIRECTORY}
+
+    #  Run CMake
+    cmake ${CMAKE_LOCATION}
+    if [ ! "$?" = '0' ]; then
+        echo 'error: CMake encountered error. Please see output.' 1>&2;
+        exit 1
+    fi
+
+    #  Run Make
+    make -j${NUM_THREADS}
+    if [ ! "$?" = '0' ]; then
+        echo 'error: Make encountered an error. Please see output.' 1>&2;
+        exit 1
+    fi
+
+    #  Run Unit Test
+    ./geoexplore-unit-test
+    
+    #  Exit directory
+    popd
+
+
+
+}
 
 #------------------------------------------#
 #-        Copy GeoExplore Headers         -#
@@ -100,7 +147,10 @@ copy_headers(){
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
     cp src/coordinate/*.hpp  $BASE_DIR/coordinate/
-
+    
+    #  Copy Utilities Module
+    mkdir -p $BASE_DIR/utilities
+    cp src/utilities/*.hpp  $BASE_DIR/utilities/
 
 }
 
@@ -136,6 +186,7 @@ RUN_MAKE=0
 RUN_INSTALL=0
 COPY_HEADERS=0
 RUN_CLEAN=0
+RUN_TEST=0
 
 BUILD_TYPE='release'
 NUM_THREADS=1
@@ -154,6 +205,11 @@ for ARG in "$@"; do
         #   Clean GeoExplore
         '-c' | '--clean' )
             RUN_CLEAN=1
+            ;;
+
+        #   Test GeoExplore
+        '-t' | '--test' )
+            RUN_TEST=1
             ;;
 
         #   Make GeoExplore
@@ -198,7 +254,7 @@ done
 #---------------------------------------------------------#
 #-     Make sure at least one run flag was provided      -#
 #---------------------------------------------------------#
-if [ "$RUN_MAKE" = '0' -a "$RUN_INSTALL" = '0' -a "$COPY_HEADERS" = '0' -a "$RUN_CLEAN" = '0' ]; then
+if [ "$RUN_MAKE" = '0' -a "$RUN_INSTALL" = '0' -a "$COPY_HEADERS" = '0' -a "$RUN_CLEAN" = '0' -a "$RUN_TEST" = '0' ]; then
     echo 'error: At least one flag must be provided.' 1>&2
     usage
     exit 1;
@@ -226,6 +282,15 @@ fi
 #------------------------------#
 #-     Install GeoExplore     -#
 #------------------------------#
+
+
+#---------------------------#
+#-     Test GeoExplore     -#
+#---------------------------#
+if [ "$RUN_TEST" = '1' ]; then
+    test_software '../../install/test'  ${BUILD_TYPE} ${NUM_THREADS} 'test'
+fi
+
 
 #------------------------#
 #-     Copy Headers     -#

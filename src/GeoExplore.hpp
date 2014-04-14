@@ -15,6 +15,7 @@
 /// Coordinate Module
 #include <GeoExplore/coordinate/CoordinateBase.hpp>
 
-
+/// Utility Module
+#include <GeoExplore/utilities/StringUtilities.hpp>
 
 #endif
