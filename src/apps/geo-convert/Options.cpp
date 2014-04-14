@@ -26,7 +26,7 @@ void usage( const std::string& appName ){
     std::cerr << "        -i <value>   : Set the input to be converted." << std::endl;
     std::cerr << "          Input Formats" << std::endl;
     std::cerr << "            Coordinates:" << std::endl;
-    std::cerr << "              -utm:<easting>:<northing>:<altitude=0>:<projection=WGS84>" << std::endl;
+    std::cerr << "              -utm:zone:<easting>:<northing>:<altitude=0>:<projection=WGS84>" << std::endl;
     std::cerr << "              -geod-dd:<latitude>:<longitude>:<altitude=0>:<projection=WGS84>" << std::endl;
     std::cerr << "              -geod-dm:<lat,min>:<lon,min>:<altitude=0>:<projection=WGS84>" << std::endl;
     std::cerr << "              -geod-dms:<lat,min,sec>:<lon,min,sec>:<altitude=0>:<projection=WGS84>" << std::endl;

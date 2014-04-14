@@ -8,8 +8,8 @@
 #include <GeoExplore.hpp>
 
 /// Geo-Convert Libraries
-#include "CoordinateConversion.hpp"
 #include "Options.hpp"
+#include "CoordinateConversion.hpp"
 
 /// C++ Libraries
 #include <exception>
@@ -31,7 +31,7 @@ int main( int argc, char* argv[] ){
         
         /// Check our conversion type and pass it to the appropriate function
         if( options.ctype == ConversionType::COORDINATE ){
-            convert_coordinate( options );
+            convert_coordinates( options );
         }
 
 

@@ -14,12 +14,41 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x")
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../../lib )
 
+#-----------------------------------#
+#-     Find GeoExplore Library     -#
+#-----------------------------------#
+find_library( GeoExplore_LIBRARY
+                REQUIRED
+                NAMES
+                    GeoExplore
+                HINTS
+                    ${PROJECT_BINARY_DIR}/../../lib
+)
+
+#-------------------#
+#-    Find Boost   -#
+#-------------------#
+find_package( Boost 
+                COMPONENTS
+                    thread
+                    system
+                    filesystem
+                    regex
+                REQUIRED
+)
+
+#-----------------------------------#
+#-     Find C++ Thread Library     -#
+#-----------------------------------#
+find_package( Threads )
+
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
 #------------------------------------------#
 set( GEOCONVERT_HEADERS
     ../../../src/apps/geo-convert/Options.hpp
+    ../../../src/apps/geo-convert/CoordinateConversion.hpp
 )
 
 
@@ -29,6 +58,7 @@ set( GEOCONVERT_HEADERS
 set( GEOCONVERT_SOURCES
     ../../../src/apps/geo-convert/main.cpp
     ../../../src/apps/geo-convert/Options.cpp
+    ../../../src/apps/geo-convert/CoordinateConversion.cpp
 )
 
 #---------------------------------#
@@ -39,5 +69,11 @@ include_directories( "${PROJECT_BINARY_DIR}/../../include" )
 add_executable( geo-convert 
                 ${GEOCONVERT_SOURCES}
                 ${GEOCONVERT_HEADERS}
+)
+
+target_link_libraries( geo-convert
+                ${GeoExplore_LIBRARY}
+                ${CMAKE_THREAD_LIBS_INIT}
+                ${Boost_LIBRARIES}
 )
 
