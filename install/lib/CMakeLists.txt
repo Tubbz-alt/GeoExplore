@@ -28,6 +28,8 @@ set( GEOEXPLORE_CORE_HEADERS
 #   Coordinate Module
 set( GEOEXPLORE_COORDINATE_HEADERS
     ../src/coordinate/CoordinateBase.hpp
+    ../src/coordinate/CoordinateGeodetic.hpp
+    ../src/coordinate/CoordinateUTM.hpp
 )
 
 #   Utility Module

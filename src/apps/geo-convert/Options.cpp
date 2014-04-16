@@ -15,25 +15,29 @@
  */
 void usage( const std::string& appName ){
 
-    std::cerr << "usage: " << appName << "<ctype> -i <value> -o <value>" << std::endl;
+    std::cerr << "usage: " << appName << " <conversion-type> -i <value> -o <value>" << std::endl;
     std::cerr << std::endl;
     std::cerr << "    required flags: " << std::endl;
     std::cerr << std::endl;
-    std::cerr << "       -ctype : Set the conversion type." << std::endl;
-    std::cerr << "             Supported Conversion Types" << std::endl;
-    std::cerr << "             -c : Coordinate conversion" << std::endl;
+    std::cerr << "        -conversion-type : Set the conversion type." << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "            Supported Conversion Types" << std::endl;
+    std::cerr << "            -c : Coordinate conversion" << std::endl;
     std::cerr << std::endl;
     std::cerr << "        -i <value>   : Set the input to be converted." << std::endl;
-    std::cerr << "          Input Formats" << std::endl;
-    std::cerr << "            Coordinates:" << std::endl;
-    std::cerr << "              -utm:zone:<easting>:<northing>:<altitude=0>:<projection=WGS84>" << std::endl;
-    std::cerr << "              -geod-dd:<latitude>:<longitude>:<altitude=0>:<projection=WGS84>" << std::endl;
-    std::cerr << "              -geod-dm:<lat,min>:<lon,min>:<altitude=0>:<projection=WGS84>" << std::endl;
-    std::cerr << "              -geod-dms:<lat,min,sec>:<lon,min,sec>:<altitude=0>:<projection=WGS84>" << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "            Input Formats" << std::endl;
+    std::cerr << "                Coordinates:" << std::endl;
+    std::cerr << "                -utm:zone:<easting>:<northing>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
+    std::cerr << "                -geod-dd:<latitude>:<longitude>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
+    std::cerr << "                -geod-dm:<lat,min>:<lon,min>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
+    std::cerr << "                -geod-dms:<lat,min,sec>:<lon,min,sec>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
+    std::cerr << "                -mgrs:<string>:<altitude>:<projection=WGS84/EPSG:4326>" << std::endl;
     std::cerr << std::endl;
     std::cerr << "        -o <value>   : Set the desired output given the conversion type." << std::endl;
-    std::cerr << "            Coordinates:  Specify the output coordinate type." << std::endl;
-    std::cerr << "                  Supported types:   -utm, -geod-dd, -geod-dm, -geod-dms" << std::endl;
+    std::cerr << "            Output Formats" << std::endl;
+    std::cerr << "                Coordinates:  Specify the output coordinate type." << std::endl;
+    std::cerr << "                -utm, -geod-dd, -geod-dm, -geod-dms" << std::endl;
     std::cerr << std::endl;
     std::cerr << "    optional flags: " << std::endl;
     std::cerr << "        -h, --help     : Print usage instructions." << std::endl;
@@ -120,6 +124,10 @@ Options parse_command_line( int argc, char* argv[] ){
 
     }
 
+    // make sure the conversion type was specified
+    if( options.ctype == ConversionType::NONE ){
+        throw std::runtime_error("No conversion-type specified.");
+    }
 
     // return our command-line options
     return options;

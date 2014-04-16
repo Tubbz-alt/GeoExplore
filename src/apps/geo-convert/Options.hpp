@@ -14,6 +14,7 @@
  */
 enum class ConversionType{
     
+    NONE,
     COORDINATE,
 
 }; /// End of ConversionType Enumeration
@@ -24,7 +25,12 @@ enum class ConversionType{
 class Options{
 
     public:
-        
+
+        /**
+         * Default Constructor
+         */
+        Options() : ctype(ConversionType::NONE){}
+
         /// Name of the application
         std::string appName;
         

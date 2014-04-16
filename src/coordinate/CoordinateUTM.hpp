@@ -20,18 +20,53 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
     public:
         
+        /// Typedef 
+        typedef DATATYPE datatype;
+        
+        /// Pointer type
+        typedef boost::shared_ptr<CoordinateUTM<DATATYPE> > ptr_t;
+
         /**
          * Default Constructor
          */
-        Coordinate
+        CoordinateUTM() : m_easting(0), 
+                          m_northing(0), 
+                          CoordinateBase<DATATYPE>(0, CoordinateSystem::WGS84){}
 
+    /**
+     * Get the Easting
+     */
+    datatype easting()const{ return m_easting; }
+
+    /**
+     * Set the Easting
+     */
+    datatype& easting(){ return m_easting; }
+
+    /**
+     * Get the northing
+     */
+    datatype northing()const{ return m_northing; }
+
+    /**
+     * Set the northing
+     */
+    datatype& northing(){ return m_northing; }
 
     private:
 
+        /// Easting
+        datatype m_easting;
 
+        /// Northing
+        datatype m_northing;
 
 
 }; /// End of CoordinateUTM Class
+
+/// Common Typedefs
+typedef CoordinateUTM<double> CoordinateUTMDouble;
+typedef CoordinateUTM<double> CoordinateUTM_d;
 
 
 } /// End of GEO Namespace

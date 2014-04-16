@@ -9,17 +9,15 @@
 namespace GEO{
 
 /**
- * @class ProjectionType
+ * @class CoordinateSystem
  *
  * Common Geographic Projections which are supported.
  */
-enum class ProjectionType{
+enum class CoordinateSystem{
 
-    WGS84,  // EPSG: 
-
+    WGS84 = 4326,  // EPSG: 4326
 
 }; /// End of ProjectionType Class
-
 
 
 } /// End of GEO Namespace

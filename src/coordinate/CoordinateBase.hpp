@@ -9,6 +9,8 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Enumerations.hpp>
 
+/// Boost
+#include <boost/shared_ptr.hpp>
 
 namespace GEO{
 
@@ -27,59 +29,55 @@ class CoordinateBase{
         /// Typedef 
         typedef DATATYPE datatype;
 
+        /// Pointer type
+        typedef boost::shared_ptr<CoordinateBase<DATATYPE> > ptr_t;
+
         /**
          * Default Constructor
          */
-        CoordinateBase() : m_data{0,0,0}, m_projection(ProjectionType::WGS84){};
+        CoordinateBase() : m_altitude(0), m_coordinateSystem(CoordinateSystem::WGS84){};
 
         /**
-         * Parameterized Constructor
+         * Parameterized Constructor Given only the CoordinateSystem and altiutude
          */
-        CoordinateBase( const DATATYPE& x, const DATATYPE& y, const DATATYPE& z = 0, const ProjectionType projection = ProjectionType::WGS84) 
-                           : m_data{x, y, z}, m_projection(projection){}
-
+        CoordinateBase( const DATATYPE& altitude, const CoordinateSystem& coordinateSystem ) : m_altitude(altitude), m_coordinateSystem(coordinateSystem){}
 
         /**
-         * Get the X Value
+         * Get the altitude
          */
-        DATATYPE x()const{ return m_data[0]; }
+        DATATYPE altitude()const{ return m_altitude; }
 
         /**
-         * Set the X Value
+         * Set the altitude
          */
-        DATATYPE& x(){ return m_data[0]; }
+        DATATYPE& altitude(){ return m_altitude; }
+        
+        /**
+         * Get the coordinate system
+         */
+        CoordinateSystem coordinateSystem()const{ return m_coordinateSystem; }
 
         /**
-         * Get the Y Value
+         * Set the coordinate system
          */
-        DATATYPE y()const{ return m_data[1]; }
-
-        /**
-         * Set the Y Value
-         */
-        DATATYPE& y(){ return m_data[1]; }
-
-        /**
-         * Get the Z Value
-         */
-        DATATYPE z()const{ return m_data[2]; }
-
-        /**
-         * Set the Z Value
-         */
-        DATATYPE& z(){ return m_data[2]; }
+        CoordinateSystem& coordinateSystem(){ return m_coordinateSystem; }
 
 
     protected:
         
         /// Coordinate Information
-        DATATYPE m_data[3];
+        DATATYPE m_altitude;
         
         /// Projection Type
-        ProjectionType m_projection;
+        CoordinateSystem m_coordinateSystem;
         
 
 }; /// End of CoordinateBase class
+
+/// Common Typdefs
+typedef CoordinateBase<double> CoordinateBaseDouble;
+typedef CoordinateBase<double> CoordinateBase_d;
+
 
 } /// End of GEO Namespace
 

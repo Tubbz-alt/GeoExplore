@@ -11,9 +11,10 @@
 /// Core Module
 #include <GeoExplore/core/Enumerations.hpp>
 
-
 /// Coordinate Module
 #include <GeoExplore/coordinate/CoordinateBase.hpp>
+#include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
 /// Utility Module
 #include <GeoExplore/utilities/StringUtilities.hpp>
