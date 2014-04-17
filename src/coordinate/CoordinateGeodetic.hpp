@@ -36,6 +36,18 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         CoordinateGeodetic() : m_latitude(0), 
                                m_longitude(0), 
                                CoordinateBase<DATATYPE>(0, Datum::WGS84){}
+        
+        /**
+         * Parameterized Constructor
+         */
+        CoordinateGeodetic( datatype const& latitude, 
+                            datatype const& longitude,
+                            datatype const& altitude = 0,
+                            Datum const& datum = Datum::WGS84 ) : 
+                                
+                                m_latitude(latitude), 
+                                m_longitude(longitude),
+                                CoordinateBase<datatype>(altitude, datum){}
 
         /**
          * Get the latitude

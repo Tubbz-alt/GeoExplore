@@ -32,7 +32,18 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         CoordinateUTM() : m_easting(0), 
                           m_northing(0), 
                           CoordinateBase<DATATYPE>(0, Datum::WGS84){}
-
+        
+        /**
+         * Parameterized Constructor
+         */
+        CoordinateUTM( datatype const& easting, 
+                       datatype const& northing, 
+                       datatype const& altitude = 0, 
+                       Datum const& datum = Datum::WGS84 ) : 
+                                m_easting(easting),
+                                m_northing(northing),
+                                CoordinateBase<DATATYPE>(altitude, datum){}
+            
     /**
      * Get the Easting
      */
