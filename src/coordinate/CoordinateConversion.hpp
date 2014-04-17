@@ -14,9 +14,9 @@
  * Convert between coordinate systems
  */
 template<typename DATATYPE>
-CoordinateBase<DATATYPE>::ptr_t  convert_coordinate_system( CoordinateBase<DATATYPE>::ptr_t const& coordinate, CoordinateSystem const& output_coordinate_system ){
+CoordinateBase<DATATYPE>::ptr_t  convert_coordinate_system( CoordinateBase<DATATYPE>::ptr_t const& coordinate, CoordinateType const& output_coordinate_type ){
 
-
+    // 
 }
 
 

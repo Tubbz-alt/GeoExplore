@@ -31,7 +31,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
          */
         CoordinateUTM() : m_easting(0), 
                           m_northing(0), 
-                          CoordinateBase<DATATYPE>(0, CoordinateSystem::WGS84){}
+                          CoordinateBase<DATATYPE>(0, Datum::WGS84){}
 
     /**
      * Get the Easting

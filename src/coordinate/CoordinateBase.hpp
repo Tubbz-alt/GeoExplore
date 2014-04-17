@@ -35,13 +35,13 @@ class CoordinateBase{
         /**
          * Default Constructor
          */
-        CoordinateBase() : m_altitude(0), m_coordinateSystem(CoordinateSystem::WGS84){};
+        CoordinateBase() : m_altitude(0), m_datum(Datum::WGS84){};
 
         /**
-         * Parameterized Constructor Given only the CoordinateSystem and altiutude
+         * Parameterized Constructor Given only the Datum and altiutude
          */
-        CoordinateBase( const DATATYPE& altitude, const CoordinateSystem& coordinateSystem ) : m_altitude(altitude), m_coordinateSystem(coordinateSystem){}
-
+        CoordinateBase( const DATATYPE& altitude, const Datum& datum ) : m_altitude(altitude), m_datum(datum){}
+        
         /**
          * Get the altitude
          */
@@ -55,13 +55,17 @@ class CoordinateBase{
         /**
          * Get the coordinate system
          */
-        CoordinateSystem coordinateSystem()const{ return m_coordinateSystem; }
+        Datum datum()const{ return m_datum; }
 
         /**
          * Set the coordinate system
          */
-        CoordinateSystem& coordinateSystem(){ return m_coordinateSystem; }
-
+        Datum& datum(){ return m_datum; }
+        
+        /*
+         * Get the type
+         */
+        static CoordinateType type(){ return CoordinateType::Base; }
 
     protected:
         
@@ -69,7 +73,7 @@ class CoordinateBase{
         DATATYPE m_altitude;
         
         /// Projection Type
-        CoordinateSystem m_coordinateSystem;
+        Datum m_datum;
         
 
 }; /// End of CoordinateBase class

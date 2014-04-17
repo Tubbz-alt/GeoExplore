@@ -35,7 +35,7 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
          */
         CoordinateGeodetic() : m_latitude(0), 
                                m_longitude(0), 
-                               CoordinateBase<DATATYPE>(0, CoordinateSystem::WGS84){}
+                               CoordinateBase<DATATYPE>(0, Datum::WGS84){}
 
         /**
          * Get the latitude

@@ -55,6 +55,7 @@ set( UNIT_TEST_HEADERS
 set( UNIT_TEST_SOURCES
     ../../tests/cpp/googletest/src/gtest_main.cc
     ../../tests/cpp/googletest/src/gtest-all.cc
+    ../../tests/cpp/coordinate/TEST_CoordinateBase.cpp
     ../../tests/cpp/utilities/TEST_StringUtilities.cpp
 )
 

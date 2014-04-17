@@ -9,16 +9,27 @@
 namespace GEO{
 
 /**
- * @class CoordinateSystem
+ * @class Datum
  *
- * Common Geographic Projections which are supported.
+ * Common Geographic Datums which are supported.
  */
-enum class CoordinateSystem{
+enum class Datum{
 
-    WGS84 = 4326,  // EPSG: 4326
+    WGS84,
+    NAD83,
 
 }; /// End of ProjectionType Class
 
+/**
+ * @class CoordinateType
+ */
+enum class CoordinateType{
+
+    Base,
+    Geodetic,
+    UTM,
+
+}; /// End of CoordinateType
 
 } /// End of GEO Namespace
 
