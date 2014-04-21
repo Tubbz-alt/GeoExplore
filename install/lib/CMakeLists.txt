@@ -21,20 +21,20 @@ set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
 #   Core Module
 set( GEOEXPLORE_CORE_HEADERS
-    ../src/core/Enumerations.hpp
+    ../src/cpp/core/Enumerations.hpp
 )
 
 
 #   Coordinate Module
 set( GEOEXPLORE_COORDINATE_HEADERS
-    ../src/coordinate/CoordinateBase.hpp
-    ../src/coordinate/CoordinateGeodetic.hpp
-    ../src/coordinate/CoordinateUTM.hpp
+    ../src/cpp/coordinate/CoordinateBase.hpp
+    ../src/cpp/coordinate/CoordinateGeodetic.hpp
+    ../src/cpp/coordinate/CoordinateUTM.hpp
 )
 
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
-    ../src/utilities/StringUtilities.hpp
+    ../src/cpp/utilities/StringUtilities.hpp
 )
 
 #  Combine modules
@@ -51,12 +51,12 @@ set( GEOEXPLORE_HEADERS
 
 #    Coordinate Module
 set( GEOEXPLORE_COORDINATE_SOURCES
-    ../src/coordinate/CoordinateBase.cpp
+    ../src/cpp/coordinate/CoordinateBase.cpp
 )
 
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
-    ../src/utilities/StringUtilities.cpp
+    ../src/cpp/utilities/StringUtilities.cpp
 )
 
 #   Combine Modules

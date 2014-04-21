@@ -47,8 +47,8 @@ find_package( Threads )
 #-      Define Required Header Files      -#
 #------------------------------------------#
 set( GEOCONVERT_HEADERS
-    ../../../src/apps/geo-convert/Options.hpp
-    ../../../src/apps/geo-convert/CoordinateConversion.hpp
+    ../../../src/cpp/apps/geo-convert/Options.hpp
+    ../../../src/cpp/apps/geo-convert/CoordinateConversion.hpp
 )
 
 
@@ -56,9 +56,9 @@ set( GEOCONVERT_HEADERS
 #-      Define Required Source Files      -#
 #------------------------------------------#
 set( GEOCONVERT_SOURCES
-    ../../../src/apps/geo-convert/main.cpp
-    ../../../src/apps/geo-convert/Options.cpp
-    ../../../src/apps/geo-convert/CoordinateConversion.cpp
+    ../../../src/cpp/apps/geo-convert/main.cpp
+    ../../../src/cpp/apps/geo-convert/Options.cpp
+    ../../../src/cpp/apps/geo-convert/CoordinateConversion.cpp
 )
 
 #---------------------------------#

@@ -68,6 +68,14 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
          * Set the longitude
          */
         datatype& longitude(){ return m_longitude; }
+    
+        /**
+         * Clone the data
+         */
+        CoordinateGeodetic<DATATYPE>::ptr_t clone()const{ 
+                    return CoordinateGeodetic<DATATYPE>::ptr_t( 
+                            new CoordinateGeodetic<DATATYPE>(m_latitude, m_longitude, this->altitude(), this->datum())); 
+                    }
 
 
     protected:

@@ -23,6 +23,7 @@ void convert_coordinates( Options const& options ){
     // create a list of input coordinates
     std::vector<GEO::CoordinateBaseDouble::ptr_t> input_coordinates;
 
+
     // get each input and parse
     for( size_t i=0; i<options.inputs.size(); i++ ){
         
@@ -112,8 +113,17 @@ void convert_coordinates( Options const& options ){
     // now run coordinate conversion on each coordinate
     for( size_t i=0; i<input_coordinates.size(); i++ ){
 
+        // check the output type
+        GEO::CoordinateType 
+        if( options.outputs.size() == 1 ){
+
+        }
+        else{
+            
+        }
+
         // convert the coordinate
-        //GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate_system( 
+        GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate( input_coordinates[i], output_types[i], 
 
     }
 

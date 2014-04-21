@@ -44,25 +44,38 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                                 m_northing(northing),
                                 CoordinateBase<DATATYPE>(altitude, datum){}
             
-    /**
-     * Get the Easting
-     */
-    datatype easting()const{ return m_easting; }
+        /**
+         * Get the Easting
+         */
+        datatype easting()const{ return m_easting; }
 
-    /**
-     * Set the Easting
-     */
-    datatype& easting(){ return m_easting; }
+        /**
+         * Set the Easting
+         */
+        datatype& easting(){ return m_easting; }
 
-    /**
-     * Get the northing
-     */
-    datatype northing()const{ return m_northing; }
+        /**
+         * Get the northing
+         */
+        datatype northing()const{ return m_northing; }
 
-    /**
-     * Set the northing
-     */
-    datatype& northing(){ return m_northing; }
+        /**
+         * Set the northing
+         */
+        datatype& northing(){ return m_northing; }
+
+        /**
+         * Clone the data
+         */
+        CoordinateUTM<DATATYPE>::ptr_t clone()const{ 
+            return CoordinateUTM<DATATYPE>::ptr_t( 
+                    new CoordinateUTM<DATATYPE>(
+                                m_easting, 
+                                m_northing, 
+                                this->altitude(), 
+                                this->datum())); 
+            }
+
 
     private:
 
