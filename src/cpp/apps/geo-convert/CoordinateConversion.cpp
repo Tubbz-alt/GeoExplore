@@ -114,7 +114,7 @@ void convert_coordinates( Options const& options ){
     for( size_t i=0; i<input_coordinates.size(); i++ ){
 
         // check the output type
-        GEO::CoordinateType 
+        //GEO::CoordinateType 
         if( options.outputs.size() == 1 ){
 
         }
@@ -123,7 +123,7 @@ void convert_coordinates( Options const& options ){
         }
 
         // convert the coordinate
-        GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate( input_coordinates[i], output_types[i], 
+        //GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate( input_coordinates[i], output_types[i], 
 
     }
 

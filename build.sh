@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #    File:    build.sh
 #    Author:  Marvin Smith
