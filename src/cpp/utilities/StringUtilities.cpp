@@ -23,6 +23,27 @@ std::vector<std::string> string_split( const std::string& input, std::string con
     return output;
 
 }
+
+/**
+ * Convert string to lower case
+ */
+std::string string_toLower( const string& in ){
+    
+    string value = in;
+    std::transform( in.begin(), in.end(), value.begin(), ::tolower);
+    return value;
+}
+
+/**
+ * Convert string to upper case
+ */
+std::string string_toUpper( const string& in ){
+
+    string value = in;
+    std::transform( in.begin(), in.end(), value.begin(), ::toupper);
+    return value;
+}
+
  
 }/// End of GEO Namespace
 

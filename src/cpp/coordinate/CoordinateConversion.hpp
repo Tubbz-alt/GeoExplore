@@ -6,9 +6,9 @@
 #ifndef __SRC_COORDINATE_COORDINATECONVERSION_HPP__
 #define __SRC_COORDINATE_COORDINATECONVERSION_HPP__
 
-#include <gorgon/coordinate/CoordinateBase.hpp>
-#include <gorgon/coordinate/CoordinateGeodetic.hpp>
-#include <gorgon/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/coordinate/CoordinateBase.hpp>
+#include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
 /**
  * Convert between coordinate systems

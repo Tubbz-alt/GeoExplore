@@ -49,6 +49,7 @@ find_package( Threads )
 set( GEOCONVERT_HEADERS
     ../../../src/cpp/apps/geo-convert/Options.hpp
     ../../../src/cpp/apps/geo-convert/CoordinateConversion.hpp
+    ../../../src/cpp/apps/geo-convert/Utilities.hpp
 )
 
 
@@ -59,6 +60,7 @@ set( GEOCONVERT_SOURCES
     ../../../src/cpp/apps/geo-convert/main.cpp
     ../../../src/cpp/apps/geo-convert/Options.cpp
     ../../../src/cpp/apps/geo-convert/CoordinateConversion.cpp
+    ../../../src/cpp/apps/geo-convert/Utilities.cpp
 )
 
 #---------------------------------#

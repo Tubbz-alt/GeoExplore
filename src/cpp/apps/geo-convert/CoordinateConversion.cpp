@@ -5,12 +5,17 @@
  */
 #include "CoordinateConversion.hpp"
 
+/// GeoExplore Library
 #include <GeoExplore.hpp>
 
+/// C++ Libraries
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+/// Geo-Convert Libraries
+#include "Utilities.hpp"
 
 using namespace std;
 
@@ -114,12 +119,14 @@ void convert_coordinates( Options const& options ){
     for( size_t i=0; i<input_coordinates.size(); i++ ){
 
         // check the output type
+        GEO::CoordinateType outputCoordinateType;
+        
         //GEO::CoordinateType 
         if( options.outputs.size() == 1 ){
-
+            outputCoordinateType = String2CoordinateType(options.outputs[0]); 
         }
         else{
-            
+            throw std::runtime_error("Only 1 output type must be specified.");
         }
 
         // convert the coordinate

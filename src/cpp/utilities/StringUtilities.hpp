@@ -50,6 +50,17 @@ std::string num2str( TP const& value ){
  */
 std::vector<std::string> string_split( const std::string& input, const std::string& pattern );
 
+/**
+ * Convert all characters to upper case
+ */
+std::string string_toUpper( const std::string& str );
+
+/**
+ * Convert all characters to lower case
+ */
+std::string string_toLower( const std::string& str );
+
+
 } /// End of GEO Namespace
 
 #endif

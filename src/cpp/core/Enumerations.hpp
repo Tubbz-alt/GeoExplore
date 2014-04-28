@@ -31,6 +31,7 @@ enum class CoordinateType{
 
 }; /// End of CoordinateType
 
+
 } /// End of GEO Namespace
 
 
