@@ -31,7 +31,7 @@ int main( int argc, char* argv[] ){
         filename = string(getenv("HOME")) + string("/.geoexplore/options.cfg");
 
         // load the config file parser
-        settings.load( argc, argv, filename );
+        //settings.load( argc, argv, filename );
 
     } catch ( exception& e ){
         cout << e.what() << endl;

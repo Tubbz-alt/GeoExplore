@@ -276,6 +276,7 @@ if [ "$RUN_MAKE" = '1' ]; then
     copy_headers ${BUILD_TYPE}
     build_software '../install/lib'                    ${BUILD_TYPE} ${NUM_THREADS} '.'
     build_software '../../../install/apps/geo-convert' ${BUILD_TYPE} ${NUM_THREADS} 'apps/geo-convert'
+    build_software '../../install/gui'                 ${BUILD_TYPE} ${NUM_THREADS} 'gui'
 
 fi
 
