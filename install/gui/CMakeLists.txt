@@ -8,6 +8,9 @@
 #  Define Required CMake Version
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
+# Define the project name
+project(geo-explore)
+
 #  Allow C++ 11x
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
@@ -47,8 +50,8 @@ find_package( Threads )
 #----------------------------------#
 #-       Find QT5 Libraries       -#
 #----------------------------------#
-find_package( Qt5Widgets )
-find_package( QtDeclarative )
+find_package( Qt5Widgets REQUIRED )
+#find_package( QtDeclarative )
 
 #  Tell CMake to run moc when necessary
 set( CMAKE_AUTOMOC ON )
@@ -58,7 +61,6 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #  Include Qt5
 include_directories(${Qt5Widgets_INCLUDES})
-
 
 
 #------------------------------------------#
@@ -80,16 +82,16 @@ set( GUI_SOURCES
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
-include_directories( "${PROJECT_BINARY_DIR}/../../include" )
+include_directories( "${PROJECT_BINARY_DIR}/../include" )
 
-add_executable( geo-convert 
+add_executable( geo-explore 
                 ${GUI_SOURCES}
                 ${GUI_HEADERS}
 )
 
 target_link_libraries( geo-explore
                 ${GeoExplore_LIBRARY}
-                ${CMAKE_THREAD_LIBS_INIT}
+                ${Qt5Widgets_LIBRARIES}
                 ${Boost_LIBRARIES}
 )
 

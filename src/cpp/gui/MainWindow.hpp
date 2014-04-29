@@ -7,7 +7,9 @@
 #define __SRC_CPP_GUI_MAINWINDOW_HPP__
 
 /// Qt Libraries
+#include <QApplication>
 #include <QMainWindow>
+#include <QWidget>
 
 /// GeoExplore
 #include <GeoExplore.hpp>
@@ -26,7 +28,10 @@ class MainWindow : public QMainWindow {
          * Default Constructor
          */
         MainWindow( QWidget* parent = NULL );
-
+    
+    private:
+        
+        /// Main Layout
 
 
 };  /// End of MainWindow class

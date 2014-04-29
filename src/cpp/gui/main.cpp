@@ -12,6 +12,9 @@
 /// GeoExplore library
 #include <GeoExplore.hpp>
 
+/// GUI Libraries
+#include "MainWindow.hpp"
+
 /// C++ Libraries
 #include <iostream>
 #include <string>
