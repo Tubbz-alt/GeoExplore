@@ -13,6 +13,7 @@
 
 /// Coordinate Module
 #include <GeoExplore/coordinate/CoordinateBase.hpp>
+#include <GeoExplore/coordinate/CoordinateConversion.hpp>
 #include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
