@@ -32,6 +32,34 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
 
 }
 
+
+/**
+ * Convert using actual structures.
+*/
+template<typename DATATYPE>
+CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, 
+                                             Datum const& output_datum ){
+
+    // create the output coordinate with the proper datum
+    CoordinateUTM<DATATYPE> outputCoordinate;
+    outputCoordinate->datum() = output_datum;
+
+    // pass the inputs to the OGR converter
+
+
+    return outputCoordinate;
+}
+
+
+/**
+  * Convert forcing the datum to remain the same
+ */
+template<typename DATATYPE>
+CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate ){
+    return convert_coordinate(coordinate, coordinate->datum());
+}
+
+
 } /// End of GEO Namespace
 
 #endif

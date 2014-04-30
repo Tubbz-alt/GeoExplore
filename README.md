@@ -21,3 +21,9 @@ To customize the installation, run the script to see available options.
 
     ./build.sh -h
 
+To run unit tests, run the script
+
+    ./build.sh -t
+
+To see examples of using GeoExplore binaries, see the items in scripts.
+
