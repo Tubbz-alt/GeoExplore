@@ -32,6 +32,12 @@ set( GEOEXPLORE_COORDINATE_HEADERS
     ../src/cpp/coordinate/CoordinateUTM.hpp
 )
 
+#  IO Module
+set( GEOEXPLORE_IO_HEADERS
+    ../src/cpp/io/GDAL_Driver.hpp
+    ../src/cpp/io/OGR_Driver.hpp
+)
+
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
     ../src/cpp/utilities/StringUtilities.hpp
@@ -41,6 +47,7 @@ set( GEOEXPLORE_UTILITIES_HEADERS
 set( GEOEXPLORE_HEADERS
     ${GEOEXPLORE_CORE_HEADERS}
     ${GEOEXPLORE_COORDINATE_HEADERS}
+    ${GEOEXPLORE_IO_HEADERS}
     ${GEOEXPLORE_UTILITIES_HEADERS}
 )
 
@@ -54,6 +61,11 @@ set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/cpp/coordinate/CoordinateBase.cpp
 )
 
+#   IO Module
+set( GEOEXPLORE_IO_SOURCES
+    ../src/cpp/io/OGR_Driver.cpp
+)
+
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
     ../src/cpp/utilities/StringUtilities.cpp
@@ -62,6 +74,7 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 #   Combine Modules
 set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_COORDINATE_SOURCES}
+    ${GEOEXPLORE_IO_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
 )
 
