@@ -6,6 +6,9 @@
 #ifndef __SRC_CORE_ENUMERATIONS_HPP__
 #define __SRC_CORE_ENUMERATIONS_HPP__
 
+/// C++ Standard Libraries
+#include <string>
+
 namespace GEO{
 
 /**
@@ -19,6 +22,11 @@ enum class Datum{
     NAD83,
 
 }; /// End of ProjectionType Class
+
+/**
+ * Convert a datum to the GDAL WKCS
+*/
+std::string Datum2WKT_string( Datum const& datum );
 
 /**
  * @class CoordinateType

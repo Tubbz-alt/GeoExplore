@@ -6,10 +6,13 @@
 #ifndef __SRC_COORDINATE_COORDINATECONVERSION_HPP__
 #define __SRC_COORDINATE_COORDINATECONVERSION_HPP__
 
+/// GeoExplore Libraries
 #include <GeoExplore/coordinate/CoordinateBase.hpp>
 #include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/io/OGR_Driver.hpp>
 
+/// C++ Libraries
 #include <stdexcept>
 
 namespace GEO{
@@ -41,13 +44,15 @@ CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const&
                                              Datum const& output_datum ){
 
     // create the output coordinate with the proper datum
-    CoordinateUTM<DATATYPE> outputCoordinate;
-    outputCoordinate->datum() = output_datum;
+    CoordinateUTM<DATATYPE> output;
+    output.datum() = output_datum;
 
     // pass the inputs to the OGR converter
+    GEO::OGR::convert_Geodetic2UTM( coordinate.latitude(), coordinate.longitude(), coordinate.altitude(), coordinate.datum(),
+                                    output.datum(), output.zone(), output.easting(), output.northing(),  output.altitude() );
 
 
-    return outputCoordinate;
+    return output;
 }
 
 
@@ -56,7 +61,7 @@ CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const&
  */
 template<typename DATATYPE>
 CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate ){
-    return convert_coordinate(coordinate, coordinate->datum());
+    return convert_coordinate(coordinate, coordinate.datum());
 }
 
 

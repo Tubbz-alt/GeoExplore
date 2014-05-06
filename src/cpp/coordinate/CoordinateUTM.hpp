@@ -29,21 +29,34 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         /**
          * Default Constructor
          */
-        CoordinateUTM() : m_easting(0), 
+        CoordinateUTM() : m_zone(31),
+                          m_easting(0), 
                           m_northing(0), 
                           CoordinateBase<DATATYPE>(0, Datum::WGS84){}
         
         /**
          * Parameterized Constructor
          */
-        CoordinateUTM( datatype const& easting, 
+        CoordinateUTM( int const&      zone,
+                       datatype const& easting, 
                        datatype const& northing, 
                        datatype const& altitude = 0, 
                        Datum const& datum = Datum::WGS84 ) : 
+                                m_zone(zone),
                                 m_easting(easting),
                                 m_northing(northing),
                                 CoordinateBase<DATATYPE>(altitude, datum){}
             
+        /**
+         * Get the zone
+        */
+        int zone()const{ return m_zone; }
+
+        /**
+         * Set the zone
+        */
+        int& zone(){ return m_zone; }
+
         /**
          * Get the Easting
          */
@@ -70,6 +83,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         CoordinateUTM<DATATYPE>::ptr_t clone()const{ 
             return CoordinateUTM<DATATYPE>::ptr_t( 
                     new CoordinateUTM<DATATYPE>(
+                                m_zone,
                                 m_easting, 
                                 m_northing, 
                                 this->altitude(), 
@@ -78,6 +92,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
     private:
+        
+        /// Zone
+        int      m_zone;
 
         /// Easting
         datatype m_easting;

@@ -13,7 +13,7 @@
 
 
 namespace GEO{
-
+namespace OGR{
 
 /**
  * @class OGR_Driver
@@ -31,12 +31,40 @@ class OGR_Driver {
 
 };  /// End of OGR_Driver Class
 
+
+/**
+ * Compute the UTM Zone Given the Longitude
+*/
+int compute_UTM_Zone( const double& longitude );
+
 /**
  * Convert a coordinate from UTM to Geodetic
 */
-CoordinateGeodetic convert( CoordinateUTM const& coord,  Datum const& datum );
+void convert_UTM2Geodetic( int const&    fromZone,
+                           double const& fromEasting,  
+                           double const& fromNorthing,  
+                           double const& fromAltitude,    
+                           Datum const&  fromDatum,
+                           Datum const&  toDatum,
+                           double&       toLatitude, 
+                           double&       toLongitude, 
+                           double&       toAltitude );
+
+/**
+ * Convert a coordinate from Geodetic to UTM
+*/
+void convert_Geodetic2UTM( double const& fromLatitude,
+                           double const& fromLongitude,
+                           double const& fromAltitude,
+                           Datum const&  fromDatum,
+                           Datum const&  toDatum,
+                           int&          toZone,
+                           double&       toEasting,
+                           double&       toNorthing,
+                           double&       toAltitude );
 
 
+} /// End of OGR Namespace
 } /// End of GEO Namespace
 
 #endif

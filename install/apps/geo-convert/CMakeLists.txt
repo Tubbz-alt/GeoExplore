@@ -42,6 +42,10 @@ find_package( Boost
 #-----------------------------------#
 find_package( Threads )
 
+#------------------------------#
+#-     Find GDAL Library      -#
+#------------------------------#
+find_package( GDAL REQUIRED )
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
@@ -77,5 +81,6 @@ target_link_libraries( geo-convert
                 ${GeoExplore_LIBRARY}
                 ${CMAKE_THREAD_LIBS_INIT}
                 ${Boost_LIBRARIES}
+                ${GDAL_LIBRARY}
 )
 

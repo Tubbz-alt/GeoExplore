@@ -15,6 +15,11 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x")
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
+#------------------------------#
+#-     Find GDAL Library      -#
+#------------------------------#
+find_package( GDAL REQUIRED )
+
 #-----------------------------------------#
 #-     Define Required Header Files      -#
 #-----------------------------------------#
@@ -56,6 +61,11 @@ set( GEOEXPLORE_HEADERS
 #-     Define Required Source Files     -#
 #----------------------------------------#
 
+#    Core Module
+set( GEOEXPLORE_CORE_SOURCES
+    ../src/cpp/core/Enumerations.cpp
+)
+
 #    Coordinate Module
 set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/cpp/coordinate/CoordinateBase.cpp
@@ -73,6 +83,7 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 
 #   Combine Modules
 set( GEOEXPLORE_SOURCES
+    ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
     ${GEOEXPLORE_IO_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
@@ -86,6 +97,11 @@ include_directories( ${PROJECT_BINARY_DIR}/include/ )
 add_library( GeoExplore SHARED
              ${GEOEXPLORE_SOURCES}
              ${GEOEXPLORE_HEADERS}
+)
+
+target_link_libraries(
+            GeoExplore
+            ${GDAL_LIBRARY}
 )
 
 
