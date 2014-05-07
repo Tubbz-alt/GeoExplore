@@ -137,12 +137,12 @@ void convert_coordinates( Options const& options ){
         // utm
         if( converted_coordinate->type() == GEO::CoordinateType::UTM ){
             GEO::CoordinateUTM_d::ptr_t output = boost::static_pointer_cast<GEO::CoordinateUTM_d>(converted_coordinate);
-            cout << output->zone() << ", " << (int64_t)output->easting() << ", " << (int64_t)output->northing() << ", " << (int64_t)output->altitude() << endl;
+            cout << output->zone() << "," << (int64_t)output->easting() << "," << (int64_t)output->northing() << "," << (int64_t)output->altitude() << endl;
         }
         // geodetic dd
         else if( converted_coordinate->type() == GEO::CoordinateType::Geodetic ){
             GEO::CoordinateGeodetic_d::ptr_t output = boost::static_pointer_cast<GEO::CoordinateGeodetic_d>(converted_coordinate);
-            cout << std::fixed << output->latitude() << ", " << output->longitude() << ", " << output->altitude() << endl;
+            cout << std::fixed << output->latitude() << "," << output->longitude() << "," << output->altitude() << endl;
         } else {
             throw std::runtime_error("Unknown coordinate type");
         }

@@ -138,23 +138,23 @@ copy_headers(){
 
     #  Create include directory
     mkdir -p $BASE_DIR
-    cp src/cpp/GeoExplore.hpp    $BASE_DIR/../
+    cp -u src/cpp/GeoExplore.hpp    $BASE_DIR/../
 
     #  Copy Core Module
     mkdir -p $BASE_DIR/core
-    cp src/cpp/core/*.hpp        $BASE_DIR/core/
+    cp -u src/cpp/core/*.hpp        $BASE_DIR/core/
 
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
-    cp src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
+    cp -u src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
     
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp src/cpp/io/*.hpp         $BASE_DIR/io/
+    cp -u src/cpp/io/*.hpp         $BASE_DIR/io/
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
-    cp src/cpp/utilities/*.hpp  $BASE_DIR/utilities/
+    cp -u src/cpp/utilities/*.hpp  $BASE_DIR/utilities/
 
 }
 
