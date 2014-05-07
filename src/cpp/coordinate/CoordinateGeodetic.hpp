@@ -39,6 +39,14 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         
         /**
          * Parameterized Constructor
+        */
+        CoordinateGeodetic( Datum const& datum ) : 
+                                m_latitude(0),
+                                m_longitude(0),
+                                CoordinateBase<DATATYPE>(0, datum){}
+
+        /**
+         * Parameterized Constructor
          */
         CoordinateGeodetic( datatype const& latitude, 
                             datatype const& longitude,

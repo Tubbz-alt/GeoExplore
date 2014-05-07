@@ -117,9 +117,9 @@ test_software(){
     
     #  Exit directory
     popd
-
-
-
+    
+    #  Test the geo-convert function
+    ./tests/bash/apps/geo-convert-test.sh
 }
 
 #------------------------------------------#

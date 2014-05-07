@@ -9,6 +9,7 @@
 #include <GeoExplore.hpp>
 
 /// C++ Libraries
+#include <iomanip>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -131,6 +132,20 @@ void convert_coordinates( Options const& options ){
 
         // convert the coordinate
         GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate<double>( input_coordinates[i], outputCoordinateType, input_coordinates[i]->datum() ); 
+        
+        // convert to output
+        // utm
+        if( converted_coordinate->type() == GEO::CoordinateType::UTM ){
+            GEO::CoordinateUTM_d::ptr_t output = boost::static_pointer_cast<GEO::CoordinateUTM_d>(converted_coordinate);
+            cout << output->zone() << ", " << (int64_t)output->easting() << ", " << (int64_t)output->northing() << ", " << (int64_t)output->altitude() << endl;
+        }
+        // geodetic dd
+        else if( converted_coordinate->type() == GEO::CoordinateType::Geodetic ){
+            GEO::CoordinateGeodetic_d::ptr_t output = boost::static_pointer_cast<GEO::CoordinateGeodetic_d>(converted_coordinate);
+            cout << std::fixed << output->latitude() << ", " << output->longitude() << ", " << output->altitude() << endl;
+        } else {
+            throw std::runtime_error("Unknown coordinate type");
+        }
 
     }
 

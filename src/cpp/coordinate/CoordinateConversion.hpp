@@ -45,7 +45,24 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
 
         // downcast and send
         return output;
-    
+    }
+
+    // check if we have UTM to geodetic
+    if( coordinate->type() == CoordinateType::UTM && output_coordinate_type == CoordinateType::Geodetic ){
+
+        // cast the input to UTM
+        typename CoordinateUTM<DATATYPE>::ptr_t input = boost::static_pointer_cast<CoordinateUTM<DATATYPE> >(coordinate);
+
+        // create an output coordinate
+        typename CoordinateGeodetic<DATATYPE>::ptr_t output( new CoordinateGeodetic<DATATYPE>(output_datum));
+
+        // convert
+        GEO::OGR::convert_UTM2Geodetic( input->zone(), input->easting(), input->northing(), input->altitude(), input->datum(), output->datum(),
+                                        output->latitude(), output->longitude(), output->altitude() );
+
+        return output;
+
+
     }
 
     // otherwise, throw an error
