@@ -1,6 +1,15 @@
 GeoExplore
 ==========
 
+Overview
+--------
+
+GeoExplore is a GIS Library which provides useful utilities for conducting research
+and analysis of geo-spatial information. In addition, we are currently working on a
+3D mapping server which will allow clients to view image data in 3D provided appropriate 
+elevation data exists. 
+
+
 Building GeoExplore
 -------------------
 
