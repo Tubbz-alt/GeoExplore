@@ -60,8 +60,13 @@ set( CMAKE_AUTOMOC ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #  Include Qt5
+#  Some builds of Qt5 apparently use different names for this variable
 include_directories(${Qt5Widgets_INCLUDES})
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
+#  Force position independent code (which should be a default
+#  however Qt5 complains if this isn't here)
+add_definitions(-fPIC)
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
