@@ -26,5 +26,23 @@ std::string Datum2WKT_string( Datum const& datum ){
     }
 }
 
+/** 
+ * Convert a coordinate type to a string
+*/
+std::string CoordinateType2String( CoordinateType const& ctype ){
+
+    switch( ctype ){
+
+        case CoordinateType::Base:
+            return "Base";
+        case CoordinateType::Geodetic:
+            return "Geodetic";
+        case CoordinateType::UTM:
+            return "UTM";
+        default:
+            throw std::runtime_error("Unknown CoordinateType");
+    }
+}
+
 } /// End of Namespace GEO
 

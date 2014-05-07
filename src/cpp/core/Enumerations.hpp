@@ -39,6 +39,11 @@ enum class CoordinateType{
 
 }; /// End of CoordinateType
 
+/**
+ * Convert a coordinate type to string
+*/
+std::string CoordinateType2String( CoordinateType const& ctype );
+
 
 } /// End of GEO Namespace
 

@@ -130,7 +130,7 @@ void convert_coordinates( Options const& options ){
         }
 
         // convert the coordinate
-        //GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate( input_coordinates[i], output_types[i], 
+        GEO::CoordinateBaseDouble::ptr_t converted_coordinate = GEO::convert_coordinate<double>( input_coordinates[i], outputCoordinateType, input_coordinates[i]->datum() ); 
 
     }
 

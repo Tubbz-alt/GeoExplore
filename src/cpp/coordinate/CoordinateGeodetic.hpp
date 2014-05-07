@@ -76,6 +76,8 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
                     return CoordinateGeodetic<DATATYPE>::ptr_t( 
                             new CoordinateGeodetic<DATATYPE>(m_latitude, m_longitude, this->altitude(), this->datum())); 
                     }
+        
+        virtual CoordinateType type(){ return CoordinateType::Geodetic; }
 
 
     protected:

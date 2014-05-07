@@ -70,7 +70,7 @@ class CoordinateBase{
         /*
          * Get the type
          */
-        static CoordinateType type(){ return CoordinateType::Base; }
+        virtual CoordinateType type(){ return CoordinateType::Base; }
 
     protected:
         

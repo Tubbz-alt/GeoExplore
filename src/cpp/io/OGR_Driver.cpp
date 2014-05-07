@@ -9,6 +9,7 @@
 #include <gdal/ogr_spatialref.h>
 
 /// C++ Standard Libraries
+#include <iostream>
 #include <stdexcept>
 
 namespace  GEO {
@@ -101,7 +102,7 @@ void convert_Geodetic2UTM( double const& fromLatitude,
     targetSRS.SetWellKnownGeogCS( Datum2WKT_string(toDatum  ).c_str());
 
     // set the required utm components
-    toZone = compute_UTM_Zone( fromLatitude );
+    toZone = compute_UTM_Zone( fromLongitude );
     targetSRS.SetUTM( toZone, fromLatitude >= 0);
 
     // create the coordinate conversion

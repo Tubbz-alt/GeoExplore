@@ -30,10 +30,19 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
          * Default Constructor
          */
         CoordinateUTM() : m_zone(31),
-                          m_easting(0), 
+                          m_easting(166021.4), 
                           m_northing(0), 
                           CoordinateBase<DATATYPE>(0, Datum::WGS84){}
         
+        /**
+         * Parameterized Constructor
+        */
+        CoordinateUTM( Datum const& datum ) : 
+                m_zone(31),
+                m_easting(166021.4),
+                m_northing(0),
+                CoordinateBase<DATATYPE>(0, datum){}
+
         /**
          * Parameterized Constructor
          */
@@ -90,6 +99,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                                 this->datum())); 
             }
 
+        virtual CoordinateType type(){ return CoordinateType::UTM; }
 
     private:
         

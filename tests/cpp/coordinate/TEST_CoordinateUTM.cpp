@@ -23,7 +23,7 @@ TEST( CoordinateUTM, Constructors ){
     // test 2
     GEO::CoordinateUTM_d test02;
     ASSERT_EQ( test02.zone(), 31 );
-    ASSERT_NEAR( test02.easting(),  0, 0.00001 );
+    ASSERT_NEAR( test02.easting(),  166021.4, 0.00001 );
     ASSERT_NEAR( test02.northing(), 0, 0.00001 );
     ASSERT_NEAR( test02.altitude(), 0, 0.00001 );
     ASSERT_EQ( test02.datum(), GEO::Datum::WGS84 );
