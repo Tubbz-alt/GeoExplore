@@ -9,6 +9,9 @@
 
 namespace GEO {
 
+/**
+ * @class BaseImage
+*/
 
 
 } /// End of namespace GEO

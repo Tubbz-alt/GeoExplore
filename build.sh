@@ -148,13 +148,17 @@ copy_headers(){
     mkdir -p $BASE_DIR/coordinate
     cp -u src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
     
+    #  Copy Image Module
+    mkdir -p $BASE_DIR/image      
+    cp -u src/cpp/image/*.hpp       $BASE_DIR/image/
+    
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp -u src/cpp/io/*.hpp         $BASE_DIR/io/
+    cp -u src/cpp/io/*.hpp          $BASE_DIR/io/
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
-    cp -u src/cpp/utilities/*.hpp  $BASE_DIR/utilities/
+    cp -u src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
 
 }
 

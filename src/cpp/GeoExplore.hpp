@@ -17,6 +17,9 @@
 #include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
+/// Image Module
+#include <GeoExplore/image/ChannelType.hpp>
+
 /// Utility Module
 #include <GeoExplore/utilities/StringUtilities.hpp>
 
