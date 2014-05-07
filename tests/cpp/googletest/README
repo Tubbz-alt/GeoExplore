@@ -1,0 +1,5 @@
+To Get GoogleTest, just checkout the SVN trunk at
+
+svn checkout http://googletest.googlecode.com/svn/trunk/
+
+
