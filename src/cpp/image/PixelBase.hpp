@@ -8,7 +8,23 @@
 
 namespace GEO{
 
+/**
+ *    @class PixelBase
+ *    @brief  Base class for pixels.
+ *     In GeoExplore,  images have pixels, whose datatypes are
+ *     defined as a channel.  Use OpenCV or NASA Vision Workbench 
+ *     as a reference. 
+*/
+template <typename DerivedType,  typename ChannelType>
+class PixelBase {
 
+    public:
+
+
+    private:
+
+
+}; /// End of PixelBase Class
 
 
 } /// End of GEO Namespace
