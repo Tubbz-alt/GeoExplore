@@ -117,4 +117,53 @@ TEST( PixelRGB, Constructors ){
 
 }
 
+/**
+ * PixelGray Constructors
+*/
+TEST( PixelGray, Constructors ){
+
+    /// Create PixelGray Double
+    GEO::PixelGray_Double pixel01;
+    ASSERT_NEAR( pixel01.val(), 0, 0.00001 );
+
+    GEO::PixelGray_Double pixel02(1);
+    ASSERT_NEAR( pixel02.val(), 1, 0.00001 );
+
+    /// Create PixelGray UInt8
+    GEO::PixelGray_UInt8  pixel03;
+    ASSERT_EQ( pixel03.val(), 0 );
+
+    GEO::PixelGray_UInt8  pixel04(255);
+    ASSERT_EQ( pixel04.val(), 255 );
+    
+    /// Create PixelGray UInt12
+    GEO::PixelGray_UInt12 pixel05;
+    ASSERT_EQ( pixel05.val(), 0 );
+    
+    GEO::PixelGray_UInt12 pixel06(4095);
+    ASSERT_EQ( pixel06.val(), 4095 );
+
+    /// Create PixelGray UInt14
+    GEO::PixelGray_UInt14 pixel07;
+    ASSERT_EQ( pixel07.val(), 0);
+    
+    GEO::PixelGray_UInt14 pixel08(16383);
+    ASSERT_EQ( pixel08.val(), 16383 );
+
+    /// Create PixelGray UInt16
+    GEO::PixelGray_UInt16 pixel09;
+    ASSERT_EQ( pixel09.val(), 0 );
+
+    GEO::PixelGray_UInt16 pixel10(65535);
+    ASSERT_EQ( pixel10.val(), 65535);
+
+    /// Create PixelGray UInt32
+    GEO::PixelGray_UInt32 pixel11;
+    ASSERT_EQ( pixel11.val(), 0 );
+    
+    GEO::PixelGray_UInt32 pixel12(4294967295);
+    ASSERT_EQ( pixel12.val(), 4294967295 );
+
+}   
+
 

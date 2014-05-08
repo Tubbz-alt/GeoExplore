@@ -41,6 +41,7 @@ set( GEOEXPLORE_COORDINATE_HEADERS
 set( GEOEXPLORE_IMAGE_HEADERS
     ../src/cpp/image/ChannelType.hpp
     ../src/cpp/image/PixelBase.hpp
+    ../src/cpp/image/PixelGray.hpp
     ../src/cpp/image/PixelRGB.hpp
 )
 
