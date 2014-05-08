@@ -12,7 +12,28 @@ namespace GEO {
 /**
  * @class BaseImage
 */
+template <typename PixelType>
+class BaseImage{
 
+    public: 
+
+        /// define our pixeltype
+        typedef PixelType pixeltype;
+
+         /// define the datatype
+         typedef typename pixeltype::channeltype;
+
+        /**
+         * Default Constructor
+        */
+        BaseImage (){}
+
+        private:
+
+            /// internal pixel data
+            
+
+};  /// End of BaseImage Class
 
 } /// End of namespace GEO
 
