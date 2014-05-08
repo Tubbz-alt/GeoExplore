@@ -40,6 +40,8 @@ set( GEOEXPLORE_COORDINATE_HEADERS
 #  Image Module
 set( GEOEXPLORE_IMAGE_HEADERS
     ../src/cpp/image/ChannelType.hpp
+    ../src/cpp/image/PixelBase.hpp
+    ../src/cpp/image/PixelRGB.hpp
 )
 
 #  IO Module

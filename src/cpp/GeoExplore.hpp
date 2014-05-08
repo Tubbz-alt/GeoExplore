@@ -19,6 +19,8 @@
 
 /// Image Module
 #include <GeoExplore/image/ChannelType.hpp>
+#include <GeoExplore/image/PixelBase.hpp>
+#include <GeoExplore/image/PixelRGB.hpp>
 
 /// Utility Module
 #include <GeoExplore/utilities/StringUtilities.hpp>

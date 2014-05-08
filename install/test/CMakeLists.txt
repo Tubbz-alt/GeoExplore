@@ -59,6 +59,7 @@ set( UNIT_TEST_SOURCES
     ../../tests/cpp/coordinate/TEST_CoordinateConversion.cpp
     ../../tests/cpp/coordinate/TEST_CoordinateUTM.cpp
     ../../tests/cpp/image/TEST_ChannelType.cpp
+    ../../tests/cpp/image/TEST_PixelTypes.cpp
     ../../tests/cpp/utilities/TEST_StringUtilities.cpp
 )
 

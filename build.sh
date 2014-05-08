@@ -119,7 +119,7 @@ test_software(){
     popd
     
     #  Test the geo-convert function
-    ./tests/bash/apps/geo-convert-test.sh
+    #./tests/bash/apps/geo-convert-test.sh
 }
 
 #------------------------------------------#

@@ -15,13 +15,18 @@ namespace GEO{
  *     defined as a channel.  Use OpenCV or NASA Vision Workbench 
  *     as a reference. 
 */
-template <typename DerivedType,  typename ChannelType>
+template <typename DerivedType, typename ChannelType>
 class PixelBase {
 
     public:
+        
+        /// Define a channeltype
+        typedef ChannelType channeltype;
 
-
-    private:
+        /**
+         * Default Constructor
+        */
+        PixelBase(){}
 
 
 }; /// End of PixelBase Class

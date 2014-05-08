@@ -45,10 +45,10 @@ class ChannelType<double, 1>{
         typedef double type;
 
         /// Maximum Value
-        static constexpr double maxValue = 1;
+        static constexpr type maxValue = 1;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<double,1> specialization
 
@@ -65,10 +65,10 @@ class ChannelType<uint8_t, 8>{
         typedef uint8_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 255;
+        static constexpr type maxValue = 255;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 
 }; /// End of ChannelType<uint8_t,8> specialization
@@ -86,10 +86,10 @@ class ChannelType<uint16_t, 12>{
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 4095;
+        static constexpr type maxValue = 4095;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,12> specialization
 
@@ -107,10 +107,10 @@ class ChannelType<uint16_t, 14>{
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 16383;
+        static constexpr type maxValue = 16383;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,14> specialization
 
@@ -127,10 +127,10 @@ class ChannelType<uint16_t,16>{
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 65535;
+        static constexpr type maxValue = 65535;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,16> specialization
 
@@ -148,10 +148,10 @@ class ChannelType<uint32_t,32>{
         typedef uint32_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 4294967295;
+        static constexpr type maxValue = 4294967295;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint32_t,32> specialization
 
