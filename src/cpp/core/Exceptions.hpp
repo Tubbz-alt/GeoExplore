@@ -6,6 +6,13 @@
 #ifndef __SRC_CPP_CORE_EXCEPTIONS_HPP__
 #define __SRC_CPP_CORE_EXCEPTIONS_HPP__
 
+/// C++ Standard Libraries
+#include <exception>
+#include <string>
+
+/// GeoExplore Libraries
+#include <GeoExplore/utilities/StringUtilities.hpp>
+
 namespace GEO{
 
 /**
@@ -13,7 +20,7 @@ namespace GEO{
  *
  * Error which is thrown when a function is not implemented.
 */
-class NotImplementedException : public exception {
+class NotImplementedException : public std::exception {
     
     public:
         
