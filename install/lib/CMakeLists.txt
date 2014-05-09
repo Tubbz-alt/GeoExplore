@@ -27,6 +27,7 @@ find_package( GDAL REQUIRED )
 #   Core Module
 set( GEOEXPLORE_CORE_HEADERS
     ../src/cpp/core/Enumerations.hpp
+    ../src/cpp/core/Exceptions.hpp
 )
 
 
@@ -73,6 +74,7 @@ set( GEOEXPLORE_HEADERS
 #    Core Module
 set( GEOEXPLORE_CORE_SOURCES
     ../src/cpp/core/Enumerations.cpp
+    ../src/cpp/core/Exceptions.cpp
 )
 
 #    Coordinate Module

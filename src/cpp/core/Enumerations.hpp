@@ -44,6 +44,14 @@ enum class CoordinateType{
 */
 std::string CoordinateType2String( CoordinateType const& ctype );
 
+/**
+ * @class ImageDriver
+*/
+enum class ImageDriver{
+    GDAL,
+    NETPBM
+}; /// End of ImageDriver Enumerations
+
 
 } /// End of GEO Namespace
 
