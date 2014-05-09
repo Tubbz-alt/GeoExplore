@@ -126,7 +126,6 @@ bool GDAL_Driver::isOpen()const{
 }
 
 
-
 } /// End of GDAL Namespace
 } /// End of IO Namespace
 } /// End of GEO Namespace

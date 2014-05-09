@@ -55,7 +55,23 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
             return m_data; 
         }
     
-    
+        /// return the dimensionality
+        virtual int dims()const{ return 1; }
+        
+        /**
+         * Accessor operator
+        */
+        virtual datatype& operator[]( const int& idx){
+            return m_data;
+        }
+        
+        /**
+         * Accessor Operator
+        */
+        virtual datatype operator[](const int& idx)const{
+            return m_data;
+        }
+
     private:
 
         /// Data

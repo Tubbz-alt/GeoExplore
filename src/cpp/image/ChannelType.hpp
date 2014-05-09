@@ -166,6 +166,16 @@ typedef ChannelType<uint8_t,  8>   ChannelTypeUInt8;
 typedef ChannelType<double, 1>     ChannelTypeDouble;
 
 
+/**
+ * Scale a pixel depending on its type.
+ */
+template <typename BeforeType, typename AfterType>
+typename AfterType::type range_cast( typename BeforeType::type const& value ){
+    return ((( (static_cast<double>(value) - BeforeType::minValue) / 
+               (      BeforeType::maxValue - BeforeType::minValue)  ) 
+            *( AfterType::maxValue - AfterType::minValue)) + AfterType::minValue);
+}
+
 } /// End of Namespace GEO
 
 

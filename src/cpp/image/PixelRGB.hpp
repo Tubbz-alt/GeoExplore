@@ -87,6 +87,22 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
             return m_data[2]; 
         }
 
+        /// return the dimensionality
+        virtual int dims()const{ return 3; }
+
+        /**
+         * Accessor operator
+        */
+        virtual datatype& operator[]( const int& idx){
+            return m_data[idx];
+        }
+        
+        /**
+         * Accessor Operator
+        */
+        virtual datatype operator[](const int& idx)const{
+            return m_data[idx];
+        }
 
     private:
 

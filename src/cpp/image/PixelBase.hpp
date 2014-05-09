@@ -6,6 +6,8 @@
 #ifndef __SRC_CPP_IMAGE_PIXELBASE_HPP__
 #define __SRC_CPP_IMAGE_PIXELBASE_HPP__
 
+#include <stdexcept>
+
 namespace GEO{
 
 /**
@@ -27,7 +29,21 @@ class PixelBase {
          * Default Constructor
         */
         PixelBase(){}
+        
+        virtual typename channeltype::type operator[](const int& idx)const{
+            throw std::runtime_error("error: PixelBase operator[] not implemented.");
+            typename channeltype::type value;
+            return value;
+        }
+        
+        virtual typename channeltype::type& operator[](const int& idx){
+            throw std::runtime_error("error: PixelBase operator[] not implemented.");
+        }
 
+        /// Dimensionality
+        virtual int dims()const{ 
+            throw std::runtime_error("error: PixelBase has no dimensionality.");
+        }
 
 }; /// End of PixelBase Class
 

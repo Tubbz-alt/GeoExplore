@@ -23,6 +23,9 @@
 #include <GeoExplore/image/PixelGray.hpp>
 #include <GeoExplore/image/PixelRGB.hpp>
 
+/// IO Module
+#include <GeoExplore/io/GDAL_Driver.hpp>
+
 /// Utility Module
 #include <GeoExplore/utilities/StringUtilities.hpp>
 

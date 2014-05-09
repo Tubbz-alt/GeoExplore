@@ -82,6 +82,7 @@ set( GEOEXPLORE_COORDINATE_SOURCES
 
 #   IO Module
 set( GEOEXPLORE_IO_SOURCES
+    ../src/cpp/io/GDAL_Driver.cpp
     ../src/cpp/io/OGR_Driver.cpp
 )
 

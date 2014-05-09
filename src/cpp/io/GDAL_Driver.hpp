@@ -11,7 +11,14 @@
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
+#include <boost/shared_ptr.hpp>
 
+/// GDAL Libraries
+#include <gdal/cpl_conv.h>
+#include <gdal/gdal_priv.h>
+
+/// GeoExplore Libraries
+#include <GeoExplore/image/ChannelType.hpp>
 
 namespace GEO{
 namespace IO{
@@ -25,8 +32,8 @@ class GDAL_Driver{
     public:
         
         /// create a shared object
-        boost::shared_ptr<GDAL_Driver> ptr_t;
-
+        typedef boost::shared_ptr<GDAL_Driver> ptr_t;
+        
         /**
          * Parameterized Constructor
         */
@@ -56,7 +63,7 @@ class GDAL_Driver{
          * Get image data
          */
         template<typename PixelType>
-        void getImageData( std::vector<PIXELTYPE>& image_data ){
+        void getImageData( std::vector<PixelType>& image_data ){
             
             // if the dataset is not open, then do nothing
             if( isOpen() == false ){
@@ -65,19 +72,19 @@ class GDAL_Driver{
             }
 
             // make sure the vector is properly sized
-            if( image_data.size() != (getRowCount()*getColumnCount())){
-                image_data.resize( getRowCount()*getColumnCount());
+            if( image_data.size() != (rows()*cols())){
+                image_data.resize( rows()*cols());
             }
         
         
             // get image dimensions
-            int xsize = getColumnCount();
-            int ysize = getRowCount();
+            int xsize = cols();
+            int ysize = rows();
 
             // start iterating through each band
             float* pafScanline;
             double value;
-
+    
             // get driver type
             std::string driverType;
             if( m_driver->GetDescription() != NULL ){
@@ -123,11 +130,11 @@ class GDAL_Driver{
                         
                         /// Convert datatypes
                         if( gdalDataType == GDT_Byte ){
-                            value = channel_convert<ChannelTypeUInt8,typename PIXELTYPE::channeltype>( pafScanline[c] );
+                            value = range_cast<ChannelTypeUInt8, typename PixelType::channeltype>( pafScanline[c] );
                         } else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
-                            value = channel_convert<ChannelTypeUInt12,typename PIXELTYPE::channeltype>( pafScanline[c] );
+                            value = range_cast<ChannelTypeUInt12,typename PixelType::channeltype>( pafScanline[c] );
                         } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
-                            value = channel_convert<ChannelTypeUInt16,typename PIXELTYPE::channeltype>( pafScanline[c] );                        
+                            value = range_cast<ChannelTypeUInt16,typename PixelType::channeltype>( pafScanline[c] );                        
                         } else {
                             value = pafScanline[c];
                         }
@@ -166,6 +173,7 @@ class GDAL_Driver{
          * Check if the dataset is open
          */
         bool isOpen()const;
+        
 
     private:
 
@@ -180,7 +188,6 @@ class GDAL_Driver{
 
         /// GDAL Dataset
         GDALDataset* m_dataset;
-
 
 
 }; /// End of GDAL_Driver class
@@ -203,9 +210,10 @@ std::vector<PixelType> load_image_data( const boost::filesystem::path& image_pat
     }
 
     // create the main container with the expected size
-    int cols = driver->cols();
-    rowCount = driver->rows();
+    int cols = gdal_driver->cols();
+    rowCount = gdal_driver->rows();
     
+
     // create the pixeldata
     std::vector<PixelType> pixeldata( rowCount * cols);
 

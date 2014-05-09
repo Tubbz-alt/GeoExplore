@@ -42,6 +42,11 @@ find_package( Boost
 #-----------------------------------#
 find_package( Threads )
 
+#--------------------#
+#-     Find GDAL    -#
+#--------------------#
+find_package( GDAL REQUIRED )
+
 #----------------------------------------#
 #-     Define Required Header Files     -#
 #----------------------------------------#
@@ -60,6 +65,8 @@ set( UNIT_TEST_SOURCES
     ../../tests/cpp/coordinate/TEST_CoordinateUTM.cpp
     ../../tests/cpp/image/TEST_ChannelType.cpp
     ../../tests/cpp/image/TEST_PixelTypes.cpp
+    ../../tests/cpp/io/TEST_GDAL_Driver.cpp
+    ../../tests/cpp/io/TEST_OGR_Driver.cpp
     ../../tests/cpp/utilities/TEST_StringUtilities.cpp
 )
 
@@ -77,5 +84,6 @@ target_link_libraries( geoexplore-unit-test
                        ${GeoExplore_LIBRARY}
                        ${CMAKE_THREAD_LIBS_INIT}
                        ${Boost_LIBRARIES}
+                       ${GDAL_LIBRARY}
 )
 
