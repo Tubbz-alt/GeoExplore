@@ -179,6 +179,62 @@ typedef PixelGray<ChannelTypeUInt12>  PixelGray_u12;
 typedef PixelGray<ChannelTypeUInt16>  PixelGray_u16;
 
 /**
+ * Driver Type
+*/
+class ImageDriver {
+    
+    public:
+    
+        /// Pointer Type
+        typedef boost::shared_ptr<ImageDriver> ptr_t;
+
+        /**
+         * Default Constructor
+        */
+        ImageDriver(){
+            cout << "ImageDriver Constructor " << endl;
+        }
+
+        /**
+         * Get the row count
+        */
+        virtual int rows()const = 0;
+
+        /**
+         * Get the column count
+        */
+        virtual int cols()const = 0;
+
+}; /// End of ImageDriver class
+
+/**
+ * GDAL Driver
+*/
+class GDAL_Driver : public ImageDriver {
+    
+    public:
+        
+        /**
+         * Default Constructor
+        */
+        GDAL_Driver(){
+            cout << "GDAL_Driver constructor" << endl;
+        }
+
+        /**
+         * Get the number of rows
+        */
+        int rows()const{ return 10; } 
+
+        /**
+         * Get the number of columns
+        */
+        int cols()const{ return 12; }
+
+
+}; /// End of GDAL Driver Class
+
+/**
  * @class ResourceType
 */
 template <typename DerivedType, typename PixelType>
@@ -193,6 +249,15 @@ class BaseResource{
             cout << "BaseResource Constructor" << endl;
         }
         
+        /**
+         * Get the column count
+        */
+        virtual int cols()const = 0;
+
+        /**
+         * Get the row count
+        */
+        virtual int rows()const = 0;
 
 }; /// End of BaseResourceType Class
 
@@ -211,6 +276,17 @@ class MemoryResource : public BaseResource<MemoryResource<PixelType>,PixelType>{
             cout << "MemoryResource Constructor" << endl;    
         }
 
+        /**
+         * Get the number of rows
+        */
+        virtual int rows()const{ return 5; }
+
+        /**
+         * Get the number of cols
+        */
+        virtual int cols()const{ return 4; }
+         
+
 
 }; /// End of MemoryResource 
 
@@ -227,7 +303,23 @@ class DiskResource : public BaseResource<DiskResource<PixelType>,PixelType>{
         */
         DiskResource(){
             cout << "DiskResource Constructor" << endl;    
+            
+            // pretending we loaded the image
+            m_driver =  ImageDriver::ptr_t(new GDAL_Driver);
         }
+
+        /**
+         * Get the number of rows
+        */
+        virtual int rows()const{ return m_driver->rows(); }
+
+        /**
+         * Get the number of columns
+        */
+        virtual int cols()const{ return m_driver->cols(); }
+
+        /// Driver for the resource
+        ImageDriver::ptr_t m_driver;
 
 }; /// End of DiskResource
 
@@ -287,6 +379,15 @@ class Image_{
             cout << "Image_ Constructor" << endl;
         }
         
+        /**
+         * Print the number of rows
+        */
+        int rows()const{ return m_resource.rows(); }
+
+        /**
+         * Print the number of columns
+        */
+        int cols()const{ return m_resource.cols(); }
 
     protected:
       
@@ -308,11 +409,18 @@ class OrthoImage_ : public Image_<PixelType, ResourceType>{
 
     public:
         
+        /**
+         * Default Constructor
+        */
         OrthoImage_(){
             cout << "OrthoImage_ Constructor" << endl;
         }
-
-        
+    
+       /// get the coordinate position
+       void pixel2world(){
+           cout << "pixel x,y maps to X,Y" << endl;
+       }
+         
 
 }; /// End of OrthoImage Class
 
