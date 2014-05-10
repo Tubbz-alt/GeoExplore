@@ -8,26 +8,29 @@
 % no attempts to optimize calculations.
 
 function [p, z, e, r]=testRender()
+  sz = 2^5+1;
   % generate a sinc function for sample dataset in a regular 17 x 17 grid
-  z = gensinc();
+  z = gensinc(sz);
   % active vertices (corners are active by default)
-  v = zeros(17,17);
-  v(1,1) = 1; v(1,17) = 1; v(17,1) = 1; v(17,17) = 1;
+  v = zeros(sz,sz);
+  v(1,1) = 1; v(1,sz) = 1; v(sz,1) = 1; v(sz,sz) = 1;
   % world space error
-  einc = zeros(17,17);
+  einc = zeros(sz,sz);
   % monatonically increasing error (in terms of DAG traversal)
-  e = zeros(17,17);
+  e = zeros(sz,sz);
   % screen space error
-  p = zeros(17,17);
+  p = zeros(sz,sz);
   % radius of bounding ball used in screen space error calculation
-  r = zeros(17,17);
+  r = zeros(sz,sz);
   % set a camera position (ignoring orientation of camera for this test)
   camPos = [0,-16,8];
   
+  center = [(sz-1)/2,(sz-1)/2];
+  
   % I need to build the DAG of the scene. The center of the mesh is the parent. I will
   % use an adjacency matrix to represent the DAG
-  DAG = zeros(17*17,17*17);
-  DAG = addchildren(DAG, [8,8], 1);
+  DAG = zeros(sz*sz,sz*sz);
+  DAG = addchildren(DAG, center, 1);
   
   % % Plots the DAG (VERY VERY SLOW) just for validation
   % plotDag(DAG, [8,8], 1);
@@ -36,12 +39,12 @@ function [p, z, e, r]=testRender()
   % set(gca, 'ytick', 0:1:16);
   
   % compute radius of bounding balls
-  r = boundingBall(DAG, [8,8], 1, r);
+  r = boundingBall(DAG, center, 1, r);
   
   % compute actual world space
-  einc = computeEInc(DAG, z, [8,8], 1, einc);
+  einc = computeEInc(DAG, z, center, 1, einc);
   % compute monatonically increasing world space error (in terms that e_ancestor <= e_node)
-  e = computeE(DAG, einc, [8,8], 1, e);
+  e = computeE(DAG, einc, center, 1, e);
     
   % Compute screen space error using isotropic projection (simpler than perspective)
   p = computePIsotropic(e, r, camPos, z);
@@ -51,7 +54,7 @@ function [p, z, e, r]=testRender()
 
   % Filter vertices with screen space error above pixel threshold (tau). The smaller tau is
   % the more vertices activated
-  tau=2;
+  tau=0.5;
   v(p>tau)=1;
   figure(1);
   plotVerts(v);
@@ -212,11 +215,12 @@ end
 
 function children = getChildren(DAG, node)
   % get the child positions of the given node in the DAG
-  nodeIdx = getidx(node);
+  sz = numel(DAG)^0.25;
+  nodeIdx = getidx(node,sz);
   childrenIdx=find(DAG(nodeIdx,:)>0);
   children=zeros(numel(childrenIdx),2);
   for i=1:numel(childrenIdx)
-    children(i,:)=getpos(childrenIdx(i));
+    children(i,:)=getpos(childrenIdx(i),sz);
   end
 end
 
@@ -247,48 +251,48 @@ function DAG = addchildren(DAG, node, level)
     end
     
     % add children to graph (some children are off the grid so are invalid)
-    if validPos(c1)
-      DAG(getidx(node), getidx(c1)) = 1;
+    if validPos(c1,sz)
+      DAG(getidx(node,sz), getidx(c1,sz)) = 1;
       DAG = addchildren(DAG, c1, level+1);  
     end
-    if validPos(c2)
-      DAG(getidx(node), getidx(c2)) = 1;
+    if validPos(c2,sz)
+      DAG(getidx(node,sz), getidx(c2,sz)) = 1;
       DAG = addchildren(DAG, c2, level+1);  
     end
-    if validPos(c3)
-      DAG(getidx(node), getidx(c3)) = 1;
+    if validPos(c3,sz)
+      DAG(getidx(node,sz), getidx(c3,sz)) = 1;
       DAG = addchildren(DAG, c3, level+1);  
     end
-    if validPos(c4)
-      DAG(getidx(node), getidx(c4)) = 1;
+    if validPos(c4,sz)
+      DAG(getidx(node,sz), getidx(c4,sz)) = 1;
       DAG = addchildren(DAG, c4, level+1);  
     end
   end
 end
   
-function v = validPos(pos)
+function v = validPos(pos,sz)
   % check if position is in range of [0,16]
-  v = (sum(pos>=0 & pos<=16)==2);
+  v = (sum(pos>=0 & pos<=(sz-1))==2);
 end
 
-function idx = getidx(pos)
+function idx = getidx(pos, sz)
   % generate unique index for x,y values in 17x17 grid
-  idx = pos(1)+pos(2)*17;
+  idx = pos(1)+pos(2)*sz;
 end
 
-function pos = getpos(idx)
+function pos = getpos(idx, sz)
   % retrieve unique x,y position from index in 17x17 grid
   pos = [0,0];
-  pos(1) = mod(idx,17);
-  pos(2) = (idx-pos(1))/17;
+  pos(1) = mod(idx,sz);
+  pos(2) = (idx-pos(1))/sz;
 end
 
-function z = gensinc()
+function z = gensinc(sz)
   % generate a sinc function for sample dataset in a regular 17x17 grid (17=2^4+1)
-  [x,y] = meshgrid(0:16,0:16);
-  r = sqrt((x-8).^2+(y-8).^2);
-  z = sin(r)./r;
-  z(9,9) = 1;
+  [x,y] = meshgrid(0:sz-1,0:sz-1);
+  r = sqrt((x-(sz-1)/2).^2+(y-(sz-1)/2).^2);
+  z = sin(r*16/(sz-1))./(r*16/(sz-1));
+  z((sz+1)/2,(sz+1)/2) = 1;
 end
 
 
@@ -475,12 +479,14 @@ function plotDag(DAG, node, level)
      1 1 0; ... % yellow
      0 0 0];    % black
 
-  idx = getidx(node);
+  sz = numel(DAG)^0.25;
+     
+  idx = getidx(node,sz);
   idxC = find(DAG(idx,:)>0); % find all children
   
   % iterate through children and draw line from parent to child
   for c = 1:numel(idxC)
-    nodeC = getpos(idxC(c));
+    nodeC = getpos(idxC(c),sz);
   
     plot([node(1) nodeC(1)],[node(2) nodeC(2)],'LineWidth',2,'Color',colors(level,:));
     hold on;
