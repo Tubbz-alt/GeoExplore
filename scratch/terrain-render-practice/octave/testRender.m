@@ -7,68 +7,80 @@
 % method described in Section D. This script favors readability over speed and makes
 % no attempts to optimize calculations.
 
-function [p, z, e, r]=testRender()
-  sz = 2^5+1;
-  % generate a sinc function for sample dataset in a regular 17 x 17 grid
-  z = gensinc(sz);
-  % active vertices (corners are active by default)
-  v = zeros(sz,sz);
-  v(1,1) = 1; v(1,sz) = 1; v(sz,1) = 1; v(sz,sz) = 1;
-  % world space error
-  einc = zeros(sz,sz);
-  % monatonically increasing error (in terms of DAG traversal)
-  e = zeros(sz,sz);
-  % screen space error
-  p = zeros(sz,sz);
-  % radius of bounding ball used in screen space error calculation
-  r = zeros(sz,sz);
-  % set a camera position (ignoring orientation of camera for this test)
-  camPos = [0,-16,8];
+function [p, z, e, r]=testRender() 
+  %% Input parameters
+    % width/height of regular grid (Must be of the form 2^n+1)
+    sz = 2^4+1;
+    % pixel error threshold based on 60 degree FOV and 640 pixel screen resolution
+    tau=1;
+    % set a camera position
+    camPos = [0,-16,8];
   
-  center = [(sz-1)/2,(sz-1)/2];
-  
-  % I need to build the DAG of the scene. The center of the mesh is the parent. I will
-  % use an adjacency matrix to represent the DAG
-  DAG = zeros(sz*sz,sz*sz);
-  DAG = addchildren(DAG, center, 1);
-  
-  % % Plots the DAG (VERY VERY SLOW) just for validation
-  % plotDag(DAG, [8,8], 1);
-  % axis([-0.25 16.25 -0.25 16.25]);
-  % set(gca, 'xtick', 0:1:16);
-  % set(gca, 'ytick', 0:1:16);
-  
-  % compute radius of bounding balls
-  r = boundingBall(DAG, center, 1, r);
-  
-  % compute actual world space
-  einc = computeEInc(DAG, z, center, 1, einc);
-  % compute monatonically increasing world space error (in terms that e_ancestor <= e_node)
-  e = computeE(DAG, einc, center, 1, e);
-    
-  % Compute screen space error using isotropic projection (simpler than perspective)
-  p = computePIsotropic(e, r, camPos, z);
-  
-  % % test to make sure e is monatonically increasing (sanity check)
-  % teste(DAG, [8,8], e, max(max(e)));
+  %% Initialize all the variables that are needed for this calculation.
+    % generate a sinc function for sample dataset in a regular 17 x 17 grid
+    z = gensinc(sz);
+    % active vertices (corners are active by default)
+    v = zeros(sz,sz); v(1,1) = 1; v(1,sz) = 1; v(sz,1) = 1; v(sz,sz) = 1;
+    % world space error
+    einc = zeros(sz,sz);
+    % monatonically increasing error (in terms of DAG traversal)
+    e = zeros(sz,sz);
+    % screen space error (doesn't actually need to be initialized here)
+    p = zeros(sz,sz);
+    % radius of bounding ball used in screen space error calculation
+    r = zeros(sz,sz);
+    % This is the root nodes position
+    root = [(sz-1)/2,(sz-1)/2];
+    % this will be the Directed Acyclic graph's adjacency matrix
+    DAG = zeros(sz*sz,sz*sz);
 
-  % Filter vertices with screen space error above pixel threshold (tau). The smaller tau is
-  % the more vertices activated
-  tau=0.5;
-  v(p>tau)=1;
-  figure(1);
-  plotVerts(v);
+  %% Preprocessing on dataset
+    % These values would be stored as metadata in the file containing the heightmap.
+    
+    % I need to build the DAG of the scene. The center of the mesh is the parent. Based on
+    % Section A in the paper. See Figure 2 for help understanding graph topology.
+    DAG = addchildren(DAG, root, 1);
+    % compute radius of bounding balls using Equation 3.
+    r = boundingBall(DAG, root, 1, r);
+    % compute actual incremental world space error using Equation 4 (The maximum world space
+    % error metric from Equation 5 could also be used in place of this metric).
+    einc = computeEInc(DAG, z, root, 1, einc);
+    % compute monatonically increasing world space error (in terms that e_ancestor <= e_node)
+    % using Equation 2.
+    e = computeE(DAG, einc, root, 1, e);
+
+  %% Would need to be computed every frame
+    % Compute screen space error using isotropic projection (simpler than perspective)
+    % using Equation 7 (Optionally I could be using perspective screen space error described
+    % in Equation 10). It should be noted that this value doesn't need to be computed for
+    % every node, if a parent node is deactivated (p <= tau) then I know because of the
+    % monatonic property of this metric, that all the children will also be deactivated.
+    p = computePIsotropic(e, r, camPos, z);
+    % Filter vertices with screen space error above pixel threshold (tau). The smaller tau is
+    % the more vertices activated based on Equation 8 or 11.
+    v = getActiveVerts(p, tau, v);
+    % Compute the triangle strip vertices using the method described in Section D.
+    tstrip=meshrefine(v);
+    
+    %% TODO: Perform View Frustum Culling (Section E)
   
-  % Plot the mesh as a 3d wireframe mesh (pretty slow)
-  figure(2);
-  tstrip=meshrefine(v);
-  plotTStrip(tstrip,z);
-  hold on;
+  %& Show results
+    % Plot the active vertices in top-down view
+    figure(1);
+    plotVerts(v);
+    % Plot the mesh as a 3d wireframe (pretty slow because hold on slows octave down so much)
+    figure(2);
+    plotTStrip(tstrip,z);
 end
 
+% Return a binary matrix indicating which vertices are active. based on Equation 8 or 11
+function v = getActiveVerts(p, tau, v)
+  v(p>tau)=1;
+end
+
+% Compute the isotropic screen space error using Equation 8
 function p = computePIsotropic(e, r, cam, z)
-  % Compute the isotropic screen space error (Equation 8)
-  % A FEW ASSUMPTIONS
+  % A FEW ASSUMPTIONS ABOUT SCREEN SIZE AND ASPECT RATIO
   w = 640;          % Pixels across screen
   phi = 60*pi/180;  % FOV (azimuth)
   lambda = w/phi;
@@ -89,6 +101,7 @@ function p = computePIsotropic(e, r, cam, z)
   end
 end
 
+% Compute radius of bounding balls in DAG using Equation 3
 function r=boundingBall(DAG, node, level, r)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
@@ -114,6 +127,7 @@ function r=boundingBall(DAG, node, level, r)
   end
 end
 
+% Used to compute the "otherwise" part of Equation 3. Used by boundingBall function
 function maxval=bbRadius(DAG, inode, node, level, r, maxval)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
@@ -130,19 +144,7 @@ function maxval=bbRadius(DAG, inode, node, level, r, maxval)
   end
 end
 
-% test to make sure eprev is always greater than e(node)
-function teste(DAG, node, e, eprev)
-  if e(node(1)+1, node(2)+1) > eprev
-    fprintf('Error at Vertex(%i, %i)\n', node(1), node(2));
-  end
-  cpos = getChildren(DAG, node);
-  for i=1:numel(cpos)/2
-    cnode = cpos(i,:);
-    teste(DAG, cnode, e, e(node(1)+1, node(2)+1));
-  end
-end
-
-% determine result of equation 2 in the Lindstrom paper. Assumes ehat is either einc or emax
+% Compute refined world space error using Equation 2
 function e = computeE(DAG, ehat, node, level, e)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
@@ -171,7 +173,7 @@ function e = computeE(DAG, ehat, node, level, e)
   end
 end
 
-% determine result of equation 4 in the Lindstrom paper
+% Compute incremental world space error from Equation 4
 function einc = computeEInc(DAG, z, node, level, einc)
   % determine we aren't on the max level
   % sz = 17 but keeping this function generic
@@ -206,15 +208,15 @@ function einc = computeEInc(DAG, z, node, level, einc)
   end
 end
 
+% rotate a vector by angle assumes row vector for vec
 function rotatedVec = rotateVec(vec,deg)
-  % rotate a vector by angle assumes row vector
   M = [cosd(deg) sind(deg); ...
       -sind(deg) cosd(deg)];
   rotatedVec = round(vec*M);
 end
 
+% get the child positions of the given node in the DAG (return positions in a matrix of row vectors)
 function children = getChildren(DAG, node)
-  % get the child positions of the given node in the DAG
   sz = numel(DAG)^0.25;
   nodeIdx = getidx(node,sz);
   childrenIdx=find(DAG(nodeIdx,:)>0);
@@ -224,6 +226,7 @@ function children = getChildren(DAG, node)
   end
 end
 
+% Build the adjacency matrix for the DAG
 function DAG = addchildren(DAG, node, level)
   % sz = 17 but keeping this function generic
   sz = numel(DAG)^0.25;
@@ -269,57 +272,35 @@ function DAG = addchildren(DAG, node, level)
     end
   end
 end
-  
+
+% check if pos is in valid range ([0,sz-1])
 function v = validPos(pos,sz)
-  % check if position is in range of [0,16]
   v = (sum(pos>=0 & pos<=(sz-1))==2);
 end
 
+% generate unique index for x,y values in sz x sz grid
 function idx = getidx(pos, sz)
-  % generate unique index for x,y values in 17x17 grid
   idx = pos(1)+pos(2)*sz;
 end
 
+% retrieve unique x,y position from index in sz x sz grid
 function pos = getpos(idx, sz)
-  % retrieve unique x,y position from index in 17x17 grid
   pos = [0,0];
   pos(1) = mod(idx,sz);
   pos(2) = (idx-pos(1))/sz;
 end
 
+% generate a sinc function for sample dataset in a regular sz x sz grid (sz=2^n+1)
 function z = gensinc(sz)
-  % generate a sinc function for sample dataset in a regular 17x17 grid (17=2^4+1)
   [x,y] = meshgrid(0:sz-1,0:sz-1);
   r = sqrt((x-(sz-1)/2).^2+(y-(sz-1)/2).^2);
   z = sin(r*16/(sz-1))./(r*16/(sz-1));
   z((sz+1)/2,(sz+1)/2) = 1;
 end
 
-
-function [V,parity] = tstripappend(Vin,vert,p,parity)
-  V=Vin;
-  vsz=size(V); n=vsz(1);
-  if (sum(abs(vert-V(n-1,:)))~=0) && (sum(abs(vert-V(n,:)))~=0)
-    if p~=parity
-      parity=p;
-    else
-      V = [V;V(n-1,:)];
-    end
-    V = [V;vert];
-  end
-end
-
-function [V,parity]=submeshrefine(Vin,i,j,l,parity,verts)
-  V=Vin;
-
-  if l>0 && verts(i(1)+1,i(2)+1)==1
-    childLeft = cl(i,j);
-    childRight = cr(i,j);
-    [V,parity]=submeshrefine(V,j,childLeft,l-1,parity,verts);
-    [V,parity]=tstripappend(V,i,mod(l,2),parity,verts);
-    [V,parity]=submeshrefine(V,j,childRight,l-1,parity,verts);
-  end
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           Functions used for creating triangle strip from active vertices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function V=meshrefine(verts)
   V = [0,0; ...
@@ -344,7 +325,32 @@ function V=meshrefine(verts)
   V=V(2:Vsz(1),:);
 end
 
-% assumes j is a child of i
+function [V,parity]=submeshrefine(Vin,i,j,l,parity,verts)
+  V=Vin;
+
+  if l>0 && verts(i(1)+1,i(2)+1)==1
+    childLeft = cl(i,j);
+    childRight = cr(i,j);
+    [V,parity]=submeshrefine(V,j,childLeft,l-1,parity,verts);
+    [V,parity]=tstripappend(V,i,mod(l,2),parity,verts);
+    [V,parity]=submeshrefine(V,j,childRight,l-1,parity,verts);
+  end
+end
+
+function [V,parity] = tstripappend(Vin,vert,p,parity)
+  V=Vin;
+  vsz=size(V); n=vsz(1);
+  if (sum(abs(vert-V(n-1,:)))~=0) && (sum(abs(vert-V(n,:)))~=0)
+    if p~=parity
+      parity=p;
+    else
+      V = [V;V(n-1,:)];
+    end
+    V = [V;vert];
+  end
+end
+
+% Determine the left child of the triangle defined by vi/vj assumes j is a child of i
 function c = cl(vi, vj);
   xi = vi(1);
   yi = vi(2);
@@ -406,7 +412,7 @@ function c = cl(vi, vj);
   c=[xc yc];
 end
 
-% assumes j is a child of i
+% Determine the right child of the triangle defined by vi/vj assumes j is a child of i
 function c = cr(vi, vj);
   xi = vi(1);
   yi = vi(2);
@@ -468,32 +474,11 @@ function c = cr(vi, vj);
   c = [xc yc];
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                             Plotting functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function plotDag(DAG, node, level)
-  colors = ...
-    [0 0 1; ... % blue
-     0 1 0; ... % green
-     1 0 0; ... % red
-     0 1 1; ... % cyan
-     1 0 1; ... % purple
-     1 1 0; ... % yellow
-     0 0 0];    % black
-
-  sz = numel(DAG)^0.25;
-     
-  idx = getidx(node,sz);
-  idxC = find(DAG(idx,:)>0); % find all children
-  
-  % iterate through children and draw line from parent to child
-  for c = 1:numel(idxC)
-    nodeC = getpos(idxC(c),sz);
-  
-    plot([node(1) nodeC(1)],[node(2) nodeC(2)],'LineWidth',2,'Color',colors(level,:));
-    hold on;
-    plotDag(DAG, nodeC, level+1);
-  end
-end
-
+% Plot the vertices in a top down (xy) view.
 function plotVerts(verts)
   hold on;
   sz=size(verts);
@@ -512,6 +497,8 @@ function plotVerts(verts)
   set(gca, 'ytick', [0:1:sz(2)-1]);
 end
 
+% Plot the 3d triangle strip. lstrip should be an Nx2 matrix where N is the number of vertices
+% in triangle strip. First column are X values and second are Y values.
 function plotTStrip(lstrip,z)
   sz=size(lstrip);
   plot3([lstrip(1,1) lstrip(2,1)], ...
@@ -532,3 +519,44 @@ function plotTStrip(lstrip,z)
   end
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                      Unused functions for testing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Plot the DAG, not very useful but ensures that things are what they seem (VERY VERY SLOW)
+function plotDag(DAG, node, level)
+  colors = ...
+    [0 0 1; ... % blue
+     0 1 0; ... % green
+     1 0 0; ... % red
+     0 1 1; ... % cyan
+     1 0 1; ... % purple
+     1 1 0; ... % yellow
+     0 0 0];    % black
+
+  sz = numel(DAG)^0.25;
+     
+  idx = getidx(node,sz);
+  idxC = find(DAG(idx,:)>0); % find all children
+  
+  % iterate through children and draw line from parent to child
+  for c = 1:numel(idxC)
+    nodeC = getpos(idxC(c),sz);
+  
+    plot([node(1) nodeC(1)],[node(2) nodeC(2)],'LineWidth',2,'Color',colors(mod(level-1,7)+1,:));
+    hold on;
+    plotDag(DAG, nodeC, level+1);
+  end
+end
+
+% test to make sure eprev is always greater than e(node)
+function teste(DAG, node, e, eprev)
+  if e(node(1)+1, node(2)+1) > eprev
+    fprintf('Error at Vertex(%i, %i)\n', node(1), node(2));
+  end
+  cpos = getChildren(DAG, node);
+  for i=1:numel(cpos)/2
+    cnode = cpos(i,:);
+    teste(DAG, cnode, e, e(node(1)+1, node(2)+1));
+  end
+end
