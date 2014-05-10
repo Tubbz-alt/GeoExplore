@@ -6,22 +6,24 @@
 #ifndef __SRC_CPP_IMAGE_MEMORYRESOURCE_HPP__
 #define __SRC_CPP_IMAGE_MEMORYRESOURCE_HPP__
 
+/// GeoExplore Libraries
+#include <GeoExplore/image/BaseResource.hpp>
+
 
 namespace GEO{
-
 
 /**
  * @class MemoryResource
 */
 template <typename PixelType>
-class MemoryResource : public BaseResource {
+class MemoryResource : public BaseResource<PixelType> {
 
     public:
 
         /**
          * Get the pixel value
         */
-        virtual PixelType operator[]const( const int& idx )const{
+        virtual PixelType operator[]( const int& idx )const{
             return m_data[idx];
         }
 

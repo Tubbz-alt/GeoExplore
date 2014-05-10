@@ -13,6 +13,7 @@ namespace GEO{
 /**
  * @class BaseResource
 */
+template <typename PixelType>
 class BaseResource{
 
     public:
@@ -20,12 +21,12 @@ class BaseResource{
         /**
          * Return the pixel value
         */
-        virtual double operator[]( const int& idx )const;
+        virtual double operator[]( const int& idx )const = 0;
 
         /**
          * Return the pixel reference
         */
-        virtual double& operator[]( const int& idx );
+        virtual double& operator[]( const int& idx ) = 0;
 
 
 

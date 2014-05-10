@@ -40,7 +40,13 @@ set( GEOEXPLORE_COORDINATE_HEADERS
 
 #  Image Module
 set( GEOEXPLORE_IMAGE_HEADERS
+    ../src/cpp/image/BaseResource.hpp
     ../src/cpp/image/ChannelType.hpp
+    ../src/cpp/image/DiskResource.hpp
+    ../src/cpp/image/Image.hpp
+    ../src/cpp/image/MemoryResource.hpp
+    ../src/cpp/image/MetadataContainerBase.hpp
+    ../src/cpp/image/MetadataContainer.hpp
     ../src/cpp/image/PixelBase.hpp
     ../src/cpp/image/PixelGray.hpp
     ../src/cpp/image/PixelRGB.hpp
@@ -82,6 +88,12 @@ set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/cpp/coordinate/CoordinateBase.cpp
 )
 
+#   Image Module
+set( GEOEXPLORE_IMAGE_SOURCES
+    ../src/cpp/image/MetadataContainer.cpp
+    ../src/cpp/image/MetadataContainerBase.cpp
+)
+
 #   IO Module
 set( GEOEXPLORE_IO_SOURCES
     ../src/cpp/io/GDAL_Driver.cpp
@@ -97,6 +109,7 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
+    ${GEOEXPLORE_IMAGE_SOURCES}
     ${GEOEXPLORE_IO_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
 )

@@ -6,9 +6,10 @@
 #ifndef __SRC_CPP_IMAGE_DISKRESOURCE_HPP__
 #define __SRC_CPP_IMAGE_DISKRESOURCE_HPP__
 
+/// GeoExplore Libraries
+#include <GeoExplore/image/BaseResource.hpp>
 
 namespace GEO{
-
 
 /**
  * @class DiskResource
@@ -18,7 +19,12 @@ class DiskResource : public BaseResource {
 
     public:
 
+        /**
+         * Default Constructor
+        */
+        DiskResource(){
 
+        }
 
     private:
 
