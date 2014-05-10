@@ -1,0 +1,22 @@
+Comments on this current structure
+
+1. Image and DiskImage both use the same base class.  The difference is the ResourceType.  This keeps a good uniform structure. 
+
+
+2.  DiskResource vs MemoryResource
+    - Necessary operations for both
+        - operator()( x, y) (getter)
+
+    - DiskResource Only
+        - setImageDriver/getImageDriver
+
+    - MemoryResource Only
+        - operator()( x, y) (setter)
+
+    *  Considerations:
+        -> Will the setter on the DiskResource do anything? Here are the options...
+            a) Do nothing, don't set anything.
+            b) Throw exception.
+            c) Throw compiler error (How?)
+
+
