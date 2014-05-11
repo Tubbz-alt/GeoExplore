@@ -18,5 +18,14 @@ NotImplementedException::NotImplementedException( std::string const& module,
                                                         m_lineNumber(lineNumber){}
 
 
+
+/**
+ * MemoryResourceNotInitializedException
+*/
+MemoryResourceNotInitializedException::MemoryResourceNotInitializedException( const std::string& filename, 
+                                                                              const int& lineNumber )
+                                                                                  : m_filename(filename), 
+                                                                                    m_lineNumber(lineNumber){}
+
 } /// End of GEO Namespace
 

@@ -15,7 +15,7 @@ namespace GEO{
  * @class DiskResource
 */
 template <typename PixelType>
-class DiskResource : public BaseResource {
+class DiskResource : public BaseResource<PixelType> {
 
     public:
 
@@ -24,6 +24,24 @@ class DiskResource : public BaseResource {
         */
         DiskResource(){
 
+        }
+        
+        /**
+         * Return the number of rows
+         *
+         * @return row count
+        */
+        virtual int rows()const{
+            return 0;
+        }
+
+        /**
+         * Return the number of columns
+         * 
+         * @return column count
+        */
+        virtual int cols()const{
+            return 0;
         }
 
     private:

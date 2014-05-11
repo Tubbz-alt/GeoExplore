@@ -64,6 +64,8 @@ set( UNIT_TEST_SOURCES
     ../../tests/cpp/coordinate/TEST_CoordinateConversion.cpp
     ../../tests/cpp/coordinate/TEST_CoordinateUTM.cpp
     ../../tests/cpp/image/TEST_ChannelType.cpp
+    ../../tests/cpp/image/TEST_Image.cpp
+    ../../tests/cpp/image/TEST_MemoryResource.cpp
     ../../tests/cpp/image/TEST_PixelTypes.cpp
     ../../tests/cpp/io/TEST_GDAL_Driver.cpp
     ../../tests/cpp/io/TEST_OGR_Driver.cpp

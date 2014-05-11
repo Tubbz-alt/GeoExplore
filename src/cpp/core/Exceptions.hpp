@@ -52,6 +52,35 @@ class NotImplementedException : public std::exception {
 
 }; /// End of NotImplementedException
 
+/**
+ * @class MemoryResourceNotInitializedException
+ * This is thrown when a resource is access that has not been allocated.
+*/
+class MemoryResourceNotInitializedException : public std::exception {
+
+    public:
+        
+        /**
+         * Constructor
+        */
+        MemoryResourceNotInitializedException( const std::string& filename, const int& line_number );
+
+        /**
+         * Message
+        */
+        virtual const char* what()const throw(){
+            return std::string(std::string("error: MemoryResource accessed without being initialized. File: ") +
+                               std::string(", Line: ") + num2str(m_lineNumber)).c_str();
+        }
+    
+    private:
+        
+        /// Filename
+        std::string m_filename;
+
+        /// Line Number
+        int m_lineNumber;
+}; /// End of MemoryResourceNotInitializedException
 
 } /// End of GEO Namespace
 

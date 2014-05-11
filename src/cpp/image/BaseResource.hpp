@@ -21,14 +21,23 @@ class BaseResource{
         /**
          * Return the pixel value
         */
-        virtual double operator[]( const int& idx )const = 0;
+        virtual PixelType operator[]( const int& idx )const = 0;
 
         /**
          * Return the pixel reference
         */
-        virtual double& operator[]( const int& idx ) = 0;
+        virtual PixelType& operator[]( const int& idx ) = 0;
+        
+        /**
+         * Return the number of image rows
+        */
+        virtual int rows()const = 0;
 
-
+        /**
+         * Return the number of image columns
+         * @return column count
+        */
+        virtual int cols()const = 0;
 
 }; /// End of BaseResource Class
 

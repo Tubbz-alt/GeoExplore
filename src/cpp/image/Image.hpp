@@ -8,6 +8,8 @@
 
 /// GeoExplore Libraries
 #include <GeoExplore/image/BaseResource.hpp>
+#include <GeoExplore/image/DiskResource.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
 #include <GeoExplore/image/MetadataContainerBase.hpp>
 
 
@@ -35,16 +37,36 @@ class Image_{
 
         }
 
+        /**
+         * Return the number of rows
+         * @return row count
+        */
+        int rows()const{
+            return m_resource.rows();
+        }
+
+        /**
+         * Return the number of columns
+         * @return column count
+        */
+        int cols()const{
+            return m_resource.cols();
+        }
+
 
         private:
 
             /// internal pixel data
-            BaseResource<PixelType> m_resource;    
+            ResourceType m_resource;    
             
             /// Internal Metadata
             MetadataContainerBase::ptr_t m_metadata;
 
 };  /// End of BaseImage Class
+
+/// Common Image Aliases
+template <typename PixelType> using Image     = Image_<PixelType,MemoryResource<PixelType> >;
+template <typename PixelType> using DiskImage = Image_<PixelType,DiskResource<PixelType> >;
 
 } /// End of namespace GEO
 
