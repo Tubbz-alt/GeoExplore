@@ -53,6 +53,20 @@ void convert_UTM2Geodetic( int const&    fromZone,
 /**
  * Convert a coordinate from Geodetic to UTM
 */
+void convert_Geodetic2UTM_fixedZone( double const& fromLatitude,
+                                     double const& fromLongitude,
+                                     double const& fromAltitude,
+                                     Datum const&  fromDatum,
+                                     Datum const&  toDatum,
+                                     int const&    toZone,
+                                     double&       toEasting,
+                                     double&       toNorthing,
+                                     double&       toAltitude );
+ 
+ 
+/**
+ * Convert a coordinate from Geodetic to UTM
+*/
 void convert_Geodetic2UTM( double const& fromLatitude,
                            double const& fromLongitude,
                            double const& fromAltitude,

@@ -74,3 +74,25 @@ To run unit tests, run the script
 
 To see examples of using GeoExplore binaries, see the items in scripts.
 
+TODO
+====
+
+Needed Unit Tests
+-----------------
+
+* UTM to UTM: change only Datum
+* UTM to UTM: change only zone
+* UTM to UTM: change both DATUM and Zone
+* UTM to UTM: change nothing, make sure output returns input 
+
+* UTM to Geod: same datum
+* UTM to Geod: different datum
+
+* Geodetic to UTM: same datum, free zone
+* Geodetic to UTM: same datum, fixed zone
+* Geodetic to UTM: different datum, free zone
+* Geodetic to UTM: different datum, fixed zone
+
+* Geodetic to Geodetic: same datum, make sure output returns input
+* Geodetic to Geodetic: different datum
+

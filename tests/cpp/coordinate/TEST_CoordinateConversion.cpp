@@ -53,10 +53,10 @@ TEST( CoordinateConversion, Geodetic2UTM_ptr ){
 }
 
 
- /**
-  * Test the Coordinate Conversion 
- */
- TEST( CoordinateConversion, Geodetic2UTM01 ){
+/**
+ * Test the Coordinate Conversion 
+*/
+TEST( CoordinateConversion, Geodetic2UTM01_freeZone_sameDatum ){
 
     // create a geodetic coordinate
     GEO::CoordinateGeodetic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
@@ -88,9 +88,42 @@ TEST( CoordinateConversion, Geodetic2UTM_ptr ){
 
 
 /**
+ * Test Geodetic to UTM with a fixed Zone
+*/
+TEST( CoordinateConversion, Geodetic2UTM02_fixedZone_sameDatum ){
+
+    // create a geodetic coordinate
+    GEO::CoordinateGeodetic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
+    
+    // convert the coordinate
+    GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01, 30 );
+
+    // test the output
+    ASSERT_EQ( GEO::Datum::WGS84, result01.datum() );
+    ASSERT_EQ(          30, result01.zone() );
+    ASSERT_NEAR( 833978.56, result01.easting(),  0.1 );
+    ASSERT_NEAR(         0, result01.northing(), 0.1 );
+    ASSERT_NEAR(         0, result01.altitude(), 0.1 );
+    
+    // test the white house
+    coordinate01.latitude()  = 38.8977;
+    coordinate01.longitude() = -77.0365;
+    coordinate01.altitude()  = 17;
+    coordinate01.datum()     = GEO::Datum::WGS84;
+
+    result01 = GEO::convert_coordinate( coordinate01, 19 );
+    ASSERT_EQ( GEO::Datum::WGS84, result01.datum() );
+    ASSERT_EQ(        19, result01.zone());
+    ASSERT_NEAR( -197379, result01.easting(), 1 );
+    ASSERT_NEAR( 4336248, result01.northing(), 1);
+    ASSERT_NEAR(      17, result01.altitude(), 1 );
+    
+}
+
+/**
  * Test the UTM to Geodetic
 */
-TEST( CoordinateConversion, UTM2Geodetic01 ){
+TEST( CoordinateConversion, UTM2Geodetic01_freeZone_sameDatum ){
 
     // create a UTM Coordinate
     GEO::CoordinateUTM_d coordinate01;
