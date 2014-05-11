@@ -6,7 +6,11 @@
 #ifndef __SRC_CPP_IMAGE_PIXELBASE_HPP__
 #define __SRC_CPP_IMAGE_PIXELBASE_HPP__
 
+/// C++ Standard Library
 #include <stdexcept>
+
+/// GeoExplore Libraries
+#include <GeoExplore/core/Exceptions.hpp>
 
 namespace GEO{
 
@@ -30,19 +34,33 @@ class PixelBase {
         */
         PixelBase(){}
         
+        /**
+         * Return channel value
+        */
         virtual typename channeltype::type operator[](const int& idx)const{
-            throw std::runtime_error("error: PixelBase operator[] not implemented.");
+            throw NotImplementedException("PixelBase operator[]", __FILE__, __LINE__);
             typename channeltype::type value;
             return value;
         }
         
+        /**
+         * Return the channel reference
+        */
         virtual typename channeltype::type& operator[](const int& idx){
-            throw std::runtime_error("error: PixelBase operator[] not implemented.");
+            throw NotImplementedException("PixelBase &operator[]", __FILE__, __LINE__ );
         }
 
         /// Dimensionality
         virtual int dims()const{ 
-            throw std::runtime_error("error: PixelBase has no dimensionality.");
+            throw GeneralException("error: PixelBase has no dimensionality.", __FILE__, __LINE__);
+        }
+
+        /**
+         * Compare the pixel
+        */
+        virtual bool operator == ( const PixelBase<DerivedType,ChannelType>& rhs )const{
+            throw NotImplementedException("PixelBase Comparison Operator (==)", __FILE__,__LINE__);
+            return false;
         }
 
 }; /// End of PixelBase Class

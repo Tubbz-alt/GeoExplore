@@ -72,6 +72,14 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
             return m_data;
         }
 
+        /**
+         * Compare Pixel
+        */
+        virtual bool operator == ( const PixelGray<ChannelType>& rhs )const{
+            return (m_data == rhs.m_data);
+        }
+
+
     private:
 
         /// Data
@@ -83,21 +91,27 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
 /// Common Typedefs
 typedef PixelGray<ChannelTypeDouble>  PixelGrayDouble;
 typedef PixelGray<ChannelTypeDouble>  PixelGray_Double;
+typedef PixelGray<ChannelTypeDouble>  PixelGray_d;
 
 typedef PixelGray<ChannelTypeUInt8>   PixelGrayUInt8;
 typedef PixelGray<ChannelTypeUInt8>   PixelGray_UInt8;
+typedef PixelGray<ChannelTypeUInt8>   PixelGray_u8;
 
 typedef PixelGray<ChannelTypeUInt12>  PixelGrayUInt12;
 typedef PixelGray<ChannelTypeUInt12>  PixelGray_UInt12;
+typedef PixelGray<ChannelTypeUInt12>  PixelGray_u12;
 
 typedef PixelGray<ChannelTypeUInt14>  PixelGrayUInt14;
 typedef PixelGray<ChannelTypeUInt14>  PixelGray_UInt14;
+typedef PixelGray<ChannelTypeUInt14>  PixelGray_u14;
 
 typedef PixelGray<ChannelTypeUInt16>  PixelGrayUInt16;
 typedef PixelGray<ChannelTypeUInt16>  PixelGray_UInt16;
+typedef PixelGray<ChannelTypeUInt16>  PixelGray_u16;
 
 typedef PixelGray<ChannelTypeUInt32>  PixelGrayUInt32;
 typedef PixelGray<ChannelTypeUInt32>  PixelGray_UInt32;
+typedef PixelGray<ChannelTypeUInt32>  PixelGray_u32;
 
 
 } /// End of GEO Namespace

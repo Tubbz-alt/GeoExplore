@@ -103,6 +103,16 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
         virtual datatype operator[](const int& idx)const{
             return m_data[idx];
         }
+        
+        /**
+         * Compare Pixels
+        */
+        virtual bool operator == (const PixelRGB<ChannelType>& rhs )const{
+            return ( ( m_data[0] == rhs.m_data[0] ) &&
+                     ( m_data[1] == rhs.m_data[1] ) && 
+                     ( m_data[2] == rhs.m_data[2] ) );
+        }
+
 
     private:
 
@@ -118,23 +128,23 @@ typedef PixelRGB<ChannelTypeDouble>  PixelRGB_d;
 
 typedef PixelRGB<ChannelTypeUInt8>   PixelRGBUInt8;
 typedef PixelRGB<ChannelTypeUInt8>   PixelRGB_UInt8;
-typedef PixelRGB<ChannelTypeDouble>  PixelRGB_u8;
+typedef PixelRGB<ChannelTypeUInt8>   PixelRGB_u8;
 
 typedef PixelRGB<ChannelTypeUInt12>  PixelRGBUInt12;
 typedef PixelRGB<ChannelTypeUInt12>  PixelRGB_UInt12;
-typedef PixelRGB<ChannelTypeDouble>  PixelRGB_u12;
+typedef PixelRGB<ChannelTypeUInt12>  PixelRGB_u12;
 
 typedef PixelRGB<ChannelTypeUInt14>  PixelRGBUInt14;
 typedef PixelRGB<ChannelTypeUInt14>  PixelRGB_UInt14;
-typedef PixelRGB<ChannelTypeDouble>  PixelRGB_14;
+typedef PixelRGB<ChannelTypeUInt14>  PixelRGB_14;
 
 typedef PixelRGB<ChannelTypeUInt16>  PixelRGBUInt16;
 typedef PixelRGB<ChannelTypeUInt16>  PixelRGB_UInt16;
-typedef PixelRGB<ChannelTypeDouble>  PixelRGB_16;
+typedef PixelRGB<ChannelTypeUInt16>  PixelRGB_16;
 
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGBUInt32;
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_UInt32;
-typedef PixelRGB<ChannelTypeDouble>  PixelRGB_32;
+typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_32;
 
 } /// End of GEO Namespace
 

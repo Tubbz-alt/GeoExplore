@@ -27,5 +27,17 @@ MemoryResourceNotInitializedException::MemoryResourceNotInitializedException( co
                                                                                   : m_filename(filename), 
                                                                                     m_lineNumber(lineNumber){}
 
+
+/**
+ * GeneralException Constructor
+*/
+GeneralException::GeneralException( std::string const& message,
+                                    std::string const& filename,
+                                    int const& lineNumber ) : 
+                                               m_message(message),
+                                               m_filename(filename),
+                                               m_lineNumber(lineNumber){}
+
+
 } /// End of GEO Namespace
 

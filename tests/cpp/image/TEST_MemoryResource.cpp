@@ -25,4 +25,37 @@ TEST( MemoryResource, DefaultConstructor ){
 
 }
 
+/**
+ * Test the memory resource assignment operator
+*/
+TEST( MemoryResource, AssignmentOperator ){
+
+    // create a Memory Resource with a specific size
+    GEO::MemoryResource<GEO::PixelGray_u8> resource01(100,100);
+
+    // load the reference with dummy values
+    for( int i=0; i<(resource01.rows()*resource01.cols()); i++ ){
+        resource01[i] = i;
+    }
+
+    // create a new resource and copy the values
+    GEO::MemoryResource<GEO::PixelGray_u8> resource02 = resource01;
+
+    // make sure the values match
+    ASSERT_EQ( resource02.rows(), 100 );
+    ASSERT_EQ( resource02.cols(), 100 );
+    for( int i=0; i<(resource01.rows()*resource01.cols()); i++ ){
+        ASSERT_EQ( resource02[i], i );
+    }
+
+}
+
+/**
+ * Test the Memory Resource Getters and Setters
+*/
+TEST( MemoryResource, GettersSetters ){
+
+    FAIL();
+
+}
 

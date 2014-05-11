@@ -82,6 +82,43 @@ class MemoryResourceNotInitializedException : public std::exception {
         int m_lineNumber;
 }; /// End of MemoryResourceNotInitializedException
 
+/**
+ * @class GeneralException
+ *
+ * Error which is thrown if no other reason is found
+*/
+class GeneralException : public std::exception {
+    
+    public:
+        
+        /**
+         * Constructor
+        */
+        GeneralException( const std::string& message, 
+                          const std::string& filename, 
+                          const int& line_number );
+
+        /**
+         * Message
+        */
+        virtual const char* what()const throw(){
+            return std::string( m_message + std::string(", File: ") + m_filename + std::string(", Line: ") + num2str(m_lineNumber)).c_str();
+        }
+
+    private:
+        
+        /// Function Name
+        std::string m_message;
+
+        /// Filename
+        std::string m_filename;
+
+        /// Line Number
+        int m_lineNumber;
+
+
+}; /// End of NotImplementedException
+
 } /// End of GEO Namespace
 
 #endif

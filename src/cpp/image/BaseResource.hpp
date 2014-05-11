@@ -29,6 +29,16 @@ class BaseResource{
         virtual PixelType& operator[]( const int& idx ) = 0;
         
         /**
+         * Return the pixel value
+        */
+        virtual PixelType  operator()( const int& x, const int& y ) const = 0;
+
+        /**
+         * Return the pixel reference
+        */
+        virtual PixelType& operator()( const int& x, const int& y ) = 0;
+        
+        /**
          * Return the number of image rows
         */
         virtual int rows()const = 0;
