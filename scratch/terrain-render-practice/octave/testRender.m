@@ -7,7 +7,7 @@
 % method described in Section D. This script favors readability over speed and makes
 % no attempts to optimize calculations.
 
-function [p, z, e, r]=testRender() 
+function [p, z, e, einc, r]=testRender() 
   %% Input parameters
     % width/height of regular grid (Must be of the form 2^n+1)
     sz = 2^4+1;
@@ -73,33 +73,29 @@ function [p, z, e, r]=testRender()
     plotTStrip(tstrip,z);
 end
 
-% Return a binary matrix indicating which vertices are active. based on Equation 8 or 11
-function v = getActiveVerts(p, tau, v)
-  v(p>tau)=1;
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%               Compute Bounding Balls (Lateral World Space Error)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Compute the isotropic screen space error using Equation 8
-function p = computePIsotropic(e, r, cam, z)
-  % A FEW ASSUMPTIONS ABOUT SCREEN SIZE AND ASPECT RATIO
-  w = 640;          % Pixels across screen
-  phi = 60*pi/180;  % FOV (azimuth)
-  lambda = w/phi;
-  
-  sz = size(e);
-  for xIdx=1:sz(1)
-    for yIdx=1:sz(2)
-      camDist = norm([xIdx-1 yIdx-1 z(xIdx,yIdx)]-cam);
-      % if camera is within B sphere then vertex MUST be active (see paragraph above equation 7)
-      if camDist < r(xIdx, yIdx)
-        % Infinite error, forces vertex to be active
-        p(xIdx, yIdx) = Inf;
-      else
-        % Equation 7
-        p(xIdx, yIdx) = lambda * e(xIdx, yIdx) / (camDist-r(xIdx, yIdx));
-      end
-    end
-  end
-end
+% Bounding ball's are described in Section B and are computed using Equation 3.
+% There are two goals of the bounding balls.
+%
+% The first is to threshold when a screen space error even needs to be computed.
+% Basically, if your camera is within the bounding ball of a vertex, then that vertex
+% must be activated.
+%
+% The second is the ensure that screen space error is monatonically increasing
+% from parent to child. This metric complements the world space height error metric
+% by ensuring that both vertical (z) and lateral (x-y) errors are considered when
+% computing screen space errors.
+%
+% The only property of a bounding ball is that the bounding ball of a vertex always
+% encompasses the bounding balls of that vertex's decendents. This enforces the
+% nesting property which allows valid vertex activation configurations.
+%
+% One great thing about using a regular grid is that the x-y error is constant for
+% a given level of the DAG. This means that the bounding ball radii will only need
+% to be computed upon initialization of a program.
 
 % Compute radius of bounding balls in DAG using Equation 3
 function r=boundingBall(DAG, node, level, r)
@@ -144,7 +140,191 @@ function maxval=bbRadius(DAG, inode, node, level, r, maxval)
   end
 end
 
-% Compute refined world space error using Equation 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                        World Space Height Error Metrics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% World space z-error measures the amount of elevation (z-axis) error introduced by NOT
+% activating a vertex. i.e. This answers the question. If you were to remove this vertex
+% from the mesh, how much elevation error would be introduced in world space?
+%
+% This metric is view-independent and can therefore be pre-computed and stored as metadata
+% in the heightmap.
+%
+% There are two metrics presented in the paper by Lindstrom, incremental world space
+% error and maximum world space error. Incremental error (einc) computes only the error
+% introduced by removing a vertex, but ignores the potentially greater error that could
+% be caused by removing the decendents of this vertex. A decendent can not be activated
+% without it's parent being activated, so this could potentially cause visible errors
+% in the mesh where there are high frequency changes in the terrain (like a spike or cliff).
+% The Maximum error (emax) examines the decendents of the vertex and determines the
+% maximumum height error that would be introduced into the mesh by removing the vertex.
+% The emax metric is always at least as great as the einc metric and therefore will cause
+% at least as many active vertices as einc would, but high frequency changes in terrain
+% will keep the true screen space error less-than or equal-to the desired screen space
+% error.
+%
+% More about computing emax and emin.
+%
+% A node p_j has two triangles which it bisects. The parents of p_j
+% being p_i1 and p_i2 make those triangles t1=t(p_i1, p_j) and t2=t(p_i2, p_j)
+%
+%  (Imagine angle(ABC) and angle(CDA) are 90 degrees.)
+%
+%        p_i1 ---> B   
+%                /   \
+%              /  t1   \
+%            /           \  
+%  v_l --> A-------E-------C <-- v_r
+%            \           /
+%              \  t2   /
+%                \   /
+%                  D  <---- p_i2
+%       
+% The "E" vertex in the center of the diamond is p_j. t1 = ABC = t(B,E)
+% and t2 = ACD = t(D,E). See Figure 1 and Section A for more information on
+% longest edge bisection.
+
+% In the paper, D_{i,j} is contains all descendents of i reached by recursive
+% bisection of triangle t(i,j). i.e. Only recurse down paths of cl and cr
+% (using the cl and cr functions) which are the left and right children of
+% node i which bisect the two triangles created when j bisects i.
+%
+% Notice that the subscripts in the error term (delta hat) differ between
+% Equation 4 and Equation 5. Equation 4 determines the difference added by
+% bisecting only the first cut of the triangle making the z_t just the average
+% z of z(v_l) and z(v_r). In Equation 5 I need the actual z value of the triangle
+% at multiple places in t1 and t2 (not necessarily on the bisecting edge or any
+% edge for that matter). This means we'll want to use homogenous coordinatates
+% to determine the z value at any point inside the triangle.
+%
+% Here's an example of what emax actually represents. Consider the diagram below
+% showing a mesh with triangles drawn at a resolution of 2 levels courser than the
+% maximum resolution.
+%
+%                 \   /
+%                   B
+%                 /   \
+%               /       \
+%             /           \
+%           F       K       G
+%         /                   \
+%       /                       \
+% \   /                           \   /   
+%   A-------J-------E-------L-------C
+% /   \                           /   \
+%       \                       /
+%         \                   /
+%           I       M       H
+%             \           /
+%               \       /
+%                 \   /
+%                   D
+%                 /   \
+%
+%  emax(E) represents the maximum height error introduced into the scene by NOT activating
+%  vertex E. Well the first thing to consider would be that not activating E would
+%  at least introduce the error delta_{E, ABC} = |z(E)-zABC(E)| = delta_{E,ACD} = |z(E)-zACD(E)|
+%  where zABC(E) is the z value of the triangle ABC at E and zACD(E) is the z value of
+%  the triangle ACD at E. This is as far as the incremental error metric (einc) computes.
+%  However, we know that without activating E, vertices F, K, G, J, L, I, M, H also can't be
+%  activated (parent/child relationship) which could possibly introduce even more error
+%  than what is computed by the incremental error error alone.
+%  dF = delta_{F, ABC}
+%  dK = delta_{K, ABC}
+%  dG = delta_{G, ABC}
+%  dJ = delta_{J, ABC}
+%     = delta_{J, ACD}
+%  dE = delta_{E, ABC}
+%     = delta_{J, ACD}
+%     = einc(E)
+%  dL = delta_{L, ABC}
+%     = delta_{L, ACD}
+%  dI = delta_{I, ACD}
+%  dM = delta_{M, ACD}
+%  dH = delta_{H, ACD}
+%
+%  emax(E) = max(dF, dK, dG, dJ, dE, dL, dI, dM, dH)
+%  Now, emax represents the true maximum height error introduced into the mesh by excluding
+%  vertex E.         
+%
+%  Extended version of previous diagram showing a finer resolution around vertex F. (Also added
+%  vertex N and other unlabeled vertices).
+%
+%   |             \   /
+% --N-------x-------B       x       x
+%   |             / | \
+%   |           /   |   \
+%   |         /     |     \
+%   x       F       K       G       x
+%   |     /         |         \
+%   |   /           |           \
+% \ | /             |             \   /   
+%   A-------J-------E-------L-------C
+% /   \             |             /   \
+%       \           |           /
+%         \         |         /
+%   x       I       M       H       x
+%             \     |     /
+%               \   |   /
+%                 \ | /
+%   x       x       D       x       x
+%                 /   \
+%
+%  Unfortunately, emax needs to traverse all the way down the tree for every node and can't easily be
+%  computed incrementally using a bottom-up approach. Here's an example of why. The value emax(F)
+%  isn't necessarily less-than or equal-to emax(E). This is because F bisects the triangles ANB and
+%  BEA. Therefore triangle ANB needs to be considered when computing emax(F) but this area should
+%  certainly not be considered when computing emax(E) because triangle ANB doesn't fall in either
+%  triangle ABC or ACD. This is what is implied by the statement "einc and emax are not necessarily
+%  nested" in the paragraph below Equation 5.
+  
+% Compute incremental world space error from Equation 5.
+function emax = computeEMax(DAG, z, einc, node, level, emax)
+  % TODO
+  fprintf('emax function not yet implemented\n');
+  emax = einc;
+end
+
+% Compute incremental world space error from Equation 4
+function einc = computeEInc(DAG, z, node, level, einc)
+  sz = numel(DAG)^0.25;
+  % for 17x17 max level of tree is 8, for 9x9 its 6, for 5x5 its 4, etc...
+  maxLevel = log2(sz-1)*2;
+  if level < maxLevel
+    % get children of node
+    cpos = getChildren(DAG, node);
+    % to find the z values of the left and right corners of the triangle,
+    % first take the vector cnode-node then rotate it 90 degrees and -90
+    % degrees. Add both vectors to cnode to find the position of the left
+    % and right corners of the triangle defined by node and cnode.
+    for i=1:(numel(cpos)/2)
+      cnode = cpos(i,:);
+      % node may have already been visited so check before wasting time
+      if einc(cnode(1)+1, cnode(2)+1)==0
+        % find the left and right sides of the triangle (find the edge being bisected)
+        vec = cnode-node;
+        vec090 = rotateVec(vec,90);
+        vec270 = rotateVec(vec,270);
+        posL = cnode + vec090;
+        posR = cnode + vec270;
+        zl = z(posL(1) +1, posL(2) +1);
+        zr = z(posR(1) +1, posR(2) +1);
+        zi = z(cnode(1)+1, cnode(2)+1);
+        e = abs(zi - (zl+zr)/2);
+        einc(cnode(1)+1, cnode(2)+1) = e;
+        einc = computeEInc(DAG, z, cnode, level+1, einc);
+      end
+    end
+  end
+end
+
+% Compute refined world space error using Equation 2. ehat is either einc or emax.
+% This function just takes ehat and forces it to be monatonically decreasing from
+% parent to child (i.e. a parent's error is always greater or equal to than a decendent).
+% This is necessary to ensure nesting which is one of the necessary conditions to ensure
+% that the screen space error will be monatonic. (The other condition is that the
+% bounding balls are nested, see Section B).
 function e = computeE(DAG, ehat, node, level, e)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
@@ -173,62 +353,79 @@ function e = computeE(DAG, ehat, node, level, e)
   end
 end
 
-% Compute incremental world space error from Equation 4
-function einc = computeEInc(DAG, z, node, level, einc)
-  % determine we aren't on the max level
-  % sz = 17 but keeping this function generic
-  sz = numel(DAG)^0.25;
-  % for 17x17 max level of tree is 7, for 9x9 its 5, for 5x5 its 3, etc...
-  maxLevel = log2(sz-1)*2;
-  if level < maxLevel
-    % get children of node
-    cpos = getChildren(DAG, node);
-    % to find the z values of the left and right corners of the triangle,
-    % first take the vector cnode-node then rotate it 90 degrees and -90
-    % degrees. Add both vectors to cnode to find the position of the left
-    % and right corners of the triangle defined by node and cnode.
-    for i=1:(numel(cpos)/2)
-      cnode = cpos(i,:);
-      % node may have already been visited so check before wasting time
-      if einc(cnode(1)+1, cnode(2)+1)==0
-        % find the left and right sides of the triangle
-        vec = cnode-node;
-        vec090 = rotateVec(vec,90);
-        vec270 = rotateVec(vec,270);
-        posL = cnode + vec090;
-        posR = cnode + vec270;
-        zl = z(posL(1) +1, posL(2) +1);
-        zr = z(posR(1) +1, posR(2) +1);
-        zi = z(cnode(1)+1, cnode(2)+1);
-        e = abs(zi - (zl+zr)/2);
-        einc(cnode(1)+1, cnode(2)+1) = e;
-        einc = computeEInc(DAG, z, cnode, level+1, einc);
-      end
-    end
-  end
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                           Directed Acyclic Graph (DAG)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% rotate a vector by angle assumes row vector for vec
-function rotatedVec = rotateVec(vec,deg)
-  M = [cosd(deg) sind(deg); ...
-      -sind(deg) cosd(deg)];
-  rotatedVec = round(vec*M);
-end
-
-% get the child positions of the given node in the DAG (return positions in a matrix of row vectors)
-function children = getChildren(DAG, node)
-  sz = numel(DAG)^0.25;
-  nodeIdx = getidx(node,sz);
-  childrenIdx=find(DAG(nodeIdx,:)>0);
-  children=zeros(numel(childrenIdx),2);
-  for i=1:numel(childrenIdx)
-    children(i,:)=getpos(childrenIdx(i),sz);
-  end
-end
+% The Directed Acyclic Graph (DAG) is used to link nodes in a pyramid heirarchy. A
+% parent node contains at most 4 children who are at a higher resolution in the grid.
+% We can think of this DAG as a Quad-tree where some children are shared between nodes.
+% The structure of the DAG is described in detail in Section A but I'll show an example
+% which I think helps.
+%
+% Consider the following set of vertices where each vertex is equally spaced (top-down view).
+% Note that the grid must be of width and height 2^n+1 where n is an integer.
+%
+% A   B   C   D   E
+% 
+% F   G   H   I   J
+%
+% K   L   M   N   O
+%
+% P   Q   R   S   T
+%
+% U   W   X   Y   Z
+%
+% The DAG would be as follows (displayed as a quad tree with some shared children)
+%                                                             LEVEL
+%              /----------+-----M-----+----------\              1
+%             |           |           |           |
+%             |           |           |           |
+%   >-\   /---K---\   /---X---\   /---O---\   /---C-->          2
+%      \ /         \ /         \ /         \ /
+%       |           |           |           |
+%   <-+-G-+-\   /-+-Q-+-\   /-+-S-+-\   /-+-I-+-\   /-<         3
+%     |   |  \ /  |   |  \ /  |   |  \ /  |   |  \ /
+%     |   |   |   |   |   |   |   |   |   |   |   |
+%     B   F   L   P   W   R   Y   T   N   J   D   H             4
+%
+% This diagram is meant to convey the parent/child relationship like M is the parent of K, W, O and C.
+% It doesn't convey the geometric relationship between parent and child. You can see this better in
+% Figure 2 in the paper. Or the diagram below which shows the DAG's geometric topology.
+%
+%
+%   LEVEL 1 -> 2          LEVEL 2 -> 3          LEVEL 3 -> 4
+%
+%         C          |          C          |      B       D    
+%         ^          |          |          |      ^       ^    
+%         |          |      G <-+-> I      |  F <-G-> H <-I-> J
+%         |          |      ^       ^      |      v       v    
+% K <-----M-----> O  |  K---+       +---O  |      L       N    
+%         |          |      v       v      |      ^       ^    
+%         |          |      Q <-+-> S      |  P <-Q-> R <-S-> T
+%         v          |          |          |      v       v    
+%         X          |          W          |      W       Y    
+%
+% Notice that a node may have multiple parents but at most 4 children
+%   K is a parent of G and Q
+%   C is a parent of I and G
+%   G's parents are K and C
+%
+% With this structure, there is rule that, if a parent vertex is active in the mesh (i.e. at
+% least one triangle is using the vertex), then all of it's children must also be active. This allows
+% for a good structure of spliting the mesh and computing error metrics.
+%
+% Be mindful that we want to prevent T-juctions in the mesh which could cause holes. This is enforced
+% by ensuring that error metrics are nested. I.E. error of a parent is always greater than or equal to
+% that of a child. This is discussed in more detail in World Space Error Metrics and Bounding Balls
+% sections of this file. Also, it is discussed in detail in Section A. Figure 3 shows an example of
+% what is meant by a T-junction.
+%
+% Also notice that the corner vertices aren't included in the tree (A, E, U, and V) because these
+% vertices must always be active to prevent holes in the mesh.
 
 % Build the adjacency matrix for the DAG
 function DAG = addchildren(DAG, node, level)
-  % sz = 17 but keeping this function generic
   sz = numel(DAG)^0.25;
   % for 17x17 max level of tree is 8, for 9x9 its 6, for 5x5 its 4, etc...
   maxLevel = log2(sz-1)*2;
@@ -249,7 +446,7 @@ function DAG = addchildren(DAG, node, level)
     else
       c1 = node+[dist,0];
       c2 = node+[-dist,0];
-      c3 = node+[0,dist];
+      c3 = node+[0,dist];         
       c4 = node+[0,-dist];
     end
     
@@ -273,9 +470,15 @@ function DAG = addchildren(DAG, node, level)
   end
 end
 
-% check if pos is in valid range ([0,sz-1])
-function v = validPos(pos,sz)
-  v = (sum(pos>=0 & pos<=(sz-1))==2);
+% get the child positions of the given node in the DAG (return positions in a matrix of row vectors)
+function children = getChildren(DAG, node)
+  sz = numel(DAG)^0.25;
+  nodeIdx = getidx(node,sz);
+  childrenIdx=find(DAG(nodeIdx,:)>0);
+  children=zeros(numel(childrenIdx),2);
+  for i=1:numel(childrenIdx)
+    children(i,:)=getpos(childrenIdx(i),sz);
+  end
 end
 
 % generate unique index for x,y values in sz x sz grid
@@ -288,6 +491,54 @@ function pos = getpos(idx, sz)
   pos = [0,0];
   pos(1) = mod(idx,sz);
   pos(2) = (idx-pos(1))/sz;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                         Active Vertices and Screen Space error
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Compute the isotropic screen space error using Equation 8
+function p = computePIsotropic(e, r, cam, z)
+  % A FEW ASSUMPTIONS ABOUT SCREEN SIZE AND ASPECT RATIO
+  w = 640;          % Pixels across screen
+  phi = 60*pi/180;  % FOV (azimuth)
+  lambda = w/phi;
+  
+  sz = size(e);
+  for xIdx=1:sz(1)
+    for yIdx=1:sz(2)
+      camDist = norm([xIdx-1 yIdx-1 z(xIdx,yIdx)]-cam);
+      % if camera is within B sphere then vertex MUST be active (see paragraph above equation 7)
+      if camDist < r(xIdx, yIdx)
+        % Infinite error, forces vertex to be active
+        p(xIdx, yIdx) = Inf;
+      else
+        % Equation 7
+        p(xIdx, yIdx) = lambda * e(xIdx, yIdx) / (camDist-r(xIdx, yIdx));
+      end
+    end
+  end
+end
+
+% Return a binary matrix indicating which vertices are active. based on Equation 8 or 11
+function v = getActiveVerts(p, tau, v)
+  v(p>tau)=1;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                 Utility functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% rotate a vector by angle assumes row vector for vec
+function rotatedVec = rotateVec(vec,deg)
+  M = [cosd(deg) sind(deg); ...
+      -sind(deg) cosd(deg)];
+  rotatedVec = round(vec*M);
+end
+
+% check if pos is in valid range ([0,sz-1])
+function v = validPos(pos,sz)
+  v = (sum(pos>=0 & pos<=(sz-1))==2);
 end
 
 % generate a sinc function for sample dataset in a regular sz x sz grid (sz=2^n+1)
@@ -430,6 +681,52 @@ function c = cr(vi, vj);
   else
     cdist=mdist/2;
     diag=1;
+% Build the adjacency matrix for the DAG
+function DAG = addchildren(DAG, node, level)
+  sz = numel(DAG)^0.25;
+  % for 17x17 max level of tree is 8, for 9x9 its 6, for 5x5 its 4, etc...
+  maxLevel = log2(sz-1)*2;
+  if level < maxLevel
+    % level 1 is first level of the DAG with root node
+    maxDist = (sz-1)/2;
+    % determine if children are diagonal
+    diag = -mod(level,2)+1; % == (mod(level,2)==0)
+    % determine distance to travel to children, for 17x17 follows pattern 8 4 4 2 2 1 1
+    dist = maxDist/(2^((level-mod(level,2))/2));
+    
+    % compute potential locations of children
+    if diag==1
+      c1 = node+[dist,dist];
+      c2 = node+[-dist,dist];
+      c3 = node+[dist,-dist];
+      c4 = node+[-dist,-dist];
+    else
+      c1 = node+[dist,0];
+      c2 = node+[-dist,0];
+      c3 = node+[0,dist];
+      c4 = node+[0,-dist];
+    end
+    
+    % add children to graph (some children are off the grid so are invalid)
+    if validPos(c1,sz)
+      DAG(getidx(node,sz), getidx(c1,sz)) = 1;
+      DAG = addchildren(DAG, c1, level+1);  
+    end
+    if validPos(c2,sz)
+      DAG(getidx(node,sz), getidx(c2,sz)) = 1;
+      DAG = addchildren(DAG, c2, level+1);  
+    end
+    if validPos(c3,sz)
+      DAG(getidx(node,sz), getidx(c3,sz)) = 1;
+      DAG = addchildren(DAG, c3, level+1);  
+    end
+    if validPos(c4,sz)
+      DAG(getidx(node,sz), getidx(c4,sz)) = 1;
+      DAG = addchildren(DAG, c4, level+1);  
+    end
+  end
+end
+
   end
   
   % narrow down child to two candidates
