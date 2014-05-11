@@ -9,6 +9,47 @@ and analysis of geo-spatial information. In addition, we are currently working o
 3D mapping server which will allow clients to view image data in 3D provided appropriate 
 elevation data exists. 
 
+Modules
+-------
+
+
+### Coordinate Module ###
+
+The coordinate module contains various utilities and classes to enable conversions between common 
+geographical coordinate systems and types.  Below is a list of the current supported systems.
+More systems will be added as the project matures.
+
+#### Datums ####
+* WGS84
+* NAD83
+
+#### Coordinate Types ####
+* UTM (Universal Transverse Mercator)
+* Geodetic (Latitude/Longitude)
+
+
+### Image Module ###
+
+NOTE!!!!!!
+This module is not completed yet.  
+NOTE!!!!!!
+
+GeoExplore contains an image module which allows users to read, manipulate, and write images.
+
+The basic usage of the module is as such for an image loaded into memory.
+
+    Image<PixelRGB_u8> image = load_image( "foo.jpg" );
+
+For loading a DiskImage, which uses lazy evaluation, use
+
+    DiskImage<PixelRGB_u8> image = load_image( "foo.jpg");
+
+Both of these classes are based on the same Image\_ class, but vary on the resource type used
+to store the pixel data.  MemoryResource stores the data locally in contiguous memory like an array. 
+The DiskResource stores the driver, which has the data needed to open the data and pass it when referenced.
+<!---
+Implementation for the DiskResource differs by 
+--->
 
 Building GeoExplore
 -------------------
