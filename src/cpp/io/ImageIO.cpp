@@ -13,6 +13,12 @@ namespace GEO{
 GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
     
     /**
+     * Open the file to get the magic number
+    */
+    std::string magic_number = getMagicNumber( pathname ); 
+
+
+    /**
      * Test the extension to estimate the driver
     */
     std::string ext = pathname.extension().native();
