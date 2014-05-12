@@ -32,6 +32,7 @@
 #include <GeoExplore/io/GDAL_Driver.hpp>
 
 /// Utility Module
+#include <GeoExplore/utilities/FilesystemUtilities.hpp>
 #include <GeoExplore/utilities/StringUtilities.hpp>
 
 #endif

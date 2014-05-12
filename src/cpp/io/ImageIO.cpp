@@ -5,6 +5,10 @@
 */
 #include "ImageIO.hpp"
 
+/// GeoExplore Libraries
+#include <GeoExplore/utilities/FilesystemUtilities.hpp>
+
+
 namespace GEO{
 
 /**
@@ -12,10 +16,10 @@ namespace GEO{
 */
 GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
     
-    /**
-     * Open the file to get the magic number
-    */
-    std::string magic_number = getMagicNumber( pathname ); 
+    // get the file type
+    GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);
+
+    // parse available options for drivers
 
 
     /**

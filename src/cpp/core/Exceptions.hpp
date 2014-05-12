@@ -95,14 +95,16 @@ class GeneralException : public std::exception {
          * Constructor
         */
         GeneralException( const std::string& message, 
-                          const std::string& filename, 
+                          const std::string  filename, 
                           const int& line_number );
 
         /**
          * Message
         */
         virtual const char* what()const throw(){
-            return std::string( m_message + std::string(", File: ") + m_filename + std::string(", Line: ") + num2str(m_lineNumber)).c_str();
+            return std::string( m_message  + std::string(", File: ") + 
+                                m_filename + std::string(", Line: ") + 
+                                num2str(m_lineNumber)).c_str();
         }
 
     private:

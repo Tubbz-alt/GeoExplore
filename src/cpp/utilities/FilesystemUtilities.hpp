@@ -15,7 +15,25 @@
 
 namespace GEO{
 namespace FS{
-    
+
+/**
+ * @class FileType
+*/
+enum class FileType{
+    UNKNOWN,
+    JPEG,
+    PNG,
+    NETPBM,
+    NITF,
+    DTED,
+    SRTM,
+};
+
+/**
+ * Get File Type
+*/
+FileType getFileType( const boost::filesystem::path& pathname );
+
 /**
  * Extract the magic number from a file
 */

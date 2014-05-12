@@ -32,7 +32,7 @@ MemoryResourceNotInitializedException::MemoryResourceNotInitializedException( co
  * GeneralException Constructor
 */
 GeneralException::GeneralException( std::string const& message,
-                                    std::string const& filename,
+                                    std::string const  filename,
                                     int const& lineNumber ) : 
                                                m_message(message),
                                                m_filename(filename),

@@ -60,6 +60,7 @@ set( GEOEXPLORE_IO_HEADERS
 
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
+    ../src/cpp/utilities/FilesystemUtilities.hpp
     ../src/cpp/utilities/StringUtilities.hpp
 )
 
@@ -102,6 +103,7 @@ set( GEOEXPLORE_IO_SOURCES
 
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
+    ../src/cpp/utilities/FilesystemUtilities.cpp
     ../src/cpp/utilities/StringUtilities.cpp
 )
 
