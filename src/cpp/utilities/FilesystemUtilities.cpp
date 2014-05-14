@@ -23,9 +23,29 @@ namespace FS{
  * Get the file type
 */
 FileType getFileType( const boost::filesystem::path& pathname ){
+
+    // get the extension
+    std::string ext = string_toLower(pathname.extension().native());
     
-    // parse out the magic number
-    std::string magic_number = getMagicNumber( pathname );
+    // JPEG 2000
+    if( ext == ".jp2" )
+        return FileType::JPEG2000;
+
+    // JPEG
+    if( ext == ".jpg" || ext == ".jpeg" )
+        return FileType::JPEG;
+    
+    // PNG
+    if( ext == ".png" )
+        return FileType::PNG;
+
+    // NITF
+    if( ext == ".ntf" || ext == ".nitf" )
+        return FileType::NITF;
+
+    // DTED
+    if( ext == ".dt0" || ext == ".dt1" || ext == ".dt2" )
+        return FileType::DTED;
 
 
     // otherwise return unknown type

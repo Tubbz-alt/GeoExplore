@@ -31,8 +31,12 @@ TEST( FilesystemUtilities, getMagicNumber ){
  * Test the get file type function
 */
 TEST( FilesystemUtilities, getFileType ){
-
-    FAIL();
+    
+    /// create a set of tests
+    ASSERT_EQ( GEO::FS::getFileType("/var/file.jpg"), GEO::FS::FileType::JPEG );
+    ASSERT_EQ( GEO::FS::getFileType("file.png"), GEO::FS::FileType::PNG);
+    ASSERT_EQ( GEO::FS::getFileType("/root/image.nitf"), GEO::FS::FileType::NITF);
+    ASSERT_EQ( GEO::FS::getFileType("image.jp2"), GEO::FS::FileType::JPEG2000);
 
 }
 

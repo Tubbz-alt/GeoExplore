@@ -19,13 +19,8 @@ GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
     // get the file type
     GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);
 
-    // parse available options for drivers
-
-
-    /**
-     * Test the extension to estimate the driver
-    */
-    std::string ext = pathname.extension().native();
+    // test all other drivers
+    
 
     /// GDAL Driver
     return GEO::ImageDriver::GDAL;

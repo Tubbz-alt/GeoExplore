@@ -53,6 +53,12 @@ class Image_{
             return m_resource.cols();
         }
 
+        /**
+         * Return a reference to the resource
+        */
+        ResourceType resource()const{
+            return m_resource;
+        }
 
         private:
 

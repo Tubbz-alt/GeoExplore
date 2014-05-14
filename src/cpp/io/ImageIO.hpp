@@ -43,6 +43,31 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
     
 } 
 
+/**
+ * Write an image
+*/
+template <typename PixelType>
+void write_image( Image<PixelType>& output_image, boost::filesystem::path const& pathname ){
+
+    // determine the driver type
+    GEO::ImageDriver driver = compute_driver(pathname);
+
+    /**
+     * Select the driver's write function
+    */
+    if( driver == GEO::ImageDriver::GDAL ){
+        throw std::runtime_error("DRIVER NOT IMPLEMENTED");
+    }
+    else if( GEO::ImageDriver::NETPBM ){
+        throw std::runtime_error("Unknown driver.");
+    }
+    else{
+        throw std::runtime_error("Unknown driver.");
+    }
+
+}
+
+
 } /// End of IO Namespace
 } /// End of GEO Namespace
 

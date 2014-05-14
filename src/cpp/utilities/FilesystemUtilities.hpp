@@ -22,8 +22,8 @@ namespace FS{
 enum class FileType{
     UNKNOWN,
     JPEG,
+    JPEG2000,
     PNG,
-    NETPBM,
     NITF,
     DTED,
     SRTM,
