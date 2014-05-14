@@ -69,6 +69,7 @@ set( UNIT_TEST_SOURCES
     ../../tests/cpp/image/TEST_PixelTypes.cpp
     ../../tests/cpp/io/TEST_GDAL_Driver.cpp
     ../../tests/cpp/io/TEST_ImageIO.cpp
+    ../../tests/cpp/io/TEST_NETPBM_Driver.cpp
     ../../tests/cpp/io/TEST_OGR_Driver.cpp
     ../../tests/cpp/utilities/TEST_FilesystemUtilities.cpp
     ../../tests/cpp/utilities/TEST_StringUtilities.cpp

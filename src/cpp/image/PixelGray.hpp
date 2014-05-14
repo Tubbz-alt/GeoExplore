@@ -8,7 +8,7 @@
 
 /// GeoExplore Libraries
 #include <GeoExplore/image/ChannelType.hpp>
-#include <GeoExplore/image/PixelGray.hpp>
+#include <GeoExplore/image/PixelBase.hpp>
 
 
 namespace GEO{

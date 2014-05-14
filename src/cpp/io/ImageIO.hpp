@@ -10,6 +10,7 @@
 #include <GeoExplore/core/Enumerations.hpp>
 #include <GeoExplore/image/Image.hpp>
 #include <GeoExplore/io/GDAL_Driver.hpp>
+#include <GeoExplore/io/NETPBM_Driver.hpp>
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
@@ -68,7 +69,7 @@ void write_image( Image<PixelType>& output_image, boost::filesystem::path const&
         throw std::runtime_error("DRIVER NOT IMPLEMENTED");
     }
     else if( GEO::ImageDriver::NETPBM ){
-        throw std::runtime_error("Unknown driver.");
+        GEO::IO::NETPBM::write_image<PixelType>();// output_image, pathname );
     }
     else{
         throw std::runtime_error("Unknown driver.");

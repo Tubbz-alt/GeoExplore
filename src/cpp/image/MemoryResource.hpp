@@ -157,6 +157,13 @@ class MemoryResource : public BaseResource<PixelType> {
             m_cols = cols;
             m_data = data;
         }
+        
+        /**
+         * Get pixel data
+        */
+        boost::shared_ptr<PixelType[]> getPixelData()const{
+            return m_data;
+        }
 
     private:
 

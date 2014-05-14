@@ -21,8 +21,6 @@ TEST( FilesystemUtilities, getMagicNumber ){
     /// Test JPEG image 01
     std::string signature = GEO::FS::getMagicNumber("../../tests/data/images/Lenna.jpg");
     
-    std::cout << signature << std::endl;
-
     FAIL();
 
 }

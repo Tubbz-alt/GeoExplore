@@ -31,6 +31,7 @@
 /// IO Module
 #include <GeoExplore/io/GDAL_Driver.hpp>
 #include <GeoExplore/io/ImageIO.hpp>
+#include <GeoExplore/io/NETPBM_Driver.hpp>
 
 /// Utility Module
 #include <GeoExplore/utilities/FilesystemUtilities.hpp>

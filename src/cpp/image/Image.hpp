@@ -38,6 +38,13 @@ class Image_{
         }
 
         /**
+         * Create an image with a default image size
+        */
+        Image_( const int& rows, const int& cols ) : m_resource(rows,cols){
+
+        }
+
+        /**
          * Return the number of rows
          * @return row count
         */
@@ -52,12 +59,27 @@ class Image_{
         int cols()const{
             return m_resource.cols();
         }
+        
+        /**
+         * Get the pixel data
+        */
+        PixelType operator[]( const int& idx ){
+            return m_resource[idx];
+        }
+
 
         /**
          * Set the resource information reference to the resource
         */
         void setResource( ResourceType const& resource){
             m_resource = resource;
+        }
+        
+        /**
+         * Get the resource information
+        */
+        ResourceType getResource()const{
+            return m_resource;
         }
 
         private:
