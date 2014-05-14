@@ -6,6 +6,15 @@
 #ifndef __SRC_CPP_IO_IMAGEIO_HPP__
 #define __SRC_CPP_IO_IMAGEIO_HPP__
 
+/// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/io/GDAL_Driver.hpp>
+
+/// Boost C++ Libraries
+#include <boost/filesystem.hpp>
+
+
 namespace GEO{
 namespace IO{
 
@@ -34,8 +43,8 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
      * Since we are just loading pixel data, call the appropriate load_image_data function
      */
     if( driver == GEO::ImageDriver::GDAL ){
-        
-        output_image.resource() = GEO::IO::GDAL::load_image<PixelType>(pathname);
+        int rowSize;
+        output_image.setResource( GEO::IO::GDAL::load_image<PixelType>(pathname));
     }
     else{
         throw std::runtime_error("Unknown driver.");

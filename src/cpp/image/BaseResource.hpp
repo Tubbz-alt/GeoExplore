@@ -6,6 +6,8 @@
 #ifndef __SRC_CPP_IMAGE_BASERESOURCE_HPP__
 #define __SRC_CPP_IMAGE_BASERESOURCE_HPP__
 
+/// C++ Standard Libraries
+#include <memory>
 
 namespace GEO{
 
@@ -18,6 +20,7 @@ class BaseResource{
 
     public:
         
+
         /**
          * Return the pixel value
         */

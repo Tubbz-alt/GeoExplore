@@ -13,6 +13,9 @@
 /// Boost C++ Library
 #include <boost/shared_ptr.hpp>
 
+/// C++ Standard Library
+#include <memory>
+
 namespace GEO{
 
 /**
@@ -134,16 +137,25 @@ class MemoryResource : public BaseResource<PixelType> {
             if( this != &rhs ){
 
                 // set the rows and column counts
-                this.m_rows = rhs.rows();
-                this.m_cols = rhs.cols();
+                this->m_rows = rhs.rows();
+                this->m_cols = rhs.cols();
 
                 // copy the memory pointer
-                this.m_data = rhs.m_data;
+                this->m_data = rhs.m_data;
 
             }
 
             // return yourself
             return (*this);
+        }
+        
+        /**
+         * Assign Pixel Data
+        */
+        void setPixelData( boost::shared_ptr<PixelType[]> data, const int& rows, const int& cols ){
+            m_rows = rows;
+            m_cols = cols;
+            m_data = data;
         }
 
     private:

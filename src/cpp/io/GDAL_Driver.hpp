@@ -18,7 +18,9 @@
 #include <gdal/gdal_priv.h>
 
 /// GeoExplore Libraries
+#include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/ChannelType.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
 
 namespace GEO{
 namespace IO{
@@ -63,7 +65,7 @@ class GDAL_Driver{
          * Get image data
          */
         template<typename PixelType>
-        void getImageData( std::vector<PixelType>& image_data ){
+        void getImageData( boost::shared_ptr<PixelType[]>& image_data, const int& image_data_size ){
             
             // if the dataset is not open, then do nothing
             if( isOpen() == false ){
@@ -72,8 +74,8 @@ class GDAL_Driver{
             }
 
             // make sure the vector is properly sized
-            if( image_data.size() != (rows()*cols())){
-                image_data.resize( rows()*cols());
+            if( image_data_size != (rows()*cols())){
+                throw GEO::GeneralException("Error: image data must be pre-allocated to the required size.", __FILE__, __LINE__);
             }
         
         
@@ -140,7 +142,7 @@ class GDAL_Driver{
                         }
 
 
-                        if( m_dataset->GetRasterCount() == 1 && image_data.front().dims() == 3 ){
+                        if( m_dataset->GetRasterCount() == 1 && image_data[0].dims() == 3 ){
                             image_data[r*xsize + c] = value;
                         }
                         else {
@@ -196,7 +198,7 @@ class GDAL_Driver{
  * Read an image and return the image data
 */
 template <typename PixelType>
-std::vector<PixelType> load_image_data( const boost::filesystem::path& image_pathname, int& rowCount ){
+boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& image_pathname, int& rowCount, int& colCount ){
    
     // create the GDAL Driver
     GDAL_Driver::ptr_t gdal_driver( new GDAL_Driver(image_pathname));
@@ -206,23 +208,43 @@ std::vector<PixelType> load_image_data( const boost::filesystem::path& image_pat
 
     // make sure our loader did not have any major issues
     if( gdal_driver->isValid() == false ){
-        return std::vector<PixelType>();
+        rowCount = 0;
+        colCount = 0;
+        return nullptr;
     }
 
     // create the main container with the expected size
-    int cols = gdal_driver->cols();
+    colCount = gdal_driver->cols();
     rowCount = gdal_driver->rows();
     
 
     // create the pixeldata
-    std::vector<PixelType> pixeldata( rowCount * cols);
+    boost::shared_ptr<PixelType[]> pixeldata( new PixelType[rowCount * colCount]);
 
     // pass the container to the driver
-    gdal_driver->getImageData( pixeldata );
+    gdal_driver->getImageData( pixeldata, rowCount * colCount );
 
     return pixeldata;
 }
 
+/**
+ * Load an image and return a resource
+*/
+template<typename PixelType>
+MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname ){
+
+    /// create the output
+    MemoryResource<PixelType> output;
+
+    // get the pixel data
+    int rowSize, colSize;
+    boost::shared_ptr<PixelType[]> pixels = load_image_data<PixelType>( image_pathname, rowSize, colSize );
+
+    output.setPixelData( pixels, rowSize, colSize );
+
+    // return the resource
+    return output;
+}
 
 } /// End of GDAL Namespace
 } /// End of IO Namespace

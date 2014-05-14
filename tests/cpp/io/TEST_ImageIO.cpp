@@ -18,3 +18,16 @@ TEST( ImageIO, ComputeDriver ){
     
 }
 
+/**
+ * Test the read_image function
+*/
+TEST( ImageIO, ReadImage ){
+
+    GEO::Image<GEO::PixelRGB_u8> image;
+    GEO::IO::read_image("../../tests/data/images/Lenna.jpg", image);
+
+    ASSERT_EQ( image.rows(), 512 );
+    ASSERT_EQ( image.cols(), 512 );
+
+}
+

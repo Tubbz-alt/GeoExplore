@@ -5,8 +5,8 @@
 */
 #include<gtest/gtest.h>
 
-/// C++ Standard Library
-#include <vector>
+/// Boost C++ Library
+#include <boost/shared_ptr.hpp>
 
 /// GeoExplore Library 
 #include <GeoExplore.hpp>
@@ -21,18 +21,18 @@ TEST( GDAL_Driver, LoadImageJPEGRGB ){
     /**
      * Call the load image on a jpeg image 
     */
-    int rowSize;
-    std::vector<GEO::PixelRGB_UInt8> pixels = GEO::IO::GDAL::load_image_data<GEO::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize);
+    int rowSize, colSize;
+    boost::shared_ptr<GEO::PixelRGB_UInt8[]> pixels = GEO::IO::GDAL::load_image_data<GEO::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize, colSize);
 
     /// make sure the image is the right size
-    ASSERT_EQ( pixels.size(), 512*512);
     ASSERT_EQ( rowSize, 512);
+    ASSERT_EQ( colSize, 512);
 
     // make sure not all values are non-zero
     bool redNonZero = false;
     bool greenNonZero = false;
     bool blueNonZero = false;
-    for( size_t i=0; i<pixels.size(); i++ ){
+    for( size_t i=0; i<rowSize*colSize; i++ ){
         if( pixels[i].r() > 0 ){ redNonZero = true; }
         if( pixels[i].g() > 0 ){ greenNonZero = true; }
         if( pixels[i].b() > 0 ){ blueNonZero = true; }

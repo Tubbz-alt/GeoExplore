@@ -30,6 +30,7 @@
 
 /// IO Module
 #include <GeoExplore/io/GDAL_Driver.hpp>
+#include <GeoExplore/io/ImageIO.hpp>
 
 /// Utility Module
 #include <GeoExplore/utilities/FilesystemUtilities.hpp>

@@ -10,6 +10,7 @@
 
 
 namespace GEO{
+namespace IO{
 
 /**
  * Compute the driver given an image pathname
@@ -29,5 +30,5 @@ GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
 
 
 
-
+} /// End of IO Namespace
 } /// End of GEO Namespace

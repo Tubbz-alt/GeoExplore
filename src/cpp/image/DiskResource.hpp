@@ -9,6 +9,10 @@
 /// GeoExplore Libraries
 #include <GeoExplore/image/BaseResource.hpp>
 
+/// C++ Standard Libraries
+#include <memory>
+
+
 namespace GEO{
 
 /**
@@ -18,6 +22,7 @@ template <typename PixelType>
 class DiskResource : public BaseResource<PixelType> {
 
     public:
+        
 
         /**
          * Default Constructor

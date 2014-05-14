@@ -54,16 +54,16 @@ class Image_{
         }
 
         /**
-         * Return a reference to the resource
+         * Set the resource information reference to the resource
         */
-        ResourceType resource()const{
-            return m_resource;
+        void setResource( ResourceType const& resource){
+            m_resource = resource;
         }
 
         private:
 
             /// internal pixel data
-            ResourceType m_resource;    
+            ResourceType  m_resource;    
             
             /// Internal Metadata
             MetadataContainerBase::ptr_t m_metadata;
