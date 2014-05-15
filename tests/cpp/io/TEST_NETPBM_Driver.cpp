@@ -15,7 +15,27 @@
 TEST( NETPBM_Driver, WriteImagePPM ){
 
     /// create an image
-    GEO::Image<GEO::PixelRGB_d>  image01(100,100);
+    GEO::Image<GEO::PixelRGB_d>  image01(50,50);
+
+    for( int i=0; i<4; i++ ){
+    for( int j=0; j<25; j++ ){
+        
+        // print red
+        switch(i){
+
+            case 0:
+                image01(j, j) = PixelRGB_d(0,0,0);
+                break;
+
+            case 1:
+                image01(25+j
+                break;
+
+            case 2:
+            case 3:
+                break;
+        }
+    }}
 
     // write the image
     GEO::IO::NETPBM::write_image( image01, "file.ppm");

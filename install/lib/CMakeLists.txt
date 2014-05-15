@@ -100,6 +100,7 @@ set( GEOEXPLORE_IMAGE_SOURCES
 set( GEOEXPLORE_IO_SOURCES
     ../src/cpp/io/GDAL_Driver.cpp
     ../src/cpp/io/ImageIO.cpp
+    ../src/cpp/io/NETPBM_Driver.cpp
     ../src/cpp/io/OGR_Driver.cpp
 )
 

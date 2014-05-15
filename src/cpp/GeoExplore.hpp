@@ -25,6 +25,7 @@
 #include <GeoExplore/image/MetadataContainer.hpp>
 #include <GeoExplore/image/MetadataContainerBase.hpp>
 #include <GeoExplore/image/PixelBase.hpp>
+#include <GeoExplore/image/PixelCast.hpp>
 #include <GeoExplore/image/PixelGray.hpp>
 #include <GeoExplore/image/PixelRGB.hpp>
 

@@ -21,6 +21,9 @@ class ChannelType{
 
     public:
         
+        ///  Accumulator Type
+        typedef DataType accumulator_type;
+
         ///  Type of Value
         typedef DataType type;
 
@@ -40,7 +43,10 @@ template<>
 class ChannelType<double, 1>{
 
     public:
-    
+        
+        /// Accumulator Type
+        typedef double accumulator_type;
+
         /// Type of value
         typedef double type;
 
@@ -60,6 +66,9 @@ template<>
 class ChannelType<uint8_t, 8>{
 
     public:
+
+        /// Accumulator Type
+        typedef uint16_t accumulator_type;
 
         /// Type of value
         typedef uint8_t type;
@@ -82,6 +91,9 @@ class ChannelType<uint16_t, 12>{
 
     public:
         
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
+
         /// Type of value
         typedef uint16_t type;
 
@@ -103,6 +115,9 @@ class ChannelType<uint16_t, 14>{
 
     public:
         
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
+        
         /// Type of value
         typedef uint16_t type;
 
@@ -122,6 +137,9 @@ template<>
 class ChannelType<uint16_t,16>{
 
     public:
+        
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
         
         /// Type of value
         typedef uint16_t type;
@@ -144,6 +162,9 @@ class ChannelType<uint32_t,32>{
 
     public:
 
+        /// Accumulator Type
+        typedef uint64_t accumulator_type;
+        
         /// Type of Value
         typedef uint32_t type;
 
