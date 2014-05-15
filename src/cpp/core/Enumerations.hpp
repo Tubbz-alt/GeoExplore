@@ -50,6 +50,7 @@ std::string CoordinateType2String( CoordinateType const& ctype );
 enum class ImageDriver{
     GDAL,
     NETPBM,
+    OPENCV,
 }; /// End of ImageDriver Enumerations
 
 

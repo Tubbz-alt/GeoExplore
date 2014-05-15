@@ -136,15 +136,15 @@ typedef PixelRGB<ChannelTypeUInt12>  PixelRGB_u12;
 
 typedef PixelRGB<ChannelTypeUInt14>  PixelRGBUInt14;
 typedef PixelRGB<ChannelTypeUInt14>  PixelRGB_UInt14;
-typedef PixelRGB<ChannelTypeUInt14>  PixelRGB_14;
+typedef PixelRGB<ChannelTypeUInt14>  PixelRGB_u14;
 
 typedef PixelRGB<ChannelTypeUInt16>  PixelRGBUInt16;
 typedef PixelRGB<ChannelTypeUInt16>  PixelRGB_UInt16;
-typedef PixelRGB<ChannelTypeUInt16>  PixelRGB_16;
+typedef PixelRGB<ChannelTypeUInt16>  PixelRGB_u16;
 
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGBUInt32;
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_UInt32;
-typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_32;
+typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_u32;
 
 } /// End of GEO Namespace
 

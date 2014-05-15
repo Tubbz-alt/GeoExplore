@@ -20,6 +20,11 @@ set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 #------------------------------#
 find_package( GDAL REQUIRED )
 
+#--------------------------------#
+#-     Find OpenCV Library      -#
+#--------------------------------#
+find_package( OpenCV REQUIRED )
+
 #-----------------------------------------#
 #-     Define Required Header Files      -#
 #-----------------------------------------#
@@ -57,6 +62,7 @@ set( GEOEXPLORE_IO_HEADERS
     ../src/cpp/io/GDAL_Driver.hpp
     ../src/cpp/io/ImageIO.hpp
     ../src/cpp/io/OGR_Driver.hpp
+    ../src/cpp/io/OpenCV_Driver.hpp
 )
 
 #   Utility Module
@@ -132,6 +138,7 @@ add_library( GeoExplore SHARED
 target_link_libraries(
             GeoExplore
             ${GDAL_LIBRARY}
+            ${OpenCV_LIBS}
 )
 
 

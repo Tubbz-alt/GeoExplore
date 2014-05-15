@@ -37,6 +37,11 @@ find_package( Boost
                 REQUIRED
 )
 
+#--------------------------------#
+#-     Find OpenCV Library      -#
+#--------------------------------#
+find_package( OpenCV REQUIRED )
+
 #-----------------------------------#
 #-     Find C++ Thread Library     -#
 #-----------------------------------#
@@ -84,5 +89,6 @@ target_link_libraries( geo-convert
                 ${CMAKE_THREAD_LIBS_INIT}
                 ${Boost_LIBRARIES}
                 ${GDAL_LIBRARY}
+                ${OpenCV_LIBS}
 )
 

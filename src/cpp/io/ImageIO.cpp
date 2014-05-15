@@ -20,8 +20,13 @@ GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
     // get the file type
     GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);
 
-    // test all other drivers
-    
+    // opencv drivers
+    if( ftype == GEO::FS::FileType::JPEG ){
+        return GEO::ImageDriver::OPENCV;
+    }
+    if( ftype == GEO::FS::FileType::PNG ){
+        return GEO::ImageDriver::OPENCV;
+    }
 
     /// GDAL Driver
     return GEO::ImageDriver::GDAL;

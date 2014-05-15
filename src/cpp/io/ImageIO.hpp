@@ -11,6 +11,7 @@
 #include <GeoExplore/image/Image.hpp>
 #include <GeoExplore/io/GDAL_Driver.hpp>
 #include <GeoExplore/io/NETPBM_Driver.hpp>
+#include <GeoExplore/io/OpenCV_Driver.hpp>
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
@@ -70,6 +71,9 @@ void write_image( Image<PixelType>& output_image, boost::filesystem::path const&
     }
     else if( driver == GEO::ImageDriver::NETPBM ){
         GEO::IO::NETPBM::write_image<PixelType>( output_image, pathname );
+    }
+    else if( driver == GEO::ImageDriver::OPENCV ){
+        GEO::IO::OPENCV::write_image<PixelType>( output_image, pathname );
     }
     else{
         throw std::runtime_error("Unknown driver.");
