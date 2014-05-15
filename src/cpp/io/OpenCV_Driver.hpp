@@ -49,6 +49,16 @@ void write_image( Image<PixelType>const&  output_image, boost::filesystem::path 
     
     // convert the output image to an opencv structure
     cv::Mat image( output_image.rows(), output_image.cols(), PixelType2OpenCVType<PixelType>());
+    
+    // start loading the output image
+    for( size_t c=0; c<output_image.channels(); c++ ){
+    for( size_t y=0; y<output_image.rows(); y++ ){
+    for( size_t x=0; x<output_image.cols(); x++ ){
+        image.at<PixelType::channeltype::datatype>(y,x)[c] = output_image(y,x)[c];
+    }}}
+
+    // run imwrite
+    cv::imwrite( pathname.c_str(), image );
 
 }
 
