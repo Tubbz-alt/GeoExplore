@@ -15,16 +15,24 @@
 
 /// GDAL Libraries
 #include <gdal/cpl_conv.h>
+#include <gdal/cpl_string.h>
+#include <gdal/gdal.h>
 #include <gdal/gdal_priv.h>
 
 /// GeoExplore Libraries
 #include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/ChannelType.hpp>
+#include <GeoExplore/image/Image.hpp>
 #include <GeoExplore/image/MemoryResource.hpp>
 
 namespace GEO{
 namespace IO{
 namespace GDAL{
+
+/**
+ * Get Short Driver Name from Filename
+*/
+std::string getShortDriverFromFilename( const boost::filesystem::path& filename );
 
 /**
  * @class GDAL_Driver
@@ -245,6 +253,21 @@ MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathn
     // return the resource
     return output;
 }
+
+/**
+ * Write an image to a GDAL format
+*/
+template<typename PixelType>
+void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
+
+    // Identify the driver
+    std::string driverShortName = getShortDriverFromFilename(pathname);
+    
+    // create teh driver
+    GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+
+}
+
 
 } /// End of GDAL Namespace
 } /// End of IO Namespace

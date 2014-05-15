@@ -66,7 +66,7 @@ void write_image( Image<PixelType>& output_image, boost::filesystem::path const&
      * Select the driver's write function
     */
     if( driver == GEO::ImageDriver::GDAL ){
-        throw std::runtime_error("DRIVER NOT IMPLEMENTED");
+        GEO::IO::GDAL::write_image<PixelType>( output_image, pathname );
     }
     else if( driver == GEO::ImageDriver::NETPBM ){
         GEO::IO::NETPBM::write_image<PixelType>( output_image, pathname );

@@ -51,4 +51,12 @@ TEST( GDAL_Driver, LoadImageJPEGRGB ){
 
 }
 
+/**
+ * Test GDAL Short Driver by extension
+*/
+TEST( GDAL_Driver, GetShortDriverByFilename ){
+
+    ASSERT_EQ( GEO::IO::GDAL::getShortDriverFromFilename("output.png"), "PNG");
+
+}
 

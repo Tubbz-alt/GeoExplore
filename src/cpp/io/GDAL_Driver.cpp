@@ -125,6 +125,19 @@ bool GDAL_Driver::isOpen()const{
     return (m_dataset != NULL);
 }
 
+std::string getShortDriverFromFilename( const boost::filesystem::path& filename ){
+
+    // pull the extension
+    std::string ext = filename.extension().native();
+
+    // png images
+    if( ext == ".png" || ext == ".PNG" ){
+        return "PNG";
+    }
+
+    return "";
+}
+
 
 } /// End of GDAL Namespace
 } /// End of IO Namespace
