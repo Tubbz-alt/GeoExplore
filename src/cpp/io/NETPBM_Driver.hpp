@@ -34,7 +34,8 @@ void write_pgm_image( BaseResource<PixelType> const& data,
                       boost::filesystem::path const& filename ){
 
     std::cout << "Write PGM Image" << std::endl;
-
+    
+    throw GeneralException("write_pgm_image","NETPBM_Driver.hpp", __LINE__);
 }
 
 
@@ -58,8 +59,10 @@ void write_ppm_image( BaseResource<PixelType> const& data,
     for( int y=0; y<data.rows(); y++ ){
     for( int x=0; x<data.cols(); x++ ){
 
-        // create the RGB Pixel to convert
+        // create the RGB Pixel to convert.  This needs to convert any pixel type regardless of pixel type or channel type
         PixelRGB_u8 output = pixel_cast<PixelRGB_u8>(data[y*data.cols() + x]);
+
+        // write rgb to file
         color[0] = output[0];
         color[1] = output[1];
         color[2] = output[2];
@@ -72,7 +75,7 @@ void write_ppm_image( BaseResource<PixelType> const& data,
 }
 
 /**
- * Write an RGB Image to PPM File
+ * Write an RGB Image to NETPBM File
 */
 template<typename PixelType>
 void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
