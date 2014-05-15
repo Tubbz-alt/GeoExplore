@@ -49,7 +49,7 @@ std::string CoordinateType2String( CoordinateType const& ctype );
 */
 enum class ImageDriver{
     GDAL,
-    NETPBM
+    NETPBM,
 }; /// End of ImageDriver Enumerations
 
 

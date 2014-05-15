@@ -16,6 +16,7 @@ enum class ConversionType{
     
     NONE,
     COORDINATE,
+    IMAGE,
 
 }; /// End of ConversionType Enumeration
 

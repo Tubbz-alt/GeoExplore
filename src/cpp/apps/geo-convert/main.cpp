@@ -10,6 +10,7 @@
 /// Geo-Convert Libraries
 #include "Options.hpp"
 #include "CoordinateConversion.hpp"
+#include "ImageConversion.hpp"
 
 /// C++ Libraries
 #include <exception>
@@ -33,8 +34,10 @@ int main( int argc, char* argv[] ){
         if( options.ctype == ConversionType::COORDINATE ){
             convert_coordinates( options );
         }
-
-
+        else if( options.ctype == ConversionType::IMAGE ){
+            convert_images( options );
+        }
+        
     } catch ( exception& e ){
         cerr << "error: " << e.what() << endl;
         usage(argv[0]);
