@@ -8,6 +8,10 @@
 /// GeoExplore Libraries
 #include <GeoExplore.hpp>
 
+/// C++ Standard Libraries
+#include <iostream>
+
+using namespace std;
 
 /**
  * Test the Write PPM Function
@@ -17,24 +21,13 @@ TEST( NETPBM_Driver, WriteImagePPM ){
     /// create an image
     GEO::Image<GEO::PixelRGB_d>  image01(50,50);
 
-    for( int i=0; i<4; i++ ){
+    for( int i=0; i<25; i++ ){
     for( int j=0; j<25; j++ ){
         
-        // print red
-        switch(i){
-
-            case 0:
-                image01(j, j) = PixelRGB_d(0,0,0);
-                break;
-
-            case 1:
-                image01(25+j
-                break;
-
-            case 2:
-            case 3:
-                break;
-        }
+        image01(i +  0, j +  0) = GEO::PixelRGB_d(0,0,0);
+        image01(i + 25, j +  0) = GEO::PixelRGB_d(1,0,0);
+        image01(i +  0, j + 25) = GEO::PixelRGB_d(0,1,0);
+        image01(i + 25, j + 25) = GEO::PixelRGB_d(0,0,1);
     }}
 
     // write the image

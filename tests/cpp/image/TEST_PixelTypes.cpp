@@ -173,28 +173,40 @@ TEST( PixelTypes, PixelCast ){
 
     // RGB to Grayscale uint8
     GEO::PixelRGB_u8  testPixel01( 0, 0, 0);
-    GEO::PixelGray_u8 result01 = GEO::pixel_cast<GEO::ChannelTypeUInt8>(testPixel01);
+    GEO::PixelGray_u8 result01 = GEO::pixel_cast<GEO::PixelGray_u8>(testPixel01);
     ASSERT_EQ( result01[0], 0 );
 
     // RGB_d to Grayscale uint8
     GEO::PixelRGB_d   testPixel03( 0.25, 0.5, 1);
-    GEO::PixelGray_u8 result03 = GEO::pixel_cast<GEO::ChannelTypeUInt8>(testPixel03);
+    GEO::PixelGray_u8 result03 = GEO::pixel_cast<GEO::PixelGray_u8>(testPixel03);
     ASSERT_EQ( result03[0], 148);
 
     // Grayscale to RGB
     GEO::PixelGray_u8 testPixel02( 0 );
-    GEO::PixelRGB_u8  result02 = GEO::pixel_cast<GEO::ChannelTypeUInt8>(testPixel02);
+    GEO::PixelRGB_u8  result02 = GEO::pixel_cast<GEO::PixelRGB_u8>(testPixel02);
     ASSERT_EQ( result02[0], 0 );
     ASSERT_EQ( result02[1], 0 );
     ASSERT_EQ( result02[2], 0 );
     
     // Grayscale to RGB
     GEO::PixelGray_u8 testPixel04( 100 );
-    GEO::PixelRGB_d   result04 = GEO::pixel_cast<GEO::ChannelTypeDouble>(testPixel04);
+    GEO::PixelRGB_d   result04 = GEO::pixel_cast<GEO::PixelRGB_d>(testPixel04);
     ASSERT_NEAR( result04[0], 100.0/255, 0.001 );
     ASSERT_NEAR( result04[1], 100.0/255, 0.001 );
     ASSERT_NEAR( result04[2], 100.0/255, 0.001 );
-    
+
+    // Grayscale to Grayscale
+    GEO::PixelGray_u8 testPixel05(100);
+    GEO::PixelGray_d  result05 = GEO::pixel_cast<GEO::PixelGray_d>(testPixel05);
+    ASSERT_NEAR( result05[0], 100.0/255, 0.001 );
+
+    /// RGB to RGB
+    GEO::PixelRGB_u8 testPixel06(0, 100, 255);
+    GEO::PixelRGB_d  result06 = GEO::pixel_cast<GEO::PixelRGB_d>(testPixel06);
+    ASSERT_NEAR( result06[0], 0, 0.0001 );
+    ASSERT_NEAR( result06[1], 100.0/255, 0.0001 );
+    ASSERT_NEAR( result06[2], 1, 0.0001 );
+
 }
 
 

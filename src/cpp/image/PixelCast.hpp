@@ -12,36 +12,68 @@
 #include <GeoExplore/image/PixelGray.hpp>
 #include <GeoExplore/image/PixelRGB.hpp>
 
+/// C++ Standard Library
+#include <type_traits>
 
 namespace GEO{
 
 /**
- * Convert Grayscale to RGB
+ * Convert Grayscale to grayscale
 */
-template <typename OutputChannelType, typename InputChannelType>
-PixelRGB<OutputChannelType> pixel_cast( PixelGray<InputChannelType> const& pixel ){
-    return PixelRGB<OutputChannelType>( range_cast<InputChannelType,OutputChannelType>(pixel[0]), 
-                                        range_cast<InputChannelType,OutputChannelType>(pixel[0]),
-                                        range_cast<InputChannelType,OutputChannelType>(pixel[0]));
+template <typename OutputPixelType, typename InputChannelType>
+typename std::enable_if<std::is_same<OutputPixelType, PixelGray<typename OutputPixelType::channeltype> >::value,PixelGray<typename OutputPixelType::channeltype> >::type
+    pixel_cast( PixelGray<InputChannelType> const& pixel ){
+
+    return PixelGray<typename OutputPixelType::channeltype>( range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[0]));
 }
+
 
 /**
+ * Convert Grayscale to RGB
+*/
+template <typename OutputPixelType, typename InputChannelType>
+typename std::enable_if<std::is_same<OutputPixelType, PixelRGB<typename OutputPixelType::channeltype> >::value,PixelRGB<typename OutputPixelType::channeltype> >::type
+    pixel_cast( PixelGray<InputChannelType> const& pixel ){
+
+    return PixelRGB<typename OutputPixelType::channeltype>( range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[0]), 
+                                                            range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[0]),
+                                                            range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[0]));
+
+
+}
+
+
+
+/**
+ * Convert RGB to RGB
+*/
+template <typename OutputPixelType, typename InputChannelType>
+typename std::enable_if<std::is_same<OutputPixelType, PixelRGB<typename OutputPixelType::channeltype> >::value,PixelRGB<typename OutputPixelType::channeltype> >::type
+    pixel_cast( PixelRGB<InputChannelType> const& pixel ){
+   
+    // return the PixelRGB
+    return PixelRGB<typename OutputPixelType::channeltype>( range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[0] ),
+                                                            range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[1] ),
+                                                            range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[2] ));
+}
+ 
+ /**
  * Convert RGB to Grayscale
 */
-template <typename OutputChannelType, typename InputChannelType>
-PixelGray<OutputChannelType> pixel_cast( PixelRGB<InputChannelType> const& pixel ){
-
+template <typename OutputPixelType, typename InputChannelType>
+typename std::enable_if<std::is_same<OutputPixelType, PixelGray<typename OutputPixelType::channeltype> >::value,PixelGray<typename OutputPixelType::channeltype> >::type
+    pixel_cast( PixelRGB<InputChannelType> const& pixel ){
+   
     // compute the average using accumulator type
-    typename OutputChannelType::accumulator_type sum =(range_cast<InputChannelType,OutputChannelType>(pixel[0])  +
-                                                       range_cast<InputChannelType,OutputChannelType>(pixel[1])  +
-                                                       range_cast<InputChannelType,OutputChannelType>(pixel[2]));
+    typename OutputPixelType::channeltype::accumulator_type sum =(range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[0])  +
+                                                                  range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[1])  +
+                                                                  range_cast<InputChannelType,typename OutputPixelType::channeltype>(pixel[2]));
 
-    typename OutputChannelType::type avg = sum / 3;
-    
-    // return the grayscale pixel
-    return PixelGray<OutputChannelType>(avg);
-}
-    
+    typename OutputPixelType::channeltype::type avg = sum / 3;
+
+    // return the gray pixel
+    return PixelGray<typename OutputPixelType::channeltype>( avg );
+}   
 
 } /// End of GEO Namespace
 

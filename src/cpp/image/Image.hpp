@@ -66,7 +66,20 @@ class Image_{
         PixelType operator[]( const int& idx ){
             return m_resource[idx];
         }
+        
+        /**
+         * Get the pixel value
+        */
+        PixelType operator()( const int& row, const int& col )const{
+            return m_resource(row,col);
+        }
 
+        /**
+         * Get the pixel reference
+        */
+        PixelType& operator()( const int& row, const int& col ){
+            return m_resource(row,col);
+        }
 
         /**
          * Set the resource information reference to the resource

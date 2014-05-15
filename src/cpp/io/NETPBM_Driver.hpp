@@ -17,6 +17,7 @@
 #include <GeoExplore/image/ChannelType.hpp>
 #include <GeoExplore/image/Image.hpp>
 #include <GeoExplore/image/PixelBase.hpp>
+#include <GeoExplore/image/PixelCast.hpp>
 #include <GeoExplore/image/PixelGray.hpp>
 #include <GeoExplore/image/PixelRGB.hpp>
 
@@ -43,7 +44,7 @@ void write_pgm_image( BaseResource<PixelType> const& data,
 template <typename PixelType>
 void write_ppm_image( BaseResource<PixelType> const& data, 
                       boost::filesystem::path const& filename ){
-
+    
     // create some variables
     int i, j;
 
@@ -56,9 +57,12 @@ void write_ppm_image( BaseResource<PixelType> const& data,
     unsigned char color[3];
     for( int y=0; y<data.rows(); y++ ){
     for( int x=0; x<data.cols(); x++ ){
-        color[0] = data[y*data.cols() + x][0];
-        color[1] = data[y*data.cols() + x][1];
-        color[2] = data[y*data.cols() + x][2];
+
+        // create the RGB Pixel to convert
+        PixelRGB_u8 output = pixel_cast<PixelRGB_u8>(data[y*data.cols() + x]);
+        color[0] = output[0];
+        color[1] = output[1];
+        color[2] = output[2];
 
         fwrite( color, 1, 3, fp);
     }}
