@@ -5,6 +5,9 @@
  */
 #include "GDAL_Driver.hpp"
 
+/// GeoExplore Libraries
+#include <GeoExplore/utilities/StringUtilities.hpp>
+
 namespace GEO {
 namespace IO{
 namespace GDAL{
@@ -129,10 +132,21 @@ std::string getShortDriverFromFilename( const boost::filesystem::path& filename 
 
     // pull the extension
     std::string ext = filename.extension().native();
+    std::string extl = string_toLower(ext);
 
     // png images
-    if( ext == ".png" || ext == ".PNG" ){
+    if( extl == ".png" ){
         return "PNG";
+    }
+    
+    // ntf images
+    if( extl == ".ntf" || extl == ".ntif" ){
+        return "NITF";
+    }
+    
+    // jpeg images
+    if( extl == ".jpg" || extl == "jpeg" ){
+        return "JPEG";
     }
 
     return "";

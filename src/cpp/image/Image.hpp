@@ -59,6 +59,13 @@ class Image_{
         int cols()const{
             return m_resource.cols();
         }
+
+        /**
+         * Return the number of channels
+        */
+        int channels()const{
+            return m_resource.channels();
+        }
         
         /**
          * Get the pixel data

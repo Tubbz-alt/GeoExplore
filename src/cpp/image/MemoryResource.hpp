@@ -106,6 +106,13 @@ class MemoryResource : public BaseResource<PixelType> {
         }
         
         /**
+         * Return the number of channels
+        */
+        virtual int channels()const{
+            return PixelType().dims();
+        }
+
+        /**
          * Clone (Deep Copy)
         */
         MemoryResource<PixelType> clone()const{

@@ -51,6 +51,11 @@ class BaseResource{
          * @return column count
         */
         virtual int cols()const = 0;
+        
+        /**
+         * Return the number of pixel channels
+        */
+        virtual int channels()const = 0;
 
 }; /// End of BaseResource Class
 

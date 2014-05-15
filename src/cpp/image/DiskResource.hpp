@@ -48,6 +48,13 @@ class DiskResource : public BaseResource<PixelType> {
         virtual int cols()const{
             return 0;
         }
+    
+        /**
+         * Return the number of channels
+        */
+        virtual int channels()const{
+            return PixelType().dims();
+        }
 
     private:
 

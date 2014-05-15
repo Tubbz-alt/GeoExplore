@@ -7,6 +7,7 @@
 #define __SRC_CPP_IO_GDALDRIVER_HPP__
 
 /// C++ Standard Libraries
+#include <type_traits>
 #include <vector>
 
 /// Boost C++ Libraries
@@ -28,6 +29,35 @@
 namespace GEO{
 namespace IO{
 namespace GDAL{
+
+
+/**
+ * Convert generic ChannelType to a GDAL Type
+*/
+template<typename CType>
+GDALDataType ctype2gdaltype(){
+    if( std::is_same<CType,ChannelTypeUInt8>::value ){
+        return GDT_Byte;
+    }
+    if( std::is_same<CType,ChannelTypeUInt12>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,ChannelTypeUInt14>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,ChannelTypeUInt16>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,ChannelTypeUInt32>::value ){
+        return GDT_UInt32;
+    }
+    if( std::is_same<CType,ChannelTypeDouble>::value ){
+        return GDT_Float64;
+    }
+
+    return GDT_Unknown;
+}
+
 
 /**
  * Get Short Driver Name from Filename
@@ -262,10 +292,43 @@ void write_image( Image<PixelType>const&  output_image, boost::filesystem::path 
 
     // Identify the driver
     std::string driverShortName = getShortDriverFromFilename(pathname);
-    
-    // create teh driver
-    GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+    if( driverShortName == "" ){
+        throw std::runtime_error(pathname.native() + std::string(" does not have a supported gdal driver."));
+    }
 
+    // create the driver
+    GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+    
+    // make sure the driver can create images
+    if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATE, FALSE )){
+        if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATECOPY, FALSE )){
+            throw std::runtime_error(driverShortName + " Driver cannot create or copy images.");
+        }
+        throw std::runtime_error(driverShortName + " Driver cannot write images.");
+    }
+    
+    // run create
+    std::cout << "Path: " << pathname.c_str() << std::endl;
+    GDALDataset* dataset = gdal_driver->Create( pathname.c_str(), 
+                                                100,//output_image.cols(), 
+                                                100,//output_image.rows(), 
+                                                1,//output_image.channels(),
+                                                GDT_Byte,
+                                                NULL
+                                               );
+    
+    // iterate over each channel
+    for( size_t i=0; i<output_image.channels(); i++ ){
+
+        GDALRasterBand* band = dataset->GetRasterBand(i+1);
+        for( size_t x=0; x<output_image.cols(); x++ )
+        for( size_t y=0; y<output_image.rows(); y++ ){
+            band->RasterIO( GF_Write, 0, 0, x, y, &output_image(y,x)[i], 1, 1, GDT_Byte, 0, 0);
+        }
+    }
+
+    // close the dataset
+    GDALClose(dataset);
 }
 
 

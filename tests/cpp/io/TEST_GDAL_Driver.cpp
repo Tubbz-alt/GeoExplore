@@ -11,6 +11,9 @@
 /// GeoExplore Library 
 #include <GeoExplore.hpp>
 
+/// GDAL
+#include <gdal/cpl_conv.h>
+
 using namespace std;
 
 /**
@@ -60,3 +63,13 @@ TEST( GDAL_Driver, GetShortDriverByFilename ){
 
 }
 
+/**
+ * Test ChannelType to GDAL Type
+*/
+TEST( GDAL_Driver, ChannelType2GDALType ){
+
+    ASSERT_EQ( GEO::IO::GDAL::ctype2gdaltype<double>(), GDT_Unknown );
+    ASSERT_EQ( GEO::IO::GDAL::ctype2gdaltype<GEO::ChannelTypeDouble>(), GDT_Float64);
+
+
+}

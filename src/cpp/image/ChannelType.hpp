@@ -9,6 +9,10 @@
 /// C++ Standard Libraries
 #include <cinttypes>
 
+/// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+
+
 namespace GEO{
 
 /**
@@ -137,7 +141,7 @@ template<>
 class ChannelType<uint16_t,16>{
 
     public:
-        
+         
         /// Accumulator Type
         typedef uint32_t accumulator_type;
         
