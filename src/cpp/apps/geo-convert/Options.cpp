@@ -41,9 +41,9 @@ void usage( const std::string& appName ){
     std::cerr << "                -utm, -geod-dd, -geod-dm, -geod-dms" << std::endl;
     std::cerr << std::endl;
     std::cerr << "        Image/Raster Conversion Flags" << std::endl;
-    std::cerr << "        -i <filename>   : Set the input to be converted." << std::endl;
+    std::cerr << "        -i <filename>   : Set the input image to be converted." << std::endl;
     std::cerr << std::endl;
-    std::cerr << "        -o <filename>   : Set the output flag." << std::endl;
+    std::cerr << "        -o <filename>   : Set the output filename." << std::endl;
     std::cerr << std::endl;
     std::cerr << "    optional flags: " << std::endl;
     std::cerr << "        -h, --help     : Print usage instructions." << std::endl;

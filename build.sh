@@ -27,12 +27,35 @@ usage(){
     echo '    options:'
     echo ''
     echo '    -j <int>        : Set number of threads to build with.'
-    echo '    PREFIX=<PREFIX> : Set Prefix.'
+    echo '    --PREFIX <PREFIX> : Set Prefix.'
     echo '    --release       : Build release version.'
     echo '    --debug         : Build debug version.'
     echo ''
 
 }
+
+
+#---------------------------------------------------#
+#-          Install GeoExplore Software            -#
+#---------------------------------------------------#
+install_software(){
+
+    echo "-> installing GeoExplore to $PREFIX"
+    
+    # make sure binary directory exists
+    if [ ! -d "$PREFIX/bin" ]; then mkdir -p $PREFIX/bin; fi
+    
+    # make sure the library directory exists
+    if [ ! -d "$PREFIX/lib" ]; then mkdir -p $PREFIX/lib; fi
+
+    # copy binary files
+    cp $BUILD_TYPE/bin/* $PREFIX/bin
+
+    # copy libs
+    cp $BUILD_TYPE/lib/libGeoExplore* $PREFIX/lib/
+
+}
+
 
 #---------------------------------------------#
 #-        Build GeoExplore Software          -#
@@ -189,6 +212,9 @@ clean_software(){
 #-          Main Function          -#
 #-----------------------------------#
 
+#  Software installation path
+PREFIX='/opt/local'
+
 #  Default Flags
 RUN_MAKE=0
 RUN_INSTALL=0
@@ -198,6 +224,8 @@ RUN_TEST=0
 
 BUILD_TYPE='release'
 NUM_THREADS=1
+
+PREFIX_FLAG=0
 
 #  Process Command-Line Arguments
 for ARG in "$@"; do
@@ -239,6 +267,10 @@ for ARG in "$@"; do
         '--headers' )
             COPY_HEADERS=1
             ;;
+        #  Set Prefix flag
+        '--PREFIX' )
+            PREFIX_FLAG=1
+            ;;
 
         #   Other Responses
         *)
@@ -247,6 +279,11 @@ for ARG in "$@"; do
             if [ "$THREAD_FLAG" == '1' ]; then
                 THREAD_FLAG=0;
                 NUM_THREADS=$ARG
+
+            #  If we need to grab the prefix
+            elif [ "$PREFIX_FLAG" = '1' ]; then
+                PREFIX_FLAG=0
+                PREFIX=$ARG
 
             #  Otherwise, we have an error
             else
@@ -291,7 +328,9 @@ fi
 #------------------------------#
 #-     Install GeoExplore     -#
 #------------------------------#
-
+if [ "$RUN_INSTALL" = '1' ]; then
+    install_software
+fi
 
 #---------------------------#
 #-     Test GeoExplore     -#
