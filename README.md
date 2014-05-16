@@ -46,9 +46,20 @@ read-only driver to handle larger and less robust image files.
 Both of these classes are based on the same Image\_ class, but vary on the resource type used
 to store the pixel data.  MemoryResource stores the data locally in contiguous memory like an array. 
 The DiskResource stores the driver, which has the data needed to open the data and pass it when referenced.
-<!---
-Implementation for the DiskResource differs by 
---->
+
+
+### IO Module ###
+
+In order to handle Input/Output for GeoExplore, a number of drivers have been implemented.  Currently the drivers 
+are hacked together in the ImageIO and OGR Driver modules, but eventually, I will create a cohesive standard for 
+implementing drivers.
+
+####  Supported Drivers ####
+
+* Geospatial Data Abstraction Library (GDAL - Image/DEM, OGR - Coordinate)
+* OpenCV - Image IO
+* NETPBM - Image write (I am writing this as a standard driver model)
+
 
 Building GeoExplore
 -------------------
@@ -72,26 +83,4 @@ To run unit tests, run the script
     ./build.sh -t
 
 To see examples of using GeoExplore binaries, see the items in scripts.
-
-TODO
-====
-
-Needed Unit Tests
------------------
-
-* UTM to UTM: change only Datum
-* UTM to UTM: change only zone
-* UTM to UTM: change both DATUM and Zone
-* UTM to UTM: change nothing, make sure output returns input 
-
-* UTM to Geod: same datum
-* UTM to Geod: different datum
-
-* Geodetic to UTM: same datum, free zone
-* Geodetic to UTM: same datum, fixed zone
-* Geodetic to UTM: different datum, free zone
-* Geodetic to UTM: different datum, fixed zone
-
-* Geodetic to Geodetic: same datum, make sure output returns input
-* Geodetic to Geodetic: different datum
 
