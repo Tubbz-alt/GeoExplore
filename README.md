@@ -30,19 +30,18 @@ More systems will be added as the project matures.
 
 ### Image Module ###
 
-NOTE!!!!!!
-This module is not completed yet.  
-NOTE!!!!!!
-
 GeoExplore contains an image module which allows users to read, manipulate, and write images.
 
 The basic usage of the module is as such for an image loaded into memory.
 
-    Image<PixelRGB_u8> image = load_image( "foo.jpg" );
+    Image<PixelRGB_u8> image;
+    load_image( "foo.jpg", image );
 
-For loading a DiskImage, which uses lazy evaluation, use
+Another module still being designed is the DiskImage class which uses lazy evaluation in conjunction with a
+read-only driver to handle larger and less robust image files.
 
-    DiskImage<PixelRGB_u8> image = load_image( "foo.jpg");
+    Image<PixelGray_d> image;
+    load_image( "foo.tif", image );
 
 Both of these classes are based on the same Image\_ class, but vary on the resource type used
 to store the pixel data.  MemoryResource stores the data locally in contiguous memory like an array. 
