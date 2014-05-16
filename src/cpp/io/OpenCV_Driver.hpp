@@ -18,25 +18,52 @@ namespace IO{
 namespace OPENCV{
 
 /**
- * Convert PixelType to OpenCV Type
+ * Generic Conversion Definition between 3d points and opencv points
 */
-template<typename PixelType>
-int PixelType2OpenCVType(){
-    if( std::is_same<PixelType,PixelRGB_u8>::value ){
-        return CV_8UC3;
+template <typename PixelType>
+struct Pixel2OpenCVType{
+    typedef typename PixelType::channeltype cvtype;
+}; /// End of Pixel2OpenCVType
+
+/**
+ * Convert from grayscale double to double
+*/
+template <>
+struct Pixel2OpenCVType<PixelGray_d>{
+    typedef double cvtype;
+
+    static void Pix2CV( PixelGray_d const& input, cvtype& output ){
+        output = input[0];
     }
-    if( std::is_same<PixelType,PixelRGB_u12>::value ){
-        return CV_16UC3;
+}; 
+
+/**
+ * Convert from RGB Double to Vec3d
+*/
+template <>
+struct Pixel2OpenCVType<PixelRGB_d>{
+    typedef typename cv::Vec3d cvtype;
+
+    static void Pix2CV( PixelRGB_d const& input, cvtype& output ){
+        output[0] = input[2];
+        output[1] = input[1];
+        output[2] = input[0];
     }
-    if( std::is_same<PixelType,PixelRGB_u14>::value ){
-        return CV_16UC3;
+}; 
+
+/**
+ * Convert from RGB UInt8 to Vec3b
+*/
+template <>
+struct Pixel2OpenCVType<PixelRGB_u8>{
+    typedef typename cv::Vec3b cvtype;
+
+    static void Pix2CV( PixelRGB_u8 const& input, cvtype& output ){
+        output[0] = input[2];
+        output[1] = input[1];
+        output[2] = input[0];
     }
-    if( std::is_same<PixelType,PixelRGB_u16>::value ){
-        return CV_16UC3;
-    }
-    
-    return CV_8UC1;
-}
+}; 
 
 /**
  * Write an RGB Image to NETPBM File
@@ -48,14 +75,14 @@ void write_image( Image<PixelType>const&  output_image, boost::filesystem::path 
     std::cout << "write opencv image" << std::endl;
     
     // convert the output image to an opencv structure
-    cv::Mat image( output_image.rows(), output_image.cols(), PixelType2OpenCVType<PixelType>());
+    cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
     
     // start loading the output image
-    for( size_t c=0; c<output_image.channels(); c++ ){
     for( size_t y=0; y<output_image.rows(); y++ ){
     for( size_t x=0; x<output_image.cols(); x++ ){
-        image.at<typename PixelType::channeltype::type>(y,x) = output_image(y,x)[c];
-    }}}
+        //image.at<typename Pixel2OpenCVType<PixelType>::cvtype>(y,x) = Pixel2OpenCVType<PixelType>::toCV(output_image(y,x));
+        Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
+    }}
 
     // run imwrite
     cv::imwrite( pathname.c_str(), image );
