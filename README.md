@@ -21,9 +21,11 @@ In order to test the API, we are writing a series of applications to serve as us
 Perform Coordinate conversions and Image conversion.
 
 Coordinate Conversion
+    
     geo-convert -c -i -geo-dd:39:-120:0:WGS84 -o -utm
 
 Raster Conversion
+    
     geo-convert -r -i image.jpg -o image.png
 
 
