@@ -65,7 +65,7 @@ class CoordinateBase{
         /**
          * Clone the object
          */
-        CoordinateBase<DATATYPE>::ptr_t clone()const{ CoordinateBase<DATATYPE>::ptr_t( new CoordinateBase<DATATYPE>(m_altitude, m_datum)); }
+        CoordinateBase<DATATYPE>::ptr_t clone()const{ return CoordinateBase<DATATYPE>::ptr_t( new CoordinateBase<DATATYPE>(m_altitude, m_datum)); }
 
         /*
          * Get the type

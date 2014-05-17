@@ -9,9 +9,11 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/BaseResource.hpp>
+#include <cstddef>
 
 /// Boost C++ Library
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
 
 /// C++ Standard Library
 #include <memory>
@@ -25,11 +27,14 @@ template <typename PixelType>
 class MemoryResource : public BaseResource<PixelType> {
 
     public:
+       
+        // container the data_type is stored in
+        typedef boost::shared_array<PixelType> data_type;
         
         /**
          * Default Constructor
         */
-        MemoryResource() : m_data(nullptr), m_rows(0), m_cols(0){
+        MemoryResource() : m_data(), m_rows(0), m_cols(0){
 
         }
         
@@ -125,7 +130,7 @@ class MemoryResource : public BaseResource<PixelType> {
             output.m_cols = cols();
 
             // copy the data
-            output.m_data = boost::shared_ptr<PixelType[]>(new PixelType[output.m_rows*output.m_cols]);
+            output.m_data = data_type(new PixelType[output.m_rows*output.m_cols]);
 
             for( size_t i=0; i<(rows()*cols()); i++ ){
                 output.m_data[i] = m_data[i];
@@ -159,7 +164,7 @@ class MemoryResource : public BaseResource<PixelType> {
         /**
          * Assign Pixel Data
         */
-        void setPixelData( boost::shared_ptr<PixelType[]> data, const int& rows, const int& cols ){
+        void setPixelData( data_type data, const int& rows, const int& cols ){
             m_rows = rows;
             m_cols = cols;
             m_data = data;
@@ -168,14 +173,14 @@ class MemoryResource : public BaseResource<PixelType> {
         /**
          * Get pixel data
         */
-        boost::shared_ptr<PixelType[]> getPixelData()const{
+        data_type getPixelData()const{
             return m_data;
         }
 
     private:
 
         /// List of pixels
-        boost::shared_ptr<PixelType[]> m_data;
+        data_type m_data;
         
         /// number of rows
         int m_rows;
