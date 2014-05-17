@@ -18,6 +18,14 @@ class ImageDriverBase{
     public:
         
         /**
+         * Get the pixel value
+        */
+        template <typename PixelType>
+        PixelType getPixel( const int& x, const int& y)const{
+            return PixelType();
+        }
+
+        /**
          * Get the image driver type
         */
         virtual ImageDriverType type()const;

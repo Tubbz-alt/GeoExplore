@@ -44,3 +44,17 @@ TEST( Image, FunctionOperators ){
 
 }
 
+/**
+ * Test the DiskImage class Constructor
+*/
+TEST( DiskImage, Constructor ){
+
+    // create a disk image
+    GEO::DiskImage<GEO::PixelGray_df> image;
+    GEO::IO::read_image( "../../tests/data/dem/n39_w120_3arc_v1.hdr", image );
+
+    FAIL();
+
+}
+
+

@@ -78,13 +78,18 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
         ImageDriverGDAL();
 
         /**
+         * Get the pixel value
+        */
+        template <typename PixelType>
+        PixelType getPixel( const int& x, const int& y )const{
+            return PixelType();
+        }
+
+        /**
          * Return the driver type
         */
         virtual ImageDriverType type()const;
 
-        /**
-         * Test if the pathname given is supported
-        */
         
 
 }; /// End of ImageDriverBase Class

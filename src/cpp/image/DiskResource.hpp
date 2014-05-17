@@ -7,10 +7,12 @@
 #define __SRC_CPP_IMAGE_DISKRESOURCE_HPP__
 
 /// GeoExplore Libraries
+#include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/BaseResource.hpp>
 #include <GeoExplore/io/ImageDriverBase.hpp>
 
-/// C++ Standard Libraries
+/// Boost C++ Libraries
+#include <boost/filesystem.hpp>
 #include <boost/shared_ptr.hpp>
 
 
@@ -39,6 +41,34 @@ class DiskResource : public BaseResource<PixelType> {
 
             // look for the proper driver to load
              
+        }
+
+        /**
+         * Pixel Accessor
+        */
+        virtual PixelType operator()( const int& x, const int& y )const{
+            return m_image_driver->getPixel<PixelType>(x, y);
+        }
+
+        /**
+         * Pixel Reference Accessor
+        */
+        virtual PixelType& operator()(const int& x, const int& y ){
+            throw NotImplementedException("PixelType& operator()","DiskResource.hpp",__LINE__);
+        }
+        
+        /**
+         * Pixel Accessor
+        */
+        virtual PixelType operator[]( const int& x )const{
+            return m_image_driver->getPixel<PixelType>(x%cols(), x/cols());
+        }
+
+        /**
+         * Pixel Reference Accessor
+        */
+        virtual PixelType& operator[]( const int& x ){
+            throw NotImplementedException("PixelType& operator[]","DiskResource.hpp",__LINE__);
         }
 
         /**

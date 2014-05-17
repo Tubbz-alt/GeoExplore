@@ -16,6 +16,9 @@
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
 
+/// C++ Standard Libraries
+#include <iostream>
+
 
 namespace GEO{
 namespace IO{
@@ -52,7 +55,18 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
         throw std::runtime_error("Unknown driver.");
     }
     
-} 
+}
+
+/**
+ * Read a Disk Image
+*/
+template <typename PixelType>
+void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& output_image ){
+
+    std::cout << "Read Disk Image" << std::endl;
+
+}
+
 
 /**
  * Write an image
