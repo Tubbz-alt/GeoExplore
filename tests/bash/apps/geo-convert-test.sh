@@ -11,7 +11,10 @@
 
 #  Run application converting UTM to Geodetic DD
 echo 'Testing UTM to Geodetic-DD'
-./release/bin/geo-convert -c -i -utm:18:323394:4307396 -o -geod-dd
+LATITUDE=`./release/bin/geo-convert -c -i -utm:18:323394:4307396 -o -geod-dd | sed 's/,/ /g' | cut -d ' ' -f 1`
+LONGITUDE=`./release/bin/geo-convert -c -i -utm:18:323394:4307396 -o -geod-dd | sed 's/,/ /g' | cut -d ' ' -f 1`
+ALTITUDE=`./release/bin/geo-convert -c -i -utm:18:323394:4307396 -o -geod-dd | sed 's/,/ /g' | cut -d ' ' -f 1`
+
 
 
 #  Convert Geodetic DD to UTM
