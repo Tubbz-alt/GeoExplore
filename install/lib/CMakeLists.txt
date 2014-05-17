@@ -20,6 +20,11 @@ set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 #------------------------------#
 find_package( GDAL REQUIRED )
 
+#--------------------------------#
+#-     Find OpenCV Library      -#
+#--------------------------------#
+find_package( OpenCV REQUIRED )
+
 #-----------------------------------------#
 #-     Define Required Header Files      -#
 #-----------------------------------------#
@@ -27,6 +32,7 @@ find_package( GDAL REQUIRED )
 #   Core Module
 set( GEOEXPLORE_CORE_HEADERS
     ../src/cpp/core/Enumerations.hpp
+    ../src/cpp/core/Exceptions.hpp
 )
 
 
@@ -39,17 +45,29 @@ set( GEOEXPLORE_COORDINATE_HEADERS
 
 #  Image Module
 set( GEOEXPLORE_IMAGE_HEADERS
+    ../src/cpp/image/BaseResource.hpp
     ../src/cpp/image/ChannelType.hpp
+    ../src/cpp/image/DiskResource.hpp
+    ../src/cpp/image/Image.hpp
+    ../src/cpp/image/MemoryResource.hpp
+    ../src/cpp/image/MetadataContainerBase.hpp
+    ../src/cpp/image/MetadataContainer.hpp
+    ../src/cpp/image/PixelBase.hpp
+    ../src/cpp/image/PixelGray.hpp
+    ../src/cpp/image/PixelRGB.hpp
 )
 
 #  IO Module
 set( GEOEXPLORE_IO_HEADERS
     ../src/cpp/io/GDAL_Driver.hpp
+    ../src/cpp/io/ImageIO.hpp
     ../src/cpp/io/OGR_Driver.hpp
+    ../src/cpp/io/OpenCV_Driver.hpp
 )
 
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
+    ../src/cpp/utilities/FilesystemUtilities.hpp
     ../src/cpp/utilities/StringUtilities.hpp
 )
 
@@ -70,6 +88,7 @@ set( GEOEXPLORE_HEADERS
 #    Core Module
 set( GEOEXPLORE_CORE_SOURCES
     ../src/cpp/core/Enumerations.cpp
+    ../src/cpp/core/Exceptions.cpp
 )
 
 #    Coordinate Module
@@ -77,13 +96,23 @@ set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/cpp/coordinate/CoordinateBase.cpp
 )
 
+#   Image Module
+set( GEOEXPLORE_IMAGE_SOURCES
+    ../src/cpp/image/MetadataContainer.cpp
+    ../src/cpp/image/MetadataContainerBase.cpp
+)
+
 #   IO Module
 set( GEOEXPLORE_IO_SOURCES
+    ../src/cpp/io/GDAL_Driver.cpp
+    ../src/cpp/io/ImageIO.cpp
+    ../src/cpp/io/NETPBM_Driver.cpp
     ../src/cpp/io/OGR_Driver.cpp
 )
 
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
+    ../src/cpp/utilities/FilesystemUtilities.cpp
     ../src/cpp/utilities/StringUtilities.cpp
 )
 
@@ -91,6 +120,7 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
+    ${GEOEXPLORE_IMAGE_SOURCES}
     ${GEOEXPLORE_IO_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
 )
@@ -108,6 +138,7 @@ add_library( GeoExplore SHARED
 target_link_libraries(
             GeoExplore
             ${GDAL_LIBRARY}
+            ${OpenCV_LIBS}
 )
 
 

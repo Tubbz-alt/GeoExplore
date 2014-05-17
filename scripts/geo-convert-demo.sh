@@ -13,3 +13,6 @@
 # Example of coordinate-conversion from geodetic decimal degrees to utm
 ./release/bin/geo-convert -c -i -geod-dd:38.8977:-77.0365 -o -utm
 
+# Example of image-conversion from NITF to PNG
+./release/bin/geo-convert -r -i tests/data/images/i_3001a.ntf -o output.png
+

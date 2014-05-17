@@ -9,6 +9,10 @@
 /// C++ Standard Libraries
 #include <cinttypes>
 
+/// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+
+
 namespace GEO{
 
 /**
@@ -21,6 +25,9 @@ class ChannelType{
 
     public:
         
+        ///  Accumulator Type
+        typedef DataType accumulator_type;
+
         ///  Type of Value
         typedef DataType type;
 
@@ -40,15 +47,18 @@ template<>
 class ChannelType<double, 1>{
 
     public:
-    
+        
+        /// Accumulator Type
+        typedef double accumulator_type;
+
         /// Type of value
         typedef double type;
 
         /// Maximum Value
-        static constexpr double maxValue = 1;
+        static constexpr type maxValue = 1;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<double,1> specialization
 
@@ -61,14 +71,17 @@ class ChannelType<uint8_t, 8>{
 
     public:
 
+        /// Accumulator Type
+        typedef uint16_t accumulator_type;
+
         /// Type of value
         typedef uint8_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 255;
+        static constexpr type maxValue = 255;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 
 }; /// End of ChannelType<uint8_t,8> specialization
@@ -82,14 +95,17 @@ class ChannelType<uint16_t, 12>{
 
     public:
         
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
+
         /// Type of value
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 4095;
+        static constexpr type maxValue = 4095;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,12> specialization
 
@@ -103,14 +119,17 @@ class ChannelType<uint16_t, 14>{
 
     public:
         
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
+        
         /// Type of value
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 16383;
+        static constexpr type maxValue = 16383;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,14> specialization
 
@@ -122,15 +141,18 @@ template<>
 class ChannelType<uint16_t,16>{
 
     public:
+         
+        /// Accumulator Type
+        typedef uint32_t accumulator_type;
         
         /// Type of value
         typedef uint16_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 65535;
+        static constexpr type maxValue = 65535;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint16_t,16> specialization
 
@@ -144,14 +166,17 @@ class ChannelType<uint32_t,32>{
 
     public:
 
+        /// Accumulator Type
+        typedef uint64_t accumulator_type;
+        
         /// Type of Value
         typedef uint32_t type;
 
         /// Maximum Value
-        static constexpr double maxValue = 4294967295;
+        static constexpr type maxValue = 4294967295;
 
         /// Minimum Value
-        static constexpr double minValue = 0;
+        static constexpr type minValue = 0;
 
 }; /// End of ChannelType<uint32_t,32> specialization
 
@@ -165,6 +190,16 @@ typedef ChannelType<uint16_t, 12>  ChannelTypeUInt12;
 typedef ChannelType<uint8_t,  8>   ChannelTypeUInt8;
 typedef ChannelType<double, 1>     ChannelTypeDouble;
 
+
+/**
+ * Scale a pixel depending on its type.
+ */
+template <typename BeforeType, typename AfterType>
+typename AfterType::type range_cast( typename BeforeType::type const& value ){
+    return ((( (static_cast<double>(value) - BeforeType::minValue) / 
+               (      BeforeType::maxValue - BeforeType::minValue)  ) 
+            *( AfterType::maxValue - AfterType::minValue)) + AfterType::minValue);
+}
 
 } /// End of Namespace GEO
 

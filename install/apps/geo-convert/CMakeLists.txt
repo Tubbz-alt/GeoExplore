@@ -37,6 +37,11 @@ find_package( Boost
                 REQUIRED
 )
 
+#--------------------------------#
+#-     Find OpenCV Library      -#
+#--------------------------------#
+find_package( OpenCV REQUIRED )
+
 #-----------------------------------#
 #-     Find C++ Thread Library     -#
 #-----------------------------------#
@@ -53,6 +58,7 @@ find_package( GDAL REQUIRED )
 set( GEOCONVERT_HEADERS
     ../../../src/cpp/apps/geo-convert/Options.hpp
     ../../../src/cpp/apps/geo-convert/CoordinateConversion.hpp
+    ../../../src/cpp/apps/geo-convert/ImageConversion.hpp
     ../../../src/cpp/apps/geo-convert/Utilities.hpp
 )
 
@@ -64,6 +70,7 @@ set( GEOCONVERT_SOURCES
     ../../../src/cpp/apps/geo-convert/main.cpp
     ../../../src/cpp/apps/geo-convert/Options.cpp
     ../../../src/cpp/apps/geo-convert/CoordinateConversion.cpp
+    ../../../src/cpp/apps/geo-convert/ImageConversion.cpp
     ../../../src/cpp/apps/geo-convert/Utilities.cpp
 )
 
@@ -82,5 +89,6 @@ target_link_libraries( geo-convert
                 ${CMAKE_THREAD_LIBS_INIT}
                 ${Boost_LIBRARIES}
                 ${GDAL_LIBRARY}
+                ${OpenCV_LIBS}
 )
 

@@ -41,7 +41,15 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
         typename CoordinateUTM<DATATYPE>::ptr_t output( new CoordinateUTM<DATATYPE>(output_datum));
 
         // convert
-        GEO::OGR::convert_Geodetic2UTM( input->latitude(), input->longitude(), input->altitude(), input->datum(), output->datum(), output->zone(), output->easting(), output->northing(), output->altitude() );
+        GEO::OGR::convert_Geodetic2UTM( input->latitude(), 
+                                        input->longitude(), 
+                                        input->altitude(), 
+                                        input->datum(), 
+                                        output->datum(), 
+                                        output->zone(), 
+                                        output->easting(), 
+                                        output->northing(), 
+                                        output->altitude() );
 
         // downcast and send
         return output;
@@ -57,8 +65,15 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
         typename CoordinateGeodetic<DATATYPE>::ptr_t output( new CoordinateGeodetic<DATATYPE>(output_datum));
 
         // convert
-        GEO::OGR::convert_UTM2Geodetic( input->zone(), input->easting(), input->northing(), input->altitude(), input->datum(), output->datum(),
-                                        output->latitude(), output->longitude(), output->altitude() );
+        GEO::OGR::convert_UTM2Geodetic( input->zone(), 
+                                        input->easting(), 
+                                        input->northing(), 
+                                        input->altitude(), 
+                                        input->datum(), 
+                                        output->datum(),
+                                        output->latitude(), 
+                                        output->longitude(), 
+                                        output->altitude() );
 
         return output;
 
@@ -73,6 +88,11 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
 
 /**
  * Convert from Geodetic to UTM
+ *
+ * @param[in] coordinate Lat/Lon Coordinate to convert
+ * @param[in] output_datum Datum to convert to
+ *
+ * @return  UTM coordinate.
 */
 template<typename DATATYPE>
 CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, 
@@ -83,8 +103,15 @@ CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const&
     output.datum() = output_datum;
 
     // pass the inputs to the OGR converter
-    GEO::OGR::convert_Geodetic2UTM( coordinate.latitude(), coordinate.longitude(), coordinate.altitude(), coordinate.datum(),
-                                    output.datum(), output.zone(), output.easting(), output.northing(),  output.altitude() );
+    GEO::OGR::convert_Geodetic2UTM( coordinate.latitude(), 
+                                    coordinate.longitude(), 
+                                    coordinate.altitude(), 
+                                    coordinate.datum(),
+                                    output.datum(), 
+                                    output.zone(), 
+                                    output.easting(), 
+                                    output.northing(),  
+                                    output.altitude() );
 
 
     return output;
@@ -92,7 +119,58 @@ CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const&
 
 
 /**
+ * Convert from Geodetic to UTM with fixed zone
+ *
+ * @param[in] coordinate Lat/Lon coordinate to convert
+ * @param[in] zone Zone to set output to
+ * @param[in] datum Datum
+ *
+ * @return UTM Coordinate output
+*/
+template <typename DATATYPE>
+CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, const int& zone, Datum const& datum ){
+    
+    /// create the output
+    CoordinateUTM<DATATYPE> output;
+    output.datum() = datum;
+    output.zone() = zone;
+
+    // pass the inputs to the OGR converter
+    GEO::OGR::convert_Geodetic2UTM_fixedZone( coordinate.latitude(),
+                                              coordinate.longitude(),
+                                              coordinate.altitude(),
+                                              coordinate.datum(),
+                                              output.datum(),
+                                              zone,
+                                              output.easting(),
+                                              output.northing(),
+                                              output.altitude()
+                                            );
+
+    return output;
+}
+
+
+/**
+ * Convert from Geodetic to UTM with fixed Zone and fixed datum
+ *
+ * @param[in] coordinate Lat/Lon coordinate to convert
+ * @param[in] zone Zone to set output to
+ *
+ * @return UTM Coordinate output.
+*/
+template <typename DATATYPE>
+CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, const int& zone ){
+    return convert_coordinate(coordinate, zone, coordinate.datum());
+}
+
+
+/**
   * Convert Geodetic to UTM forcing the datum to remain the same
+  *
+  * @param[in] coordinate Lat/Lon Coordinate to convert
+  * 
+  * @return UTM Coordinate output
  */
 template<typename DATATYPE>
 CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate ){

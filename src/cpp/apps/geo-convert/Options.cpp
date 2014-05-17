@@ -23,12 +23,13 @@ void usage( const std::string& appName ){
     std::cerr << std::endl;
     std::cerr << "            Supported Conversion Types" << std::endl;
     std::cerr << "            -c : Coordinate conversion" << std::endl;
+    std::cerr << "            -r : Raster/Image conversion" << std::endl;
     std::cerr << std::endl;
+    std::cerr << "        Coordinate Conversion Flags" << std::endl;
     std::cerr << "        -i <value>   : Set the input to be converted." << std::endl;
     std::cerr << std::endl;
     std::cerr << "            Input Formats" << std::endl;
-    std::cerr << "                Coordinates:" << std::endl;
-    std::cerr << "                -utm:zone:<easting>:<northing>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
+    std::cerr << "                -utm:<zone>:<easting>:<northing>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
     std::cerr << "                -geod-dd:<latitude>:<longitude>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
     std::cerr << "                -geod-dm:<lat,min>:<lon,min>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
     std::cerr << "                -geod-dms:<lat,min,sec>:<lon,min,sec>:<altitude=0>:<projection=WGS84/EPSG:4326>" << std::endl;
@@ -38,6 +39,11 @@ void usage( const std::string& appName ){
     std::cerr << "            Output Formats" << std::endl;
     std::cerr << "                Coordinates:  Specify the output coordinate type." << std::endl;
     std::cerr << "                -utm, -geod-dd, -geod-dm, -geod-dms" << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "        Image/Raster Conversion Flags" << std::endl;
+    std::cerr << "        -i <filename>   : Set the input image to be converted." << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "        -o <filename>   : Set the output filename." << std::endl;
     std::cerr << std::endl;
     std::cerr << "    optional flags: " << std::endl;
     std::cerr << "        -h, --help     : Print usage instructions." << std::endl;
@@ -82,6 +88,11 @@ Options parse_command_line( int argc, char* argv[] ){
         // test if the coordinate conversion type was given
         else if( arg == "-c" ){
             options.ctype = ConversionType::COORDINATE;
+        }
+
+        // test if the raster/image conversion flag was given
+        else if( arg == "-r" ){
+            options.ctype = ConversionType::IMAGE;
         }
 
         // test if the input value was given
@@ -132,3 +143,4 @@ Options parse_command_line( int argc, char* argv[] ){
     // return our command-line options
     return options;
 }
+

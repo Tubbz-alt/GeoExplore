@@ -21,6 +21,11 @@ std::string Datum2WKT_string( Datum const& datum ){
         /// If we have WGS84
         case Datum::WGS84:
             return "WGS84";
+        
+        /// If we have NAD83
+        case Datum::NAD83:
+            return "NAD83";
+
         default:
             throw std::runtime_error("Unknown datum.");
     }

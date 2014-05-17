@@ -18,9 +18,25 @@
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
 /// Image Module
+#include <GeoExplore/image/BaseResource.hpp>
 #include <GeoExplore/image/ChannelType.hpp>
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/MetadataContainer.hpp>
+#include <GeoExplore/image/MetadataContainerBase.hpp>
+#include <GeoExplore/image/PixelBase.hpp>
+#include <GeoExplore/image/PixelCast.hpp>
+#include <GeoExplore/image/PixelGray.hpp>
+#include <GeoExplore/image/PixelRGB.hpp>
+
+/// IO Module
+#include <GeoExplore/io/GDAL_Driver.hpp>
+#include <GeoExplore/io/ImageIO.hpp>
+#include <GeoExplore/io/NETPBM_Driver.hpp>
+#include <GeoExplore/io/OpenCV_Driver.hpp>
 
 /// Utility Module
+#include <GeoExplore/utilities/FilesystemUtilities.hpp>
 #include <GeoExplore/utilities/StringUtilities.hpp>
 
 #endif
