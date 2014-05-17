@@ -51,9 +51,10 @@ TEST( DiskImage, Constructor ){
 
     // create a disk image
     GEO::DiskImage<GEO::PixelGray_df> image;
-    GEO::IO::read_image( "../../tests/data/dem/n39_w120_3arc_v1.hdr", image );
+    GEO::IO::read_image( "../../tests/data/dem/n39_w120_3arc_v1.bil", image );
 
-    FAIL();
+    ASSERT_EQ( image.rows(), 1201 );
+    ASSERT_EQ( image.cols(), 1201 );
 
 }
 

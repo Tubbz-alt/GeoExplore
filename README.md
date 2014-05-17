@@ -28,6 +28,9 @@ Raster Conversion
     
     geo-convert -r -i image.jpg -o image.png
 
+#### geo-info ####
+
+Extract information from the input source.
 
 ### Coordinate Module ###
 
