@@ -51,6 +51,10 @@ TEST( ChannelType, RangeCast ){
     uint8_t result01 = GEO::range_cast<GEO::ChannelTypeDouble,GEO::ChannelTypeUInt8>(0.5);
     ASSERT_EQ( 255/2, result01);
     
+    // convert a uint8_t to double free
+    double result02 = GEO::range_cast<GEO::ChannelTypeUInt8,GEO::ChannelTypeDoubleFree>(100);
+    ASSERT_NEAR( 100, result02, 0.0001 );
+
 
 }
 

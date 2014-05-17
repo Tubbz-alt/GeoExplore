@@ -8,9 +8,10 @@
 
 /// GeoExplore Libraries
 #include <GeoExplore/image/BaseResource.hpp>
+#include <GeoExplore/io/ImageDriverBase.hpp>
 
 /// C++ Standard Libraries
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 
 namespace GEO{
@@ -27,10 +28,19 @@ class DiskResource : public BaseResource<PixelType> {
         /**
          * Default Constructor
         */
-        DiskResource(){
+        DiskResource() : m_image_driver(nullptr){
 
         }
         
+        /**
+         * Constructor given an image to load
+        */
+        DiskResource( boost::filesystem::path const& pathname ){
+
+            // look for the proper driver to load
+             
+        }
+
         /**
          * Return the number of rows
          *
@@ -58,7 +68,8 @@ class DiskResource : public BaseResource<PixelType> {
 
     private:
 
-
+        /// Specified image driver
+        boost::shared_ptr<GEO::IO::ImageDriverBase> m_image_driver;
 
 
 

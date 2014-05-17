@@ -6,21 +6,26 @@
 #ifndef __GEOEXPLORE_IO_IMAGEDRIVERBASE_HPP__
 #define __GEOEXPLORE_IO_IMAGEDRIVERBASE_HPP__
 
+/// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+
 namespace GEO{
+namespace IO{
+
 
 class ImageDriverBase{
 
     public:
         
         /**
-         * Force every driver to test the magic number to see if it supports it
+         * Get the image driver type
         */
-        bool compareMagicNumber( const std::string& magicNumber )const;
-
+        virtual ImageDriverType type()const;
 
 
 }; /// End of ImageDriverBase Class
 
+} /// End of IO Namespace
 } /// End of GEO Namespace
 
 #endif

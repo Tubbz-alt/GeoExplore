@@ -47,7 +47,8 @@ std::string CoordinateType2String( CoordinateType const& ctype );
 /**
  * @class ImageDriver
 */
-enum class ImageDriver{
+enum class ImageDriverType{
+    Base,
     GDAL,
     NETPBM,
     OPENCV,

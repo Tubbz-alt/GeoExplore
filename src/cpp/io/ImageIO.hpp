@@ -23,7 +23,7 @@ namespace IO{
 /**
  * Compute the image Driver
 */
-GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname );    
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname );    
 
 
 /**
@@ -38,13 +38,13 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
     }
 
     /// decide which driver to use depending on the filename
-    GEO::ImageDriver driver = compute_driver(pathname);
+    GEO::ImageDriverType driver = compute_driver(pathname);
 
     
     /**
      * Since we are just loading pixel data, call the appropriate load_image_data function
      */
-    if( driver == GEO::ImageDriver::GDAL ){
+    if( driver == GEO::ImageDriverType::GDAL ){
         int rowSize;
         output_image.setResource( GEO::IO::GDAL::load_image<PixelType>(pathname));
     }
@@ -61,18 +61,18 @@ template <typename PixelType>
 void write_image( Image<PixelType>& output_image, boost::filesystem::path const& pathname ){
 
     // determine the driver type
-    GEO::ImageDriver driver = compute_driver(pathname);
+    GEO::ImageDriverType driver = compute_driver(pathname);
 
     /**
      * Select the driver's write function
     */
-    if( driver == GEO::ImageDriver::GDAL ){
+    if( driver == GEO::ImageDriverType::GDAL ){
         GEO::IO::GDAL::write_image<PixelType>( output_image, pathname );
     }
-    else if( driver == GEO::ImageDriver::NETPBM ){
+    else if( driver == GEO::ImageDriverType::NETPBM ){
         GEO::IO::NETPBM::write_image<PixelType>( output_image, pathname );
     }
-    else if( driver == GEO::ImageDriver::OPENCV ){
+    else if( driver == GEO::ImageDriverType::OPENCV ){
         GEO::IO::OPENCV::write_image<PixelType>( output_image, pathname );
     }
     else{

@@ -60,6 +60,7 @@ set( GEOEXPLORE_IMAGE_HEADERS
 #  IO Module
 set( GEOEXPLORE_IO_HEADERS
     ../src/cpp/io/GDAL_Driver.hpp
+    ../src/cpp/io/ImageDriverBase.hpp
     ../src/cpp/io/ImageIO.hpp
     ../src/cpp/io/OGR_Driver.hpp
     ../src/cpp/io/OpenCV_Driver.hpp
@@ -105,6 +106,7 @@ set( GEOEXPLORE_IMAGE_SOURCES
 #   IO Module
 set( GEOEXPLORE_IO_SOURCES
     ../src/cpp/io/GDAL_Driver.cpp
+    ../src/cpp/io/ImageDriverBase.cpp
     ../src/cpp/io/ImageIO.cpp
     ../src/cpp/io/NETPBM_Driver.cpp
     ../src/cpp/io/OGR_Driver.cpp

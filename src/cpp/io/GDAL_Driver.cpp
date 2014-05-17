@@ -12,6 +12,22 @@ namespace GEO {
 namespace IO{
 namespace GDAL{
 
+
+/**
+ * ImageDriverGDAL Constructor
+*/
+ImageDriverGDAL::ImageDriverGDAL(){
+
+}
+
+/**
+ * Get the driver type
+*/
+ImageDriverType ImageDriverGDAL::type()const{
+    return ImageDriverType::GDAL;
+}
+
+
 /**
  * GDAL Driver constructor
 */

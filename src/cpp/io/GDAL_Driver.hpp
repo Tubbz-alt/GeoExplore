@@ -25,6 +25,7 @@
 #include <GeoExplore/image/ChannelType.hpp>
 #include <GeoExplore/image/Image.hpp>
 #include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/io/ImageDriverBase.hpp>
 
 namespace GEO{
 namespace IO{
@@ -63,6 +64,31 @@ GDALDataType ctype2gdaltype(){
  * Get Short Driver Name from Filename
 */
 std::string getShortDriverFromFilename( const boost::filesystem::path& filename );
+
+/**
+ * @class ImageDriverGDAL
+*/
+class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
+
+    public:
+        
+        /**
+         * Default Constructor
+        */
+        ImageDriverGDAL();
+
+        /**
+         * Return the driver type
+        */
+        virtual ImageDriverType type()const;
+
+        /**
+         * Test if the pathname given is supported
+        */
+        
+
+}; /// End of ImageDriverBase Class
+
 
 /**
  * @class GDAL_Driver
