@@ -18,8 +18,9 @@ namespace GEO{
  */
 enum class Datum{
 
-    WGS84,
+    EGM96,
     NAD83,
+    WGS84,
 
 }; /// End of ProjectionType Class
 
