@@ -1,41 +1,244 @@
 %   File : testRender.m
 % Author : Josh Gleason
-%   Date : 05/10/14
+%   Date : 05/16/14
 % This script is meant to perform simple mesh render based on a small artificial sinc function
 % dataset. Tests the error computation presented in "Lindstrom et al. Terrain simplification
 % Simplified (2002)" in Sections B and C. And renders a triangle mesh using the method
-% described in Section D. This script favors readability over speed and makes no attempts to
-% optimize calculations.
+% described in Section D. This script favors readability over speed but does offload pre
+% processed data to the hard disk to reduce run time after it has been computed the first time.
 
 % Program Entry
-% Returns some data to play with.
-% p    : screen space error
-% z    : vertex height  : note that you can get x and y using >> [x,y] = meshgrid(0:sz-1);
-% e    : nested world space error metric
-% r    : radii of bounding spheres
-% einc : actual world space error (incremental)
-% emax : actual world space error (maximum)
-function [p, z, e, r, einc, emax]=testRender() 
-  %% Input parameters
-    % width/height of regular grid (Must be of the form 2^n+1)
-    sz=2^4+1;
-    % pixel error threshold based on 60 degree FOV and 640 pixel screen resolution
-    tau=0.5;
-    % set a camera position far away. If the camera is close the mesh will be dense.
-    camPos = [0,-100,8];
+% Output
+%   p      : screen space error
+%   z      : height map of sinc function
+%   tstrip : Vertives of triangle strip
+% Input (optional)
+%   sz     : Number of rows/columns in height map
+%   tau    : Screen space error threshold (pixels)
+%   camPos : 1x3 row vector of camera position (x,y,z)
+function [p, z, tstrip]=testRender(sz, tau, camPos, makeVideo)
+  % Query user for input parameters
+  if nargin < 4
+    [sz, tau, camPos, makeVideo] = getUserInput();
+  else
+    sz = 2^ceil(log2(sz-1))+1;
+  end
+
+  % Try to load preprocessed data from fname
+  [valid, z, e, r] = initValues(sz);
+
+  % Preprocess data if necessary. Save off core so it doesn't need to be done again
+  if ~valid
+    % Perform preprocessing on data (This can take a very long time!)
+    [e, r] = preProcess(sz, z);
+    % Save preprocessed data using MATLAB .mat format
+    save(sprintf('PreProcessed%g.mat', log2(sz-1)),'e','r','z');
+  end
+
+  % Build a single plot or a video depending on user input
+  if makeVideo
+    [p,tstrip] = buildVideo(sz, z, e, r, camPos);
+  else
+    [p,v,tstrip] = computeMesh(sz, tau, camPos, z, e, r);
+    plotAll(sz, z, v, tstrip, camPos);
+  end
+end
+
+% Build a 30 Hz video moving around the scene
+function [p, tstrip] = buildVideo(sz, z, e, r, camPos)
+  if exist('OCTAVE_VERSION', 'builtin')
+    fprintf('Octave does not have the ability to create videos, please use MATLAB\n');
+    p=[]; tstrip=[];
+    return;
+  end
   
-  %% Initialize all the variables that are needed for this calculation.
-    % generate a sinc function for sample dataset in a regular 17 x 17 grid
+  % Get user input for video file name
+  fname = uiputfile({'*.mp4', 'MPEG-4 Video File'});
+  assert(~isempty(fname) && ~exist(fname,'dir'), 'Filename must be valid');
+  
+  writer = VideoWriter(fname,'MPEG-4');
+  writer.Quality = 80;
+  writer.FrameRate = 30;
+  open(writer);
+  
+  % Initialize path for camera
+  path = initPath(4:1/30:5, sz, camPos);
+
+  for i=1:numel(path)/3
+    % Compute the screen space error and triangle strip
+    [p, v, tstrip] = computeMesh(sz, tau, camPos, z, e, r);
+    % Plot figure
+    [imgMesh, imgVerts] = plotAll(sz, z, v, tstrip, camPos); 
+    close(1); close(2);
+    %fprintf('Average p value : %g\n',mean(p(~isinf(p))));
+    fprintf('Percentage Complete %g%%\n',i/(numel(path)/3)*100);
+    % Adjust camera position
+    camPos = path(i,:);
+    imgFinal = [imgMesh imgVerts];
+    
+    % Add image to file
+    writer.writeVideo(imgFinal);
+  end
+  close(writer);
+end
+
+function path = initPath(t, sz, camPos)
+  path = zeros(numel(t),3);
+  % adjust distance based on sine wave while at the same time rotating in
+  % azimute at a constant speed while varying rotation in elevation in a
+  % sine wave
+  % Need to scale not translate to move single point from origin
+  count = 1;
+  
+  % Translate so center of plot is centered
+  dx = (sz-1)/2; dy = (sz-1)/2; dz = (sz-1)/2;
+  T1 = [1 0 0 -dx; ...
+        0 1 0 -dy; ...
+        0 0 1 -dz; ...
+        0 0 0 1];
+  T6 = [1 0 0 dx; ...
+        0 1 0 dy; ...
+        0 0 1 dz; ...
+        0 0 0 1];
+  for dt=t
+    % Rotate around X and Y using sin wave motion
+    theta = pi/4*sin(pi/7*dt);
+    T2 = [1 0           0          0; ...
+          0 cos(theta) -sin(theta) 0; ...
+          0 sin(theta)  cos(theta) 0; ...
+          0 0           0          1];
+    T3 = [cos(theta) 0 sin(theta) 0; ...
+          0          1 0          0; ...
+         -sin(theta) 0 cos(theta) 0; ...
+          0          0 0          1];
+    
+    % Rotate around z linearly
+    theta = pi/5*dt;
+    T4 = [cos(theta) -sin(theta) 0 0; ...
+          sin(theta)  cos(theta) 0 0; ...
+          0           0          1 0; ...
+          0           0          0 1];
+    
+    % Scale by sine function in X and Y
+    T5 = [(sin(pi/3*dt)+2)*0.5 0 0 0; ...
+          0 (sin(pi/3*dt)+2)*0.5 0 0; ...
+          0 0 1 0; ...
+          0 0 0 1];
+   
+    pos4 = T6*T5*T4*T3*T2*T1*[camPos 1]';
+    pos4(1:3) = pos4(1:3)/pos4(4);
+    path(count,:) = pos4(1:3)';
+
+    count = count+1;
+  end
+  %plot3(path(:,1),path(:,2),path(:,3))
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                   I/O Operators
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Query user for size (sz), screen space error threshold (tau) and camera
+% position (camPos)
+function [sz, tau, camPos, makeVideo] = getUserInput()
+  % get size of array (number of rows and columns) round up to nearest 2^n+1
+  sz = 2^4+1;
+  n = input(sprintf('Enter size of array (will be scaled to nearest 2^n+1) (Default %6g) : ', sz));
+  if ~isempty(n)
+    powr = ceil(log2(n-1));
+    sz=2^powr+1;
+  end
+
+  % pixel error threshold based on 60 degree FOV and 640 pixel screen resolution
+  tau = 1;
+  tauVal=input(sprintf('Pixel Error (tau) (Default %g) : ', tau));
+  if ~isempty(tauVal), tau = tauVal; end
+  
+  % set a camera position. If the camera is close the mesh will be dense.
+  camPos = [-6 -25 2];
+  camX = input(sprintf('Camera X (Default %6g) :', camPos(1)));
+  if ~isempty(camX), camPos(1) = camX; end
+  camY = input(sprintf('Camera Y (Default %6g) :', camPos(2)));
+  if ~isempty(camY), camPos(2) = camY; end
+  camZ = input(sprintf('Camera Z (Default %6g) :', camPos(3)));
+  if ~isempty(camZ), camPos(3) = camZ; end
+  
+  % Ask if user wants to build a video
+  makeVideo = input('Do you want to build a Video? (1/0 Default 0) : ');
+  if isempty(makeVideo) || makeVideo~=1, makeVideo=0; end
+end
+
+% Attempt to load preprocessed data from a file
+function [valid, z, e, r] = initValues(sz)
+  valid = 1;
+  try
+    powr = log2(sz-1);
+    fname = sprintf('PreProcessed%g.mat',powr);
+    S = load(fname);
+    e = S.e; r = S.r; z = S.z;
+  catch
+    fprintf('Unable to load PreProcessed Data\n');
+    valid = 0;
     z = gensinc(sz);
-    % active vertices (corners and center are active by default)
-    v = zeros(sz,sz); v(1,1) = 1; v(1,sz) = 1; v(sz,1) = 1; v(sz,sz) = 1; v((sz+1)/2, (sz+1)/2) = 1;
-    % world space error
+    e = []; r = [];
+  end
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                        Mesh simplification step (every frame)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Compute nested screen space error and triangle mesh
+% Input Parameters
+%   sz     : The number of rows/columns in the height map (2^n+1)
+%   tau    : Maximum screen space error allowed (in pixels)
+%   camPos : A 1x3 row vector representing the camera position
+%   z      : The height map (z values)
+%   e      : Nested screen space error (see preProcess function)
+%   r      : Nested bounding sphere radii (see preProcess function)
+% Output Parameters
+%   p      : Nested screen space error
+%   tstrip : The triangle mesh as a continuous triangle strip (indexed)
+function [p, v, tstrip] = computeMesh(sz, tau, camPos, z, e, r)
+    % initialize active vertices (corners and center are active by default)
+    v = zeros(sz,sz);
+    v([1 sz],[1 sz])=1; v((sz+1)/2,(sz+1)/2)=1;
+    
+    % Compute screen space error using isotropic projection (simpler than perspective)
+    % using Equation 7 (Optionally I could be using perspective screen space error described
+    % in Equation 10). It should be noted that this value doesn't need to be computed for
+    % every node, if a parent node is deactivated (p <= tau) then I know because of the
+    % monatonic property of this metric, that all the children will also be deactivated.
+    p = computePIsotropic(e, r, camPos, z);
+    
+    % Filter vertices with screen space error above pixel threshold (tau). The smaller tau is
+    % the more vertices activated based ocomputeEMaxn Equation 8 or 11.
+    v = getActiveVerts(p, tau, v);
+    
+    % Compute the triangle strip vertices using the method described in Section D.
+    tstrip = meshrefine(v);
+    
+    % TODO: Perform View Frustum Culling (Section E)
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                           Data preprocessing step
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Compute the two off-core metrics used for computing the screen space error metric.
+% Input Parameters
+%   sz: The number of rows/columns in the height map (2^n+1)
+%   z:  The height map (z values)
+% Output
+%   e : World space error metric (nested)
+%   r : Bounding ball diameter
+function [e, r] = preProcess(sz, z)
+  % Initialize all the variables that are needed for this calculation.
+    % raw world space error
     einc = zeros(sz,sz);
     emax = zeros(sz,sz);
     % monatonically increasing error (in terms of DAG traversal)
     e = zeros(sz,sz);
-    % screen space error (doesn't actually need to be initialized here)
-    p = zeros(sz,sz);
     % radius of bounding ball used in screen space error calculation
     r = zeros(sz,sz);
     % This is the root nodes position
@@ -43,52 +246,27 @@ function [p, z, e, r, einc, emax]=testRender()
     % this will be the Directed Acyclic graph's adjacency matrix. Using a sparse matrix
     DAG = spalloc(sz*sz, sz*sz, 4*sz*(sz-1));
 
-  %% Preprocessing on dataset
+  % Preprocessing on dataset
     % These values would be stored as metadata in the file containing the heightmap.
-    
+
     % I need to build the DAG of the scene. The center of the mesh is the parent. Based on
     % Section A in the paper. See Figure 2 and DAG section of source code for help
     % understanding the graph topology.
     DAG = addchildren(DAG, root, 1);
     % compute radius of bounding balls using Equation 3.
-    r = boundingBall(DAG, root, 1, r);
+    r = boundingBall(DAG, root, z, 1, r);
     % compute actual world space error using Equation 4 and 5
     einc = computeEInc(DAG, z, root, 1, einc);
     emax = computeEMax(DAG, z, einc, root, 1, emax);
     % compute monatonically increasing world space error (in terms that e_ancestor <= e_node)
     % using Equation 2.
     e = computeE(DAG, emax, root, 1, e);
-
-  %% Would need to be computed every frame
-    % Compute screen space error using isotropic projection (simpler than perspective)
-    % using Equation 7 (Optionally I could be using perspective screen space error described
-    % in Equation 10). It should be noted that this value doesn't need to be computed for
-    % every node, if a parent node is deactivated (p <= tau) then I know because of the
-    % monatonic property of this metric, that all the children will also be deactivated.
-    p = computePIsotropic(e, r, camPos, z);
-    % Filter vertices with screen space error above pixel threshold (tau). The smaller tau is
-    % the more vertices activated based ocomputeEMaxn Equation 8 or 11.
-    v = getActiveVerts(p, tau, v);
-    % Compute the triangle strip vertices using the method described in Section D.
-    tstrip = meshrefine(v);
-    
-    %% TODO: Perform View Frustum Culling (Section E)
-  
-  %& Show results
-    % Plot the active vertices in top-down view
-    figure(1);
-    plotVerts(v);
-    title('Active Vertices');
-    % Plot the mesh as a 3d wireframe (pretty slow because hold('on') slows octave down a lot)
-    figure(2);
-    plotTStrip(tstrip,z);
-    title('Triangle Strip Mesh');
     
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                           Directed Acyclic Graph (DAG)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                           Directed Acyclic Graph (DAG)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % The Directed Acyclic Graph (DAG) is used to link nodes in a pyramid heirarchy. A
 % parent node contains at most 4 children who are at a higher resolution in the grid.
@@ -237,9 +415,9 @@ function pos = getpos(idx, sz)
   pos(2) = (idx-pos(1))/sz;
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%               Compute Bounding Balls (Lateral World Space Error)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               Compute Bounding Balls (Lateral World Space Error)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Bounding ball's are described in Section B and are computed using Equation 3.
 % There are two goals of the bounding balls.
@@ -262,7 +440,7 @@ end
 % to be computed upon initialization of a program.
 
 % Compute radius of bounding balls in DAG using Equation 3
-function r=boundingBall(DAG, node, level, r)
+function r=boundingBall(DAG, node, z, level, r)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
   if level == maxLevel % leaf
@@ -272,42 +450,46 @@ function r=boundingBall(DAG, node, level, r)
     for i=1:numel(cpos)/2
       cnode = cpos(i,:);
       if r(cnode(1)+1, cnode(2)+1) == 0
-        r=boundingBall(DAG, cnode, level+1, r);
+        r=boundingBall(DAG, cnode, z, level+1, r);
       end
               
       % recurse down the tree to determine value of r. This recursion visits
       % the lowest nodes first. Everything below should already have a validPos
       % value for r. The bbRadius does not modify r it simply returns the value
-      % of r(node)
-      % POSSIBLE OPTIMIZATION FROM PAPER, IT APPEARS THAT I MAY ONLY NEED TO VISIT
-      % THE CHILD NODES TO ENSURE IVE FOUND THE MAXIMUM
-      r(node(1)+1, node(2)+1) = bbRadius(DAG, node, cnode, level+1, r, 0);
+      % of r(node). Make sure the z value is included in this calculation
+      r(node(1)+1, node(2)+1) = bbRadius(DAG, node, cnode, z, level+1, r, 0);
       
     end
   end
 end
 
+% find euclidean length of vector
+function l = euclidLen(node)
+    l = sqrt(sum(node.*node,numel(size(node))));
+end
+
 % Used to compute the "otherwise" part of Equation 3. Used by boundingBall function
-function maxval=bbRadius(DAG, inode, node, level, r, maxval)
+function maxval=bbRadius(DAG, inode, node, z, level, r, maxval)
   sz = numel(DAG)^0.25;
   maxLevel = log2(sz-1)*2;
+  nodez = [node z(node(1)+1, node(2)+1)];
   % last level must be included
   if level <= maxLevel
     % compute the distance from inode to node (Equation 3 in paper)
-    dist = norm(node-inode) + r(node(1)+1, node(2)+1);
+    inodez = [inode z(inode(1)+1, inode(2)+1)];
+    dist = euclidLen(nodez-inodez) + r(node(1)+1, node(2)+1);
     maxval = max([dist maxval]);
     cpos = getChildren(DAG, node);
-    % don't need to check each child just one since the grid is regular and symmetric
-    if ~isempty(cpos)
-      cnode = cpos(1,:);
-      maxval = bbRadius(DAG, inode, cnode, level+1, r, maxval);
+    for i=1:numel(cpos)/2
+      cnode = cpos(i,:);
+      maxval = bbRadius(DAG, inode, cnode, z, level+1, r, maxval);
     end
   end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                        World Space Height Error Metrics
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                        World Space Height Error Metrics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % World space z-error measures the amount of elevation (z-axis) error introduced by NOT
 % activating a vertex. i.e. This answers the question. If you were to remove this vertex
@@ -606,9 +788,9 @@ function e = computeE(DAG, ehat, node, level, e)
   end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                  Active Vertices and Screen Space Error Metrics
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                  Active Vertices and Screen Space Error Metrics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % The screen space error metric is the final metric used to determine if a vertex
 % will be activated or not. This metric for each vertex using the camera position, the
@@ -644,9 +826,9 @@ function v = getActiveVerts(p, tau, v)
   v(p>tau)=1;
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%           Functions used for creating triangle strip from active vertices
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Functions used for creating triangle strip from active vertices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % TODO: Get a better understanding of these functions, enough to describe them in detail.
 %
@@ -825,9 +1007,9 @@ function c = cr(vi, vj);
   c = [xc yc];
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                 Utility functions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                 Utility functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % rotate a vector by angle assumes row vector for vec
 function rotatedVec = rotateVec(vec,deg)
@@ -845,8 +1027,9 @@ end
 function z = gensinc(sz)
   [x,y] = meshgrid(0:sz-1,0:sz-1);
   r = sqrt((x-(sz-1)/2).^2+(y-(sz-1)/2).^2);
-  z = sin(r*16/(sz-1))./(r*16/(sz-1));
-  z((sz+1)/2,(sz+1)/2) = 1;
+  z = sin(r*16/(sz-1)*2)./(r*16/(sz-1)*2);
+  z(isnan(z)) = 1;
+  z = z*(sz-1);
 end
 
 % given a row/column in a matrix get linear index for it  
@@ -854,9 +1037,63 @@ function idx=getRowColIdx(row, col, sz)
   idx = (col-1)*sz+(row-1)+1;
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                             Plotting functions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             Plotting functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+function img = captureFigure(f)
+  if exist('OCTAVE_VERSION', 'builtin')
+    img = [];
+  else % MATLAB
+    data = getframe(f);
+    img = data.cdata;
+  end
+end
+
+% Plots the final output to the user
+function [imgMesh, imgVerts] = plotAll(sz, z, v, tstrip, camPos)
+  monPos = get(0,'MonitorPositions');
+  maxX = abs(monPos(3)-monPos(1));
+  maxY = abs(monPos(4)-monPos(2));
+  imsz = [640 480];
+  
+  % Plot active vertices
+  f=figure(1); hold off;
+  plotVerts(v);
+  set(f, 'Color', [1 1 1]);
+  figPos = get(f, 'Position');
+  set(f, 'Position', [min(figPos(1),maxX-imsz(1)-80) min(figPos(2),maxY-imsz(2)-200) imsz(1) imsz(2)]);
+  
+  % Get capture of figure
+  imgVerts = captureFigure(f);
+  
+  % Plot the triangle mesh as well as the camera position (camera is red "O")
+  f=figure(2); hold off;
+  plotTStrip(tstrip,z); hold on;
+
+  % Move the camera and point it at the center of the sceen
+  figPos = get(f, 'Position');
+  set(f, 'Color', [1 1 1]);
+
+  % Make axis for 3d and scale ticks to square things appear square
+  axis equal;
+  if ~exist("OCTAVE_VERSION", "builtin")
+    plot3(camPos(1), camPos(2), camPos(3), 'ro');
+    set(gca, 'CameraPosition', camPos);
+    set(gca, 'CameraTarget', [(sz-1)/2 (sz-1)/2 0.5]);
+    set(f, 'Position', [min(figPos(1),maxX-imsz(1)-80) min(figPos(2),maxY-imsz(2)-200) imsz(1) imsz(2)]);
+    
+    axis vis3d off;
+    % Set perspective projection
+    camproj perspective;
+    % Set view angle to 60 degrees
+    camva(60);
+  end
+  
+  % Get capture of figure
+  imgMesh = captureFigure(f);
+end
 
 % Plot the vertices in a top down (xy) view.
 function plotVerts(verts)
@@ -882,9 +1119,8 @@ end
 function plotTStrip(lstrip,z)
   sz=size(z); sz=sz(1);
   lstripSz=size(lstrip);
-  [x,y] = meshgrid(0:sz-1);
+  [x,y] = meshgrid(0:sz-1,0:sz-1);
   c = zeros(numel(z),3);
-  c(:,3) = 1; % make the mesh blue
   
   % initialize triangle index container and color container
   tri = zeros(0,3);
@@ -901,48 +1137,6 @@ function plotTStrip(lstrip,z)
       tri = [tri; p1Idx p2Idx p3Idx];
     end
   end
-  % Plot triangle mesh as a surface with z buffering
-  trimesh(tri,x,y,z,c,'LineWidth', 2);
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                      Unused functions for testing
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Plot the DAG, not very useful but ensures that things are what they seem (VERY VERY SLOW)
-function plotDag(DAG, node, level)
-  colors = ...
-    [0 0 1; ... % blue
-     0 1 0; ... % green
-     1 0 0; ... % red
-     0 1 1; ... % cyan
-     1 0 1; ... % purple
-     1 1 0; ... % yellow
-     0 0 0];    % black
-
-  sz = numel(DAG)^0.25;
-     
-  idx = getidx(node,sz);
-  idxC = find(DAG(idx,:)>0); % find all children
-  
-  % iterate through children and draw line from parent to child
-  for c = 1:numel(idxC)
-    nodeC = getpos(idxC(c),sz);
-  
-    plot([node(1) nodeC(1)],[node(2) nodeC(2)],'LineWidth',2,'Color',colors(mod(level-1,7)+1,:));
-    hold on;
-    plotDag(DAG, nodeC, level+1);
-  end
-end
-
-% test to make sure eprev is always greater than e(node)
-function teste(DAG, node, e, eprev)
-  if e(node(1)+1, node(2)+1) > eprev
-    fprintf('Error at Vertex(%i, %i)\n', node(1), node(2));
-  end
-  cpos = getChildren(DAG, node);
-  for i=1:numel(cpos)/2
-    cnode = cpos(i,:);
-    teste(DAG, cnode, e, e(node(1)+1, node(2)+1));
-  end
+  %trimesh(tri,x(:), y(:), z(:),'EdgeColor','b');
+  trimesh(tri,x(:), y(:), z(:),'EdgeColor','none','FaceColor','interp');
 end
