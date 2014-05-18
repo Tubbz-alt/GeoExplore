@@ -90,35 +90,32 @@ class ImageDriverOpenCV : public ImageDriverBase {
          * Get the image driver type
         */
         virtual ImageDriverType type()const;
+        
+        /**
+         * Write an image to file
+        */
+        template <typename PixelType>
+        static void write_image( Image<PixelType>const& output_image, boost::filesystem::path const& pathname ){
+            
+            // convert the output image to an opencv structure
+            cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
+    
+            // start loading the output image
+            for( size_t y=0; y<output_image.rows(); y++ ){
+            for( size_t x=0; x<output_image.cols(); x++ ){
+                Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
+            }}
+
+            // run imwrite
+            cv::imwrite( pathname.c_str(), image );
+        }
+        
+    private:
+        
+        /// open the file
 
 
 }; /// End of ImageDriverOpenCV Class
-
-
-/**
- * Write an RGB Image to NETPBM File
-*/
-template<typename PixelType>
-void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
-
-    // convert pixel data to 
-    std::cout << "write opencv image" << std::endl;
-    
-    // convert the output image to an opencv structure
-    cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
-    
-    // start loading the output image
-    for( size_t y=0; y<output_image.rows(); y++ ){
-    for( size_t x=0; x<output_image.cols(); x++ ){
-        //image.at<typename Pixel2OpenCVType<PixelType>::cvtype>(y,x) = Pixel2OpenCVType<PixelType>::toCV(output_image(y,x));
-        Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
-    }}
-
-    // run imwrite
-    cv::imwrite( pathname.c_str(), image );
-
-}
-
 
 
 } /// End of OpenCV Namespace

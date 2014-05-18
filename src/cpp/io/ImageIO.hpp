@@ -126,7 +126,7 @@ void write_image( Image<PixelType>& output_image, boost::filesystem::path const&
         GEO::IO::NETPBM::write_image<PixelType>( output_image, pathname );
     }
     else if( driver == GEO::ImageDriverType::OPENCV ){
-        GEO::IO::OPENCV::write_image<PixelType>( output_image, pathname );
+        GEO::IO::OPENCV::ImageDriverOpenCV::write_image<PixelType>( output_image, pathname );
     }
     else{
         throw std::runtime_error("Unknown driver.");
