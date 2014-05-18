@@ -7,7 +7,12 @@
 #define __SRC_CPP_IO_OPENCVDRIVER_HPP__
 
 /// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+#include <GeoExplore/image/ChannelType.hpp>
 #include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/PixelCast.hpp>
+#include <GeoExplore/image/PixelGray.hpp>
+#include <GeoExplore/image/PixelRGB.hpp>
 
 /// OpenCV Libraries
 #include <opencv2/core/core.hpp>
@@ -65,30 +70,52 @@ struct Pixel2OpenCVType<PixelRGB_u8>{
     }
 }; 
 
+
 /**
- * Write an RGB Image to NETPBM File
+ * @class ImageDriverOpenCV 
 */
-template<typename PixelType>
-void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
+class ImageDriverOpenCV : public ImageDriverBase {
 
-    // convert pixel data to 
-    std::cout << "write opencv image" << std::endl;
+    public:
+        
+        /**
+         * Get the pixel value
+        */
+        template <typename PixelType>
+        PixelType getPixel( const int& x, const int& y )const{
+            return PixelType();
+        }
+
+        /**
+         * Get the image driver type
+        */
+        virtual ImageDriverType type()const;
+        
+        /**
+         * Write an image to file
+        */
+        template <typename PixelType>
+        static void write_image( Image<PixelType>const& output_image, boost::filesystem::path const& pathname ){
+            
+            // convert the output image to an opencv structure
+            cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
     
-    // convert the output image to an opencv structure
-    cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
-    
-    // start loading the output image
-    for( size_t y=0; y<output_image.rows(); y++ ){
-    for( size_t x=0; x<output_image.cols(); x++ ){
-        //image.at<typename Pixel2OpenCVType<PixelType>::cvtype>(y,x) = Pixel2OpenCVType<PixelType>::toCV(output_image(y,x));
-        Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
-    }}
+            // start loading the output image
+            for( size_t y=0; y<output_image.rows(); y++ ){
+            for( size_t x=0; x<output_image.cols(); x++ ){
+                Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
+            }}
 
-    // run imwrite
-    cv::imwrite( pathname.c_str(), image );
+            // run imwrite
+            cv::imwrite( pathname.c_str(), image );
+        }
+        
+    private:
+        
+        /// open the file
 
-}
 
+}; /// End of ImageDriverOpenCV Class
 
 
 } /// End of OpenCV Namespace

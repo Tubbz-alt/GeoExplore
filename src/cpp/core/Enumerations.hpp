@@ -18,8 +18,9 @@ namespace GEO{
  */
 enum class Datum{
 
-    WGS84,
+    EGM96,
     NAD83,
+    WGS84,
 
 }; /// End of ProjectionType Class
 
@@ -47,7 +48,8 @@ std::string CoordinateType2String( CoordinateType const& ctype );
 /**
  * @class ImageDriver
 */
-enum class ImageDriver{
+enum class ImageDriverType{
+    Base,
     GDAL,
     NETPBM,
     OPENCV,

@@ -89,6 +89,9 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
 }; /// End of PixelGray Class
 
 /// Common Typedefs
+typedef PixelGray<ChannelTypeDoubleFree> PixelGrayDoubleFree;
+typedef PixelGray<ChannelTypeDoubleFree> PixelGray_df;
+
 typedef PixelGray<ChannelTypeDouble>  PixelGrayDouble;
 typedef PixelGray<ChannelTypeDouble>  PixelGray_Double;
 typedef PixelGray<ChannelTypeDouble>  PixelGray_d;

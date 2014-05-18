@@ -17,6 +17,10 @@ namespace GEO{
 std::string Datum2WKT_string( Datum const& datum ){
 
     switch(datum){
+        
+        /// If we have EGM96
+        case Datum::EGM96:
+            return "EGM96";
 
         /// If we have WGS84
         case Datum::WGS84:

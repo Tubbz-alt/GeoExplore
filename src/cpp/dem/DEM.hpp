@@ -15,7 +15,13 @@ class DEM {
 
     public:
         
+    
 
+    private:
+        
+        /**
+         * This is the read-only memory image
+        */
 
 
 }; /// End of DEM Class

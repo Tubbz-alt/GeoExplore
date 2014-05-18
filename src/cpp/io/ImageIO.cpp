@@ -15,21 +15,21 @@ namespace IO{
 /**
  * Compute the driver given an image pathname
 */
-GEO::ImageDriver compute_driver( const boost::filesystem::path& pathname ){
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, DriverOptions const& options ){
     
     // get the file type
     GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);
 
     // opencv drivers
     if( ftype == GEO::FS::FileType::JPEG ){
-        return GEO::ImageDriver::OPENCV;
+        return GEO::ImageDriverType::OPENCV;
     }
     if( ftype == GEO::FS::FileType::PNG ){
-        return GEO::ImageDriver::OPENCV;
+        return GEO::ImageDriverType::OPENCV;
     }
 
     /// GDAL Driver
-    return GEO::ImageDriver::GDAL;
+    return GEO::ImageDriverType::GDAL;
 
 }
 

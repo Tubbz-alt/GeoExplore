@@ -7,10 +7,13 @@
 #define __SRC_CPP_IMAGE_DISKRESOURCE_HPP__
 
 /// GeoExplore Libraries
+#include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/BaseResource.hpp>
+#include <GeoExplore/io/ImageDriverBase.hpp>
 
-/// C++ Standard Libraries
-#include <memory>
+/// Boost C++ Libraries
+#include <boost/filesystem.hpp>
+#include <boost/shared_ptr.hpp>
 
 
 namespace GEO{
@@ -27,10 +30,47 @@ class DiskResource : public BaseResource<PixelType> {
         /**
          * Default Constructor
         */
-        DiskResource(){
+        DiskResource() : m_image_driver(nullptr){
 
         }
         
+        /**
+         * Constructor given an image to load
+        */
+        DiskResource( boost::filesystem::path const& pathname ){
+
+            // look for the proper driver to load
+             
+        }
+
+        /**
+         * Pixel Accessor
+        */
+        virtual PixelType operator()( const int& x, const int& y )const{
+            return m_image_driver->getPixel<PixelType>(x, y);
+        }
+
+        /**
+         * Pixel Reference Accessor
+        */
+        virtual PixelType& operator()(const int& x, const int& y ){
+            throw NotImplementedException("PixelType& operator()","DiskResource.hpp",__LINE__);
+        }
+        
+        /**
+         * Pixel Accessor
+        */
+        virtual PixelType operator[]( const int& x )const{
+            return m_image_driver->getPixel<PixelType>(x%cols(), x/cols());
+        }
+
+        /**
+         * Pixel Reference Accessor
+        */
+        virtual PixelType& operator[]( const int& x ){
+            throw NotImplementedException("PixelType& operator[]","DiskResource.hpp",__LINE__);
+        }
+
         /**
          * Return the number of rows
          *
@@ -56,9 +96,18 @@ class DiskResource : public BaseResource<PixelType> {
             return PixelType().dims();
         }
 
+        /**
+         * Set the driver
+        */
+        void setDriver( boost::shared_ptr<GEO::IO::ImageDriverBase>& image_driver ){
+            m_image_driver = image_driver;
+        }
+
+
     private:
 
-
+        /// Specified image driver
+        boost::shared_ptr<GEO::IO::ImageDriverBase> m_image_driver;
 
 
 

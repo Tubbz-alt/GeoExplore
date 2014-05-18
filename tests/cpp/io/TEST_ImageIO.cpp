@@ -14,7 +14,7 @@
 TEST( ImageIO, ComputeDriver ){
 
     /// Test the driver for GDAL-type images
-    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.jpg"), GEO::ImageDriver::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.jpg"), GEO::ImageDriverType::GDAL );
     
 }
 

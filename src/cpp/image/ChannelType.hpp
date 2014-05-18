@@ -62,6 +62,27 @@ class ChannelType<double, 1>{
 
 }; /// End of ChannelType<double,1> specialization
 
+/**
+ * Class Template Specialization for Double Images that are range-free
+*/
+template <>
+class ChannelType<double, 2>{
+
+    public:
+        
+        /// Accumulator type
+        typedef double accumulator_type;
+        
+        /// Type Parameter
+        typedef double type;
+
+        /// min value
+        static constexpr type maxValue = 1;
+
+        /// max value
+        static constexpr type minValue = -1;
+
+}; /// End of ChannelType<double,2> Specialization
 
 /**
  * Class Template Specialization for UInt8 images
@@ -189,6 +210,7 @@ typedef ChannelType<uint16_t, 14>  ChannelTypeUInt14;
 typedef ChannelType<uint16_t, 12>  ChannelTypeUInt12;
 typedef ChannelType<uint8_t,  8>   ChannelTypeUInt8;
 typedef ChannelType<double, 1>     ChannelTypeDouble;
+typedef ChannelType<double, 2>     ChannelTypeDoubleFree;
 
 
 /**
@@ -196,10 +218,19 @@ typedef ChannelType<double, 1>     ChannelTypeDouble;
  */
 template <typename BeforeType, typename AfterType>
 typename AfterType::type range_cast( typename BeforeType::type const& value ){
+    
+    /// Free-Range ChannelTypes require just passing the value through 
+    if( std::is_same<AfterType, ChannelTypeDoubleFree>::value ){
+        return (static_cast<typename AfterType::type>(value));
+    }
+    
+    /// Otherwise do proper range scaling
     return ((( (static_cast<double>(value) - BeforeType::minValue) / 
                (      BeforeType::maxValue - BeforeType::minValue)  ) 
             *( AfterType::maxValue - AfterType::minValue)) + AfterType::minValue);
 }
+
+
 
 } /// End of Namespace GEO
 

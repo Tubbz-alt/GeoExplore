@@ -39,6 +39,8 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         
         /**
          * Parameterized Constructor
+         *
+         * @param[in] datum Datum
         */
         CoordinateGeodetic( Datum const& datum ) : 
                                 m_latitude(0),
@@ -99,8 +101,11 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
 }; /// End of CoordinateGeodetic Class
 
 /// Common Typdefs
-typedef CoordinateGeodetic<double> CoordinateGeodeticDouble;
-typedef CoordinateGeodetic<double> CoordinateGeodetic_d;
+typedef CoordinateGeodetic<double>   CoordinateGeodeticDouble;
+typedef CoordinateGeodetic<double>   CoordinateGeodetic_d;
+
+typedef CoordinateGeodetic<int32_t>  CoordinateGeodeticInt32;
+typedef CoordinateGeodetic<int32_t>  CoordinateGeodetic_i32;
 
 } /// End of GEO Namespace
 

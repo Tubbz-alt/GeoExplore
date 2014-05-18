@@ -27,6 +27,13 @@ TEST( CoordinateUTM, Constructors ){
     ASSERT_NEAR( test02.northing(), 0, 0.00001 );
     ASSERT_NEAR( test02.altitude(), 0, 0.00001 );
     ASSERT_EQ( test02.datum(), GEO::Datum::WGS84 );
-
+    
+    // test 3
+    GEO::CoordinateUTM_d test03( GEO::Datum::EGM96 );
+    ASSERT_EQ( test03.zone(), 31 );
+    ASSERT_NEAR( test03.easting(), 166021.4, 0.0001 );
+    ASSERT_NEAR( test03.northing(), 0, 0.0001 );
+    ASSERT_NEAR( test03.altitude(), 0, 0.0001 );
+    ASSERT_EQ( test03.datum(), GEO::Datum::EGM96 );
 }
 
