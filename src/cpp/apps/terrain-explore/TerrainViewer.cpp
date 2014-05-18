@@ -12,6 +12,7 @@
 
 /// Include C++ Headers
 #include <iostream>
+#include <cstddef> // offsetof
 
 /**
  * Default constructor
@@ -21,7 +22,6 @@ TerrainViewer::TerrainViewer(QWidget* parent) :
     m_windowSize(800, 600)
 {
     setMouseTracking(true);
-    glewInit();
 }
 
 TerrainViewer::~TerrainViewer()
@@ -128,7 +128,7 @@ void TerrainViewer::initializeGL()
         std::cerr << "[F] POSITION NOT FOUND" << std::endl;
         qApp->quit();
     }
-
+    
     m_locColor = glGetAttribLocation(m_program,
                     const_cast<const char*>("v_color"));
     if(m_locColor == -1)
@@ -140,6 +140,7 @@ void TerrainViewer::initializeGL()
 
 void TerrainViewer::paintGL()
 {
+    /// TODO Mostly temporary. This is here for a test
     //clear the screen
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,13 +152,14 @@ void TerrainViewer::paintGL()
     glEnableVertexAttribArray(m_locPosition);
     glEnableVertexAttribArray(m_locColor);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboGeometry);
+
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( m_locPosition,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
+                           3,               //number of elements
+                           GL_FLOAT,        //type
+                           GL_FALSE,        //normalized?
+                           sizeof(Vertex),  //stride
+                           0);              //offset
 
     glVertexAttribPointer( m_locColor,
                            3,
@@ -165,7 +167,7 @@ void TerrainViewer::paintGL()
                            GL_FALSE,
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,color));
-
+     
     glDrawArrays(GL_TRIANGLES, 0, 3);//mode, starting index, count
 
     //clean up

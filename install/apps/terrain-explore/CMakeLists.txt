@@ -8,7 +8,7 @@
 cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
 
 #  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../bin )
@@ -74,6 +74,11 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS}
 #  however Qt5 complains if this isn't here)
 add_definitions(-fPIC)
 
+#-----------------#
+#-  Find Lib Z   -#
+#-----------------#
+find_package( ZLIB REQUIRED )
+
 #------------------------------------#
 #-  Find OpenGL Libraries (Drivers) -#
 #------------------------------------#
@@ -90,6 +95,7 @@ find_package( GLEW REQUIRED )
 set( TERRAINEXPLORE_HEADERS
     ../../../src/cpp/apps/terrain-explore/Options.hpp
     ../../../src/cpp/apps/terrain-explore/TerrainViewer.hpp
+    ../../../src/cpp/apps/terrain-explore/glincludes.hpp
 )
 
 #------------------------------------------#
@@ -125,7 +131,8 @@ target_link_libraries( terrain-explore
                 ${Boost_LIBRARIES}
                 ${Qt5Widgets_LIBRARY}
                 ${Qt5OpenGL_LIBRARY}
-                ${OpenGL_LIBRARY}
+                ${OPENGL_LIBRARIES}
                 ${GLEW_LIBRARY}
+                ${ZLIB_LIBRARY}
 )
 
