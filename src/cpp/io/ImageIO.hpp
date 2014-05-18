@@ -24,9 +24,17 @@ namespace GEO{
 namespace IO{
 
 /**
+ * Driver Options
+*/
+enum class DriverOptions{
+    NONE,
+    READ_ONLY
+}; /// End Driver Options Class
+
+/**
  * Compute the image Driver
 */
-GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname );    
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, const DriverOptions& options = DriverOptions::NONE );    
 
 
 /**
@@ -64,7 +72,38 @@ template <typename PixelType>
 void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& output_image ){
 
     std::cout << "Read Disk Image" << std::endl;
+    // make sure the file exists
+    if( boost::filesystem::exists( pathname ) == false ){
+        throw std::runtime_error(std::string(std::string("error: File \"") + pathname.native() + std::string("\" does not exist.")).c_str());
+    }
 
+    // compute the required driver
+    GEO::ImageDriverType driver = compute_driver( pathname, DriverOptions::READ_ONLY );
+    
+    // create the resource
+    DiskResource<PixelType> resource;
+    
+    boost::shared_ptr<GEO::IO::ImageDriverBase> image_driver(nullptr);
+
+    /**
+     * Iterate through potential drivers
+     */
+    if( driver == ImageDriverType::OPENCV ){
+        image_driver = boost::shared_ptr<GEO::IO::ImageDriverBase>(new GEO::IO::OPENCV::ImageDriverOpenCV());
+    }
+    else if( driver == ImageDriverType::GDAL ){
+        image_driver = boost::shared_ptr<GEO::IO::ImageDriverBase>(new GEO::IO::GDAL::ImageDriverGDAL());
+    }
+    else{
+        throw std::runtime_error("Unknown driver type.");
+    }
+    
+
+    // set the resource
+    resource.setDriver( image_driver );
+
+    // set the driver
+    output_image.setResource(resource);
 }
 
 

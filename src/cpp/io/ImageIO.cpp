@@ -15,7 +15,7 @@ namespace IO{
 /**
  * Compute the driver given an image pathname
 */
-GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname ){
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, DriverOptions const& options ){
     
     // get the file type
     GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);

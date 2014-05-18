@@ -96,6 +96,14 @@ class DiskResource : public BaseResource<PixelType> {
             return PixelType().dims();
         }
 
+        /**
+         * Set the driver
+        */
+        void setDriver( boost::shared_ptr<GEO::IO::ImageDriverBase>& image_driver ){
+            m_image_driver = image_driver;
+        }
+
+
     private:
 
         /// Specified image driver

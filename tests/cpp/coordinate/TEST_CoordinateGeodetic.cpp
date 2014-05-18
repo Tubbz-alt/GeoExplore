@@ -80,7 +80,7 @@ TEST( CoordinateGeodetic, GettersSetters ){
     ASSERT_EQ( test01.datum(), GEO::Datum::WGS84 );
 
     // change the datum
-    test01.datum() = GEO::Datum::EGM95;
+    test01.datum() = GEO::Datum::EGM96;
 
     // test results
     ASSERT_NEAR( test01.latitude(), 39, 0.000001 );
@@ -95,8 +95,8 @@ TEST( CoordinateGeodetic, GettersSetters ){
 */
 TEST( CoordinateGeodetic, type ){
 
-    ASSERT_EQ( CoordinateGeodetic_d().type(), GEO::CoordinateType::Geodetic );
-    ASSERT_EQ( CoordinateGeodetic_i32().type(), GEO::CoordinateType::Geodetic );
+    ASSERT_EQ( GEO::CoordinateGeodetic_d().type(), GEO::CoordinateType::Geodetic );
+    ASSERT_EQ( GEO::CoordinateGeodetic_i32().type(), GEO::CoordinateType::Geodetic );
 
 }
 

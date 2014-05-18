@@ -7,7 +7,12 @@
 #define __SRC_CPP_IO_OPENCVDRIVER_HPP__
 
 /// GeoExplore Libraries
+#include <GeoExplore/core/Enumerations.hpp>
+#include <GeoExplore/image/ChannelType.hpp>
 #include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/PixelCast.hpp>
+#include <GeoExplore/image/PixelGray.hpp>
+#include <GeoExplore/image/PixelRGB.hpp>
 
 /// OpenCV Libraries
 #include <opencv2/core/core.hpp>
@@ -64,6 +69,31 @@ struct Pixel2OpenCVType<PixelRGB_u8>{
         output[2] = input[0];
     }
 }; 
+
+
+/**
+ * @class ImageDriverOpenCV 
+*/
+class ImageDriverOpenCV : public ImageDriverBase {
+
+    public:
+        
+        /**
+         * Get the pixel value
+        */
+        template <typename PixelType>
+        PixelType getPixel( const int& x, const int& y )const{
+            return PixelType();
+        }
+
+        /**
+         * Get the image driver type
+        */
+        virtual ImageDriverType type()const;
+
+
+}; /// End of ImageDriverOpenCV Class
+
 
 /**
  * Write an RGB Image to NETPBM File
