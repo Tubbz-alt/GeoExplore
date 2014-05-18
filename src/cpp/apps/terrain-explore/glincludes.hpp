@@ -7,11 +7,14 @@
 #ifndef __SRC_APPS_TERRAINEXPLORE_GLINCLUDES_HPP
 #define __SRC_APPS_TERRAINEXPLORE_GLINCLUDES_HPP
 
-#ifdef __APPLE__
-    #include <OpenGL/glew.h>
-#else
-    #include <GL/glew.h>
-#endif
+#include <GL/glew.h>
+#include "glwrappers/GLAttribute.hpp"
+#include "glwrappers/GLBuffer.hpp"
+#include "glwrappers/GLShader.hpp"
+#include "glwrappers/GLProgram.hpp"
+#include "glwrappers/GLUniform.hpp"
+#include "glwrappers/GLVertexArray.hpp"
+#include "glwrappers/GLCompleteProgram.hpp"
 
 #endif // __SRC_APPS_TERRAINEXPLORE_GLINCLUDES_HPP
 
