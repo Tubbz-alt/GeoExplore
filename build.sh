@@ -336,7 +336,7 @@ if [ "$RUN_MAKE" = '1' ]; then
     copy_headers ${BUILD_TYPE}
     build_software '../install/lib'                         ${BUILD_TYPE}  ${MAKE_ARGS}  '.'
     build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-convert'
-    #build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE} "${MAKE_ARGS}" 'apps/terrain-explore'
+    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE} "${MAKE_ARGS}" 'apps/terrain-explore'
     build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-info'
     build_software '../../install/gui'                      ${BUILD_TYPE}  ${MAKE_ARGS}  'gui'
 
