@@ -21,6 +21,7 @@ usage(){
     echo '    -t, --test    : Build and run unit tests.'
     echo '    -i, --install : Deploy GeoExplore to $PREFIX'
     echo "                    Note: PREFIX=$PREFIX"
+    echo "    -v, --verbose : Show all build commands"
     echo '    --headers     : Create deployable include directory.'
     echo '    -c, --clean   : Clean up GeoExplore builds.'
     echo ''
@@ -63,13 +64,13 @@ install_software(){
 build_software(){
 
     #  Get the cmake file
-    CMAKE_LOCATION=$1
+    CMAKE_LOCATION="$1"
 
     #  Get the build type
-    BUILD_TYPE=$2
+    BUILD_TYPE="$2"
 
-    #  Get the number of threads
-    NUM_THREADS=$3
+    #  Get the make arguments 
+    MAKE_ARGS="$3"
     
     #  Get the build directory
     BUILD_DIRECTORY="${BUILD_TYPE}/${4}"
@@ -88,7 +89,7 @@ build_software(){
     fi
 
     #  Run Make
-    make -j${NUM_THREADS}
+    make ${MAKE_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: Make encountered an error. Please see output.' 1>&2;
         exit 1
@@ -104,13 +105,13 @@ build_software(){
 test_software(){
     
     #  Get the cmake file
-    CMAKE_LOCATION=$1
+    CMAKE_LOCATION="$1"
 
     #  Get the build type
-    BUILD_TYPE=$2
+    BUILD_TYPE="$2"
 
-    #  Get the number of threads
-    NUM_THREADS=$3
+    #  Get the make arguments 
+    MAKE_ARGS="$3"
     
     #  Get the build directory
     BUILD_DIRECTORY="${BUILD_TYPE}/${4}"
@@ -129,7 +130,7 @@ test_software(){
     fi
 
     #  Run Make
-    make -j${NUM_THREADS}
+    make ${MAKE_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: Make encountered an error. Please see output.' 1>&2;
         exit 1
@@ -221,9 +222,11 @@ RUN_INSTALL=0
 COPY_HEADERS=0
 RUN_CLEAN=0
 RUN_TEST=0
+BUILD_VERBOSE=0
 
 BUILD_TYPE='release'
 NUM_THREADS=1
+MAKE_ARGS=
 
 PREFIX_FLAG=0
 
@@ -257,7 +260,12 @@ for ARG in "$@"; do
         '-i' | '--install' )
             RUN_INSTALL=1
             ;;
-        
+       
+        #   Build verbose
+        '-v' | '--verbose' | '--VERBOSE' )
+            BUILD_VERBOSE=1
+            ;;
+
         #   Number of threads
         '-j' )
             THREAD_FLAG=1
@@ -306,6 +314,14 @@ if [ "$RUN_MAKE" = '0' -a "$RUN_INSTALL" = '0' -a "$COPY_HEADERS" = '0' -a "$RUN
 fi
 
 #---------------------------------#
+#-    Generate Make arguments    -#
+#---------------------------------#
+MAKE_ARGS=-j${NUM_THREADS}
+if [ "${BUILD_VERBOSE}" = '1' ]; then
+    MAKE_ARGS="${MAKE_ARGS} VERBOSE=1"
+fi
+
+#---------------------------------#
 #-       Clean GeoExplore        -#
 #---------------------------------#
 if [ "$RUN_CLEAN" = '1' ]; then
@@ -317,12 +333,12 @@ fi
 #-      Make GeoExplore       -#
 #------------------------------#
 if [ "$RUN_MAKE" = '1' ]; then
-
     copy_headers ${BUILD_TYPE}
-    build_software '../install/lib'                    ${BUILD_TYPE} ${NUM_THREADS} '.'
-    build_software '../../../install/apps/geo-convert' ${BUILD_TYPE} ${NUM_THREADS} 'apps/geo-convert'
-    build_software '../../../install/apps/geo-info'    ${BUILD_TYPE} ${NUM_THREADS} 'apps/geo-info'
-    build_software '../../install/gui'                 ${BUILD_TYPE} ${NUM_THREADS} 'gui'
+    build_software '../install/lib'                         ${BUILD_TYPE}  ${MAKE_ARGS}  '.'
+    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-convert'
+    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE} "${MAKE_ARGS}" 'apps/terrain-explore'
+    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-info'
+    build_software '../../install/gui'                      ${BUILD_TYPE}  ${MAKE_ARGS}  'gui'
 
 fi
 
@@ -337,7 +353,7 @@ fi
 #-     Test GeoExplore     -#
 #---------------------------#
 if [ "$RUN_TEST" = '1' ]; then
-    test_software '../../install/test'  ${BUILD_TYPE} ${NUM_THREADS} 'test'
+    test_software '../../install/test'  ${BUILD_TYPE} "${MAKE_ARGS}" 'test'
 fi
 
 

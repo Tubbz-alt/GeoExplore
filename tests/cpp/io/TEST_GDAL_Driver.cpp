@@ -25,7 +25,7 @@ TEST( GDAL_Driver, LoadImageJPEGRGB ){
      * Call the load image on a jpeg image 
     */
     int rowSize, colSize;
-    boost::shared_ptr<GEO::PixelRGB_UInt8[]> pixels = GEO::IO::GDAL::load_image_data<GEO::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize, colSize);
+    typename GEO::IO::GDAL::GDAL_Driver::image_data_type<GEO::PixelRGB_UInt8> pixels = GEO::IO::GDAL::load_image_data<GEO::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize, colSize);
 
     /// make sure the image is the right size
     ASSERT_EQ( rowSize, 512);
