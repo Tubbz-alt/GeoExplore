@@ -5,7 +5,7 @@
  */
 
 /// Qt5 Headers
-#include <GL/glew.h>
+#include "glincludes.hpp"
 #include <QGLWidget>
 
 class TerrainViewer : public QGLWidget
