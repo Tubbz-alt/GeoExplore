@@ -131,7 +131,7 @@ target_link_libraries( terrain-explore
                 ${Boost_LIBRARIES}
                 ${Qt5Widgets_LIBRARY}
                 ${Qt5OpenGL_LIBRARY}
-                ${OpenGL_LIBRARY}
+                ${OPENGL_LIBRARIES}
                 ${GLEW_LIBRARY}
                 ${ZLIB_LIBRARY}
 )
