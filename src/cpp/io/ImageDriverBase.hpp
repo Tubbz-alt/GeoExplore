@@ -29,7 +29,16 @@ class ImageDriverBase{
          * Get the image driver type
         */
         virtual ImageDriverType type()const;
+        
+        /**
+         * Get the rows
+        */
+        virtual int rows()const = 0;
 
+        /**
+         * Get the columns
+        */
+        virtual int cols()const = 0;
 
 }; /// End of ImageDriverBase Class
 

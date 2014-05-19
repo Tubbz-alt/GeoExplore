@@ -85,6 +85,16 @@ class ImageDriverOpenCV : public ImageDriverBase {
         PixelType getPixel( const int& x, const int& y )const{
             return PixelType();
         }
+    
+        /**
+         * Get the number of rows
+        */
+        virtual int rows()const;
+
+        /**
+         * Get the number of columns
+        */
+        virtual int cols()const;
 
         /**
          * Get the image driver type
@@ -94,8 +104,8 @@ class ImageDriverOpenCV : public ImageDriverBase {
         /**
          * Write an image to file
         */
-        template <typename PixelType>
-        static void write_image( Image<PixelType>const& output_image, boost::filesystem::path const& pathname ){
+        template <typename PixelType, typename ResourceType>
+        static void write_image( Image_<PixelType,ResourceType>const& output_image, boost::filesystem::path const& pathname ){
             
             // convert the output image to an opencv structure
             cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());

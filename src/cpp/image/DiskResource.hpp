@@ -77,7 +77,7 @@ class DiskResource : public BaseResource<PixelType> {
          * @return row count
         */
         virtual int rows()const{
-            return 0;
+            return m_image_driver->rows();
         }
 
         /**
@@ -86,7 +86,7 @@ class DiskResource : public BaseResource<PixelType> {
          * @return column count
         */
         virtual int cols()const{
-            return 0;
+            return m_image_driver->cols();
         }
     
         /**

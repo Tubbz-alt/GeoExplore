@@ -18,6 +18,29 @@ namespace GDAL{
 */
 ImageDriverGDAL::ImageDriverGDAL(){
 
+    // initialize the drivers
+    m_driver = nullptr;
+    m_dataset = nullptr;
+}
+
+/**
+ * Get the rows
+*/
+int ImageDriverGDAL::rows()const{
+    if( m_dataset == nullptr ){
+        return 0;
+    }
+    return m_dataset->GetRasterYSize();
+}
+
+/**
+ * Get the columns
+*/
+int ImageDriverGDAL::cols()const{
+    if( m_dataset == nullptr ){
+        return 0;
+    }
+    return m_dataset->GetRasterXSize();
 }
 
 /**

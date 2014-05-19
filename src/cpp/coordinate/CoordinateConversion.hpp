@@ -128,7 +128,9 @@ CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeodetic<DATATYPE> const&
  * @return UTM Coordinate output
 */
 template <typename DATATYPE>
-CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, const int& zone, Datum const& datum ){
+CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeodetic<DATATYPE> const& coordinate, 
+                                            const int& zone, 
+                                            Datum const& datum ){
     
     /// create the output
     CoordinateUTM<DATATYPE> output;

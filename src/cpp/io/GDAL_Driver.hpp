@@ -89,8 +89,24 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
          * Return the driver type
         */
         virtual ImageDriverType type()const;
-
         
+        /**
+         * Return the number of rows
+        */
+        virtual int rows()const;
+
+        /**
+         * Return the number of columns
+        */
+        virtual int cols()const;
+        
+    public:
+        
+        /// Driver
+        GDALDriver* m_driver;
+
+        /// Dataset
+        GDALDataset* m_dataset;
 
 }; /// End of ImageDriverBase Class
 
@@ -318,8 +334,8 @@ MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathn
 /**
  * Write an image to a GDAL format
 */
-template<typename PixelType>
-void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
+template<typename PixelType, typename ResourceType>
+void write_image( Image_<PixelType,ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
 
     // Identify the driver
     std::string driverShortName = getShortDriverFromFilename(pathname);

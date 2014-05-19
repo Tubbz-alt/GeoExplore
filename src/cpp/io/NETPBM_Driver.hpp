@@ -77,8 +77,8 @@ void write_ppm_image( BaseResource<PixelType> const& data,
 /**
  * Write an RGB Image to NETPBM File
 */
-template<typename PixelType>
-void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
+template<typename PixelType, typename ResourceType>
+void write_image( Image_<PixelType, ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
 
     // select pgm or ppm
     if( pathname.extension().native() == ".ppm" ){
