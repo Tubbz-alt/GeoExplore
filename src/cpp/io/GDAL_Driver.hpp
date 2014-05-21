@@ -76,12 +76,50 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
          * Default Constructor
         */
         ImageDriverGDAL();
+        
+        /**
+         * Default Constructor
+        */
+        ImageDriverGDAL( const boost::filesystem::path& pathname );
+
+        /**
+         * Destructor
+        */
+        ~ImageDriverGDAL();
+        
+        /**
+         * Check if the driver is open
+        */
+        bool isOpen()const;
+        
+        /**
+         * Open the driver
+        */
+        void open();
+        
+        /**
+         * Open the driver given a filename
+        */
+        void open( boost::filesystem::path const& pathname );
+
+        /**
+         * Close the driver
+        */
+        void close();
 
         /**
          * Get the pixel value
         */
         template <typename PixelType>
-        PixelType getPixel( const int& x, const int& y )const{
+        PixelType getPixel( const int& x, const int& y ){
+            
+            // make sure the driver is open 
+            if( isOpen() == false ){
+                open();
+            }
+
+            // return the pixel data for the specified region
+            
             return PixelType();
         }
 
@@ -99,9 +137,13 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
          * Return the number of columns
         */
         virtual int cols()const;
+
         
     public:
         
+        /// Filename
+        boost::filesystem::path m_path;
+
         /// Driver
         GDALDriver* m_driver;
 

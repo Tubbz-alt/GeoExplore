@@ -8,6 +8,12 @@
 /// GeoExplore Library
 #include <GeoExplore.hpp>
 
+/// C++ Standard Libraries
+#include <iostream>
+
+using namespace std;
+
+
 /**
  * Test the Image_ class functions using a Memory resource
 */
@@ -55,6 +61,25 @@ TEST( DiskImage, Constructor ){
 
     ASSERT_EQ( image.rows(), 1201 );
     ASSERT_EQ( image.cols(), 1201 );
+    
+}
+
+/**
+ * Test the disk image function operator
+*/
+TEST( DiskImage, FunctionOperators ){
+
+    // create a disk image
+    GEO::DiskImage<GEO::PixelGray_df> image;
+    GEO::IO::read_image( "../../tests/data/dem/n39_w120_3arc_v1.bil", image );
+
+    // make sure we get data out
+    ASSERT_EQ( image.rows(), 1201 );
+    ASSERT_EQ( image.cols(), 1201 );
+    cout << "Printing" << endl;
+    cout << image[0][0] << ", " << image[1][0] << endl;
+
+    FAIL();
 
 }
 

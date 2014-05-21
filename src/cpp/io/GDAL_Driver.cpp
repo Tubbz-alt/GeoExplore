@@ -24,6 +24,23 @@ ImageDriverGDAL::ImageDriverGDAL(){
 }
 
 /**
+ * ImageDriverGDAL Constructor
+*/
+ImageDriverGDAL::ImageDriverGDAL( const boost::filesystem::path& pathname ){
+    m_path = pathname;
+}
+
+/**
+ * Destructor
+*/
+ImageDriverGDAL::~ImageDriverGDAL(){
+
+    if( isOpen() == true ){
+        close();
+    }
+}
+
+/**
  * Get the rows
 */
 int ImageDriverGDAL::rows()const{
@@ -48,6 +65,76 @@ int ImageDriverGDAL::cols()const{
 */
 ImageDriverType ImageDriverGDAL::type()const{
     return ImageDriverType::GDAL;
+}
+
+/**
+ * Check if the driver is open
+*/
+bool ImageDriverGDAL::isOpen()const{
+    if( m_dataset == NULL ){
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Open the driver
+*/
+void ImageDriverGDAL::open( const boost::filesystem::path& pathname ){
+    m_path = pathname;
+
+    open();
+}
+
+/**
+ * Open the driver
+*/
+void ImageDriverGDAL::open(){
+    
+    /// if the dataset is already open, then do nothing
+    if( isOpen() == true ){
+        std::cout << "error: dataset already open" << std::endl;
+        return;
+    }
+
+    // make sure the file exists
+    if( boost::filesystem::exists( m_path ) == false ){
+        throw std::runtime_error( std::string(m_path.native() + " does not exist.").c_str());
+    }
+
+    /// Register the driver
+    GDALAllRegister();
+
+	// load the dataset 
+    m_dataset = (GDALDataset*) GDALOpen( m_path.c_str(), GA_ReadOnly);
+	
+    // if dataset is null, then there was a problem
+	if( m_dataset == NULL ){
+        std::cout << "GDALOpen returned a null object." << std::endl;
+		return;
+	}
+	
+	// make sure we have pixel data inside the raster
+	if( m_dataset->GetRasterCount() <= 0 ){
+        std::cout << "File has no pixel data." << std::endl;
+		return;
+	}
+	
+	//extract the driver infomation
+    m_driver = m_dataset->GetDriver();
+    
+}
+
+/**
+ * Close the driver
+*/
+void ImageDriverGDAL::close(){
+
+    if( isOpen() == false ){
+        GDALClose((GDALDatasetH)m_dataset);
+        m_dataset = NULL;
+        m_driver = NULL;
+    }
 }
 
 
