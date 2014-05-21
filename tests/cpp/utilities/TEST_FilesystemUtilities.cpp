@@ -14,18 +14,6 @@
 using namespace std;
 
 /**
- * Test the magic string function
-*/
-TEST( FilesystemUtilities, getMagicNumber ){
-
-    /// Test JPEG image 01
-    std::string signature = GEO::FS::getMagicNumber("../../tests/data/images/Lenna.jpg");
-    
-    FAIL();
-
-}
-
-/**
  * Test the get file type function
 */
 TEST( FilesystemUtilities, getFileType ){

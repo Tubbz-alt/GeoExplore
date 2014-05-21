@@ -120,6 +120,15 @@ class ImageDriverOpenCV : public ImageDriverBase {
             cv::imwrite( pathname.c_str(), image );
         }
         
+        /**
+         * Open the driver
+        */
+        void open();
+
+        /**
+         * Open the driver given an image filename
+        */
+        void open( const boost::filesystem::path& pathname );
     private:
         
         /// open the file

@@ -31,6 +31,20 @@ ImageDriverType ImageDriverOpenCV::type()const{
     return ImageDriverType::OPENCV;
 }
 
+/**
+ * Open the driver
+*/
+void ImageDriverOpenCV::open(){
+
+}
+
+/**
+ * Open the driver
+*/
+void ImageDriverOpenCV::open( const boost::filesystem::path& pathname ){
+
+}
+
 } /// End of OpenCV Namespace
 } /// End of IO Namespace
 } /// End of GEO Namespace

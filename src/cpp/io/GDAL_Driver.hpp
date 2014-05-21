@@ -95,12 +95,12 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
         /**
          * Open the driver
         */
-        void open();
+        virtual void open();
         
         /**
          * Open the driver given a filename
         */
-        void open( boost::filesystem::path const& pathname );
+        virtual void open( boost::filesystem::path const& pathname );
 
         /**
          * Close the driver
@@ -117,12 +117,50 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
             if( isOpen() == false ){
                 open();
             }
-
-            // return the pixel data for the specified region
             
-            return PixelType();
-        }
+            // create output
+            PixelType output;
 
+            // iterate over each channel
+            float data;
+            double value;
+            for( int i=0; i<m_dataset->GetRasterCount(); i++ ){
+            
+                // create raster band
+                GDALRasterBand* band = m_dataset->GetRasterBand(i+1);
+                
+                // get raster datatype
+                int gdalDataType = band->GetRasterDataType();
+                
+
+                // read data
+                band->RasterIO( GF_Read, x, y, 1, 1, &data, 1, 1, GDT_Float32, 0, 0);
+
+                /// Convert datatypes
+                if( gdalDataType == GDT_Byte ){
+                    value = range_cast<ChannelTypeUInt8, typename PixelType::channeltype>( data );
+                //} else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
+                //    value = range_cast<ChannelTypeUInt12,typename PixelType::channeltype>( data );
+                } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
+                    value = range_cast<ChannelTypeUInt16,typename PixelType::channeltype>( data );                        
+                } else {
+                    value = data;
+                }
+
+                    
+                // if the current channel is less than the total channels for the pixeltype
+                if( i <= output.dims() && output.dims() > 1 ){
+                    output[i] = value;
+                }
+                // otherwise, just set it equal
+                else{
+                    output = value;
+                }
+            }
+
+            return output;
+        }
+        
         /**
          * Return the driver type
         */

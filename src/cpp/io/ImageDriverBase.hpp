@@ -9,6 +9,9 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Enumerations.hpp>
 
+/// Boost C++ Libraries
+#include <boost/filesystem.hpp>
+
 namespace GEO{
 namespace IO{
 
@@ -39,6 +42,17 @@ class ImageDriverBase{
          * Get the columns
         */
         virtual int cols()const = 0;
+    
+        /**
+         * Open the driver
+        */
+        virtual void open() = 0;
+
+        /**
+         * Open the driver given an image
+        */
+        virtual void open( const boost::filesystem::path& pathname ) = 0;
+        
 
 }; /// End of ImageDriverBase Class
 

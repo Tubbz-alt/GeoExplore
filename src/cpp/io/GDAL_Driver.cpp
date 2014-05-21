@@ -28,6 +28,10 @@ ImageDriverGDAL::ImageDriverGDAL(){
 */
 ImageDriverGDAL::ImageDriverGDAL( const boost::filesystem::path& pathname ){
     m_path = pathname;
+    
+    // initialize the drivers
+    m_driver = nullptr;
+    m_dataset = nullptr;
 }
 
 /**
