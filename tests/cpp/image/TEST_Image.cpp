@@ -61,7 +61,7 @@ TEST( DiskImage, Constructor ){
 
     ASSERT_EQ( image.rows(), 1201 );
     ASSERT_EQ( image.cols(), 1201 );
-    
+    ASSERT_EQ( image.channels(), 1 ); 
 }
 
 /**
@@ -76,6 +76,7 @@ TEST( DiskImage, FunctionOperators ){
     // make sure we get data out
     ASSERT_EQ( image.rows(), 1201 );
     ASSERT_EQ( image.cols(), 1201 );
+    ASSERT_EQ( image.channels(), 1 ); 
     cout << "Printing" << endl;
     cout << image[0][0] << ", " << image[1][0] << endl;
 

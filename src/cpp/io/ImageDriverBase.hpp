@@ -36,12 +36,12 @@ class ImageDriverBase{
         /**
          * Get the rows
         */
-        virtual int rows()const = 0;
+        virtual int rows() = 0;
 
         /**
          * Get the columns
         */
-        virtual int cols()const = 0;
+        virtual int cols() = 0;
     
         /**
          * Open the driver

@@ -169,15 +169,15 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
         /**
          * Return the number of rows
         */
-        virtual int rows()const;
+        virtual int rows();
 
         /**
          * Return the number of columns
         */
-        virtual int cols()const;
+        virtual int cols();
 
         
-    public:
+    private:
         
         /// Filename
         boost::filesystem::path m_path;

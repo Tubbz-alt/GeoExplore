@@ -14,7 +14,14 @@
 TEST( ImageIO, ComputeDriver ){
 
     /// Test the driver for OPENCV-type images
-    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.jpg"), GEO::ImageDriverType::OPENCV );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.jpg"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.dt0"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.dt1"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.dt2"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.ntf"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.nitf"), GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.NTF"),  GEO::ImageDriverType::GDAL );
+    ASSERT_EQ( GEO::IO::compute_driver("/var/tmp/image.NITF"), GEO::ImageDriverType::GDAL );
     
 }
 

@@ -47,9 +47,16 @@ ImageDriverGDAL::~ImageDriverGDAL(){
 /**
  * Get the rows
 */
-int ImageDriverGDAL::rows()const{
+int ImageDriverGDAL::rows(){
     if( m_dataset == nullptr ){
-        return 0;
+        
+        if( boost::filesystem::exists( m_path ) == true ){
+            open();
+            m_dataset->GetRasterYSize();
+        }
+        else{
+            return 0;
+        }
     }
     return m_dataset->GetRasterYSize();
 }
@@ -57,9 +64,15 @@ int ImageDriverGDAL::rows()const{
 /**
  * Get the columns
 */
-int ImageDriverGDAL::cols()const{
+int ImageDriverGDAL::cols(){
     if( m_dataset == nullptr ){
-        return 0;
+        if( boost::filesystem::exists( m_path ) == true ){
+            open();
+            m_dataset->GetRasterXSize();
+        }
+        else{
+            return 0;
+        }
     }
     return m_dataset->GetRasterXSize();
 }

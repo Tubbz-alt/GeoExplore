@@ -8,6 +8,7 @@
 
 /// Qt Libraries
 #include <QApplication>
+#include <QGridLayout>
 #include <QMainWindow>
 #include <QWidget>
 
@@ -32,6 +33,10 @@ class MainWindow : public QMainWindow {
     private:
         
         /// Main Layout
+        QGridLayout*  mainLayout;
+
+        /// List of widgets
+
 
 
 };  /// End of MainWindow class
