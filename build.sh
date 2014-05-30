@@ -61,10 +61,21 @@ install_software(){
     if [ ! -d "$PREFIX/lib" ]; then mkdir -p $PREFIX/lib; fi
 
     # copy binary files
-    cp $BUILD_TYPE/bin/* $PREFIX/bin
+    cp scripts/geo-explore.sh      $PREFIX/share/GeoExplore/geo-explore
+
+    cp $BUILD_TYPE/bin/geo-convert $PREFIX/bin
 
     # copy libs
     cp $BUILD_TYPE/lib/libGeoExplore* $PREFIX/lib/
+    
+    # copy share
+    mkdir -p $PREFIX/share/GeoExplore/bin
+    mkdir -p $PREFIX/share/GeoExplore/icons
+    cp $BUILD_TYPE/bin/geo-explore $PREFIX/share/GeoExplore/bin/
+    cp src/cpp/gui/icons/*.png     $PREFIX/share/GeoExplore/icons/
+
+    if [ -f "$PREFIX/bin/geo-explore" ]; then rm "$PREFIX/bin/geo-explore"; fi
+    ln -s "$PREFIX/share/GeoExplore/geo-explore" "$PREFIX/bin/geo-explore"
 
 }
 

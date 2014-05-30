@@ -73,6 +73,7 @@ add_definitions(-fPIC)
 #------------------------------------------#
 set( GUI_HEADERS
     ../../src/cpp/gui/MainWindow.hpp
+    ../../src/cpp/gui/toolbar/ToolbarWidget.hpp
 )
 
 
@@ -82,6 +83,7 @@ set( GUI_HEADERS
 set( GUI_SOURCES
     ../../src/cpp/gui/main.cpp
     ../../src/cpp/gui/MainWindow.cpp
+    ../../src/cpp/gui/toolbar/ToolbarWidget.cpp
 )
 
 #---------------------------------#
