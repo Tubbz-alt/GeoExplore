@@ -24,6 +24,7 @@ usage(){
     echo "    -v, --verbose : Show all build commands"
     echo '    --headers     : Create deployable include directory.'
     echo '    -c, --clean   : Clean up GeoExplore builds.'
+    echo '    -d, --docs    : Create Documentation.'
     echo ''
     echo '    options:'
     echo ''
@@ -35,6 +36,16 @@ usage(){
 
 }
 
+
+#--------------------------------#
+#-      Build Documentation     -#
+#--------------------------------#
+build_documentation(){
+
+    echo '-> building documentation'
+    doxygen docs/doxygen/Doxyfile
+
+}
 
 #---------------------------------------------------#
 #-          Install GeoExplore Software            -#
@@ -218,6 +229,7 @@ PREFIX='/opt/local'
 
 #  Default Flags
 RUN_MAKE=0
+RUN_DOCS=0
 RUN_INSTALL=0
 COPY_HEADERS=0
 RUN_CLEAN=0
@@ -280,6 +292,11 @@ for ARG in "$@"; do
             PREFIX_FLAG=1
             ;;
 
+        #  Create Documentation
+        '-d' | '--docs' )
+            RUN_DOCS=1
+            ;;
+
         #   Other Responses
         *)
             
@@ -307,7 +324,7 @@ done
 #---------------------------------------------------------#
 #-     Make sure at least one run flag was provided      -#
 #---------------------------------------------------------#
-if [ "$RUN_MAKE" = '0' -a "$RUN_INSTALL" = '0' -a "$COPY_HEADERS" = '0' -a "$RUN_CLEAN" = '0' -a "$RUN_TEST" = '0' ]; then
+if [ "$RUN_MAKE" = '0' -a "$RUN_INSTALL" = '0' -a "$COPY_HEADERS" = '0' -a "$RUN_CLEAN" = '0' -a "$RUN_TEST" = '0' -a "$RUN_DOCS" = '0' ]; then
     echo 'error: At least one flag must be provided.' 1>&2
     usage
     exit 1;
@@ -328,6 +345,13 @@ if [ "$RUN_CLEAN" = '1' ]; then
     clean_software
 fi
 
+
+#----------------------------------#
+#-      Create Documentation      -#
+#----------------------------------#
+if [ "$RUN_DOCS" = '1' ]; then
+    build_documentation
+fi
 
 #------------------------------#
 #-      Make GeoExplore       -#
