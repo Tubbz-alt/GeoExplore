@@ -21,7 +21,7 @@ void convert_images( const Options& options ){
     for( size_t i=0; i<options.inputs.size(); i++ ){
 
         // read the image
-        GEO::DiskImage<GEO::PixelRGB_d> input_image;
+        GEO::Image<GEO::PixelRGB_d> input_image;
         GEO::IO::read_image( options.inputs[i], input_image );
 
         // write the image
