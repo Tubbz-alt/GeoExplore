@@ -5,6 +5,9 @@
 */
 #include "ToolbarWidget.hpp"
 
+namespace GEO{
+namespace GUI{
+
 /*
  * Default constructor
 */
@@ -26,8 +29,12 @@ ToolbarWidget::ToolbarWidget( QWidget* parent ) : QWidget(parent){
     m_coordinateConversionButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
     m_coordinateConversionButton->setFixedSize(QSize(90,100));
     m_mainLayout->addWidget( m_coordinateConversionButton, 0, 0 );
+    connect( m_coordinateConversionButton, SIGNAL(clicked()), this, SIGNAL(openCoordinateConversionWidgetButtonClicked()));
     
     // set the size
-    setFixedWidth(100);
+    setFixedWidth(110);
 }
+
+} // End of GUI Namespace
+} // End of GEO Namespace
 

@@ -11,6 +11,8 @@
 #include <QToolButton>
 #include <QWidget>
 
+namespace GEO{
+namespace GUI{
 
 /**
  * @class ToolbarWidget
@@ -20,6 +22,10 @@
 class ToolbarWidget : public QWidget {
 
     Q_OBJECT
+
+    signals:
+        
+        void openCoordinateConversionWidgetButtonClicked();
 
     public:
         
@@ -40,5 +46,7 @@ class ToolbarWidget : public QWidget {
 
 }; /// End of ToolbarWidget Class
 
+} // End of GUI Namespace
+} // End of GEO Namespace
 
 #endif

@@ -11,6 +11,7 @@
 #include <QDockWidget>
 #include <QGridLayout>
 #include <QMainWindow>
+#include <QScrollArea>
 #include <QWidget>
 
 // GeoExplore
@@ -18,9 +19,15 @@
 
 // GUI Libraries
 #include "toolbar/ToolbarWidget.hpp"
+#include "utils/coordinate/CoordinateConversionDialog.hpp"
+
+namespace GEO{
+namespace GUI{
 
 /**
- * Main Window for the Application
+ * @class MainWindow
+ *
+ * @brief Main Window for the Application
  */
 class MainWindow : public QMainWindow {
 
@@ -30,10 +37,17 @@ class MainWindow : public QMainWindow {
     public:
         
         /**
-         * Default Constructor
+         * @brief Default Constructor
          */
         MainWindow( QWidget* parent = NULL );
     
+    private slots:
+        
+        /**
+         * Open a coordinate conversion window
+        */
+        void openCoordinateConversionWindow();
+
     private:
         
         //--------------------------------------//
@@ -50,19 +64,30 @@ class MainWindow : public QMainWindow {
         */
         void create_toolbar_dock();
         
+        /**
+         * @brief Create Button Connections
+        */
+        void create_connections();
+
         //--------------------------------------//
         //-          Private Variables         -//
         //--------------------------------------//
-
-        /// Main View
 
         /// List of widgets
         QDockWidget* m_toolbarDock;
 
         /// Toolbar Widget
         ToolbarWidget* m_toolbarWidget;
+        
+        /// Main Window
+        QScrollArea* m_mainScrollArea;
 
+        
 };  /// End of MainWindow class
+
+} // End of GUI Namespace
+} // End of GEO Namespace
+
 
 #endif
 
