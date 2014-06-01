@@ -5,6 +5,10 @@
 */
 #include "CoordinateConversionWidget.hpp"
 
+// GeoExplore Library
+#include "CoordinateConversionReference.hpp"
+
+
 namespace GEO{
 namespace GUI{
 
@@ -25,7 +29,10 @@ CoordinateConversionWidget::CoordinateConversionWidget( QWidget* parent ) : QWid
     this->setLayout( mainLayout );
 
 }
-    
+
+/**
+ * Coordinate Type Combo Box
+*/
 void CoordinateConversionWidget::initialize_coordinate_type_combos(){
 
     // create main widget
@@ -39,7 +46,10 @@ void CoordinateConversionWidget::initialize_coordinate_type_combos(){
     convertedCoordinateTypeComboBox = new QComboBox(coordinateTypeSelectionWidget);
 
     // load conversion types
-    
+    for( size_t i=0; i<The_CoordinateConversionReference::getInstance().Get_Size(); i++ ){
+        originalCoordinateTypeComboBox->addItem(  The_CoordinateConversionReference::getInstance().Get_Coordinate_Type_Name(i).c_str() );
+        convertedCoordinateTypeComboBox->addItem( The_CoordinateConversionReference::getInstance().Get_Coordinate_Type_Name(i).c_str() );
+    }
 
     // add to gui
     coordinateTypeSelectionLayout->addWidget( originalCoordinateTypeComboBox );

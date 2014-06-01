@@ -17,7 +17,7 @@ ToolbarWidget::ToolbarWidget( QWidget* parent ) : QWidget(parent){
     m_mainLayout = new QGridLayout();
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
-    m_mainLayout->setAlignment( Qt::AlignTop | Qt::AlignRight );
+    m_mainLayout->setAlignment( Qt::AlignTop | Qt::AlignCenter );
 
     this->setLayout( this->m_mainLayout );
     
@@ -32,7 +32,7 @@ ToolbarWidget::ToolbarWidget( QWidget* parent ) : QWidget(parent){
     connect( m_coordinateConversionButton, SIGNAL(clicked()), this, SIGNAL(openCoordinateConversionWidgetButtonClicked()));
     
     // set the size
-    setFixedWidth(110);
+    setFixedWidth(100);
 }
 
 } // End of GUI Namespace
