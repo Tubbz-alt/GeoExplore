@@ -9,7 +9,11 @@
  * Test the Disk Resource Constructor
 */
 TEST( DiskResource, Constructor ){
+    
+    /// Make sure default constructor has no resource
 
+
+    
     FAIL();
 }
 

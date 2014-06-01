@@ -71,70 +71,66 @@ std::string getShortDriverFromFilename( const boost::filesystem::path& filename 
 class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
 
     public:
+
+        /// Pointer Type
+        typedef boost::shared_ptr<ImageDriverGDAL> ptr_t;
         
         /**
          * Default Constructor
         */
         ImageDriverGDAL();
-
-        /**
-         * Get the pixel value
-        */
-        template <typename PixelType>
-        PixelType getPixel( const int& x, const int& y )const{
-            return PixelType();
-        }
-
-        /**
-         * Return the driver type
-        */
-        virtual ImageDriverType type()const;
-
-        
-
-}; /// End of ImageDriverBase Class
-
-
-/**
- * @class GDAL_Driver
-*/
-class GDAL_Driver{
-
-    public:
-        
-        /// create a shared object
-        typedef boost::shared_ptr<GDAL_Driver> ptr_t;
         
         /**
-         * Parameterized Constructor
+         * Default Constructor
         */
-        GDAL_Driver( const boost::filesystem::path& image_pathname );
+        ImageDriverGDAL( const boost::filesystem::path& pathname );
 
         /**
          * Destructor
         */
-        ~GDAL_Driver();
-
-        /**
-         * Check validity
-        */
-        bool isValid()const;
-
-        /**
-         * Get number of rows
-        */
-        int rows()const;
-
-        /**
-         * Get number of columns
-        */
-        int cols()const;
+        ~ImageDriverGDAL();
         
+        /**
+         * Check if the driver is open
+        */
+        bool isOpen()const;
+        
+        /**
+         * Open the driver
+        */
+        virtual void open();
+        
+        /**
+         * Open the driver given a filename
+        */
+        virtual void open( boost::filesystem::path const& pathname );
+
+        /**
+         * Close the driver
+        */
+        void close();
+        
+        /**
+         * Return the driver type
+        */
+        virtual ImageDriverType type()const;
+        
+        /**
+         * Return the number of rows
+        */
+        virtual int rows();
+
+        /**
+         * Return the number of columns
+        */
+        virtual int cols();
+
+
         /**
          * Get image data
          */
         template<typename PixelType>
-        void getImageData( boost::shared_ptr<PixelType[]>& image_data, const int& image_data_size ){
+        void getPixels( boost::shared_ptr<PixelType[]>& image_data, const int& image_data_size ){
             
             // if the dataset is not open, then do nothing
             if( isOpen() == false ){
@@ -231,37 +227,72 @@ class GDAL_Driver{
         }
 
         /**
-         * Open image data
-         */
-        void open( );
-        
-        /**
-         * Close Dataset
-         */
-        void close();
+         * Get the pixel value
+        */
+        template <typename PixelType>
+        PixelType getPixel( const int& x, const int& y ){
+            
+            // make sure the driver is open 
+            if( isOpen() == false ){
+                open();
+            }
+            
+            // create output
+            PixelType output;
 
-        /**
-         * Check if the dataset is open
-         */
-        bool isOpen()const;
-        
+            // iterate over each channel
+            float data;
+            double value;
+            for( int i=0; i<m_dataset->GetRasterCount(); i++ ){
+            
+                // create raster band
+                GDALRasterBand* band = m_dataset->GetRasterBand(i+1);
+                
+                // get raster datatype
+                int gdalDataType = band->GetRasterDataType();
+                
 
+                // read data
+                band->RasterIO( GF_Read, x, y, 1, 1, &data, 1, 1, GDT_Float32, 0, 0);
+
+                /// Convert datatypes
+                if( gdalDataType == GDT_Byte ){
+                    value = range_cast<ChannelTypeUInt8, typename PixelType::channeltype>( data );
+                //} else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
+                //    value = range_cast<ChannelTypeUInt12,typename PixelType::channeltype>( data );
+                } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
+                    value = range_cast<ChannelTypeUInt16,typename PixelType::channeltype>( data );                        
+                } else {
+                    value = data;
+                }
+
+                    
+                // if the current channel is less than the total channels for the pixeltype
+                if( i <= output.dims() && output.dims() > 1 ){
+                    output[i] = value;
+                }
+                // otherwise, just set it equal
+                else{
+                    output = value;
+                }
+            }
+
+            return output;
+        }
+        
     private:
-
-        /// Location of file
-        boost::filesystem::path m_path;
         
-        /// Valid flag
-        bool m_valid;
+        /// Filename
+        boost::filesystem::path m_path;
 
-        /// GDAL Driver
+        /// Driver
         GDALDriver* m_driver;
 
-        /// GDAL Dataset
+        /// Dataset
         GDALDataset* m_dataset;
 
+}; /// End of ImageDriverBase Class
 
-}; /// End of GDAL_Driver class
 
 /**
  * Read an image and return the image data
@@ -270,13 +301,13 @@ template <typename PixelType>
 boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& image_pathname, int& rowCount, int& colCount ){
    
     // create the GDAL Driver
-    GDAL_Driver::ptr_t gdal_driver( new GDAL_Driver(image_pathname));
+    ImageDriverGDAL::ptr_t gdal_driver( new ImageDriverGDAL(image_pathname));
 
     // open the dataset
     gdal_driver->open();
 
     // make sure our loader did not have any major issues
-    if( gdal_driver->isValid() == false ){
+    if( gdal_driver->isOpen() == false ){
         rowCount = 0;
         colCount = 0;
         return nullptr;
@@ -291,7 +322,7 @@ boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& i
     boost::shared_ptr<PixelType[]> pixeldata( new PixelType[rowCount * colCount]);
 
     // pass the container to the driver
-    gdal_driver->getImageData( pixeldata, rowCount * colCount );
+    gdal_driver->getPixels( pixeldata, rowCount * colCount );
 
     return pixeldata;
 }
@@ -318,8 +349,8 @@ MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathn
 /**
  * Write an image to a GDAL format
 */
-template<typename PixelType>
-void write_image( Image<PixelType>const&  output_image, boost::filesystem::path const& pathname ){
+template<typename PixelType, typename ResourceType>
+void write_image( Image_<PixelType,ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
 
     // Identify the driver
     std::string driverShortName = getShortDriverFromFilename(pathname);

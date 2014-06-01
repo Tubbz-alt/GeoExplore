@@ -54,7 +54,7 @@ class DiskResource : public BaseResource<PixelType> {
          * Pixel Reference Accessor
         */
         virtual PixelType& operator()(const int& x, const int& y ){
-            throw NotImplementedException("PixelType& operator()","DiskResource.hpp",__LINE__);
+            throw std::runtime_error("PixelType& operator() Not Implemented in DiskResource.hpp");
         }
         
         /**
@@ -68,7 +68,7 @@ class DiskResource : public BaseResource<PixelType> {
          * Pixel Reference Accessor
         */
         virtual PixelType& operator[]( const int& x ){
-            throw NotImplementedException("PixelType& operator[]","DiskResource.hpp",__LINE__);
+            std::runtime_error("PixelType& operator[] Not Implemented in DiskResource.hpp");
         }
 
         /**
@@ -77,7 +77,7 @@ class DiskResource : public BaseResource<PixelType> {
          * @return row count
         */
         virtual int rows()const{
-            return 0;
+            return m_image_driver->rows();
         }
 
         /**
@@ -86,7 +86,7 @@ class DiskResource : public BaseResource<PixelType> {
          * @return column count
         */
         virtual int cols()const{
-            return 0;
+            return m_image_driver->cols();
         }
     
         /**

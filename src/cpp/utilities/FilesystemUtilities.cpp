@@ -53,38 +53,6 @@ FileType getFileType( const boost::filesystem::path& pathname ){
 }
 
 
-/**
- * Get the magic number from a file
-*/
-std::string getMagicNumber( const boost::filesystem::path& pathname ){
-
-    // make sure the file exists
-    if( boost::filesystem::exists( pathname ) == false ){
-        throw GeneralException(pathname.native() + " does not exist.","FilesystemUtilities.cpp", __LINE__);
-    }
-    
-    /// open the file stream
-    std::string output;
-    std::ifstream fin;
-    fin.open(pathname.c_str());
-    
-    char tempChar;
-    fin >> tempChar;
-
-    for( int i=0; i<11 && !fin.eof(); i++ ){
-
-        output.push_back(tempChar);
-        fin >> tempChar;
-
-    }
-
-    //fin.read
-    fin.close();
-
-
-    return output;
-}
-
 } /// End of FS Namespace
 } /// End of GEO Namespace
 

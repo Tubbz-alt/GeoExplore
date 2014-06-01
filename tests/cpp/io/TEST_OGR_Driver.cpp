@@ -5,11 +5,56 @@
 */
 #include <gtest/gtest.h>
 
+/// GeoExplore Libraries
+#include <GeoExplore.hpp>
+
 /**
- * Test Geodetic to UTM conversion with free UTM  zone.
+ * Compute the UTM Zone
 */
-TEST(  OGR_Driver,  convertGeodetic2UTMFreeZone ){
+TEST( OGR_Driver, computeUTMZone ){
+
+    ASSERT_EQ( GEO::OGR::compute_UTM_Zone(   0), 31 );
+    ASSERT_EQ( GEO::OGR::compute_UTM_Zone(  10), 32 );
+    ASSERT_EQ( GEO::OGR::compute_UTM_Zone(  18), 34 );
+    ASSERT_EQ( GEO::OGR::compute_UTM_Zone(-180),  1 );
+    ASSERT_EQ( GEO::OGR::compute_UTM_Zone( 179), 60 );
+
+}
+
+/**
+ * Convert Coordinate from UTM to Geodetic
+*/
+TEST( OGR_Driver, convert_UTM2Geodetic ){
+   
+    double newLatitude, newLongitude, newAltitude;
+    
+    // test first coordinate
+    GEO::OGR::convert_UTM2Geodetic( 31, 166021, 0, 0, 
+                                    GEO::Datum::WGS84, GEO::Datum::WGS84, 
+                                    newLatitude, newLongitude, newAltitude);
+    ASSERT_NEAR( newLatitude, 0, 0.0001 );
+    ASSERT_NEAR( newLongitude, 0, 0.0001 );
+    ASSERT_NEAR( newAltitude, 0, 0.0001 );
+
+
+    
+}
+
+/**
+ * Convert Coordinate from Geodetic to UTM
+*/
+TEST( OGR_Driver, convert_Geodetic2UTM_fixedZone ){
 
     FAIL();
 
 }
+
+/**
+ * Convert Coordinate from Geodetic 2 UTM
+*/
+TEST( OGR_Driver, convert_Geodetic2UTM ){
+
+    FAIL();
+}
+
+

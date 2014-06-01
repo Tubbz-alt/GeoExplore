@@ -50,12 +50,4 @@ TEST( MemoryResource, AssignmentOperator ){
 
 }
 
-/**
- * Test the Memory Resource Getters and Setters
-*/
-TEST( MemoryResource, GettersSetters ){
-
-    FAIL();
-
-}
 

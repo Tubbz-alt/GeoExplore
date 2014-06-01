@@ -34,12 +34,6 @@ enum class FileType{
 */
 FileType getFileType( const boost::filesystem::path& pathname );
 
-/**
- * Extract the magic number from a file
-*/
-std::string getMagicNumber( const boost::filesystem::path& pathname );
-
-
 } /// End of FS Namespace
 } /// End of GEO Namespace
 

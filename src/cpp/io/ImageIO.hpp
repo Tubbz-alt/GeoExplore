@@ -71,7 +71,6 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
 template <typename PixelType>
 void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& output_image ){
 
-    std::cout << "Read Disk Image" << std::endl;
     // make sure the file exists
     if( boost::filesystem::exists( pathname ) == false ){
         throw std::runtime_error(std::string(std::string("error: File \"") + pathname.native() + std::string("\" does not exist.")).c_str());
@@ -88,11 +87,9 @@ void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& 
     /**
      * Iterate through potential drivers
      */
-    if( driver == ImageDriverType::OPENCV ){
-        image_driver = boost::shared_ptr<GEO::IO::ImageDriverBase>(new GEO::IO::OPENCV::ImageDriverOpenCV());
-    }
-    else if( driver == ImageDriverType::GDAL ){
-        image_driver = boost::shared_ptr<GEO::IO::ImageDriverBase>(new GEO::IO::GDAL::ImageDriverGDAL());
+    if( driver == ImageDriverType::GDAL ){
+        image_driver = boost::shared_ptr<GEO::IO::ImageDriverBase>(new GEO::IO::GDAL::ImageDriverGDAL(pathname));
+        image_driver->open();
     }
     else{
         throw std::runtime_error("Unknown driver type.");
@@ -110,8 +107,8 @@ void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& 
 /**
  * Write an image
 */
-template <typename PixelType>
-void write_image( Image<PixelType>& output_image, boost::filesystem::path const& pathname ){
+template <typename PixelType, typename ResourceType>
+void write_image( Image_<PixelType,ResourceType>& output_image, boost::filesystem::path const& pathname ){
 
     // determine the driver type
     GEO::ImageDriverType driver = compute_driver(pathname);
@@ -120,13 +117,13 @@ void write_image( Image<PixelType>& output_image, boost::filesystem::path const&
      * Select the driver's write function
     */
     if( driver == GEO::ImageDriverType::GDAL ){
-        GEO::IO::GDAL::write_image<PixelType>( output_image, pathname );
+        GEO::IO::GDAL::write_image<PixelType,ResourceType>( output_image, pathname );
     }
     else if( driver == GEO::ImageDriverType::NETPBM ){
-        GEO::IO::NETPBM::write_image<PixelType>( output_image, pathname );
+        GEO::IO::NETPBM::write_image<PixelType,ResourceType>( output_image, pathname );
     }
     else if( driver == GEO::ImageDriverType::OPENCV ){
-        GEO::IO::OPENCV::ImageDriverOpenCV::write_image<PixelType>( output_image, pathname );
+        GEO::IO::OPENCV::ImageDriverOpenCV::write_image<PixelType,ResourceType>( output_image, pathname );
     }
     else{
         throw std::runtime_error("Unknown driver.");

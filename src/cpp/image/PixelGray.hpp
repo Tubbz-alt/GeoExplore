@@ -78,7 +78,7 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
         virtual bool operator == ( const PixelGray<ChannelType>& rhs )const{
             return (m_data == rhs.m_data);
         }
-
+        
 
     private:
 

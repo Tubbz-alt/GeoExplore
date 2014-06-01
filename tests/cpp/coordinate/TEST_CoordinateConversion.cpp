@@ -161,9 +161,30 @@ TEST( CoordinateConversion, Geodetic2UTM04_fixedZone_differentDatum ){
 
     // create an empty Geodetic coordinate for testing
     GEO::CoordinateGeodetic_d coordinate01( 0, 0, 0, GEO::Datum::WGS84);
+    
+    // convert the coordinate
+    GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01, 32, GEO::Datum::NAD83);
 
+    // validate the coordinate converts 
+    ASSERT_EQ( GEO::Datum::NAD83, result01.datum());
+    ASSERT_EQ( 32, result01.zone());
+    ASSERT_NEAR( -505646.88823697111, result01.easting(), 0.1);
+    ASSERT_NEAR( 0, result01.northing(), 0.1 );
+    ASSERT_NEAR( 0, result01.altitude(), 0.1 );
 
-    FAIL();
+    // test the white house
+    coordinate01.latitude()  = 38.8977;
+    coordinate01.longitude() = -77.0365;
+    coordinate01.altitude()  = 17;
+    coordinate01.datum()     = GEO::Datum::WGS84;
+
+    result01 = GEO::convert_coordinate( coordinate01, 18, GEO::Datum::EGM96 );
+    ASSERT_EQ( GEO::Datum::EGM96, result01.datum() );
+    ASSERT_EQ( 18, result01.zone());
+    ASSERT_NEAR( 323394, result01.easting(), 1 );
+    ASSERT_NEAR( 4307396, result01.northing(), 1);
+    ASSERT_NEAR(      17, result01.altitude(), 1 );
+
 }
 
 /**

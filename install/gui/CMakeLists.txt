@@ -73,6 +73,9 @@ add_definitions(-fPIC)
 #------------------------------------------#
 set( GUI_HEADERS
     ../../src/cpp/gui/MainWindow.hpp
+    ../../src/cpp/gui/toolbar/ToolbarWidget.hpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionDialog.hpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionWidget.hpp
 )
 
 
@@ -82,6 +85,9 @@ set( GUI_HEADERS
 set( GUI_SOURCES
     ../../src/cpp/gui/main.cpp
     ../../src/cpp/gui/MainWindow.cpp
+    ../../src/cpp/gui/toolbar/ToolbarWidget.cpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionDialog.cpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionWidget.cpp
 )
 
 #---------------------------------#
