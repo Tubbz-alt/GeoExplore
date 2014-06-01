@@ -27,6 +27,8 @@ public:
      * @param   vshader  The filename of the vertex shader.
      * @param   fshader  The filename of the fragment shader.
      * @param   gshader  Optionally use a geometry shader.
+     * @return If true then all opperations were successful. If false call GLProgram::getLastError
+     *         to get detailed information on failure.
      */
     bool loadAndLink(const char* vshader, const char* fshader, const char* gshader = nullptr);
 };

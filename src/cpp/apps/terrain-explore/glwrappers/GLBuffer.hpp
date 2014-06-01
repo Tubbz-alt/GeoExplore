@@ -33,6 +33,7 @@ public:
     /**
      * @brief Generate new buffers, the size of n. This must be called before binding.
      * @param     n The size of the new buffer to be created.
+     * @return True on success, false on failure.
      */
     bool generate(GLsizei n = 1);
 
@@ -68,7 +69,9 @@ public:
      * the memory layout of binding a buffer to a binding point, then binding multiple
      * uniform blocks to the same binding point.
      *
-     * \image html GLBufferBlocks.png "Binding buffers to binding points. Sharred buffer with uniform blocks"
+     * \image html BindBufferBlock.jpg "Buffer binding point example"
+     *
+     * <B>\noref %Image Source: <a href="http://www.lighthouse3d.com/tutorials/glsl-core-tutorial/3490-2/">www.lighthouse3d.com</a></B>
      */
     void bindBase(GLuint bindingPoint, GLsizei idx = 0);
 
@@ -78,6 +81,7 @@ public:
      * @param usage Specifies the expected pattern of the data store, GL_STATIC_DRAW is
      *              probably good since this is clearing it.
      * @param   idx The index of the buffer to set to empty.
+     * @return True on success, false on failure.
      */
     bool setEmpty(GLsizeiptr size, GLenum usage = GL_STATIC_DRAW, GLsizei idx = 0);
 
@@ -88,6 +92,7 @@ public:
      *                  begins <B>in bytes</B>.
      * @param      size The number of elements being replaced in the data store.
      * @param       idx The index of the buffer to set to empty.
+     * @return True on success, false on failure.
      *
      * Buffer must be bound and data store must already be initialized. Use either setEmpty()
      * or setData() to initialize the data store. The offset/sizeof(T)+size must be no greater
@@ -114,6 +119,7 @@ public:
      *                  GL_STATIC_READ, GL_STATIC_COPY, GL_DYNAMIC_DRAW, GL_DYNAMIC_READ,
      *                  GL_DYNAMIC_COPY.
      * @param       idx The index of the buffer.
+     * @return True on success, false on failure.
      */
     template <typename T>
     bool setData(const T* data, GLsizei size = 1, GLenum usage = GL_STATIC_DRAW, GLsizei idx = 0)
@@ -140,6 +146,9 @@ public:
      * @brief Return the OpenGL buffer index. Be very careful with this because the
      *        buffer does not recognize this as a reference count.
      * @param   idx The index of the buffer.
+     * @return The index of the OpenGL buffer.
+     *
+     * Should only be used when debugging.
      */
     GLuint getBufferIdx(GLsizei idx = 0);
 protected:

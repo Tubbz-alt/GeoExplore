@@ -10,6 +10,16 @@ GLVertexArray::~GLVertexArray()
     removeBeforeDelete();
 }
 
+GLVertexArray& GLVertexArray::operator=(const GLVertexArray& rhs)
+{
+    removeBeforeDelete();
+
+    m_count = rhs.m_count;
+    m_vao = rhs.m_vao;
+
+    return *this;
+}
+
 void GLVertexArray::create(GLsizei count)
 {
     removeBeforeDelete();

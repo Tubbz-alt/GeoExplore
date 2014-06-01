@@ -91,7 +91,7 @@ void GLTexture::generateMipMap(GLenum target)
     glGenerateMipmap(target);
 }
 
-bool GLTexture::loadImageData(const char* filename, GLsizei idx, GLenum internalFormat, GLint lod)
+bool GLTexture::loadImageData(const char* filename, GLsizei idx, GLint lod)
 {
     bool retVal = false;
     if ( ilLoadImage(filename) )
@@ -106,7 +106,7 @@ bool GLTexture::loadImageData(const char* filename, GLsizei idx, GLenum internal
         GLsizei dims[] = {width, height, depth};
 
         // set the data to the texture
-        retVal = this->setData(data, dims, idx, type, format, internalFormat, lod);
+        retVal = this->setData(data, dims, idx, type, format, lod);
 
         // clean up
         ilClearImage();
