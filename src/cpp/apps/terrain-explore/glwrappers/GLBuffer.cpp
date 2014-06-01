@@ -86,16 +86,24 @@ void GLBuffer::bind(GLenum target, GLsizei idx)
     }
 }
  
-void GLBuffer::bindBase(GLuint index, GLsizei idx)
+void GLBuffer::bindBase(GLuint bindingPoint, GLsizei idx)
 {
     if ( m_buffers != nullptr && m_bufferCount > idx && m_targets[idx] != GL_NONE )
     {
-        glBindBufferBase(m_targets[idx], index, m_buffers[idx]);
+        glBindBufferBase(m_targets[idx], bindingPoint, m_buffers[idx]);
     }
 }
 
 void GLBuffer::unbindBuffers(GLenum target)
 {
     glBindBuffer(target, 0);
+}
+    
+
+GLuint GLBuffer::getBufferIdx(GLsizei idx)
+{
+    if ( m_buffers != nullptr && m_bufferCount > idx )
+        return m_buffers[idx];
+    else return 0;
 }
 
