@@ -9,8 +9,13 @@
 // Qt Libraries
 #include <QComboBox>
 #include <QLabel>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
+
+// GeoExplore GUI Libraries
+#include "CoordinateConversionGeodeticPanelWidget.hpp"
+#include "CoordinateConversionUTMPanelWidget.hpp"
 
 namespace GEO{
 namespace GUI{
@@ -39,6 +44,11 @@ class CoordinateConversionWidget : public QWidget {
         */
         void initialize_coordinate_type_combos();
 
+        /**
+         * @brief Initialize the Coordinate Panel Stack
+        */
+        void initialize_coordinate_panel_stack();
+
         //-------------------------------------//
         //-         Private Variables         -//
         //-------------------------------------//
@@ -58,6 +68,11 @@ class CoordinateConversionWidget : public QWidget {
         /// Converted Coordinate Combo Box
         QComboBox* convertedCoordinateTypeComboBox;
 
+        /// Stacked Widget
+        QStackedWidget* m_conversionPanelStackPre;
+        QStackedWidget* m_conversionPanelStackPost;
+
+        
 
 }; /// End of CoordinateConversionWidget
 

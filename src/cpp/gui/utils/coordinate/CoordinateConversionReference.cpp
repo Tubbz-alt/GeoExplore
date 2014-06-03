@@ -12,6 +12,7 @@ namespace GUI{
  * Coordinate Reference Constructor
 */
 A_CoordinateReference::A_CoordinateReference() :
+                       m_coordinate_type( CoordinateType::Base ),
                        m_coordinate_type_name("")
 {
 }
@@ -19,11 +20,20 @@ A_CoordinateReference::A_CoordinateReference() :
 /**
  * Coordinate Reference Constructor
 */
-A_CoordinateReference::A_CoordinateReference( const std::string& coordinate_type_name ) :
+A_CoordinateReference::A_CoordinateReference(  const CoordinateType& coordinate_type,
+                                               const std::string& coordinate_type_name ) :
+                       m_coordinate_type( coordinate_type ), 
                        m_coordinate_type_name(coordinate_type_name)
 {
 
 
+}
+
+/**
+ * Get the coordinate type
+*/
+CoordinateType A_CoordinateReference::Get_Coordinate_Type()const{
+    return m_coordinate_type;
 }
 
 /**
@@ -47,6 +57,11 @@ std::string The_CoordinateConversionReference::Get_Coordinate_Type_Name( const i
     return m_references[index].Get_Coordinate_Type_Name();
 }
 
+CoordinateType The_CoordinateConversionReference::Get_Coordinate_Type( const int& index )const{
+    return m_references[index].Get_Coordinate_Type();
+}
+
+
 /**
  * Get Instance of the reference
 */
@@ -61,8 +76,8 @@ The_CoordinateConversionReference& The_CoordinateConversionReference::getInstanc
 The_CoordinateConversionReference::The_CoordinateConversionReference(){
     
     // initialize
-    m_references.push_back( A_CoordinateReference("Geodetic"));
-    m_references.push_back( A_CoordinateReference("Universal Transverse Mercator"));
+    m_references.push_back( A_CoordinateReference(CoordinateType::Geodetic, "Geodetic"));
+    m_references.push_back( A_CoordinateReference(CoordinateType::UTM,      "Universal Transverse Mercator"));
 
 }
 

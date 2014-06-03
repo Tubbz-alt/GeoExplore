@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+// GeoExplore Library
+#include <GeoExplore.hpp>
 
 namespace GEO{
 namespace GUI{
@@ -29,14 +31,23 @@ class A_CoordinateReference{
         /**
          * @brief A_CoordinateReference Constructor
         */
-        A_CoordinateReference( const std::string& coordinate_type_name );
+        A_CoordinateReference( const CoordinateType& coordinate_type,
+                               const std::string& coordinate_type_name );
+
+        /**
+         * Get the coordinate type
+        */
+        CoordinateType Get_Coordinate_Type()const;
 
         /**
          * @brief Get the Coordinate Type Name
         */
         std::string Get_Coordinate_Type_Name()const;
 
-    private:    
+    private:   
+        
+        /// Coordinate Type
+        CoordinateType m_coordinate_type;
         
         /// Coordinate Type Name
         std::string m_coordinate_type_name;
@@ -55,6 +66,11 @@ class The_CoordinateConversionReference{
         */
         std::string Get_Coordinate_Type_Name( const int& index )const;
         
+        /**
+         * @brief Get the coordinate type
+        */
+        CoordinateType Get_Coordinate_Type( const int& index )const;
+
         /**
          * @brief Get the Reference Size
         */

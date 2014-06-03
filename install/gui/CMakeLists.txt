@@ -77,6 +77,8 @@ set( GUI_HEADERS
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionDialog.hpp
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionReference.hpp
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionWidget.hpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionGeodeticPanelWidget.hpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionUTMPanelWidget.hpp
 )
 
 
@@ -88,6 +90,8 @@ set( GUI_SOURCES
     ../../src/cpp/gui/MainWindow.cpp
     ../../src/cpp/gui/toolbar/ToolbarWidget.cpp
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionDialog.cpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionGeodeticPanelWidget.cpp
+    ../../src/cpp/gui/utils/coordinate/CoordinateConversionUTMPanelWidget.cpp
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionReference.cpp
     ../../src/cpp/gui/utils/coordinate/CoordinateConversionWidget.cpp
 )
