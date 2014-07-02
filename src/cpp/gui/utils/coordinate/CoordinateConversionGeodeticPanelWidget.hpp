@@ -11,6 +11,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLineEdit>
 #include <QWidget>
 
 
@@ -38,9 +39,18 @@ class CoordinateConversionGeodeticPanelWidget : public QWidget{
         */
         void initialize_datum_widget();
 
+        /**
+         * Create the latitude widget
+        */
+        void initialize_latlon_widget();
+
+
         /// Main Layout
         QGridLayout* mainLayout;
 
+        /********************************/
+        /*    Datum Widget Materials    */
+        /********************************/
         /// Datum Widget
         QWidget* datumWidget;
 
@@ -52,6 +62,28 @@ class CoordinateConversionGeodeticPanelWidget : public QWidget{
 
         /// Datum Widget Combo
         QComboBox* datumComboBox;
+        
+        /***********************************/
+        /*    Latitude Widet Materials     */
+        /***********************************/
+
+        /// LatLon Widget
+        QWidget* latLonWidget;
+
+        /// LatLon Layout
+        QHBoxLayout* latLonLayout;
+
+        /// Latitude Widget Label
+        QLabel* latitudeLabel;
+
+        /// Latitude Edit
+        QLineEdit* latitudeEdit;
+
+        /// Longitude Widget Label
+        QLabel* longitudeLabel;
+
+        /// Longitude Text Edit
+        QLineEdit* longitudeEdit;
 
 
 }; // End of CoordinateConversionGeodeticPanelWidget Class

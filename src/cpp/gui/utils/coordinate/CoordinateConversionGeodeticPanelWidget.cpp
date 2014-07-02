@@ -20,6 +20,9 @@ CoordinateConversionGeodeticPanelWidget::CoordinateConversionGeodeticPanelWidget
     // initialize the datum widget
     initialize_datum_widget();
 
+    // initialize the latitude widget
+    initialize_latlon_widget();
+
     // set the main layout
     setLayout( mainLayout );
 }
@@ -51,6 +54,42 @@ void CoordinateConversionGeodeticPanelWidget::initialize_datum_widget(){
 
 }
 
+/**
+ * Initialize the LatLon Widget
+*/
+void CoordinateConversionGeodeticPanelWidget::initialize_latlon_widget(){
+
+
+    // create widget
+    latLonWidget = new QWidget(this);
+
+    // create the layout
+    latLonLayout = new QHBoxLayout();
+
+    // create the latitude label
+    latitudeLabel = new QLabel("Lat:");
+    latLonLayout->addWidget( latitudeLabel );
+
+    // create the latitude edit
+    latitudeEdit = new QLineEdit();
+    latLonLayout->addWidget(latitudeEdit);
+
+    // create the longitude label
+    longitudeLabel = new QLabel("Lon:");
+    latLonLayout->addWidget(longitudeLabel);
+
+    // create the longitude edit
+    longitudeEdit = new QLineEdit();
+    latLonLayout->addWidget( longitudeEdit );
+
+    // set the layout
+    latLonWidget->setLayout( latLonLayout );
+
+    // add to main layout
+    mainLayout->addWidget( latLonWidget );
+
+
+}
 
 } // End of GUI Namespace
 } // End of GEO Namespace

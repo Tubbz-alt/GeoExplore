@@ -25,6 +25,8 @@ namespace GUI{
 */
 class CoordinateConversionWidget : public QWidget {
 
+    Q_OBJECT
+
     public:
         
         /**
@@ -32,6 +34,17 @@ class CoordinateConversionWidget : public QWidget {
         */
         CoordinateConversionWidget( QWidget* parent = NULL );
 
+    private slots:
+        
+        /**
+         * Change the From Coordinate Dialog
+        */
+        void changeOriginalCoordinateDialog();
+
+        /**
+         * Change the To Coordinate Dialog
+        */
+        void changeConvertedCoordinateDialog();
         
     private:
         

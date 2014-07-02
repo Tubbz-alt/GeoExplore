@@ -46,7 +46,7 @@ void CoordinateConversionWidget::initialize_coordinate_type_combos(){
     coordinateTypeSelectionLayout = new QVBoxLayout();
 
     // create widgets
-    originalCoordinateTypeComboBox  = new QComboBox(coordinateTypeSelectionWidget);
+    originalCoordinateTypeComboBox  = new QComboBox(coordinateTypeSelectionWidget);    
     convertedCoordinateTypeComboBox = new QComboBox(coordinateTypeSelectionWidget);
 
     // load conversion types
@@ -59,6 +59,10 @@ void CoordinateConversionWidget::initialize_coordinate_type_combos(){
     coordinateTypeSelectionLayout->addWidget( originalCoordinateTypeComboBox );
     coordinateTypeSelectionLayout->addWidget( convertedCoordinateTypeComboBox );
     
+    // connect combo boxes
+    connect( originalCoordinateTypeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOriginalCoordinateDialog()));
+    connect( convertedCoordinateTypeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeConvertedCoordinateDialog()));
+
     // set layout
     coordinateTypeSelectionWidget->setLayout( coordinateTypeSelectionLayout );
 
@@ -104,6 +108,31 @@ void CoordinateConversionWidget::initialize_coordinate_panel_stack(){
     mainLayout->addWidget( m_conversionPanelStackPre );
     mainLayout->addWidget( m_conversionPanelStackPost );
 
+}
+
+/**
+ * Change the top coordinate dialog
+*/
+void CoordinateConversionWidget::changeOriginalCoordinateDialog(){
+
+    // get the index for the current combo box
+    int currentIndex = originalCoordinateTypeComboBox->currentIndex();
+
+    // set the index on the stacked widget
+    m_conversionPanelStackPre->setCurrentIndex(currentIndex);
+
+}
+
+/**
+ * Change the bottom corodinate dialog
+*/
+void CoordinateConversionWidget::changeConvertedCoordinateDialog(){
+
+    // get the index of the combo box
+    int currentIndex = convertedCoordinateTypeComboBox->currentIndex();
+
+    // set the index on the stacked widget
+    m_conversionPanelStackPost->setCurrentIndex(currentIndex);
 }
 
 
