@@ -25,6 +25,15 @@ find_package( GDAL REQUIRED )
 #--------------------------------#
 find_package( OpenCV REQUIRED )
 
+#-----------------------#
+#-     Find Boost      -#
+#-----------------------#
+find_package( Boost 
+                COMPONENTS
+                    system
+                    filesystem
+                REQUIRED )
+
 #-----------------------------------------#
 #-     Define Required Header Files      -#
 #-----------------------------------------#
@@ -142,6 +151,7 @@ target_link_libraries(
             GeoExplore
             ${GDAL_LIBRARY}
             ${OpenCV_LIBS}
+            ${Boost_LIBRARIES}
 )
 
 

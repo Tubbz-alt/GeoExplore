@@ -15,10 +15,10 @@
 #include <boost/shared_ptr.hpp>
 
 /// GDAL Libraries
-#include <gdal/cpl_conv.h>
-#include <gdal/cpl_string.h>
-#include <gdal/gdal.h>
-#include <gdal/gdal_priv.h>
+#include <cpl_conv.h>
+#include <cpl_string.h>
+#include <gdal.h>
+#include <gdal_priv.h>
 
 /// GeoExplore Libraries
 #include <GeoExplore/core/Exceptions.hpp>

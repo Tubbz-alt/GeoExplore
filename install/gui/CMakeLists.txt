@@ -40,6 +40,7 @@ find_package( Boost
                     regex
                 REQUIRED
 )
+include_directories(${Boost_INCLUDE_DIRS})
 
 #-----------------------------------#
 #-     Find C++ Thread Library     -#
@@ -50,7 +51,18 @@ find_package( Threads )
 #----------------------------------#
 #-       Find QT5 Libraries       -#
 #----------------------------------#
-find_package( Qt5Widgets REQUIRED )
+if( DEFINED ENV{QTDIR})
+    set(CMAKE_PREFIX_PATH $ENV{QTDIR}/lib/cmake ${CMAKE_PREFIX_PATH})
+endif()
+
+find_package( Qt5
+                COMPONENTS
+                    OpenGL
+                    Widgets
+                    Core
+                REQUIRED
+)
+#find_package( Qt5Widgets REQUIRED )
 #find_package( QtDeclarative )
 
 #  Tell CMake to run moc when necessary
@@ -67,6 +79,8 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 #  Force position independent code (which should be a default
 #  however Qt5 complains if this isn't here)
 add_definitions(-fPIC)
+add_definitions(${Qt5Widgets_DEFINITIONS})
+set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 #------------------------------------------#
 #-      Define Required Header Files      -#

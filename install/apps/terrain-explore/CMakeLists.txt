@@ -47,6 +47,10 @@ find_package( Threads )
 #--------------------------#
 #-  Find Qt5 Libraries    -#
 #--------------------------#
+#  This will allow code to build in OSX
+if( DEFINED ENV{QTDIR})
+    set(CMAKE_PREFIX_PATH $ENV{QTDIR}/lib/cmake ${CMAKE_PREFIX_PATH})
+endif()
 find_package( Qt5
                 COMPONENTS
                     OpenGL
@@ -88,6 +92,7 @@ find_package( OpenGL REQUIRED )
 #-  Find OpenGL Extension Wrangler (GLEW)  -#
 #-------------------------------------------#
 find_package( GLEW REQUIRED )
+include_directories(${GLEW_INCLUDE_DIR})
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
