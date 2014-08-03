@@ -10,9 +10,6 @@
 #include <GeoExplore/core/Enumerations.hpp>
 #include <GeoExplore/coordinate/CoordinateBase.hpp>
 
-/// Boost
-#include <boost/shared_ptr.hpp>
-
 namespace GEO{
 
 
@@ -28,7 +25,7 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         typedef DATATYPE datatype;
         
         /// Pointer type
-        typedef boost::shared_ptr<CoordinateGeodetic<DATATYPE> > ptr_t;
+        typedef std::shared_ptr<CoordinateGeodetic<DATATYPE> > ptr_t;
 
         /**
          * Default Constructor

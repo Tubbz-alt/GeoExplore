@@ -16,6 +16,7 @@
 #include <type_traits>
 
 namespace GEO{
+namespace IMG{
 
 /**
  * Convert Grayscale to grayscale
@@ -75,7 +76,8 @@ typename std::enable_if<std::is_same<OutputPixelType, PixelGray<typename OutputP
     return PixelGray<typename OutputPixelType::channeltype>( avg );
 }   
 
-} /// End of GEO Namespace
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 
 #endif

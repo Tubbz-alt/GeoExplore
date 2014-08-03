@@ -24,7 +24,7 @@ class CoordinateMGRS : public CoordinateBase<DATATYPE>{
         typedef DATATYPE datatype;
 
         /// Create the pointer type
-        typedef boost::shared_ptr<CoordinateMGRS<DATATYPE> > ptr_t;
+        typedef std::::shared_ptr<CoordinateMGRS<DATATYPE> > ptr_t;
 
 
         /**

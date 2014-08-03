@@ -9,15 +9,14 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Exceptions.hpp>
 #include <GeoExplore/image/BaseResource.hpp>
-#include <cstddef>
 
-/// Boost C++ Library
-#include <boost/shared_ptr.hpp>
 
 /// C++ Standard Library
+#include <cstddef>
 #include <memory>
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class MemoryResource
@@ -37,7 +36,7 @@ class MemoryResource : public BaseResource<PixelType> {
         /**
          * Parameterized Constructor
         */
-        MemoryResource( const int& rows, const int& cols ) : m_data(new PixelType[rows*cols]),
+        MemoryResource( const int& rows, const int& cols ) : m_data(new std::vector<PixelType>(rows*cols)),
                                                              m_rows(rows), m_cols(cols){}
 
         /**
@@ -49,7 +48,7 @@ class MemoryResource : public BaseResource<PixelType> {
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return m_data[idx];
+            return (*m_data)[idx];
         }
 
         /**
@@ -61,7 +60,7 @@ class MemoryResource : public BaseResource<PixelType> {
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return m_data[idx];
+            return (*m_data)[idx];
         }
         
         /**
@@ -73,7 +72,7 @@ class MemoryResource : public BaseResource<PixelType> {
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return m_data[m_cols*y + x];
+            return (*m_data)[m_cols*y + x];
         }
         
         /**
@@ -85,7 +84,7 @@ class MemoryResource : public BaseResource<PixelType> {
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return m_data[m_cols*y + x];
+            return (*m_data)[m_cols*y + x];
         }
 
         /**
@@ -126,10 +125,10 @@ class MemoryResource : public BaseResource<PixelType> {
             output.m_cols = cols();
 
             // copy the data
-            output.m_data = boost::shared_ptr<PixelType[]>(new PixelType[output.m_rows*output.m_cols]);
+            output.m_data = std::shared_ptr<std::vector<PixelType> >(new std::vector<PixelType>(output.m_rows*output.m_cols));
 
             for( size_t i=0; i<(rows()*cols()); i++ ){
-                output.m_data[i] = m_data[i];
+                (*output.m_data)[i] = (*m_data)[i];
             }
 
             // return the data
@@ -160,7 +159,7 @@ class MemoryResource : public BaseResource<PixelType> {
         /**
          * Assign Pixel Data
         */
-        void setPixelData( boost::shared_ptr<PixelType[]> data, const int& rows, const int& cols ){
+        void setPixelData( std::shared_ptr<std::vector<PixelType> > const& data, const int& rows, const int& cols ){
             m_rows = rows;
             m_cols = cols;
             m_data = data;
@@ -169,15 +168,15 @@ class MemoryResource : public BaseResource<PixelType> {
         /**
          * Get pixel data
         */
-        boost::shared_ptr<PixelType[]> getPixelData()const{
+        std::shared_ptr<std::vector<PixelType> > getPixelData()const{
             return m_data;
         }
 
     private:
 
         /// List of pixels
-        boost::shared_ptr<PixelType[]> m_data;
-        
+        std::shared_ptr<std::vector<PixelType> >  m_data;
+
         /// number of rows
         int m_rows;
 
@@ -186,6 +185,7 @@ class MemoryResource : public BaseResource<PixelType> {
 
 }; /// End of MemoryResource Class
 
+} /// End of IMG Namespace
 } /// End of GEO Namespace
 
 #endif

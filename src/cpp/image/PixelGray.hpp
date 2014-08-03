@@ -12,6 +12,7 @@
 
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class PixelGray
@@ -116,7 +117,7 @@ typedef PixelGray<ChannelTypeUInt32>  PixelGrayUInt32;
 typedef PixelGray<ChannelTypeUInt32>  PixelGray_UInt32;
 typedef PixelGray<ChannelTypeUInt32>  PixelGray_u32;
 
-
-} /// End of GEO Namespace
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 #endif

@@ -7,13 +7,11 @@
 #define __SRC_CPP_IMAGE_IMAGETYPE_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/image/BaseResource.hpp>
-#include <GeoExplore/image/DiskResource.hpp>
-#include <GeoExplore/image/MemoryResource.hpp>
 #include <GeoExplore/image/MetadataContainerBase.hpp>
 
 
 namespace GEO {
+namespace IMG{
 
 /**
  * @class Image
@@ -112,10 +110,7 @@ class Image_{
 
 };  /// End of BaseImage Class
 
-/// Common Image Aliases
-template <typename PixelType> using Image     = Image_<PixelType,MemoryResource<PixelType> >;
-template <typename PixelType> using DiskImage = Image_<PixelType,DiskResource<PixelType> >;
-
+} /// End of namespace IMG
 } /// End of namespace GEO
 
 #endif

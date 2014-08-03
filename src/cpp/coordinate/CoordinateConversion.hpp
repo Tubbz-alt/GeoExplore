@@ -14,6 +14,7 @@
 
 /// C++ Libraries
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 
 namespace GEO{
@@ -35,7 +36,7 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
     if( coordinate->type() == CoordinateType::Geodetic && output_coordinate_type == CoordinateType::UTM ){
     
         // cast the input to the proper type
-        typename CoordinateGeodetic<DATATYPE>::ptr_t input = boost::static_pointer_cast<CoordinateGeodetic<DATATYPE> >(coordinate);
+        typename CoordinateGeodetic<DATATYPE>::ptr_t input = std::dynamic_pointer_cast<CoordinateGeodetic<DATATYPE> >(coordinate);
 
         // create an output coordinate
         typename CoordinateUTM<DATATYPE>::ptr_t output( new CoordinateUTM<DATATYPE>(output_datum));
@@ -59,7 +60,7 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
     if( coordinate->type() == CoordinateType::UTM && output_coordinate_type == CoordinateType::Geodetic ){
 
         // cast the input to UTM
-        typename CoordinateUTM<DATATYPE>::ptr_t input = boost::static_pointer_cast<CoordinateUTM<DATATYPE> >(coordinate);
+        typename CoordinateUTM<DATATYPE>::ptr_t input = std::dynamic_pointer_cast<CoordinateUTM<DATATYPE> >(coordinate);
 
         // create an output coordinate
         typename CoordinateGeodetic<DATATYPE>::ptr_t output( new CoordinateGeodetic<DATATYPE>(output_datum));

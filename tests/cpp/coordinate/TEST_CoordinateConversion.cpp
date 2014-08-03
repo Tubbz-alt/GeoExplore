@@ -11,10 +11,6 @@
 /// C++ Libraries
 #include <iostream>
 
-/// Boost C++ Libraries
-#include <boost/shared_ptr.hpp>
-#include <boost/pointer_cast.hpp>
-
 using namespace std;
 
 
@@ -27,7 +23,7 @@ TEST( CoordinateConversion, Geodetic2UTM_ptr ){
     GEO::CoordinateGeodetic_d::ptr_t coordinate01( new GEO::CoordinateGeodetic_d(0, 0, 0, GEO::Datum::WGS84));
     
     // convert the coordinate
-    GEO::CoordinateUTM_d::ptr_t result01 = boost::static_pointer_cast<GEO::CoordinateUTM_d>(GEO::convert_coordinate<double>( coordinate01, GEO::CoordinateType::UTM, coordinate01->datum() ));
+    GEO::CoordinateUTM_d::ptr_t result01 = std::dynamic_pointer_cast<GEO::CoordinateUTM_d>(GEO::convert_coordinate<double>( coordinate01, GEO::CoordinateType::UTM, coordinate01->datum() ));
     
     // test the output
     ASSERT_EQ( GEO::Datum::WGS84, result01->datum() );
@@ -42,7 +38,7 @@ TEST( CoordinateConversion, Geodetic2UTM_ptr ){
     coordinate01->altitude()  = 17;
     coordinate01->datum()     = GEO::Datum::WGS84;
 
-    result01 = boost::static_pointer_cast<GEO::CoordinateUTM_d>(GEO::convert_coordinate<double>( coordinate01, GEO::CoordinateType::UTM, coordinate01->datum()));
+    result01 = std::dynamic_pointer_cast<GEO::CoordinateUTM_d>(GEO::convert_coordinate<double>( coordinate01, GEO::CoordinateType::UTM, coordinate01->datum()));
     ASSERT_EQ( GEO::Datum::WGS84, result01->datum() );
     ASSERT_EQ( 18, result01->zone());
     ASSERT_NEAR( 323394, result01->easting(), 1 );

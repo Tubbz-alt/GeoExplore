@@ -30,7 +30,7 @@ TEST( ImageIO, ComputeDriver ){
 */
 TEST( ImageIO, ReadImage ){
 
-    GEO::Image<GEO::PixelRGB_u8> image;
+    GEO::IMG::Image<GEO::IMG::PixelRGB_u8> image;
     GEO::IO::read_image("../../tests/data/images/Lenna.jpg", image);
 
     ASSERT_EQ( image.rows(), 512 );
@@ -44,14 +44,14 @@ TEST( ImageIO, ReadImage ){
 TEST( ImageIO, ReadDiskImage ){
 
     // force GDAL using NITF
-    GEO::DiskImage<GEO::PixelRGB_u8> image;
+    GEO::IMG::DiskImage<GEO::IMG::PixelRGB_u8> image;
     GEO::IO::read_image("../../tests/data/images/i_3001a.ntf", image);
     
     ASSERT_EQ( image.rows(), 1024 );
     ASSERT_EQ( image.cols(), 1024 );
 
     // force GDAL using SRTM
-    GEO::DiskImage<GEO::PixelGray_df> image02;
+    GEO::IMG::DiskImage<GEO::IMG::PixelGray_df> image02;
     GEO::IO::read_image("../../tests/data/dem/n39_w120_3arc_v1.bil", image02 );
 
     ASSERT_EQ( image02.rows(), 1201 );

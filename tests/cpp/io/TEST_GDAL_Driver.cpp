@@ -5,14 +5,11 @@
 */
 #include<gtest/gtest.h>
 
-/// Boost C++ Library
-#include <boost/shared_ptr.hpp>
-
 /// GeoExplore Library 
 #include <GeoExplore.hpp>
 
 /// GDAL
-#include <gdal/cpl_conv.h>
+#include <cpl_conv.h>
 
 using namespace std;
 
@@ -25,7 +22,7 @@ TEST( GDAL_Driver, LoadImageJPEGRGB ){
      * Call the load image on a jpeg image 
     */
     int rowSize, colSize;
-    boost::shared_ptr<GEO::PixelRGB_UInt8[]> pixels = GEO::IO::GDAL::load_image_data<GEO::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize, colSize);
+    std::vector<GEO::IMG::PixelRGB_UInt8> pixels = *GEO::IO::GDAL::load_image_data<GEO::IMG::PixelRGB_UInt8>( "../../tests/data/images/Lenna.jpg", rowSize, colSize);
 
     /// make sure the image is the right size
     ASSERT_EQ( rowSize, 512);
@@ -69,7 +66,7 @@ TEST( GDAL_Driver, GetShortDriverByFilename ){
 TEST( GDAL_Driver, ChannelType2GDALType ){
 
     ASSERT_EQ( GEO::IO::GDAL::ctype2gdaltype<double>(), GDT_Unknown );
-    ASSERT_EQ( GEO::IO::GDAL::ctype2gdaltype<GEO::ChannelTypeDouble>(), GDT_Float64);
+    ASSERT_EQ( GEO::IO::GDAL::ctype2gdaltype<GEO::IMG::ChannelTypeDouble>(), GDT_Float64);
 
 
 }

@@ -36,6 +36,7 @@ find_package( Boost
                     regex
                 REQUIRED
 )
+include_directories(${Boost_INCLUDE_DIRS})
 
 #-----------------------------------#
 #-     Find C++ Thread Library     -#
@@ -46,6 +47,7 @@ find_package( Threads )
 #-     Find GDAL    -#
 #--------------------#
 find_package( GDAL REQUIRED )
+include_directories( ${GDAL_INCLUDE_DIR} )
 
 #----------------------------------------#
 #-     Define Required Header Files     -#

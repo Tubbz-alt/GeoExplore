@@ -11,7 +11,7 @@
 #include <GeoExplore/image/PixelBase.hpp>
 
 namespace GEO{
-
+namespace IMG{
 
 /**
  * @class PixelRGB
@@ -146,6 +146,7 @@ typedef PixelRGB<ChannelTypeUInt32>  PixelRGBUInt32;
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_UInt32;
 typedef PixelRGB<ChannelTypeUInt32>  PixelRGB_u32;
 
-} /// End of GEO Namespace
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 #endif

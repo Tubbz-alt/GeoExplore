@@ -40,4 +40,14 @@
 #include <GeoExplore/utilities/FilesystemUtilities.hpp>
 #include <GeoExplore/utilities/StringUtilities.hpp>
 
+namespace GEO{
+namespace IMG{
+
+/// Common Image Aliases
+template <typename PixelType> using Image     = GEO::IMG::Image_<PixelType,GEO::IMG::MemoryResource<PixelType> >;
+template <typename PixelType> using DiskImage = GEO::IMG::Image_<PixelType,GEO::IMG::DiskResource<PixelType> >;
+
+} // End of IMG Namespace
+} // End of GEO Namespace
+
 #endif

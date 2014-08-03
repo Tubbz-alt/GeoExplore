@@ -24,7 +24,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         typedef DATATYPE datatype;
         
         /// Pointer type
-        typedef boost::shared_ptr<CoordinateUTM<DATATYPE> > ptr_t;
+        typedef std::shared_ptr<CoordinateUTM<DATATYPE> > ptr_t;
 
         /**
          * Default Constructor

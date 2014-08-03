@@ -14,6 +14,7 @@
 
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class ChannelType
@@ -231,7 +232,7 @@ typename AfterType::type range_cast( typename BeforeType::type const& value ){
 }
 
 
-
+} /// End of Namespace IMG
 } /// End of Namespace GEO
 
 

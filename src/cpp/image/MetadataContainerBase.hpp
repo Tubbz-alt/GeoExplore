@@ -6,10 +6,11 @@
 #ifndef __SRC_CPP_IMAGE_METADATACONTAINERBASE_HPP__
 #define __SRC_CPP_IMAGE_METADATACONTAINERBASE_HPP__
 
-/// Boost C++ Library
-#include <boost/shared_ptr.hpp>
+// C++ Standard Libraries
+#include <memory>
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class MetadataContainerBase
@@ -19,7 +20,7 @@ class MetadataContainerBase{
     public:
         
         /// Pointer Type
-        typedef boost::shared_ptr<MetadataContainerBase> ptr_t;
+        typedef std::shared_ptr<MetadataContainerBase> ptr_t;
 
         /**
          * Default Constructor
@@ -29,6 +30,7 @@ class MetadataContainerBase{
 
 }; /// End MetadataContainerBase Class
 
-} /// End of GEO Namespace
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 #endif

@@ -13,6 +13,7 @@
 #include <GeoExplore/image/PixelCast.hpp>
 #include <GeoExplore/image/PixelGray.hpp>
 #include <GeoExplore/image/PixelRGB.hpp>
+#include <GeoExplore/io/ImageDriverBase.hpp>
 
 /// OpenCV Libraries
 #include <opencv2/core/core.hpp>
@@ -34,10 +35,10 @@ struct Pixel2OpenCVType{
  * Convert from grayscale double to double
 */
 template <>
-struct Pixel2OpenCVType<PixelGray_d>{
+struct Pixel2OpenCVType<IMG::PixelGray_d>{
     typedef double cvtype;
 
-    static void Pix2CV( PixelGray_d const& input, cvtype& output ){
+    static void Pix2CV( IMG::PixelGray_d const& input, cvtype& output ){
         output = input[0];
     }
 }; 
@@ -46,10 +47,10 @@ struct Pixel2OpenCVType<PixelGray_d>{
  * Convert from RGB Double to Vec3d
 */
 template <>
-struct Pixel2OpenCVType<PixelRGB_d>{
+struct Pixel2OpenCVType<IMG::PixelRGB_d>{
     typedef typename cv::Vec3d cvtype;
 
-    static void Pix2CV( PixelRGB_d const& input, cvtype& output ){
+    static void Pix2CV( IMG::PixelRGB_d const& input, cvtype& output ){
         output[0] = input[2];
         output[1] = input[1];
         output[2] = input[0];
@@ -60,10 +61,10 @@ struct Pixel2OpenCVType<PixelRGB_d>{
  * Convert from RGB UInt8 to Vec3b
 */
 template <>
-struct Pixel2OpenCVType<PixelRGB_u8>{
+struct Pixel2OpenCVType<IMG::PixelRGB_u8>{
     typedef typename cv::Vec3b cvtype;
 
-    static void Pix2CV( PixelRGB_u8 const& input, cvtype& output ){
+    static void Pix2CV( IMG::PixelRGB_u8 const& input, cvtype& output ){
         output[0] = input[2];
         output[1] = input[1];
         output[2] = input[0];
@@ -105,7 +106,7 @@ class ImageDriverOpenCV : public ImageDriverBase {
          * Write an image to file
         */
         template <typename PixelType, typename ResourceType>
-        static void write_image( Image_<PixelType,ResourceType>const& output_image, boost::filesystem::path const& pathname ){
+        static void write_image( IMG::Image_<PixelType,ResourceType>const& output_image, boost::filesystem::path const& pathname ){
             
             // convert the output image to an opencv structure
             cv::Mat_<cv::Vec3b> image( output_image.rows(), output_image.cols());
@@ -113,7 +114,7 @@ class ImageDriverOpenCV : public ImageDriverBase {
             // start loading the output image
             for( size_t y=0; y<output_image.rows(); y++ ){
             for( size_t x=0; x<output_image.cols(); x++ ){
-                Pixel2OpenCVType<PixelRGB_u8>::Pix2CV( pixel_cast<PixelRGB_u8>(output_image(y,x)), image(y,x) );
+                Pixel2OpenCVType<IMG::PixelRGB_u8>::Pix2CV( IMG::pixel_cast<IMG::PixelRGB_u8>(output_image(y,x)), image(y,x) );
             }}
 
             // run imwrite

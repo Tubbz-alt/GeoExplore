@@ -13,6 +13,7 @@
 #include <GeoExplore/core/Exceptions.hpp>
 
 namespace GEO{
+namespace IMG{
 
 /**
  *    @class PixelBase
@@ -65,8 +66,8 @@ class PixelBase {
 
 }; /// End of PixelBase Class
 
-
-} /// End of GEO Namespace
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 
 #endif

@@ -19,15 +19,15 @@ using namespace std;
 TEST( NETPBM_Driver, WriteImagePPM ){
 
     /// create an image
-    GEO::Image<GEO::PixelRGB_d>  image01(50,50);
+    GEO::IMG::Image<GEO::IMG::PixelRGB_d>  image01(50,50);
 
     for( int i=0; i<25; i++ ){
     for( int j=0; j<25; j++ ){
         
-        image01(i +  0, j +  0) = GEO::PixelRGB_d(0,0,0);
-        image01(i + 25, j +  0) = GEO::PixelRGB_d(1,0,0);
-        image01(i +  0, j + 25) = GEO::PixelRGB_d(0,1,0);
-        image01(i + 25, j + 25) = GEO::PixelRGB_d(0,0,1);
+        image01(i +  0, j +  0) = GEO::IMG::PixelRGB_d(0,0,0);
+        image01(i + 25, j +  0) = GEO::IMG::PixelRGB_d(1,0,0);
+        image01(i +  0, j + 25) = GEO::IMG::PixelRGB_d(0,1,0);
+        image01(i + 25, j + 25) = GEO::IMG::PixelRGB_d(0,0,1);
     }}
 
     // write the image
@@ -48,15 +48,15 @@ TEST( NETPBM_Driver, WriteImagePPM ){
 TEST( NETPBM_Driver, WriteImagePGM ){
     
     /// create an image
-    GEO::Image<GEO::PixelRGB_d>  image01(50,50);
+    GEO::IMG::Image<GEO::IMG::PixelRGB_d>  image01(50,50);
 
     for( int i=0; i<25; i++ ){
     for( int j=0; j<25; j++ ){
         
-        image01(i +  0, j +  0) = GEO::PixelRGB_d(0,0,0);
-        image01(i + 25, j +  0) = GEO::PixelRGB_d(1,0,0);
-        image01(i +  0, j + 25) = GEO::PixelRGB_d(0,1,0);
-        image01(i + 25, j + 25) = GEO::PixelRGB_d(0,0,1);
+        image01(i +  0, j +  0) = GEO::IMG::PixelRGB_d(0,0,0);
+        image01(i + 25, j +  0) = GEO::IMG::PixelRGB_d(1,0,0);
+        image01(i +  0, j + 25) = GEO::IMG::PixelRGB_d(0,1,0);
+        image01(i + 25, j + 25) = GEO::IMG::PixelRGB_d(0,0,1);
     }}
 
     // write the image
@@ -77,7 +77,7 @@ TEST( NETPBM_Driver, WriteImagePGM ){
 TEST( NETPBM_Driver, WriteImageError ){
 
     /// Create an image
-    GEO::Image<GEO::PixelRGB_d> image01;
+    GEO::IMG::Image<GEO::IMG::PixelRGB_d> image01;
 
     // write the image
     ASSERT_THROW( GEO::IO::NETPBM::write_image( image01, "file.jpg"), GEO::GeneralException );

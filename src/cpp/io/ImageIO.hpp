@@ -8,7 +8,9 @@
 
 /// GeoExplore Libraries
 #include <GeoExplore/core/Enumerations.hpp>
+#include <GeoExplore/image/DiskResource.hpp>
 #include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/DiskResource.hpp>
 #include <GeoExplore/io/GDAL_Driver.hpp>
 #include <GeoExplore/io/NETPBM_Driver.hpp>
 #include <GeoExplore/io/OpenCV_Driver.hpp>
@@ -41,7 +43,7 @@ GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, co
  * Read an Image
 */
 template<typename PixelType>
-void read_image( boost::filesystem::path const& pathname, Image<PixelType>& output_image ){
+void read_image( boost::filesystem::path const& pathname, IMG::Image_<PixelType, IMG::MemoryResource<PixelType>>& output_image ){
 
     /// make sure the file exists
     if( boost::filesystem::exists( pathname ) == false ){
@@ -69,7 +71,7 @@ void read_image( boost::filesystem::path const& pathname, Image<PixelType>& outp
  * Read a Disk Image
 */
 template <typename PixelType>
-void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& output_image ){
+void read_image( boost::filesystem::path const& pathname, IMG::Image_<PixelType,IMG::DiskResource<PixelType> >& output_image ){
 
     // make sure the file exists
     if( boost::filesystem::exists( pathname ) == false ){
@@ -80,7 +82,7 @@ void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& 
     GEO::ImageDriverType driver = compute_driver( pathname, DriverOptions::READ_ONLY );
     
     // create the resource
-    DiskResource<PixelType> resource;
+    IMG::DiskResource<PixelType> resource;
     
     boost::shared_ptr<GEO::IO::ImageDriverBase> image_driver(nullptr);
 
@@ -108,7 +110,7 @@ void read_image( boost::filesystem::path const& pathname, DiskImage<PixelType>& 
  * Write an image
 */
 template <typename PixelType, typename ResourceType>
-void write_image( Image_<PixelType,ResourceType>& output_image, boost::filesystem::path const& pathname ){
+void write_image( IMG::Image_<PixelType,ResourceType>& output_image, boost::filesystem::path const& pathname ){
 
     // determine the driver type
     GEO::ImageDriverType driver = compute_driver(pathname);

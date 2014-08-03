@@ -9,8 +9,8 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Enumerations.hpp>
 
-/// Boost
-#include <boost/shared_ptr.hpp>
+// C++ Standard Libraries
+#include <memory>
 
 namespace GEO{
 
@@ -30,7 +30,7 @@ class CoordinateBase{
         typedef DATATYPE datatype;
 
         /// Pointer type
-        typedef boost::shared_ptr<CoordinateBase<DATATYPE> > ptr_t;
+        typedef std::shared_ptr<CoordinateBase<DATATYPE> > ptr_t;
 
         /**
          * Default Constructor

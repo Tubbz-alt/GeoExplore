@@ -30,7 +30,7 @@ namespace NETPBM{
  * Write PGM Image
  */
 template <typename PixelType>
-void write_pgm_image( BaseResource<PixelType> const& data, 
+void write_pgm_image( IMG::BaseResource<PixelType> const& data, 
                       boost::filesystem::path const& filename ){
 
     // create some variables
@@ -47,7 +47,7 @@ void write_pgm_image( BaseResource<PixelType> const& data,
     for( int x=0; x<data.cols(); x++ ){
 
         // create the RGB Pixel to convert.  This needs to convert any pixel type regardless of pixel type or channel type
-        PixelGray_u8 output = pixel_cast<PixelGray_u8>(data[y*data.cols() + x]);
+        IMG::PixelGray_u8 output = IMG::pixel_cast<IMG::PixelGray_u8>(data[y*data.cols() + x]);
 
         // write rgb to file
         info = output[0];
@@ -64,7 +64,7 @@ void write_pgm_image( BaseResource<PixelType> const& data,
  * Write PPM Image
  */
 template <typename PixelType>
-void write_ppm_image( BaseResource<PixelType> const& data, 
+void write_ppm_image( IMG::BaseResource<PixelType> const& data, 
                       boost::filesystem::path const& filename ){
     
     // create some variables
@@ -81,7 +81,7 @@ void write_ppm_image( BaseResource<PixelType> const& data,
     for( int x=0; x<data.cols(); x++ ){
 
         // create the RGB Pixel to convert.  This needs to convert any pixel type regardless of pixel type or channel type
-        PixelRGB_u8 output = pixel_cast<PixelRGB_u8>(data[y*data.cols() + x]);
+        IMG::PixelRGB_u8 output = IMG::pixel_cast<IMG::PixelRGB_u8>(data[y*data.cols() + x]);
 
         // write rgb to file
         color[0] = output[0];
@@ -99,7 +99,7 @@ void write_ppm_image( BaseResource<PixelType> const& data,
  * Write an RGB Image to NETPBM File
 */
 template<typename PixelType, typename ResourceType>
-void write_image( Image_<PixelType, ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
+void write_image( IMG::Image_<PixelType, ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
 
     // select pgm or ppm
     if( pathname.extension().native() == ".ppm" ){

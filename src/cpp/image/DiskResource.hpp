@@ -17,6 +17,7 @@
 
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class DiskResource
@@ -113,6 +114,7 @@ class DiskResource : public BaseResource<PixelType> {
 
 }; /// End of DiskResource Class
 
+} /// End of IMG Namespace
 } /// End of GEO Namespace
 
 #endif

@@ -10,6 +10,7 @@
 #include <memory>
 
 namespace GEO{
+namespace IMG{
 
 
 /**
@@ -59,6 +60,7 @@ class BaseResource{
 
 }; /// End of BaseResource Class
 
+} /// End of IMG Namespace
 } /// End of GEO Namespace
 
 #endif

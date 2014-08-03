@@ -11,6 +11,7 @@
 
 
 namespace GEO{
+namespace IMG{
 
 /**
  * @class MetadataContainer
@@ -28,6 +29,7 @@ class MetadataContainer : public MetadataContainerBase{
 
 }; /// End of MetadataContainer Class
 
-} /// End of Namespace GEO
+} // End of Namespace IMG
+} // End of Namespace GEO
 
 #endif

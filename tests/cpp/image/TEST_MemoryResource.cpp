@@ -14,7 +14,7 @@
 TEST( MemoryResource, DefaultConstructor ){
 
     // create first memory resource
-    GEO::MemoryResource<GEO::PixelRGB_u8> memoryResource01;
+    GEO::IMG::MemoryResource<GEO::IMG::PixelRGB_u8> memoryResource01;
     
     // make sure the rows and columns are empty
     ASSERT_EQ( memoryResource01.rows(), 0);
@@ -31,7 +31,7 @@ TEST( MemoryResource, DefaultConstructor ){
 TEST( MemoryResource, AssignmentOperator ){
 
     // create a Memory Resource with a specific size
-    GEO::MemoryResource<GEO::PixelGray_u8> resource01(100,100);
+    GEO::IMG::MemoryResource<GEO::IMG::PixelGray_u8> resource01(100,100);
 
     // load the reference with dummy values
     for( int i=0; i<(resource01.rows()*resource01.cols()); i++ ){
@@ -39,7 +39,7 @@ TEST( MemoryResource, AssignmentOperator ){
     }
 
     // create a new resource and copy the values
-    GEO::MemoryResource<GEO::PixelGray_u8> resource02 = resource01;
+    GEO::IMG::MemoryResource<GEO::IMG::PixelGray_u8> resource02 = resource01;
 
     // make sure the values match
     ASSERT_EQ( resource02.rows(), 100 );

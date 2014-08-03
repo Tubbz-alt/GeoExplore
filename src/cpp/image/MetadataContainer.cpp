@@ -6,6 +6,7 @@
 #include "MetadataContainer.hpp"
 
 namespace GEO{
+namespace IMG{
 
 /**
  * Default Constructor
@@ -15,5 +16,6 @@ MetadataContainer::MetadataContainer(){
 
 }
 
+} /// End of IMG Namespace
 } /// End of GEO Namespace
 

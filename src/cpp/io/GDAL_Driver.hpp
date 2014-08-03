@@ -12,7 +12,6 @@
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
-#include <boost/shared_ptr.hpp>
 
 /// GDAL Libraries
 #include <cpl_conv.h>
@@ -37,22 +36,22 @@ namespace GDAL{
 */
 template<typename CType>
 GDALDataType ctype2gdaltype(){
-    if( std::is_same<CType,ChannelTypeUInt8>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeUInt8>::value ){
         return GDT_Byte;
     }
-    if( std::is_same<CType,ChannelTypeUInt12>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeUInt12>::value ){
         return GDT_UInt16;
     }
-    if( std::is_same<CType,ChannelTypeUInt14>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeUInt14>::value ){
         return GDT_UInt16;
     }
-    if( std::is_same<CType,ChannelTypeUInt16>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeUInt16>::value ){
         return GDT_UInt16;
     }
-    if( std::is_same<CType,ChannelTypeUInt32>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeUInt32>::value ){
         return GDT_UInt32;
     }
-    if( std::is_same<CType,ChannelTypeDouble>::value ){
+    if( std::is_same<CType,IMG::ChannelTypeDouble>::value ){
         return GDT_Float64;
     }
 
@@ -73,7 +72,7 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
     public:
 
         /// Pointer Type
-        typedef boost::shared_ptr<ImageDriverGDAL> ptr_t;
+        typedef std::shared_ptr<ImageDriverGDAL> ptr_t;
         
         /**
          * Default Constructor
@@ -130,7 +129,7 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
          * Get image data
          */
         template<typename PixelType>
-        void getPixels( boost::shared_ptr<PixelType[]>& image_data, const int& image_data_size ){
+        void getPixels( std::shared_ptr<std::vector<PixelType> >& image_data, const int& image_data_size ){
             
             // if the dataset is not open, then do nothing
             if( isOpen() == false ){
@@ -197,21 +196,21 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
                         
                         /// Convert datatypes
                         if( gdalDataType == GDT_Byte ){
-                            value = range_cast<ChannelTypeUInt8, typename PixelType::channeltype>( pafScanline[c] );
+                            value = IMG::range_cast<IMG::ChannelTypeUInt8, typename PixelType::channeltype>( pafScanline[c] );
                         } else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
-                            value = range_cast<ChannelTypeUInt12,typename PixelType::channeltype>( pafScanline[c] );
+                            value = IMG::range_cast<IMG::ChannelTypeUInt12,typename PixelType::channeltype>( pafScanline[c] );
                         } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
-                            value = range_cast<ChannelTypeUInt16,typename PixelType::channeltype>( pafScanline[c] );                        
+                            value = IMG::range_cast<IMG::ChannelTypeUInt16,typename PixelType::channeltype>( pafScanline[c] );                        
                         } else {
                             value = pafScanline[c];
                         }
 
 
-                        if( m_dataset->GetRasterCount() == 1 && image_data[0].dims() == 3 ){
-                            image_data[r*xsize + c] = value;
+                        if( m_dataset->GetRasterCount() == 1 && (*image_data)[0].dims() == 3 ){
+                            (*image_data)[r*xsize + c] = value;
                         }
                         else {
-                            image_data[r*xsize + c][i] = value;
+                            (*image_data)[r*xsize + c][i] = value;
                         }
                         
 
@@ -257,11 +256,11 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
 
                 /// Convert datatypes
                 if( gdalDataType == GDT_Byte ){
-                    value = range_cast<ChannelTypeUInt8, typename PixelType::channeltype>( data );
+                    value = IMG::range_cast<IMG::ChannelTypeUInt8, typename PixelType::channeltype>( data );
                 //} else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
-                //    value = range_cast<ChannelTypeUInt12,typename PixelType::channeltype>( data );
+                //    value = IMG::range_cast<IMG::ChannelTypeUInt12,typename PixelType::channeltype>( data );
                 } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
-                    value = range_cast<ChannelTypeUInt16,typename PixelType::channeltype>( data );                        
+                    value = IMG::range_cast<IMG::ChannelTypeUInt16,typename PixelType::channeltype>( data );                        
                 } else {
                     value = data;
                 }
@@ -298,7 +297,7 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
  * Read an image and return the image data
 */
 template <typename PixelType>
-boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& image_pathname, int& rowCount, int& colCount ){
+std::shared_ptr<std::vector<PixelType> > load_image_data( const boost::filesystem::path& image_pathname, int& rowCount, int& colCount ){
    
     // create the GDAL Driver
     ImageDriverGDAL::ptr_t gdal_driver( new ImageDriverGDAL(image_pathname));
@@ -319,7 +318,7 @@ boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& i
     
 
     // create the pixeldata
-    boost::shared_ptr<PixelType[]> pixeldata( new PixelType[rowCount * colCount]);
+    std::shared_ptr<std::vector<PixelType> > pixeldata( new std::vector<PixelType>(rowCount * colCount));
 
     // pass the container to the driver
     gdal_driver->getPixels( pixeldata, rowCount * colCount );
@@ -331,14 +330,14 @@ boost::shared_ptr<PixelType[]> load_image_data( const boost::filesystem::path& i
  * Load an image and return a resource
 */
 template<typename PixelType>
-MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname ){
+IMG::MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname ){
 
     /// create the output
-    MemoryResource<PixelType> output;
+    IMG::MemoryResource<PixelType> output;
 
     // get the pixel data
     int rowSize, colSize;
-    boost::shared_ptr<PixelType[]> pixels = load_image_data<PixelType>( image_pathname, rowSize, colSize );
+    std::shared_ptr<std::vector<PixelType> > pixels = load_image_data<PixelType>( image_pathname, rowSize, colSize );
 
     output.setPixelData( pixels, rowSize, colSize );
 
@@ -350,7 +349,7 @@ MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathn
  * Write an image to a GDAL format
 */
 template<typename PixelType, typename ResourceType>
-void write_image( Image_<PixelType,ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
+void write_image( IMG::Image_<PixelType,ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
 
     // Identify the driver
     std::string driverShortName = getShortDriverFromFilename(pathname);
