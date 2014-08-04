@@ -1,33 +1,61 @@
+
+// C++ Standard Libraries
 #include <iostream>
 #include <vector>
 
+// OpenCV Library
+#include <opencv2/core/core.hpp>
+
+using namespace cv;
 using namespace std;
 
-/**
- * Compute Mesh Function
-*/
-void computeMesh( int const& sz_x, int const& sz_y, const int& tau, const std::vector<std::vector<double> >& z, double const& e, double const& r ){
-    
-    // Create zero matrix for initial active vertices
-    std::vector<std::vector<bool> >  active_vertices(sz_y);
-    for( int y=0; y<sz_y; y++ )
-    for( int x=0; x<sz_x; x++ )
-        active_vertices.push_back(false);
 
-    // set corners and center to active by default
-    active_vertices[    0     ][     0    ] = true;
-    active_vertices[ sz_x -1  ][     0    ] = true;
-    active_vertices[    0     ][ sz_y-1   ] = true;
-    active_vertices[ sz_x-1   ][ sz_y-1   ] = true;
-    active_vertices[(sz_x+1)/2][(sz_y+1)/2] = true;
+Mat gensinc( const int& mesh_size ){
+
+    // Create x, y matrices
+    Mat x(mesh_size, mesh_size, CV_64FC1);
+    Mat y(mesh_size, mesh_size, CV_64FC1);
+
+    for( int i=0; i<mesh_size-1; i++ ){
+    for( int j=0; j<mesh_size-1; j++ ){
+        x.at<double>(i,j) = j;
+        y.at<double>(i,j) = i;
+    }}
+
+    //r = sqrt((x-(sz-1)/2).^2+(y-(sz-1)/2).^2);
+    Mat r = x.clone();
+    double tx, ty;
+    for( int i=0; i<mesh_size-1; i++ ){
+    for( int j=0; j<mesh_size-1; j++ ){
+        tx = (x.at<double>(i,j)-(mesh_size-1)/2);
+        ty = (y.at<double>(i,j)-(mesh_size-1)/2);
+        r.at<double>(tx*tx + ty*ty);
+    }}
+
+    //z = sin(r*16/(sz-1)*2)./(r*16/(sz-1)*2);
+  
+    //z(isnan(z)) = 1;
+  
+    //z = z*(sz-1);
+
+}
+
+void initValues( const int& mesh_size ){
+
 
 
 }
 
-int main( int argc, char* argv[] ){
-    
-    // 
 
+int main( int argc, char* argv[] ){
+   
+    // mesh size
+    int mesh_size = 1000;
+
+    // Generate sinc function
+    Mat z = gensinc( mesh_size );
+
+    // Perform Pre-Processing on Data
 
     return 0;
 }
