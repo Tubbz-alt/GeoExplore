@@ -15,10 +15,20 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x")
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
+#-----------------------#
+#-     Find Boost      -#
+#-----------------------#
+find_package( Boost REQUIRED 
+                COMPONENTS
+                    FILESYSTEM
+                    SYSTEM
+            )
+
 #------------------------------#
 #-     Find GDAL Library      -#
 #------------------------------#
 find_package( GDAL REQUIRED )
+include_directories( ${GDAL_INCLUDE_DIR} )
 
 #--------------------------------#
 #-     Find OpenCV Library      -#
@@ -140,6 +150,7 @@ add_library( GeoExplore SHARED
 
 target_link_libraries(
             GeoExplore
+            ${Boost_LIBRARIES}
             ${GDAL_LIBRARY}
             ${OpenCV_LIBS}
 )

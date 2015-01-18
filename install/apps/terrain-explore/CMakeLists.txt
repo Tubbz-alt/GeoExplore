@@ -4,8 +4,12 @@
 #    
 #    Purpose:  Build script for the Terrain-Explore utility
 #
+
 #  Define Required CMake Version (Required newer than 2.8.9 for Qt5 macros)
 cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
+
+# Define the project name
+project(terrain-explore)
 
 #  Allow C++ 11x
 SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
@@ -47,13 +51,19 @@ find_package( Threads )
 #--------------------------#
 #-  Find Qt5 Libraries    -#
 #--------------------------#
+if( DEFINED ENV{QT5_CMAKE_PATH} )
+    set(Qt5_DIR $ENV{QT5_CMAKE_PATH})
+endif()
 find_package( Qt5
                 COMPONENTS
                     OpenGL
                     Widgets
                     Core
-                REQUIRED
 )
+if( NOT Qt5_FOUND )
+    MESSAGE("Qt5 was not found. Consider setting QT5_CMAKE_PATH to the Qt5Config.cmake directory.")
+    return()
+endif()
 
 #  Tell CMake to use the necessary modules
 set( QT_USE_QTOPENGL ON )
@@ -88,6 +98,7 @@ find_package( OpenGL REQUIRED )
 #-  Find OpenGL Extension Wrangler (GLEW)  -#
 #-------------------------------------------#
 find_package( GLEW REQUIRED )
+include_directories( ${GLEW_INCLUDE_DIR})
 
 #------------------------------------------#
 #-      Define Required Header Files      -#

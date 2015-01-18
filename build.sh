@@ -82,6 +82,9 @@ build_software(){
     pushd ${BUILD_DIRECTORY}
 
     #  Run CMake
+    if [ "$BUILD_VERBOSE" = '1' ]; then
+        echo "cmake ${CMAKE_LOCATION}"
+    fi
     cmake ${CMAKE_LOCATION}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
@@ -162,27 +165,27 @@ copy_headers(){
 
     #  Create include directory
     mkdir -p $BASE_DIR
-    cp -u src/cpp/GeoExplore.hpp    $BASE_DIR/../
+    cp src/cpp/GeoExplore.hpp    $BASE_DIR/../
 
     #  Copy Core Module
     mkdir -p $BASE_DIR/core
-    cp -u src/cpp/core/*.hpp        $BASE_DIR/core/
+    cp src/cpp/core/*.hpp        $BASE_DIR/core/
 
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
-    cp -u src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
+    cp src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
     
     #  Copy Image Module
     mkdir -p $BASE_DIR/image      
-    cp -u src/cpp/image/*.hpp       $BASE_DIR/image/
+    cp src/cpp/image/*.hpp       $BASE_DIR/image/
     
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp -u src/cpp/io/*.hpp          $BASE_DIR/io/
+    cp src/cpp/io/*.hpp          $BASE_DIR/io/
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
-    cp -u src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
+    cp src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
 
 }
 
@@ -264,6 +267,8 @@ for ARG in "$@"; do
         #   Build verbose
         '-v' | '--verbose' | '--VERBOSE' )
             BUILD_VERBOSE=1
+            THREAD_FLAG=0
+            PREFIX_FLAG=0
             ;;
 
         #   Number of threads
@@ -333,12 +338,13 @@ fi
 #-      Make GeoExplore       -#
 #------------------------------#
 if [ "$RUN_MAKE" = '1' ]; then
+
     copy_headers ${BUILD_TYPE}
-    build_software '../install/lib'                         ${BUILD_TYPE}  ${MAKE_ARGS}  '.'
-    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-convert'
-    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE} "${MAKE_ARGS}" 'apps/terrain-explore'
-    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-info'
-    build_software '../../install/gui'                      ${BUILD_TYPE}  ${MAKE_ARGS}  'gui'
+    build_software '../install/lib'                         ${BUILD_TYPE}  "${MAKE_ARGS}"  '.'
+    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-convert'
+    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE}  "${MAKE_ARGS}" 'apps/terrain-explore'
+    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-info'
+    build_software '../../install/gui'                      ${BUILD_TYPE}  "${MAKE_ARGS}"  'gui'
 
 fi
 

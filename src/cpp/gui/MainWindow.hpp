@@ -7,7 +7,6 @@
 #define __SRC_CPP_GUI_MAINWINDOW_HPP__
 
 /// Qt Libraries
-#include <QApplication>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QWidget>
@@ -22,7 +21,6 @@ class MainWindow : public QMainWindow {
 
     Q_OBJECT
 
-
     public:
         
         /**
@@ -36,8 +34,6 @@ class MainWindow : public QMainWindow {
         QGridLayout*  mainLayout;
 
         /// List of widgets
-
-
 
 };  /// End of MainWindow class
 

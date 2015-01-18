@@ -6,9 +6,10 @@
 #include "OGR_Driver.hpp"
 
 /// OGR Bindings
-#include <gdal/ogr_spatialref.h>
+#include <ogr_spatialref.h>
 
 /// C++ Standard Libraries
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 

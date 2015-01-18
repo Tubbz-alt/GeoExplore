@@ -8,6 +8,9 @@
 /// GeoExplore Libraries
 #include <GeoExplore/utilities/StringUtilities.hpp>
 
+/// C++ Libraries
+#include <iostream>
+
 namespace GEO {
 namespace IO{
 namespace GDAL{
