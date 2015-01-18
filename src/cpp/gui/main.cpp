@@ -6,8 +6,6 @@
 
 /// Qt Libraries
 #include <QApplication>
-#include <QtGui>
-#include <QWidget>
 
 /// GeoExplore library
 #include <GeoExplore.hpp>

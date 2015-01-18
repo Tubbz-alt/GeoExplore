@@ -7,6 +7,7 @@
 #define __SRC_CPP_IO_GDALDRIVER_HPP__
 
 /// C++ Standard Libraries
+#include <iostream>
 #include <type_traits>
 #include <vector>
 

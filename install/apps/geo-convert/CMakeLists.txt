@@ -36,6 +36,7 @@ find_package( Boost
                     regex
                 REQUIRED
 )
+include_directories( ${Boost_INCLUDE_DIRS} )
 
 #--------------------------------#
 #-     Find OpenCV Library      -#

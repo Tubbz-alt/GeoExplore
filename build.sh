@@ -104,6 +104,9 @@ build_software(){
     pushd ${BUILD_DIRECTORY}
 
     #  Run CMake
+    if [ "$BUILD_VERBOSE" = '1' ]; then
+        echo "cmake ${CMAKE_LOCATION}"
+    fi
     cmake ${CMAKE_LOCATION}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
@@ -287,6 +290,8 @@ for ARG in "$@"; do
         #   Build verbose
         '-v' | '--verbose' | '--VERBOSE' )
             BUILD_VERBOSE=1
+            THREAD_FLAG=0
+            PREFIX_FLAG=0
             ;;
 
         #   Number of threads
@@ -368,12 +373,13 @@ fi
 #-      Make GeoExplore       -#
 #------------------------------#
 if [ "$RUN_MAKE" = '1' ]; then
+
     copy_headers ${BUILD_TYPE}
-    build_software '../install/lib'                         ${BUILD_TYPE}  ${MAKE_ARGS}  '.'
-    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-convert'
-    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE} "${MAKE_ARGS}" 'apps/terrain-explore'
-    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  ${MAKE_ARGS}  'apps/geo-info'
-    #build_software '../../install/gui'                      ${BUILD_TYPE}  ${MAKE_ARGS}  'gui'
+    build_software '../install/lib'                         ${BUILD_TYPE}  "${MAKE_ARGS}"  '.'
+    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-convert'
+    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE}  "${MAKE_ARGS}" 'apps/terrain-explore'
+    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-info'
+    build_software '../../install/gui'                      ${BUILD_TYPE}  "${MAKE_ARGS}"  'gui'
 
 fi
 

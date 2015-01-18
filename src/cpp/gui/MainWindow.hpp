@@ -6,8 +6,7 @@
 #ifndef __SRC_CPP_GUI_MAINWINDOW_HPP__
 #define __SRC_CPP_GUI_MAINWINDOW_HPP__
 
-// Qt Libraries
-#include <QApplication>
+/// Qt Libraries
 #include <QDockWidget>
 #include <QGridLayout>
 #include <QMainWindow>
@@ -32,7 +31,6 @@ namespace GUI{
 class MainWindow : public QMainWindow {
 
     Q_OBJECT
-
 
     public:
         

@@ -90,12 +90,12 @@ class ImageDriverOpenCV : public ImageDriverBase {
         /**
          * Get the number of rows
         */
-        virtual int rows()const;
+        virtual int rows();
 
         /**
          * Get the number of columns
         */
-        virtual int cols()const;
+        virtual int cols();
 
         /**
          * Get the image driver type

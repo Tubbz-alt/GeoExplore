@@ -13,14 +13,14 @@ namespace OPENCV{
 /**
  * Get the rows
 */
-int ImageDriverOpenCV::rows()const{
+int ImageDriverOpenCV::rows(){
     return 0;
 }
 
 /**
  * Get the columns
 */
-int ImageDriverOpenCV::cols()const{
+int ImageDriverOpenCV::cols(){
     return 0;
 }
 

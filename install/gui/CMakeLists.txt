@@ -6,17 +6,54 @@
 #
 
 #  Define Required CMake Version
-cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
+cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
 
 # Define the project name
 project(geo-explore)
 
 #  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../lib )
+
+#----------------------------------#
+#-       Find QT5 Libraries       -#
+#----------------------------------#
+if( DEFINED ENV{QT5_CMAKE_PATH} )
+    set(Qt5_DIR $ENV{QT5_CMAKE_PATH})
+endif()
+find_package( Qt5
+                COMPONENTS
+                    OpenGL
+                    Widgets
+                    Core
+            )
+if( NOT Qt5_FOUND )
+    MESSAGE( FATAL_ERROR "Qt5 was not found. Consider setting QT5_CMAKE_PATH to the Qt5Config.cmake directory.")
+endif()
+
+#  Tell CMake to use the necessary modules
+set( QT_USE_QTOPENGL ON )
+
+#  Tell CMake to run moc when necessary
+set( CMAKE_AUTOMOC ON )
+
+#  Include Qt5
+#  Some builds of Qt5 apparently use different names for this variable
+include_directories(${Qt5Core_INCLUDES}
+                    ${Qt5Core_INCLUDE_DIRS}
+                    ${Qt5Widgets_INCLUDES} 
+                    ${Qt5Widgets_INCLUDE_DIRS}
+                    ${Qt5OpenGL_INCLUDES} 
+                    ${Qt5OpenGL_INCLUDE_DIRS}
+                    )
+
+#  Force position independent code (which should be a default
+#  however Qt5 complains if this isn't here)
+add_definitions(-fPIC)
+
 
 #-----------------------------------#
 #-     Find GeoExplore Library     -#
@@ -46,41 +83,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 #-     Find C++ Thread Library     -#
 #-----------------------------------#
 find_package( Threads )
-
-
-#----------------------------------#
-#-       Find QT5 Libraries       -#
-#----------------------------------#
-if( DEFINED ENV{QTDIR})
-    set(CMAKE_PREFIX_PATH $ENV{QTDIR}/lib/cmake ${CMAKE_PREFIX_PATH})
-endif()
-
-find_package( Qt5
-                COMPONENTS
-                    OpenGL
-                    Widgets
-                    Core
-                REQUIRED
-)
-#find_package( Qt5Widgets REQUIRED )
-#find_package( QtDeclarative )
-
-#  Tell CMake to run moc when necessary
-set( CMAKE_AUTOMOC ON )
-
-#  Tell CMake to always look for includes in the MOC path
-set( CMAKE_INCLUDE_CURRENT_DIR ON )
-
-#  Include Qt5
-#  Some builds of Qt5 apparently use different names for this variable
-include_directories(${Qt5Widgets_INCLUDES})
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
-
-#  Force position independent code (which should be a default
-#  however Qt5 complains if this isn't here)
-add_definitions(-fPIC)
-add_definitions(${Qt5Widgets_DEFINITIONS})
-set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
@@ -120,6 +122,12 @@ add_executable( geo-explore
                 ${GUI_HEADERS}
 )
 
+#  Allows functionality of QMake through CMake
+qt5_use_modules( geo-explore 
+                 Widgets
+                 OpenGL
+                 Core
+                 )
 target_link_libraries( geo-explore
                 ${GeoExplore_LIBRARY}
                 ${Qt5Widgets_LIBRARIES}
