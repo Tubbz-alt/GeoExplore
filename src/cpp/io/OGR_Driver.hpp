@@ -9,7 +9,7 @@
 /// GeoExplore Libraries
 #include <GeoExplore/core/Enumerations.hpp>
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
-#include <GeoExplore/coordinate/CoordinateGeodetic.hpp>
+#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
 
 
 namespace GEO{
@@ -42,36 +42,36 @@ class OGR_Driver {
 int compute_UTM_Zone( const double& longitude );
 
 /**
- * Convert a coordinate from UTM to Geodetic
+ * Convert a coordinate from UTM to Geographic
  *
  * @param[in] fromZone Input UTM Zone
  * @param[in] fromEasting  Input UTM Easting (x)
  * @param[in] fromNorthing Input UTM Northing (y)
  * @param[in] fromAltitude Input UTM Altitude (z)
  * @param[in] fromDatum    Input UTM Datum
- * @param[in] toDatum      Output Fixed Geodetic Datum
- * @param[out] toLatitude  Output Geodetic Latitude
- * @param[out] toLongitude Output Geodetic Longitude
- * @param[out] toAltitude  Output Geodetic Altitude
+ * @param[in] toDatum      Output Fixed Geographic Datum
+ * @param[out] toLatitude  Output Geographic Latitude
+ * @param[out] toLongitude Output Geographic Longitude
+ * @param[out] toAltitude  Output Geographic Altitude
  *
- * @return Geodetic Coordinate
+ * @return Geographic Coordinate
 */
-void convert_UTM2Geodetic( int const&    fromZone,
-                           double const& fromEasting,  
-                           double const& fromNorthing,  
-                           double const& fromAltitude,    
-                           Datum const&  fromDatum,
-                           Datum const&  toDatum,
-                           double&       toLatitude, 
-                           double&       toLongitude, 
-                           double&       toAltitude );
+void convert_UTM2Geographic( int const&    fromZone,
+                             double const& fromEasting,  
+                             double const& fromNorthing,  
+                             double const& fromAltitude,    
+                             Datum const&  fromDatum,
+                             Datum const&  toDatum,
+                             double&       toLatitude, 
+                             double&       toLongitude, 
+                             double&       toAltitude );
 
 /**
- * Convert a coordinate from Geodetic to UTM
+ * Convert a coordinate from Geographic to UTM
  *
- * @param[in]  fromLatitude  Input Geodetic Latitude
- * @param[in]  fromLongitude Input Geodetic Longitude
- * @param[in]  fromAltitude  Input Geodetic Altitude
+ * @param[in]  fromLatitude  Input Geographic Latitude
+ * @param[in]  fromLongitude Input Geographic Longitude
+ * @param[in]  fromAltitude  Input Geographic Altitude
  * @param[in]  fromDatum     Input Datum
  * @param[in]  toDatum       Output Fixed Datum
  * @param[in]  toZone        Output Fixed UTM Zone
@@ -81,23 +81,23 @@ void convert_UTM2Geodetic( int const&    fromZone,
  *
  * @return Output UTM Coordinate
 */
-void convert_Geodetic2UTM_fixedZone( double const& fromLatitude,
-                                     double const& fromLongitude,
-                                     double const& fromAltitude,
-                                     Datum const&  fromDatum,
-                                     Datum const&  toDatum,
-                                     int const&    toZone,
-                                     double&       toEasting,
-                                     double&       toNorthing,
-                                     double&       toAltitude );
+void convert_Geographic2UTM_fixedZone( double const& fromLatitude,
+                                       double const& fromLongitude,
+                                       double const& fromAltitude,
+                                       Datum const&  fromDatum,
+                                       Datum const&  toDatum,
+                                       int const&    toZone,
+                                       double&       toEasting,
+                                       double&       toNorthing,
+                                       double&       toAltitude );
  
  
 /**
- * Convert a coordinate from Geodetic to UTM
+ * Convert a coordinate from Geographic to UTM
  *
- * @param[in]  fromLatitude  Input Geodetic Latitude
- * @param[in]  fromLongitude Input Geodetic Longitude
- * @param[in]  fromAltitude  Input Geodetic Altitude
+ * @param[in]  fromLatitude  Input Geographic Latitude
+ * @param[in]  fromLongitude Input Geographic Longitude
+ * @param[in]  fromAltitude  Input Geographic Altitude
  * @param[in]  fromDatum     Input Datum
  * @param[in]  toDatum       Output Fixed Datum
  * @param[out] toEasting     Output UTM Easting  (x)
@@ -106,15 +106,15 @@ void convert_Geodetic2UTM_fixedZone( double const& fromLatitude,
  *
  * @return UTM Coordinate
 */
-void convert_Geodetic2UTM( double const& fromLatitude,
-                           double const& fromLongitude,
-                           double const& fromAltitude,
-                           Datum const&  fromDatum,
-                           Datum const&  toDatum,
-                           int&          toZone,
-                           double&       toEasting,
-                           double&       toNorthing,
-                           double&       toAltitude );
+void convert_Geographic2UTM( double const& fromLatitude,
+                             double const& fromLongitude,
+                             double const& fromAltitude,
+                             Datum const&  fromDatum,
+                             Datum const&  toDatum,
+                             int&          toZone,
+                             double&       toEasting,
+                             double&       toNorthing,
+                             double&       toAltitude );
 
 
 } /// End of OGR Namespace

@@ -12,11 +12,11 @@
 
 /// GUI Libraries
 #include "MainWindow.hpp"
+#include "Global_Options.hpp"
 
 /// C++ Libraries
 #include <iostream>
 #include <string>
-
 
 /**
  * Main Function
@@ -27,10 +27,10 @@ int main( int argc, char* argv[] ){
 
         /// set the filename for the config file
         std::string filename;
-        filename = std::string(getenv("HOME")) + std::string("/.geoexplore/options.cfg");
+        filename = std::string(getenv("HOME")) + std::string("/.geoexplore/options.xml");
 
         // load the config file parser
-        //settings.load( argc, argv, filename );
+        GEO::GUI::Global_Options::Get_Instance().Load_Configuration( argc, argv, filename );
 
     } catch ( std::exception& e ){
         std::cout << e.what() << std::endl;

@@ -31,15 +31,38 @@ class CoordinateConversionUTMPanelWidget : public QWidget{
         CoordinateConversionUTMPanelWidget( QWidget* parent = NULL );
 
     private:
-        
+
+        /**
+         * @brief Create the Title Widget
+         */
+        void Initialize_Title_Widget();
+
         /**
          * Create the datum widget
         */
         void initialize_datum_widget();
 
+        /************************************/
+        /*           Core Elements          */
+        /************************************/
         /// Main Layout
         QGridLayout* mainLayout;
         
+        /************************************/
+        /*       Title Widget Elements      */
+        /************************************/
+        /// Title Widget
+        QWidget* titleWidget;
+
+        /// Title Layout
+        QHBoxLayout* titleLayout;
+
+        /// Title Label
+        QLabel*   titleLabel;
+
+        /************************************/
+        /*       Datum Widget Elements      */
+        /************************************/
         /// Datum widget
         QWidget* datumWidget;
 

@@ -1,5 +1,5 @@
 /**
- * @file    TEST_CoordinateGeodetic.cpp
+ * @file    TEST_CoordinateGeographic.cpp
  * @author  Marvin Smith
  * @date    4/16/2014
  */
@@ -9,12 +9,12 @@
 
 
 /**
- * Test the Coordinate Geodetic Constructors
+ * Test the Coordinate Geographic Constructors
 */
-TEST( CoordinateGeodetic, Constructors ){
+TEST( CoordinateGeographic, Constructors ){
 
     // test 1 (Default Constructor)
-    GEO::CoordinateGeodetic_d test01;
+    GEO::CoordinateGeographic_d test01;
     ASSERT_NEAR( test01.latitude(), 0, 0.000001 );
     ASSERT_NEAR( test01.longitude(), 0, 0.00001 );
     ASSERT_NEAR( test01.altitude(), 0, 0.00001 );
@@ -22,7 +22,7 @@ TEST( CoordinateGeodetic, Constructors ){
 
 
     // test 2 (Parameterized Constructor )
-    GEO::CoordinateGeodetic_d test02( 35, -117, 1000, GEO::Datum::NAD83 );
+    GEO::CoordinateGeographic_d test02( 35, -117, 1000, GEO::Datum::NAD83 );
     ASSERT_NEAR( test02.latitude(), 35, 0.00001 );
     ASSERT_NEAR( test02.longitude(), -117, 0.00001 );
     ASSERT_NEAR( test02.altitude(), 1000, 0.00001 );
@@ -30,7 +30,7 @@ TEST( CoordinateGeodetic, Constructors ){
     
 
     // test 3 (Parameterized Constructor)
-    GEO::CoordinateGeodetic_d test03( GEO::Datum::EGM96 );
+    GEO::CoordinateGeographic_d test03( GEO::Datum::EGM96 );
     ASSERT_NEAR( test03.latitude(), 0, 0.00001 );
     ASSERT_NEAR( test03.longitude(), 0, 0.00001 );
     ASSERT_NEAR( test03.altitude(), 0, 0.00001 );
@@ -41,10 +41,10 @@ TEST( CoordinateGeodetic, Constructors ){
 /**
  * Test the Getters and Setters 
 */
-TEST( CoordinateGeodetic, GettersSetters ){
+TEST( CoordinateGeographic, GettersSetters ){
 
     // create an empty coordinate
-    GEO::CoordinateGeodetic_d test01;
+    GEO::CoordinateGeographic_d test01;
 
     // test
     ASSERT_NEAR( test01.latitude(), 0, 0.000001 );
@@ -91,12 +91,12 @@ TEST( CoordinateGeodetic, GettersSetters ){
 }
 
 /**
- * Test the Geodetic Coordinate Type Function
+ * Test the Geographic Coordinate Type Function
 */
-TEST( CoordinateGeodetic, type ){
+TEST( CoordinateGeographic, type ){
 
-    ASSERT_EQ( GEO::CoordinateGeodetic_d().type(), GEO::CoordinateType::Geodetic );
-    ASSERT_EQ( GEO::CoordinateGeodetic_i32().type(), GEO::CoordinateType::Geodetic );
+    ASSERT_EQ( GEO::CoordinateGeographic_d().type(), GEO::CoordinateType::Geographic );
+    ASSERT_EQ( GEO::CoordinateGeographic_i32().type(), GEO::CoordinateType::Geographic );
 
 }
 

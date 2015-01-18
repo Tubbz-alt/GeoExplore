@@ -85,11 +85,11 @@ void CoordinateConversionWidget::initialize_coordinate_panel_stack(){
             
         switch( The_CoordinateConversionReference::getInstance().Get_Coordinate_Type(i) ){
 
-            case CoordinateType::Geodetic:
+            case CoordinateType::Geographic:
                 
-                // create a Geodetic Conversion Widget
-                m_conversionPanelStackPre->addWidget(  new CoordinateConversionGeodeticPanelWidget());
-                m_conversionPanelStackPost->addWidget( new CoordinateConversionGeodeticPanelWidget());
+                // create a Geographic Conversion Widget
+                m_conversionPanelStackPre->addWidget(  new CoordinateConversionGeographicPanelWidget());
+                m_conversionPanelStackPost->addWidget( new CoordinateConversionGeographicPanelWidget());
                 break;
 
             case CoordinateType::UTM:

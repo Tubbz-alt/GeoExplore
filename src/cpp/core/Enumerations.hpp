@@ -20,7 +20,7 @@ enum class Datum{
 
     EGM96 /**< Earth Graviational Model 1996*/,
     NAD83 /**< North American Datum 1983*/,
-    WGS84 /**< World Geodetic System 1984*/,
+    WGS84 /**< World Geographic System 1984*/,
 
 }; /// End of ProjectionType Class
 
@@ -40,7 +40,7 @@ std::string Datum2WKT_string( Datum const& datum );
 enum class CoordinateType{
 
     Base     /**< Base Implementation of CoordinateType*/,
-    Geodetic /**< Geodetic Coordinate (Lat/Lon)*/,
+    Geographic /**< Geographic Coordinate (Lat/Lon)*/,
     UTM      /**< Universal Transverse Mercator*/,
 
 }; /// End of CoordinateType

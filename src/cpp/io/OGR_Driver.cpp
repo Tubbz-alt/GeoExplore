@@ -36,9 +36,9 @@ int compute_UTM_Zone( double const& longitude ){
 
 
 /**
- *  Convert from UTM to Geodetic
+ *  Convert from UTM to Geographic
 */
-void convert_UTM2Geodetic( int const&    fromZone,
+void convert_UTM2Geographic( int const&    fromZone,
                            double const& fromEasting,  
                            double const& fromNorthing,  
                            double const& fromAltitude,    
@@ -81,9 +81,9 @@ void convert_UTM2Geodetic( int const&    fromZone,
 }
 
 /**
- * Convert from Geodetic to UTM
+ * Convert from Geographic to UTM
 */
-void convert_Geodetic2UTM( double const& fromLatitude,
+void convert_Geographic2UTM( double const& fromLatitude,
                            double const& fromLongitude,
                            double const& fromAltitude,
                            Datum const&  fromDatum,
@@ -128,9 +128,9 @@ void convert_Geodetic2UTM( double const& fromLatitude,
 
 
 /**
- * Convert from Geodetic to UTM
+ * Convert from Geographic to UTM
 */
-void convert_Geodetic2UTM_fixedZone( double const& fromLatitude,
+void convert_Geographic2UTM_fixedZone( double const& fromLatitude,
                                      double const& fromLongitude,
                                      double const& fromAltitude,
                                      Datum const&  fromDatum,

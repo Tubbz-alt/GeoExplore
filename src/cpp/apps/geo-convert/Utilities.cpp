@@ -16,8 +16,8 @@ GEO::CoordinateType String2CoordinateType( std::string const& ctype ){
     }
 
     // check for geodd
-    else if( ctype == "-geod-dd" || "-geod-dm" || "-geod-dms" ){
-        return GEO::CoordinateType::Geodetic;
+    else if( ctype == "-geog-dd" || "-geog-dm" || "-geog-dms" ){
+        return GEO::CoordinateType::Geographic;
     }
 
     // otherwise we have an error

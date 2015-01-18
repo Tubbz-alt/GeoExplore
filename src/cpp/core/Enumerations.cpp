@@ -44,8 +44,8 @@ std::string CoordinateType2String( CoordinateType const& ctype ){
 
         case CoordinateType::Base:
             return "Base";
-        case CoordinateType::Geodetic:
-            return "Geodetic";
+        case CoordinateType::Geographic:
+            return "Geographic";
         case CoordinateType::UTM:
             return "UTM";
         default:

@@ -44,7 +44,7 @@ More systems will be added as the project matures.
 
 #### Coordinate Types ####
 * UTM (Universal Transverse Mercator)
-* Geodetic (Latitude/Longitude)
+* Geographic (Latitude/Longitude)
 
 
 ### Image Module ###

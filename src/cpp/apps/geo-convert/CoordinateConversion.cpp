@@ -76,7 +76,7 @@ void convert_coordinates( Options const& options ){
             }
 
             // create our coordinate
-            GEO::CoordinateGeodetic_d::ptr_t point( new GEO::CoordinateGeodetic_d());
+            GEO::CoordinateGeographic_d::ptr_t point( new GEO::CoordinateGeographic_d());
 
             // set the latitude
             point->latitude() = GEO::str2num<double>(components[1]);
@@ -141,8 +141,8 @@ void convert_coordinates( Options const& options ){
             cout << output->zone() << "," << (int64_t)output->easting() << "," << (int64_t)output->northing() << "," << (int64_t)output->altitude() << endl;
         }
         // geodetic dd
-        else if( converted_coordinate->type() == GEO::CoordinateType::Geodetic ){
-            GEO::CoordinateGeodetic_d::ptr_t output = std::dynamic_pointer_cast<GEO::CoordinateGeodetic_d>(converted_coordinate);
+        else if( converted_coordinate->type() == GEO::CoordinateType::Geographic ){
+            GEO::CoordinateGeographic_d::ptr_t output = std::dynamic_pointer_cast<GEO::CoordinateGeographic_d>(converted_coordinate);
             cout << std::fixed << output->latitude() << "," << output->longitude() << "," << output->altitude() << endl;
         } else {
             throw std::runtime_error("Unknown coordinate type");

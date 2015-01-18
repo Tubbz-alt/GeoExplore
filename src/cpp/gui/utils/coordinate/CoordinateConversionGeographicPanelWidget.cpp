@@ -1,9 +1,9 @@
 /** 
- * @file    CoordinateConversionGeodeticPanelWidget.cpp
+ * @file    CoordinateConversionGeographicPanelWidget.cpp
  * @author  Marvin Smith
  * @date    6/4/2014
 */
-#include "CoordinateConversionGeodeticPanelWidget.hpp"
+#include "CoordinateConversionGeographicPanelWidget.hpp"
 
 namespace GEO{
 namespace GUI{
@@ -11,11 +11,14 @@ namespace GUI{
 /**
  * Constructor
 */
-CoordinateConversionGeodeticPanelWidget::CoordinateConversionGeodeticPanelWidget( QWidget* parent ) : 
+CoordinateConversionGeographicPanelWidget::CoordinateConversionGeographicPanelWidget( QWidget* parent ) : 
                                                                                   QWidget(parent){
 
     // create the main layout
     mainLayout = new QGridLayout();
+
+    // Initialize the title widget
+    Initialize_Title_Widget();
 
     // initialize the datum widget
     initialize_datum_widget();
@@ -28,9 +31,33 @@ CoordinateConversionGeodeticPanelWidget::CoordinateConversionGeodeticPanelWidget
 }
 
 /**
+ * Initialize the Title Widget
+*/
+void CoordinateConversionGeographicPanelWidget::Initialize_Title_Widget()
+{
+
+    // Create the widget
+    titleWidget = new QWidget(this);
+
+    // Create the layout
+    titleLayout = new QHBoxLayout();
+
+    // Create the label
+    titleLabel = new QLabel("Geographic Coordinate Panel");
+    titleLayout->addWidget(titleLabel);
+
+    // Set the layout
+    titleWidget->setLayout(titleLayout);
+
+    // add to widget
+    mainLayout->addWidget( titleWidget );
+
+}
+
+/**
  * Initialize the datum widget
 */
-void CoordinateConversionGeodeticPanelWidget::initialize_datum_widget(){
+void CoordinateConversionGeographicPanelWidget::initialize_datum_widget(){
 
     // create widget
     datumWidget = new QWidget(this);
@@ -57,7 +84,7 @@ void CoordinateConversionGeodeticPanelWidget::initialize_datum_widget(){
 /**
  * Initialize the LatLon Widget
 */
-void CoordinateConversionGeodeticPanelWidget::initialize_latlon_widget(){
+void CoordinateConversionGeographicPanelWidget::initialize_latlon_widget(){
 
 
     // create widget

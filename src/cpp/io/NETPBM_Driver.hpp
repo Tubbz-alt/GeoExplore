@@ -27,14 +27,13 @@ namespace IO{
 namespace NETPBM{
 
 /**
- * Write PGM Image
+ * @brief Write PGM Image
+ * @param[in] data Image Resource Data
+ * @param[in] filename Pathname to write to.
  */
 template <typename PixelType>
 void write_pgm_image( IMG::BaseResource<PixelType> const& data, 
                       boost::filesystem::path const& filename ){
-
-    // create some variables
-    int i, j;
 
     // open file
     FILE *fp = fopen( filename.c_str(), "wb" ); // open in binary mode
@@ -61,15 +60,15 @@ void write_pgm_image( IMG::BaseResource<PixelType> const& data,
 
 
 /**
- * Write PPM Image
+ * @brief Write PPM Image
+ *
+ * @param[in] data Image pixel data.
+ * @param[in] filename Image filename to write to.
  */
 template <typename PixelType>
 void write_ppm_image( IMG::BaseResource<PixelType> const& data, 
                       boost::filesystem::path const& filename ){
     
-    // create some variables
-    int i, j;
-
     // open file
     FILE *fp = fopen( filename.c_str(), "wb" ); // open in binary mode
 

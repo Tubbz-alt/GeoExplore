@@ -58,7 +58,7 @@ set( GEOEXPLORE_CORE_HEADERS
 #   Coordinate Module
 set( GEOEXPLORE_COORDINATE_HEADERS
     ../src/cpp/coordinate/CoordinateBase.hpp
-    ../src/cpp/coordinate/CoordinateGeodetic.hpp
+    ../src/cpp/coordinate/CoordinateGeographic.hpp
     ../src/cpp/coordinate/CoordinateUTM.hpp
 )
 

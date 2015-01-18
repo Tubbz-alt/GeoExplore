@@ -1,5 +1,5 @@
 /**
- * @file    CoordinateGeodetic.hpp
+ * @file    CoordinateGeographic.hpp
  * @author  Marvin Smith
  * @date    4/16/2014
  */
@@ -14,10 +14,10 @@ namespace GEO{
 
 
 /**
- * @class CoordinateGeodetic
+ * @class CoordinateGeographic
  */
 template<typename DATATYPE>
-class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
+class CoordinateGeographic : public CoordinateBase<DATATYPE>{
 
     public:
         
@@ -25,12 +25,12 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         typedef DATATYPE datatype;
         
         /// Pointer type
-        typedef std::shared_ptr<CoordinateGeodetic<DATATYPE> > ptr_t;
+        typedef std::shared_ptr<CoordinateGeographic<DATATYPE> > ptr_t;
 
         /**
          * Default Constructor
          */
-        CoordinateGeodetic() : m_latitude(0), 
+        CoordinateGeographic() : m_latitude(0), 
                                m_longitude(0), 
                                CoordinateBase<DATATYPE>(0, Datum::WGS84){}
         
@@ -39,7 +39,7 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
          *
          * @param[in] datum Datum
         */
-        CoordinateGeodetic( Datum const& datum ) : 
+        CoordinateGeographic( Datum const& datum ) : 
                                 m_latitude(0),
                                 m_longitude(0),
                                 CoordinateBase<DATATYPE>(0, datum){}
@@ -47,7 +47,7 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         /**
          * Parameterized Constructor
          */
-        CoordinateGeodetic( datatype const& latitude, 
+        CoordinateGeographic( datatype const& latitude, 
                             datatype const& longitude,
                             datatype const& altitude = 0,
                             Datum const& datum = Datum::WGS84 ) : 
@@ -79,12 +79,12 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         /**
          * Clone the data
          */
-        CoordinateGeodetic<DATATYPE>::ptr_t clone()const{ 
-                    return CoordinateGeodetic<DATATYPE>::ptr_t( 
-                            new CoordinateGeodetic<DATATYPE>(m_latitude, m_longitude, this->altitude(), this->datum())); 
+        CoordinateGeographic<DATATYPE>::ptr_t clone()const{ 
+                    return CoordinateGeographic<DATATYPE>::ptr_t( 
+                            new CoordinateGeographic<DATATYPE>(m_latitude, m_longitude, this->altitude(), this->datum())); 
                     }
         
-        virtual CoordinateType type(){ return CoordinateType::Geodetic; }
+        virtual CoordinateType type(){ return CoordinateType::Geographic; }
 
 
     protected:
@@ -95,14 +95,14 @@ class CoordinateGeodetic : public CoordinateBase<DATATYPE>{
         /// Longitude
         datatype m_longitude;
 
-}; /// End of CoordinateGeodetic Class
+}; /// End of CoordinateGeographic Class
 
 /// Common Typdefs
-typedef CoordinateGeodetic<double>   CoordinateGeodeticDouble;
-typedef CoordinateGeodetic<double>   CoordinateGeodetic_d;
+typedef CoordinateGeographic<double>   CoordinateGeographicDouble;
+typedef CoordinateGeographic<double>   CoordinateGeographic_d;
 
-typedef CoordinateGeodetic<int32_t>  CoordinateGeodeticInt32;
-typedef CoordinateGeodetic<int32_t>  CoordinateGeodetic_i32;
+typedef CoordinateGeographic<int32_t>  CoordinateGeographicInt32;
+typedef CoordinateGeographic<int32_t>  CoordinateGeographic_i32;
 
 } /// End of GEO Namespace
 

@@ -17,10 +17,10 @@ using namespace std;
 /**
  * Test the coordinate conversion given pointers
 */
-TEST( CoordinateConversion, Geodetic2UTM_ptr ){
+TEST( CoordinateConversion, Geographic2UTM_ptr ){
 
     // create a geodetic coordinate
-    GEO::CoordinateGeodetic_d::ptr_t coordinate01( new GEO::CoordinateGeodetic_d(0, 0, 0, GEO::Datum::WGS84));
+    GEO::CoordinateGeographic_d::ptr_t coordinate01( new GEO::CoordinateGeographic_d(0, 0, 0, GEO::Datum::WGS84));
     
     // convert the coordinate
     GEO::CoordinateUTM_d::ptr_t result01 = std::dynamic_pointer_cast<GEO::CoordinateUTM_d>(GEO::convert_coordinate<double>( coordinate01, GEO::CoordinateType::UTM, coordinate01->datum() ));
@@ -52,10 +52,10 @@ TEST( CoordinateConversion, Geodetic2UTM_ptr ){
 /**
  * Test the Coordinate Conversion 
 */
-TEST( CoordinateConversion, Geodetic2UTM01_freeZone_sameDatum ){
+TEST( CoordinateConversion, Geographic2UTM01_freeZone_sameDatum ){
 
     // create a geodetic coordinate
-    GEO::CoordinateGeodetic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
+    GEO::CoordinateGeographic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
     
     // convert the coordinate
     GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01 );
@@ -84,12 +84,12 @@ TEST( CoordinateConversion, Geodetic2UTM01_freeZone_sameDatum ){
 
 
 /**
- * Test Geodetic to UTM with a fixed Zone
+ * Test Geographic to UTM with a fixed Zone
 */
-TEST( CoordinateConversion, Geodetic2UTM02_fixedZone_sameDatum ){
+TEST( CoordinateConversion, Geographic2UTM02_fixedZone_sameDatum ){
 
     // create a geodetic coordinate
-    GEO::CoordinateGeodetic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
+    GEO::CoordinateGeographic_d coordinate01(0, 0, 0, GEO::Datum::WGS84);
     
     // convert the coordinate
     GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01, 30 );
@@ -117,12 +117,12 @@ TEST( CoordinateConversion, Geodetic2UTM02_fixedZone_sameDatum ){
 }
 
 /**
- * Test Geodetic to UTM with a free zone and different datum
+ * Test Geographic to UTM with a free zone and different datum
 */
-TEST( CoordinateConversion, Geodetic2UTM03_freeZone_differentDatum ){
+TEST( CoordinateConversion, Geographic2UTM03_freeZone_differentDatum ){
 
-    // create an empty Geodetic coordinate for testing
-    GEO::CoordinateGeodetic_d coordinate01( 0, 0, 0, GEO::Datum::WGS84);
+    // create an empty Geographic coordinate for testing
+    GEO::CoordinateGeographic_d coordinate01( 0, 0, 0, GEO::Datum::WGS84);
     
     // convert the coordinate
     GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01, GEO::Datum::NAD83);
@@ -151,12 +151,12 @@ TEST( CoordinateConversion, Geodetic2UTM03_freeZone_differentDatum ){
 }
 
 /**
- * Test Geodetic to UTM with a fixed zone and different datum
+ * Test Geographic to UTM with a fixed zone and different datum
 */
-TEST( CoordinateConversion, Geodetic2UTM04_fixedZone_differentDatum ){
+TEST( CoordinateConversion, Geographic2UTM04_fixedZone_differentDatum ){
 
-    // create an empty Geodetic coordinate for testing
-    GEO::CoordinateGeodetic_d coordinate01( 0, 0, 0, GEO::Datum::WGS84);
+    // create an empty Geographic coordinate for testing
+    GEO::CoordinateGeographic_d coordinate01( 0, 0, 0, GEO::Datum::WGS84);
     
     // convert the coordinate
     GEO::CoordinateUTM_d result01 = GEO::convert_coordinate( coordinate01, 32, GEO::Datum::NAD83);
@@ -184,15 +184,15 @@ TEST( CoordinateConversion, Geodetic2UTM04_fixedZone_differentDatum ){
 }
 
 /**
- * Test the UTM to Geodetic
+ * Test the UTM to Geographic
 */
-TEST( CoordinateConversion, UTM2Geodetic01_freeZone_sameDatum ){
+TEST( CoordinateConversion, UTM2Geographic01_freeZone_sameDatum ){
 
     // create a UTM Coordinate
     GEO::CoordinateUTM_d coordinate01;
 
     // convert the coordinate
-    GEO::CoordinateGeodetic_d result01 = GEO::convert_coordinate( coordinate01 );
+    GEO::CoordinateGeographic_d result01 = GEO::convert_coordinate( coordinate01 );
 
     // test the output
     ASSERT_EQ( GEO::Datum::WGS84, result01.datum() );

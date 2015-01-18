@@ -14,7 +14,7 @@
 #include <QWidget>
 
 // GeoExplore GUI Libraries
-#include "CoordinateConversionGeodeticPanelWidget.hpp"
+#include "CoordinateConversionGeographicPanelWidget.hpp"
 #include "CoordinateConversionUTMPanelWidget.hpp"
 
 namespace GEO{

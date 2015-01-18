@@ -17,12 +17,38 @@ CoordinateConversionUTMPanelWidget::CoordinateConversionUTMPanelWidget(QWidget* 
     
     // create the main layout
     mainLayout = new QGridLayout();
+    
+    // Initialize the title widget
+    Initialize_Title_Widget();
 
     // initialize the datum combo
     initialize_datum_widget();
 
     // set the main layout  
     setLayout( mainLayout );
+
+}
+
+/**
+ * Initialize the Title Widget
+*/
+void CoordinateConversionUTMPanelWidget::Initialize_Title_Widget(){
+    
+    // Create the widget
+    titleWidget = new QWidget(this);
+
+    // Create the layout
+    titleLayout = new QHBoxLayout();
+
+    // Create the label
+    titleLabel = new QLabel("Universal Transverse Mercator Coordinate Panel");
+    titleLayout->addWidget(titleLabel);
+
+    // Set the layout
+    titleWidget->setLayout(titleLayout);
+
+    // add to widget
+    mainLayout->addWidget( titleWidget );
 
 }
 

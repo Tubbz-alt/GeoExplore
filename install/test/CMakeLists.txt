@@ -64,7 +64,7 @@ set( UNIT_TEST_SOURCES
     ../../tests/cpp/googletest/src/gtest-all.cc
     ../../tests/cpp/coordinate/TEST_CoordinateBase.cpp
     ../../tests/cpp/coordinate/TEST_CoordinateConversion.cpp
-    ../../tests/cpp/coordinate/TEST_CoordinateGeodetic.cpp
+    ../../tests/cpp/coordinate/TEST_CoordinateGeographic.cpp
     ../../tests/cpp/coordinate/TEST_CoordinateUTM.cpp
     ../../tests/cpp/image/TEST_ChannelType.cpp
     ../../tests/cpp/image/TEST_DiskResource.cpp

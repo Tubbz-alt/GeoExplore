@@ -58,7 +58,6 @@ void read_image( boost::filesystem::path const& pathname, IMG::Image_<PixelType,
      * Since we are just loading pixel data, call the appropriate load_image_data function
      */
     if( driver == GEO::ImageDriverType::GDAL ){
-        int rowSize;
         output_image.setResource( GEO::IO::GDAL::load_image<PixelType>(pathname));
     }
     else{

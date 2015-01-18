@@ -76,7 +76,7 @@ The_CoordinateConversionReference& The_CoordinateConversionReference::getInstanc
 The_CoordinateConversionReference::The_CoordinateConversionReference(){
     
     // initialize
-    m_references.push_back( A_CoordinateReference(CoordinateType::Geodetic, "Geodetic"));
+    m_references.push_back( A_CoordinateReference(CoordinateType::Geographic, "Geographic"));
     m_references.push_back( A_CoordinateReference(CoordinateType::UTM,      "Universal Transverse Mercator"));
 
 }

@@ -1,5 +1,5 @@
 /**
- * @file    CoordinateConversionGeodeticPanelWidget.hpp
+ * @file    CoordinateConversionGeographicPanelWidget.hpp
  * @author  Marvin Smith
  * @date    6/4/2014
 */
@@ -19,9 +19,9 @@ namespace GEO{
 namespace GUI{
 
 /**
- * @class CoordinateConversionGeodeticPanelWidget
+ * @class CoordinateConversionGeographicPanelWidget
 */
-class CoordinateConversionGeodeticPanelWidget : public QWidget{
+class CoordinateConversionGeographicPanelWidget : public QWidget{
 
     Q_OBJECT
 
@@ -30,10 +30,15 @@ class CoordinateConversionGeodeticPanelWidget : public QWidget{
         /**
          * @brief Default Constructor
         */
-        CoordinateConversionGeodeticPanelWidget( QWidget* parent = NULL );
+        CoordinateConversionGeographicPanelWidget( QWidget* parent = NULL );
 
     private:
-        
+       
+        /**
+         * @brief Initialize the Title Widget
+        */
+        void Initialize_Title_Widget();
+
         /**
          * Create the datum widget
         */
@@ -47,6 +52,19 @@ class CoordinateConversionGeodeticPanelWidget : public QWidget{
 
         /// Main Layout
         QGridLayout* mainLayout;
+    
+    
+        /*******************************/
+        /*   Title Widget Materials    */
+        /*******************************/
+        /// Title Widget
+        QWidget* titleWidget;
+
+        /// Title Layout
+        QHBoxLayout* titleLayout;
+
+        /// Title Text Box
+        QLabel* titleLabel;
 
         /********************************/
         /*    Datum Widget Materials    */
@@ -86,7 +104,7 @@ class CoordinateConversionGeodeticPanelWidget : public QWidget{
         QLineEdit* longitudeEdit;
 
 
-}; // End of CoordinateConversionGeodeticPanelWidget Class
+}; // End of CoordinateConversionGeographicPanelWidget Class
 
 } // End of GUI Namespace
 } // End of GEO Namespace
