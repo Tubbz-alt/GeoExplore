@@ -16,5 +16,23 @@
 */
 Options Parse_Command_Line( int argc, char* argv[] );
 
+
+/**
+ * Print Usage Instructions
+*/
+void Usage( Options const& options );
+
+
+/**
+ * Initialize DEM Manager
+*/
+void Initialize_DEM_Manager( const Options& options );
+
+/**
+ * Initialize Data
+*/
+void Initialize_Data( Data_Container& data, 
+                      Options const& options );
+
 #endif
 

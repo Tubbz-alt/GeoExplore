@@ -9,7 +9,7 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
 #  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_FLAGS "-std=c++11")
 
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
@@ -52,6 +52,7 @@ find_package( Boost
 set( GEOEXPLORE_CORE_HEADERS
     ../src/cpp/core/Enumerations.hpp
     ../src/cpp/core/Exceptions.hpp
+    ../src/cpp/core/A_Size.hpp
 )
 
 
@@ -60,6 +61,15 @@ set( GEOEXPLORE_COORDINATE_HEADERS
     ../src/cpp/coordinate/CoordinateBase.hpp
     ../src/cpp/coordinate/CoordinateGeographic.hpp
     ../src/cpp/coordinate/CoordinateUTM.hpp
+)
+
+#  DEM Module
+set( GEOEXPLORE_DEM_HEADERS
+    ../src/cpp/dem/A_DEM_IO_Driver_Base.hpp
+    ../src/cpp/dem/A_DEM_IO_Driver_Flat.hpp
+    ../src/cpp/dem/A_DEM_IO_Driver_SRTM.hpp
+    ../src/cpp/dem/An_Elevation_Tile.hpp
+    ../src/cpp/dem/DEM_Manager.hpp
 )
 
 #  Image Module
@@ -85,6 +95,21 @@ set( GEOEXPLORE_IO_HEADERS
     ../src/cpp/io/OpenCV_Driver.hpp
 )
 
+#   Math Module
+set( GEOEXPLORE_MATH_HEADERS
+    ../src/cpp/math/A_Rectangle.hpp
+    ../src/cpp/math/A_Point.hpp
+    ../src/cpp/math/A_Polygon.hpp
+)
+
+
+#  Thirdparty Module
+set( GEOEXPLORE_THIRDPARTY_HEADERS
+    ../src/cpp/thirdparty/pugixml/pugixml.hpp
+    ../src/cpp/thirdparty/pugixml/pugiconfig.hpp
+)
+
+
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
     ../src/cpp/utilities/FilesystemUtilities.hpp
@@ -95,8 +120,11 @@ set( GEOEXPLORE_UTILITIES_HEADERS
 set( GEOEXPLORE_HEADERS
     ${GEOEXPLORE_CORE_HEADERS}
     ${GEOEXPLORE_COORDINATE_HEADERS}
+    ${GEOEXPLORE_DEM_HEADERS}
     ${GEOEXPLORE_IMAGE_HEADERS}
     ${GEOEXPLORE_IO_HEADERS}
+    ${GEOEXPLORE_MATH_HEADERS}
+    ${GEOEXPLORE_THIRDPARTY_HEADERS}
     ${GEOEXPLORE_UTILITIES_HEADERS}
 )
 
@@ -116,6 +144,12 @@ set( GEOEXPLORE_COORDINATE_SOURCES
     ../src/cpp/coordinate/CoordinateBase.cpp
 )
 
+#   Dem Sources
+set( GEOEXPLORE_DEM_SOURCES
+    ../src/cpp/dem/DEM_Manager.cpp
+)
+
+
 #   Image Module
 set( GEOEXPLORE_IMAGE_SOURCES
     ../src/cpp/image/MetadataContainer.cpp
@@ -132,6 +166,17 @@ set( GEOEXPLORE_IO_SOURCES
     ../src/cpp/io/OpenCV_Driver.cpp
 )
 
+#  Math Modules
+set( GEOEXPLORE_MATH_SOURCES
+)
+
+
+#  Thirdparty Module
+set( GEOEXPLORE_THIRDPARTY_SOURCES
+    ../src/cpp/thirdparty/pugixml/pugixml.cpp
+)
+
+
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
     ../src/cpp/utilities/FilesystemUtilities.cpp
@@ -142,8 +187,11 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
+    ${GEOEXPLORE_DEM_SOURCES}
     ${GEOEXPLORE_IMAGE_SOURCES}
     ${GEOEXPLORE_IO_SOURCES}
+    ${GEOEXPLORE_MATH_SOURCES}
+    ${GEOEXPLORE_THIRDPARTY_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
 )
 

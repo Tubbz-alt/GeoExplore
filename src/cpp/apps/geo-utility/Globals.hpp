@@ -6,7 +6,23 @@
 #ifndef __GEOEXPLORE_SRC_CPP_APPS_GEOUTILITY_GLOBALS_HPP__
 #define __GEOEXPLORE_SRC_CPP_APPS_GEOUTILITY_GLOBALS_HPP__
 
+// GeoExplore Libraries
+#include <GeoExplore.hpp>
 
+class Data_Container{
+
+    public:
+
+        /// DEM Manager
+        GEO::DEM_Manager::ptr_t dem_manager;
+
+        /// Elevation Tile
+        GEO::ElevationTileUTM_d::ptr_t elevation_tile;
+
+        /// Image Tile 
+
+
+}; /// End of Data_Container Class
 
 
 

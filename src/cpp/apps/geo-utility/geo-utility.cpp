@@ -23,7 +23,14 @@ using namespace std;
 int main( int argc, char* argv[] ){
 
     // Process Command-Line Arguments
-    Options options = Process_Command_Line(argc,argv);
+    Options options = Parse_Command_Line(argc,argv);
+
+    // Initialize the DEM Manager
+    Initialize_DEM_Manager( options );
+
+    //  Initialize the imagery
+    Data_Container data;
+    Initialize_Data( data, options );    
 
     return 0;
 }

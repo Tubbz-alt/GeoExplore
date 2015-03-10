@@ -32,6 +32,7 @@ usage(){
     echo '    --PREFIX <PREFIX> : Set Prefix.'
     echo '    --release       : Build release version.'
     echo '    --debug         : Build debug version.'
+    echo '    --cmake-args <string> :  Add additional CMake options.'
     echo ''
 
 }
@@ -105,9 +106,9 @@ build_software(){
 
     #  Run CMake
     if [ "$BUILD_VERBOSE" = '1' ]; then
-        echo "cmake ${CMAKE_LOCATION}"
+        echo "cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}"
     fi
-    cmake ${CMAKE_LOCATION}
+    cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
         exit 1
@@ -148,7 +149,7 @@ test_software(){
     pushd ${BUILD_DIRECTORY}
 
     #  Run CMake
-    cmake ${CMAKE_LOCATION}
+    cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
         exit 1
@@ -187,27 +188,35 @@ copy_headers(){
 
     #  Create include directory
     mkdir -p $BASE_DIR
-    cp src/cpp/GeoExplore.hpp    $BASE_DIR/../
+    cp -p src/cpp/GeoExplore.hpp    $BASE_DIR/../
 
     #  Copy Core Module
     mkdir -p $BASE_DIR/core
-    cp src/cpp/core/*.hpp        $BASE_DIR/core/
+    cp -p src/cpp/core/*.hpp        $BASE_DIR/core/
 
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
-    cp src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
-    
+    cp -p src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
+
+    #  Copy Dem Module
+    mkdir -p $BASE_DIR/dem      
+    cp -p src/cpp/dem/*.hpp         $BASE_DIR/dem/
+
     #  Copy Image Module
     mkdir -p $BASE_DIR/image      
-    cp src/cpp/image/*.hpp       $BASE_DIR/image/
+    cp -p src/cpp/image/*.hpp       $BASE_DIR/image/
     
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp src/cpp/io/*.hpp          $BASE_DIR/io/
+    cp -p src/cpp/io/*.hpp          $BASE_DIR/io/
+
+    #  Copy Math Module
+    mkdir -p $BASE_DIR/math
+    cp -p src/cpp/math/*.hpp        $BASE_DIR/math
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
-    cp src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
+    cp -p src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
 
 }
 
@@ -255,6 +264,9 @@ NUM_THREADS=1
 MAKE_ARGS=
 
 PREFIX_FLAG=0
+
+CMAKE_EXTRA_ARGS=''
+CMAKE_ARGS_FLAG=0
 
 #  Process Command-Line Arguments
 for ARG in "$@"; do
@@ -313,6 +325,11 @@ for ARG in "$@"; do
             RUN_DOCS=1
             ;;
 
+        #  Cmake Arguments
+        '--cmake-args')
+            CMAKE_ARGS_FLAG=1
+            ;;
+
         #   Other Responses
         *)
             
@@ -320,6 +337,11 @@ for ARG in "$@"; do
             if [ "$THREAD_FLAG" == '1' ]; then
                 THREAD_FLAG=0;
                 NUM_THREADS=$ARG
+
+            #  Cmake args flag
+            elif [ "$CMAKE_ARGS_FLAG" = '1' ]; then
+                CMAKE_ARGS_FLAG=0
+                CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS $ARG"
 
             #  If we need to grab the prefix
             elif [ "$PREFIX_FLAG" = '1' ]; then
@@ -379,6 +401,7 @@ if [ "$RUN_MAKE" = '1' ]; then
     build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-convert'
     build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE}  "${MAKE_ARGS}" 'apps/terrain-explore'
     build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-info'
+    build_software '../../../install/apps/geo-utility'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-utility'
     build_software '../../install/gui'                      ${BUILD_TYPE}  "${MAKE_ARGS}"  'gui'
 
 fi

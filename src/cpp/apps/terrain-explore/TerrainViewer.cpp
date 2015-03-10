@@ -86,6 +86,7 @@ void TerrainViewer::initializeGL()
     // Vertex shader first
     glShaderSource(vertex_shader, 1, &vs, NULL);
     glCompileShader(vertex_shader);
+    
     //check the compile status
     glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &shader_status);
     if(!shader_status)
@@ -97,6 +98,7 @@ void TerrainViewer::initializeGL()
     // Now the Fragment shader
     glShaderSource(fragment_shader, 1, &fs, NULL);
     glCompileShader(fragment_shader);
+    
     //check the compile status
     glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
     if(!shader_status)
@@ -111,6 +113,7 @@ void TerrainViewer::initializeGL()
     glAttachShader(m_program, vertex_shader);
     glAttachShader(m_program, fragment_shader);
     glLinkProgram(m_program);
+    
     //check if everything linked ok
     glGetProgramiv(m_program, GL_LINK_STATUS, &shader_status);
     if(!shader_status)
@@ -121,8 +124,8 @@ void TerrainViewer::initializeGL()
 
     //Now we set the locations of the attributes and uniforms
     //this allows us to access them easily while rendering
-    m_locPosition = glGetAttribLocation(m_program,
-                    const_cast<const char*>("v_position"));
+    m_locPosition = glGetAttribLocation( m_program,
+                                         const_cast<const char*>("v_position"));
     if(m_locPosition == -1)
     {
         std::cerr << "[F] POSITION NOT FOUND" << std::endl;
@@ -140,6 +143,7 @@ void TerrainViewer::initializeGL()
 
 void TerrainViewer::paintGL()
 {
+    
     /// TODO Mostly temporary. This is here for a test
     //clear the screen
     glClearColor(1.0, 1.0, 1.0, 1.0);

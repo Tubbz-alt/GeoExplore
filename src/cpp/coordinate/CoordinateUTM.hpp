@@ -30,6 +30,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
          * Default Constructor
          */
         CoordinateUTM() : m_zone(31),
+                          m_is_northern(true),
                           m_easting(166021.4), 
                           m_northing(0), 
                           CoordinateBase<DATATYPE>(0, Datum::WGS84){}
@@ -39,6 +40,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         */
         CoordinateUTM( Datum const& datum ) : 
                 m_zone(31),
+                m_is_northern(true),
                 m_easting(166021.4),
                 m_northing(0),
                 CoordinateBase<DATATYPE>(0, datum){}
@@ -47,11 +49,13 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
          * Parameterized Constructor
          */
         CoordinateUTM( int const&      zone,
+                       bool const&     is_northern,
                        datatype const& easting, 
                        datatype const& northing, 
                        datatype const& altitude = 0, 
                        Datum const& datum = Datum::WGS84 ) : 
                                 m_zone(zone),
+                                m_is_northern(is_northern),
                                 m_easting(easting),
                                 m_northing(northing),
                                 CoordinateBase<DATATYPE>(altitude, datum){}
@@ -65,6 +69,13 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
          * Set the zone
         */
         int& zone(){ return m_zone; }
+
+        /**
+         * Is Northern
+        */
+        bool   Is_Northern_Hemisphere()const{ return m_is_northern; }
+        bool&  Is_Northern_Hemisphere(){ return m_is_northern; }
+
 
         /**
          * Get the Easting
@@ -111,7 +122,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
         /// Northing
         datatype m_northing;
-
+        
+        /// Hemisphere
+        bool m_is_northern;
 
 }; /// End of CoordinateUTM Class
 

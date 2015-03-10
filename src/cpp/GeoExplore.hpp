@@ -9,6 +9,7 @@
 #define __GEOEXPLORE_HPP__
 
 /// Core Module
+#include <GeoExplore/core/A_Size.hpp>
 #include <GeoExplore/core/Enumerations.hpp>
 
 /// Coordinate Module
@@ -16,6 +17,13 @@
 #include <GeoExplore/coordinate/CoordinateConversion.hpp>
 #include <GeoExplore/coordinate/CoordinateGeographic.hpp>
 #include <GeoExplore/coordinate/CoordinateUTM.hpp>
+
+/// Dem Module
+#include <GeoExplore/dem/A_DEM_IO_Driver_Base.hpp>
+#include <GeoExplore/dem/A_DEM_IO_Driver_Flat.hpp>
+#include <GeoExplore/dem/A_DEM_IO_Driver_SRTM.hpp>
+#include <GeoExplore/dem/An_Elevation_Tile.hpp>
+#include <GeoExplore/dem/DEM_Manager.hpp>
 
 /// Image Module
 #include <GeoExplore/image/BaseResource.hpp>
@@ -35,6 +43,11 @@
 #include <GeoExplore/io/ImageIO.hpp>
 #include <GeoExplore/io/NETPBM_Driver.hpp>
 #include <GeoExplore/io/OpenCV_Driver.hpp>
+
+/// Math Module
+#include <GeoExplore/math/A_Rectangle.hpp>
+#include <GeoExplore/math/A_Point.hpp>
+#include <GeoExplore/math/A_Polygon.hpp>
 
 /// Utility Module
 #include <GeoExplore/utilities/FilesystemUtilities.hpp>
