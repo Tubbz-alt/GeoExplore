@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <deque>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 
@@ -107,12 +108,16 @@ void Initialize_Data( Data_Container& data,
 {
 
     // Activate the DEM Manager
-    data.dem_manager.reset(GEO::The_DEM_Manager::Instance_Of());
+    data.dem_manager = GEO::The_DEM_Manager::Instance_Of();
 
     // Create the elevation tile from the DEM Manager
-    data.elevation_tile = data.dem_manager->Create_Elevation_Tile<CoordinateUTM<double>,double>( options.Get_Min_Image_Bound(),
-                                                                                                 options.Get_Image_Size(),
-                                                                                                 options.Get_GSD());
-
+    data.elevation_tile = data.dem_manager->Create_Elevation_Tile<GEO::CoordinateUTM<double>,double>( options.Get_Min_Image_Bound(),
+                                                                                                      options.Get_Image_Size(),
+                                                                                                      options.Get_GSD());
+    
+    // Make sure the elevation tile initialize properly
+    if( data.elevation_tile == nullptr ){
+        throw std::runtime_error("error: Elevation tile returned was null.");
+    }
 }
 

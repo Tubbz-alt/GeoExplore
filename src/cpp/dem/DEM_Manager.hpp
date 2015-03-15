@@ -33,16 +33,30 @@ class DEM_Manager{
         /**
          * Create Elevation Tile
         */
-        template <typename ElevationDataType,
-                  typename CoordinateType>
+        template <typename CoordinateType,
+                  typename ElevationDataType>
         typename An_Elevation_Tile<CoordinateType,ElevationDataType>::ptr_t Create_Elevation_Tile( CoordinateType const& min_corner,
                                                                                                    A_Size_i const& image_size,
                                                                                                    const double& gsd )
         {
             // Create elevation tile
             typename An_Elevation_Tile<CoordinateType,ElevationDataType>::ptr_t tile = nullptr;
-
             
+            // Compute max corner
+            CoordinateType max_corner = min_corner + CoordinateType( image_size.Width() * gsd, 
+                                                                     image_size.Height() * gsd );
+
+            // Iterate over drivers
+            for( int didx=0; didx<m_drivers.size(); didx++ ){
+
+                // Check if driver has coverage
+                if( m_drivers[didx]->Coverage( min_corner, max_corner ) == true ){
+                    return m_drivers[didx]->Create_Elevation_Tile(  min_corner, 
+                                                                    image_size, 
+                                                                    gsd );   
+                }
+
+            }
 
             // return tile
             return tile;

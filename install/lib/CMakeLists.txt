@@ -147,6 +147,7 @@ set( GEOEXPLORE_COORDINATE_SOURCES
 #   Dem Sources
 set( GEOEXPLORE_DEM_SOURCES
     ../src/cpp/dem/DEM_Manager.cpp
+    ../src/cpp/dem/A_DEM_IO_Driver_FLAT.cpp
 )
 
 

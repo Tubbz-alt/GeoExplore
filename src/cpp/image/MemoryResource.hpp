@@ -7,8 +7,10 @@
 #define __SRC_CPP_IMAGE_MEMORYRESOURCE_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Exceptions.hpp>
-#include <GeoExplore/image/BaseResource.hpp>
+#include "../core/A_Size.hpp"
+#include "../core/Exceptions.hpp"
+#include "BaseResource.hpp"
+#include "Image.hpp"
 
 
 /// C++ Standard Library
@@ -27,23 +29,61 @@ class MemoryResource : public BaseResource<PixelType> {
     public:
         
         /**
-         * Default Constructor
+         * @brief Constructor
         */
-        MemoryResource() : m_data(nullptr), m_rows(0), m_cols(0){
-
+        MemoryResource()
+            : m_data(nullptr), 
+              m_rows(0), 
+              m_cols(0)
+        {
         }
         
-        /**
-         * Parameterized Constructor
-        */
-        MemoryResource( const int& rows, const int& cols ) : m_data(new std::vector<PixelType>(rows*cols)),
-                                                             m_rows(rows), m_cols(cols){}
 
         /**
-         * Get the pixel value
+         * @brief Constructor given default size info.
         */
-        virtual PixelType operator[]( const int& idx )const{
-            
+        MemoryResource( const int& rows, const int& cols ) 
+          : m_data(new std::vector<PixelType>(rows*cols)),
+            m_rows(rows), 
+            m_cols(cols)
+        {
+        }
+
+
+        /**
+         * @brief Constructor given size info
+         * 
+         * @param[in] size.
+         */
+        MemoryResource( const A_Size<int>& size )
+          : m_data( new std::vector<PixelType>( size.Width() * size.Height() )),
+            m_rows(size.Height()),
+            m_cols(size.Width())
+        {
+        }
+
+
+        /**
+         * @brief Constructor given default size and pixel value.
+         *
+         * @param[in] rows Image resource rows.
+         * @param[in] cols Image resource cols.
+         * @param[in] pixel Initial pixel value.
+        */
+        MemoryResource( const int& rows, 
+                        const int& cols, 
+                        PixelType const& pixel )
+          : m_data(new std::vector<PixelType>(rows*cols, pixel)),
+            m_rows(rows),
+            m_cols(cols)
+        {
+        }
+
+        /**
+         * @brief Get the pixel value
+        */
+        virtual PixelType operator[]( const int& idx )const
+        {
             // make sure the image has memory initialized
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
@@ -51,8 +91,13 @@ class MemoryResource : public BaseResource<PixelType> {
             return (*m_data)[idx];
         }
 
+
         /**
-         * Get the pixel reference
+         * @brief Get the pixel reference
+         *
+         * @param[in] idx Index to image position.
+         *
+         * @return Image pixel reference.
         */
         virtual PixelType& operator[]( const int& idx ){
             

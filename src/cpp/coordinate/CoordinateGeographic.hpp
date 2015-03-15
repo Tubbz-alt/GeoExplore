@@ -84,7 +84,12 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
                             new CoordinateGeographic<DATATYPE>(m_latitude, m_longitude, this->altitude(), this->datum())); 
                     }
         
-        virtual CoordinateType type(){ return CoordinateType::Geographic; }
+        /**
+         * Return the type
+         */
+        virtual CoordinateType type(){ 
+            return CoordinateType::Geographic; 
+        }
 
 
     protected:

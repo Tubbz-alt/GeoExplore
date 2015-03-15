@@ -31,46 +31,65 @@ class CoordinateBase{
 
         /// Pointer type
         typedef std::shared_ptr<CoordinateBase<DATATYPE> > ptr_t;
-
+    
+        
         /**
-         * Default Constructor
+         * @brief Constructor
          */
         CoordinateBase() : m_altitude(0), m_datum(Datum::WGS84){};
 
         /**
-         * Parameterized Constructor Given only the Datum and altiutude
+         * @brief Constructor Given only the Datum and altiutude
          */
-        CoordinateBase( const DATATYPE& altitude, const Datum& datum ) : m_altitude(altitude), m_datum(datum){}
+        CoordinateBase( const DATATYPE& altitude, 
+                        const Datum& datum ) : 
+                            m_altitude(altitude), m_datum(datum)
+        {
+        }
         
         /**
          * Get the altitude
          */
-        DATATYPE altitude()const{ return m_altitude; }
+        inline DATATYPE altitude()const{ 
+            return m_altitude; 
+        }
 
         /**
          * Set the altitude
          */
-        DATATYPE& altitude(){ return m_altitude; }
+        inline DATATYPE& altitude(){ 
+            return m_altitude; 
+        }
         
         /**
          * Get the coordinate system
          */
-        Datum datum()const{ return m_datum; }
+        inline Datum datum()const{
+            return m_datum; 
+        }
 
         /**
          * Set the coordinate system
          */
-        Datum& datum(){ return m_datum; }
+        inline Datum& datum(){ 
+            return m_datum; 
+        }
+
         
         /**
          * Clone the object
          */
-        CoordinateBase<DATATYPE>::ptr_t clone()const{ return CoordinateBase<DATATYPE>::ptr_t( new CoordinateBase<DATATYPE>(m_altitude, m_datum)); }
+        CoordinateBase<DATATYPE>::ptr_t clone()const{ 
+            return CoordinateBase<DATATYPE>::ptr_t( new CoordinateBase<DATATYPE>(m_altitude, m_datum)); 
+        }
+
 
         /*
          * Get the type
          */
-        virtual CoordinateType type(){ return CoordinateType::Base; }
+        virtual CoordinateType type(){ 
+            return CoordinateType::Base; 
+        }
 
     protected:
         

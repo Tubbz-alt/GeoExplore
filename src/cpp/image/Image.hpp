@@ -7,19 +7,21 @@
 #define __SRC_CPP_IMAGE_IMAGETYPE_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/image/MetadataContainerBase.hpp>
+#include "../core/A_Size.hpp"
+#include "MetadataContainerBase.hpp"
 
 
 namespace GEO {
 namespace IMG{
 
 /**
- * @class Image
+ * @class Image_
 */
 template <typename PixelType, typename ResourceType>
 class Image_{
 
     public: 
+
 
         /// define our pixeltype
         typedef PixelType pixeltype;
@@ -29,21 +31,71 @@ class Image_{
         typedef typename pixeltype::channeltype datatype;
 
         /**
-         * Default Constructor
+         * @brief Constructor
         */
         Image_(){
 
         }
 
-        /**
-         * Create an image with a default image size
-        */
-        Image_( const int& rows, const int& cols ) : m_resource(rows,cols){
 
+        /**
+         * @brief Constructor given initial size.
+         *
+         * Create an image with a default image size
+         *
+         * @param[in] rows Image rows.
+         * @param[in] cols Image cols.
+        */
+        Image_( const int& rows, const int& cols )
+          : m_resource(rows,cols)
+        {
         }
 
+
         /**
-         * Return the number of rows
+         * @brief Constructor given initial size.
+         *
+         * Create an image with the default size.
+         *
+         * @param[in] image_size Size of image.
+         */
+        Image_( const A_Size<int>& image_size )
+          : m_resource( image_size)
+        {
+        }
+        
+
+        /**
+         * @brief Image Constructor given default size and initial value.
+         *
+         * @param[in] rows Image rows.
+         * @param[in] cols Image cols.
+         * @param[in] pixel Initial pixel value.
+         */
+         Image_( const int& rows,
+                 const int& cols,
+                 const PixelType& pixel )
+           : m_resource(rows, cols, pixel)
+        {
+        }
+        
+
+        /**
+         * @brief Image Constructor given size and initial value.
+         *
+         * @param[in] size Image size.
+         * @param[in] pixel Initial pixel value.
+         */
+        Image_( const A_Size<int>& size,
+                const PixelType& pixel )
+          : m_resource( size, pixel )
+        {
+        }
+
+
+        /**
+         * @brief Return the number of rows
+         *
          * @return row count
         */
         int rows()const{
@@ -51,7 +103,8 @@ class Image_{
         }
 
         /**
-         * Return the number of columns
+         * @brief Return the number of columns
+         * 
          * @return column count
         */
         int cols()const{
@@ -59,14 +112,20 @@ class Image_{
         }
 
         /**
-         * Return the number of channels
+         * @brief Return the number of channels
+         * 
+         * @return number of channels.
         */
         int channels()const{
             return m_resource.channels();
         }
         
         /**
-         * Get the pixel data
+         * @brief Get the pixel data at the specified index
+         *
+         * @param[in] index Image position (Row-Major)
+         *
+         * @returns Pixel value at Image[i]
         */
         PixelType operator[]( const int& idx ){
             return m_resource[idx];
@@ -87,18 +146,21 @@ class Image_{
         }
 
         /**
-         * Set the resource information reference to the resource
+         * @brief Set the resource information reference to the resource
+         *
+         * @param[in] resource Resource data to pull data from.
         */
         void setResource( ResourceType const& resource){
             m_resource = resource;
         }
         
         /**
-         * Get the resource information
+         * @brief Get the resource information
         */
         ResourceType getResource()const{
             return m_resource;
         }
+
 
         private:
 

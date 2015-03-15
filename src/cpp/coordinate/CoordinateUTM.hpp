@@ -71,46 +71,81 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         int& zone(){ return m_zone; }
 
         /**
-         * Is Northern
+         * @brief Check if coordinate is in Northern Hemisphere
         */
-        bool   Is_Northern_Hemisphere()const{ return m_is_northern; }
-        bool&  Is_Northern_Hemisphere(){ return m_is_northern; }
+        bool   Is_Northern_Hemisphere()const{ 
+            return m_is_northern; 
+        }
+        
+        
+        /**
+         * Set if the coordinate is in the northern hemisphere or not.
+         */
+        bool&  Is_Northern_Hemisphere(){ 
+            return m_is_northern; 
+        }
 
 
         /**
-         * Get the Easting
+         * @brief Get the Easting
          */
         datatype easting()const{ return m_easting; }
 
         /**
          * Set the Easting
          */
-        datatype& easting(){ return m_easting; }
+        datatype& easting(){ 
+            return m_easting; 
+        }
 
         /**
          * Get the northing
          */
-        datatype northing()const{ return m_northing; }
+        datatype northing()const{ 
+            return m_northing; 
+        }
 
         /**
-         * Set the northing
+         * @brief Set the northing
          */
-        datatype& northing(){ return m_northing; }
+        datatype& northing(){ 
+            return m_northing; 
+        }
 
         /**
-         * Clone the data
+         * @brief Clone the data
          */
         CoordinateUTM<DATATYPE>::ptr_t clone()const{ 
             return CoordinateUTM<DATATYPE>::ptr_t( 
                     new CoordinateUTM<DATATYPE>(
                                 m_zone,
+                                m_is_northern,
                                 m_easting, 
                                 m_northing, 
                                 this->altitude(), 
                                 this->datum())); 
             }
+        
 
-        virtual CoordinateType type(){ return CoordinateType::UTM; }
+        /**
+         * @brief Addition Operator
+        */
+        CoordinateUTM<DATATYPE> operator + ( const CoordinateUTM<DATATYPE>& rhs )const{
+            return CoordinateUTM<DATATYPE>( m_zone,
+                                            m_is_northern,
+                                            m_easting + rhs.m_easting,
+                                            m_northing + rhs.m_northing,
+                                            this->m_altitude + rhs.altitude(),
+                                            this->m_datum );
+        }
+
+
+        /**
+         * @brief Return the type
+        */
+        virtual CoordinateType type(){ 
+            return CoordinateType::UTM; 
+        }
 
     private:
         
