@@ -86,17 +86,19 @@ install_software(){
 #---------------------------------------------#
 build_software(){
 
-    #  Get the cmake file
-    CMAKE_LOCATION="$1"
-
     #  Get the build type
-    BUILD_TYPE="$2"
+    BUILD_TYPE="$1"
 
     #  Get the make arguments 
-    MAKE_ARGS="$3"
+    MAKE_ARGS="$2"
     
     #  Get the build directory
-    BUILD_DIRECTORY="${BUILD_TYPE}/${4}"
+    BUILD_DIRECTORY="."
+    if [ "$BUILD_TYPE" = 'release' -o "$BUILD_TYPE" = 'RELEASE' ]; then
+        BUILD_DIRECTORY='release'
+    else
+        BUILD_DIRECTORY='debug'
+    fi
 
     #  Create the directory
     mkdir -p ${BUILD_DIRECTORY}
@@ -108,7 +110,7 @@ build_software(){
     if [ "$BUILD_VERBOSE" = '1' ]; then
         echo "cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}"
     fi
-    cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}
+    cmake .. ${CMAKE_EXTRA_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
         exit 1
@@ -130,17 +132,14 @@ build_software(){
 #----------------------------#
 test_software(){
     
-    #  Get the cmake file
-    CMAKE_LOCATION="$1"
-
     #  Get the build type
-    BUILD_TYPE="$2"
+    BUILD_TYPE="$1"
 
     #  Get the make arguments 
-    MAKE_ARGS="$3"
+    MAKE_ARGS="$2"
     
     #  Get the build directory
-    BUILD_DIRECTORY="${BUILD_TYPE}/${4}"
+    BUILD_DIRECTORY="${4}"
 
     #  Create the directory
     mkdir -p ${BUILD_DIRECTORY}
@@ -188,31 +187,31 @@ copy_headers(){
 
     #  Create include directory
     mkdir -p $BASE_DIR
-    cp -p src/cpp/GeoExplore.hpp    $BASE_DIR/../
+    cp -p src/lib/GeoExplore.hpp    $BASE_DIR/../
 
     #  Copy Core Module
     mkdir -p $BASE_DIR/core
-    cp -p src/cpp/core/*.hpp        $BASE_DIR/core/
+    cp -p src/lib/core/*.hpp        $BASE_DIR/core/
 
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
-    cp -p src/cpp/coordinate/*.hpp  $BASE_DIR/coordinate/
+    cp -p src/lib/coordinate/*.hpp  $BASE_DIR/coordinate/
 
     #  Copy Dem Module
     mkdir -p $BASE_DIR/dem      
-    cp -p src/cpp/dem/*.hpp         $BASE_DIR/dem/
+    cp -p src/lib/dem/*.hpp         $BASE_DIR/dem/
 
     #  Copy Image Module
     mkdir -p $BASE_DIR/image      
-    cp -p src/cpp/image/*.hpp       $BASE_DIR/image/
+    cp -p src/lib/image/*.hpp       $BASE_DIR/image/
     
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp -p src/cpp/io/*.hpp          $BASE_DIR/io/
+    cp -p src/lib/io/*.hpp          $BASE_DIR/io/
 
     #  Copy Math Module
     mkdir -p $BASE_DIR/math
-    cp -p src/cpp/math/*.hpp        $BASE_DIR/math
+    cp -p src/lib/math/*.hpp        $BASE_DIR/math
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
@@ -396,13 +395,7 @@ fi
 #------------------------------#
 if [ "$RUN_MAKE" = '1' ]; then
 
-    copy_headers ${BUILD_TYPE}
-    build_software '../install/lib'                         ${BUILD_TYPE}  "${MAKE_ARGS}"  '.'
-    build_software '../../../install/apps/geo-convert'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-convert'
-    build_software '../../../install/apps/terrain-explore'  ${BUILD_TYPE}  "${MAKE_ARGS}" 'apps/terrain-explore'
-    build_software '../../../install/apps/geo-info'         ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-info'
-    build_software '../../../install/apps/geo-utility'      ${BUILD_TYPE}  "${MAKE_ARGS}"  'apps/geo-utility'
-    build_software '../../install/gui'                      ${BUILD_TYPE}  "${MAKE_ARGS}"  'gui'
+    build_software ${BUILD_TYPE}  "${MAKE_ARGS}"
 
 fi
 

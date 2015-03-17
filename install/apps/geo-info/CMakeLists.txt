@@ -25,18 +25,6 @@ find_library( GeoExplore_LIBRARY
                     ${PROJECT_BINARY_DIR}/../../lib
 )
 
-#-------------------#
-#-    Find Boost   -#
-#-------------------#
-find_package( Boost 
-                COMPONENTS
-                    thread
-                    system
-                    filesystem
-                    regex
-                REQUIRED
-)
-include_directories( ${Boost_INCLUDE_DIRS} )
 
 #--------------------------------#
 #-     Find OpenCV Library      -#
@@ -53,37 +41,4 @@ find_package( Threads )
 #------------------------------#
 find_package( GDAL REQUIRED )
 
-#------------------------------------------#
-#-      Define Required Header Files      -#
-#------------------------------------------#
-set( GEOINFO_HEADERS
-    ../../../src/cpp/apps/geo-info/Options.hpp
-)
-
-
-#------------------------------------------#
-#-      Define Required Source Files      -#
-#------------------------------------------#
-set( GEOINFO_SOURCES
-    ../../../src/cpp/apps/geo-info/main.cpp
-    ../../../src/cpp/apps/geo-info/Options.cpp
-)
-
-#---------------------------------#
-#-     Build the Application     -#
-#---------------------------------#
-include_directories( "${PROJECT_BINARY_DIR}/../../include" )
-
-add_executable( geo-info 
-                ${GEOINFO_SOURCES}
-                ${GEOINFO_HEADERS}
-)
-
-target_link_libraries( geo-info
-                ${GeoExplore_LIBRARY}
-                ${CMAKE_THREAD_LIBS_INIT}
-                ${Boost_LIBRARIES}
-                ${GDAL_LIBRARY}
-                ${OpenCV_LIBS}
-)
 
