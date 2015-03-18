@@ -5,18 +5,18 @@
 #    Purpose:  Build script for GeoExplore GUI
 #
 
-#  Define Required CMake Version
-cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
-
 # Define the project name
 project(Geo-Explore)
 
-#  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 #  Set the executable output path
 #set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin )
 #set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../lib )
+
+#  Set list of directories to search for cmake modules
+set( CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake
+)
 
 #----------------------------------#
 #-       Find QT5 Libraries       -#
@@ -56,30 +56,6 @@ add_definitions(-fPIC)
 
 
 #-----------------------------------#
-#-     Find GeoExplore Library     -#
-#-----------------------------------#
-find_library( GeoExplore_LIBRARY
-                REQUIRED
-                NAMES
-                    GeoExplore
-                HINTS
-                    ${PROJECT_BINARY_DIR}/../lib
-)
-
-#-------------------#
-#-    Find Boost   -#
-#-------------------#
-find_package( Boost 
-                COMPONENTS
-                    thread
-                    system
-                    filesystem
-                    regex
-                REQUIRED
-)
-include_directories(${Boost_INCLUDE_DIRS})
-
-#-----------------------------------#
 #-     Find C++ Thread Library     -#
 #-----------------------------------#
 find_package( Threads )
@@ -117,6 +93,7 @@ set( GUI_SOURCES
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
+include_directories(../../lib)
 
 add_executable( geo-explore 
                 ${GUI_SOURCES}

@@ -7,13 +7,13 @@
 #define __SRC_CPP_IO_IMAGEIO_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Enumerations.hpp>
-#include <GeoExplore/image/DiskResource.hpp>
-#include <GeoExplore/image/Image.hpp>
-#include <GeoExplore/image/DiskResource.hpp>
-#include <GeoExplore/io/GDAL_Driver.hpp>
-#include <GeoExplore/io/NETPBM_Driver.hpp>
-#include <GeoExplore/io/OpenCV_Driver.hpp>
+#include "../core/Enumerations.hpp"
+#include "../image/DiskResource.hpp"
+#include "../image/MemoryResource.hpp"
+#include "../image/Image.hpp"
+#include "../io/GDAL_Driver.hpp"
+#include "../io/NETPBM_Driver.hpp"
+#include "../io/OpenCV_Driver.hpp"
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>
@@ -36,14 +36,17 @@ enum class DriverOptions{
 /**
  * Compute the image Driver
 */
-GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, const DriverOptions& options = DriverOptions::NONE );    
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, 
+                                     const DriverOptions& options = DriverOptions::NONE );    
 
 
 /**
  * Read an Image
 */
 template<typename PixelType>
-void read_image( boost::filesystem::path const& pathname, IMG::Image_<PixelType, IMG::MemoryResource<PixelType>>& output_image ){
+void read_image( boost::filesystem::path const& pathname, 
+                 IMG::Image_<PixelType, IMG::MemoryResource<PixelType>>& output_image )
+{
 
     /// make sure the file exists
     if( boost::filesystem::exists( pathname ) == false ){

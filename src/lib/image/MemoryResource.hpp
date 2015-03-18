@@ -250,6 +250,9 @@ class MemoryResource : public BaseResource<PixelType> {
 
 }; /// End of MemoryResource Class
 
+// Define our typedef alias'
+template <typename PixelType> using Image = Image_<PixelType,GEO::IMG::MemoryResource<PixelType> >;
+
 } /// End of IMG Namespace
 } /// End of GEO Namespace
 

@@ -11,18 +11,9 @@
 #------------------------------#
 PROJECT( Geo-Convert )
 
-#--------------------#
-#-    Find Boost    -#
-#--------------------#
-FIND_LIBRARY( Boost
-                COMPONENTS
-                    thread
-                    system 
-                    filesystem
-                    regex
-                REQUIRED
-)
-include_directories( ${Boost_INCLUDE_DIRS} )
+#  Set C++ 11
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
@@ -50,6 +41,8 @@ set( GEOCONVERT_SOURCES
 #----------------------------------#
 #-     Build the Application      -#
 #----------------------------------#
+include_directories(../../lib)
+
 add_executable( geo-convert 
                 ${GEOCONVERT_SOURCES}
                 ${GEOCONVERT_HEADERS}

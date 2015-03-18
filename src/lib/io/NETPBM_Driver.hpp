@@ -13,13 +13,13 @@
 #include <boost/filesystem.hpp>
 
 /// GeoExplore Libraries
-#include <GeoExplore/image/BaseResource.hpp>
-#include <GeoExplore/image/ChannelType.hpp>
-#include <GeoExplore/image/Image.hpp>
-#include <GeoExplore/image/PixelBase.hpp>
-#include <GeoExplore/image/PixelCast.hpp>
-#include <GeoExplore/image/PixelGray.hpp>
-#include <GeoExplore/image/PixelRGB.hpp>
+#include "../image/BaseResource.hpp"
+#include "../image/ChannelType.hpp"
+#include "../image/Image.hpp"
+#include "../image/PixelBase.hpp"
+#include "../image/PixelCast.hpp"
+#include "../image/PixelGray.hpp"
+#include "../image/PixelRGB.hpp"
 
 
 namespace GEO{

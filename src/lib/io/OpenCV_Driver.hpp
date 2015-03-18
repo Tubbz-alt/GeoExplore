@@ -7,13 +7,13 @@
 #define __SRC_CPP_IO_OPENCVDRIVER_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Enumerations.hpp>
-#include <GeoExplore/image/ChannelType.hpp>
-#include <GeoExplore/image/Image.hpp>
-#include <GeoExplore/image/PixelCast.hpp>
-#include <GeoExplore/image/PixelGray.hpp>
-#include <GeoExplore/image/PixelRGB.hpp>
-#include <GeoExplore/io/ImageDriverBase.hpp>
+#include "../core/Enumerations.hpp"
+#include "../image/ChannelType.hpp"
+#include "../image/Image.hpp"
+#include "../image/PixelCast.hpp"
+#include "../image/PixelGray.hpp"
+#include "../image/PixelRGB.hpp"
+#include "../io/ImageDriverBase.hpp"
 
 /// OpenCV Libraries
 #include <opencv2/core/core.hpp>

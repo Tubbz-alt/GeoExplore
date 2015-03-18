@@ -1,5 +1,10 @@
 <!-- Geo-Utility Configuration File -->
 <geo-utility>
+    
+    <!-- Image List -->
+    <image-list>
+        <image path="data/unit-test/images/lenna.jpg" />
+    </image-list>
 
     <!-- Render Configuration Information -->
     <render-configuration>

@@ -11,18 +11,6 @@
 #----------------------------------#
 PROJECT( Geo-Info )
 
-#-------------------#
-#-    Find Boost   -#
-#-------------------#
-find_package( Boost 
-                COMPONENTS
-                    thread
-                    system
-                    filesystem
-                    regex
-                REQUIRED
-)
-
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
@@ -43,7 +31,7 @@ set( GEOINFO_SOURCES
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
-include_directories( "${PROJECT_BINARY_DIR}/../include" )
+include_directories( ../../lib )
 
 add_executable( geo-info 
                 ${GEOINFO_SOURCES}

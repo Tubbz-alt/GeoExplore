@@ -7,7 +7,7 @@
 #define __GEOEXPLORE_IO_IMAGEDRIVERBASE_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Enumerations.hpp>
+#include "../core/Enumerations.hpp"
 
 /// Boost C++ Libraries
 #include <boost/filesystem.hpp>

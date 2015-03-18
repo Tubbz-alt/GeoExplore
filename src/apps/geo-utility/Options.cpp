@@ -12,7 +12,7 @@
 #include <string>
 
 // GeoExplore Libraries
-#include "../../thirdparty/pugixml/pugixml.hpp"
+#include "../../lib/thirdparty/pugixml/pugixml.hpp"
 
 
 namespace bf = boost::filesystem;

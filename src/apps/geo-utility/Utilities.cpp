@@ -81,6 +81,7 @@ void Usage( const Options& options ){
     std::cerr << "    optional flags:" << std::endl;
     std::cerr << std::endl;
     std::cerr << "-h | --help : Print usage instructions." << std::endl;
+    std::cerr << "-g | --generate <path> : Generate configuration file for usage.  Default value for <path> is " << options.Get_Application_Name() << ".xml" << std::endl;
     std::cerr << std::endl;
 
     std::cerr << "    render flags: " << std::endl;

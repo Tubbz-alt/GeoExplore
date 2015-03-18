@@ -10,7 +10,7 @@
 #include <stdexcept>
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Exceptions.hpp>
+#include "../core/Exceptions.hpp"
 
 namespace GEO{
 namespace IMG{

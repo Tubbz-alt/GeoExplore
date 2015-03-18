@@ -6,7 +6,7 @@
 #include "ImageIO.hpp"
 
 /// GeoExplore Libraries
-#include <GeoExplore/utilities/FilesystemUtilities.hpp>
+#include "../utilities/FilesystemUtilities.hpp"
 
 
 namespace GEO{
@@ -15,7 +15,9 @@ namespace IO{
 /**
  * Compute the driver given an image pathname
 */
-GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, DriverOptions const& options ){
+GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname, 
+                                     DriverOptions const& options )
+{
     
     // get the file type
     GEO::FS::FileType ftype = GEO::FS::getFileType(pathname);

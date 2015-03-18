@@ -11,11 +11,6 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
 
-#----------------------------#
-#-        Allow C++ 11x     -#
-#----------------------------#
-SET(CMAKE_CXX_FLAGS "-std=c++11")
-
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
@@ -27,15 +22,6 @@ set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 PROJECT( Lib-Geo-Explore )
 
 
-#-----------------------#
-#-     Find Boost      -#
-#-----------------------#
-find_package( Boost REQUIRED 
-                COMPONENTS
-                    FILESYSTEM
-                    SYSTEM
-            )
-
 #------------------------------#
 #-     Find GDAL Library      -#
 #------------------------------#
@@ -46,6 +32,7 @@ include_directories( ${GDAL_INCLUDE_DIR} )
 #-     Find OpenCV Library      -#
 #--------------------------------#
 find_package( OpenCV REQUIRED )
+
 
 #-----------------------#
 #-     Find Boost      -#

@@ -4,29 +4,11 @@
 #    
 #    Purpose:  Build script for the Geo-Utility
 #
-#  Define Required CMake Version
-cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
-
-#  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../bin )
 set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../../lib )
 
-
-#-------------------#
-#-    Find Boost   -#
-#-------------------#
-find_package( Boost 
-                COMPONENTS
-                    thread
-                    system
-                    filesystem
-                    regex
-                REQUIRED
-)
-include_directories( ${Boost_INCLUDE_DIR} )
 
 #--------------------------------#
 #-     Find OpenCV Library      -#
@@ -65,7 +47,7 @@ set( GEOUTILITY_SOURCES
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
-include_directories( "${PROJECT_BINARY_DIR}/../../include" )
+include_directories( ../../lib )
 
 add_executable( geo-utility
                 ${GEOUTILITY_SOURCES}

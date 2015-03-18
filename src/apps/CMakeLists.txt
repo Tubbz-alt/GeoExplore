@@ -11,7 +11,7 @@
 add_subdirectory(geo-convert)
 
 #  Create the geo-explore application
-add_subdirectory(geo-explore)
+#add_subdirectory(geo-explore)
 
 #  Create the geo-info application
 add_subdirectory(geo-info)
@@ -20,5 +20,5 @@ add_subdirectory(geo-info)
 add_subdirectory(geo-utility)
 
 #  Create the terrain explore application
-add_subdirectory(terrain-explore)
+#add_subdirectory(terrain-explore)
 

@@ -10,7 +10,7 @@
 #include <boost/filesystem.hpp>
 
 // GeoExplore Libraries
-#include "../../thirdparty/pugixml/pugixml.hpp"
+#include "../../lib/thirdparty/pugixml/pugixml.hpp"
 #include <GeoExplore.hpp>
 
 /**
@@ -100,8 +100,28 @@ class Options{
         inline std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> Get_DEM_Drivers()const{
             return m_dem_drivers;
         }
+
+        /**
+         * Get the image list
+         */
+        inline std::deque<boost::filesystem::path> Get_Image_List()const{
+            return m_image_paths;
+        }
+
+        /**
+         * Add Image to List
+        */
+        inline void Add_Image_Path( boost::filesystem::path const& image_path ){
+            m_image_paths.push_back(image_path);
+        }
+
     
     private:
+
+        /**
+         * Generate a configuration file
+        */
+        void Generate_Configuration_File();
         
         /**
          * Load the configuration file
@@ -117,6 +137,12 @@ class Options{
          * Parse the DEM Configuration
         */
         void Parse_DEM_Configuration( pugi::xml_node& dem_config_node );
+        
+        /**
+         * Parse the Image List
+        */
+        void Parse_Image_List( pugi::xml_node* image_list_node );
+
 
         /// Application Name
         boost::filesystem::path m_application_name; 
@@ -140,6 +166,9 @@ class Options{
 
         /// List of DEM IO Drivers
         std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> m_dem_drivers;
+
+        /// List of Images
+        std::deque<boost::filesystem::path> m_image_paths;
 
 }; // End of Options Class
 

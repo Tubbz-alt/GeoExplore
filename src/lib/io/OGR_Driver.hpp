@@ -7,9 +7,9 @@
 #define __SRC_CPP_IO_OGRDRIVER_HPP__
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Enumerations.hpp>
-#include <GeoExplore/coordinate/CoordinateUTM.hpp>
-#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
+#include "../core/Enumerations.hpp"
+#include "../coordinate/CoordinateUTM.hpp"
+#include "../coordinate/CoordinateGeographic.hpp"
 
 
 namespace GEO{

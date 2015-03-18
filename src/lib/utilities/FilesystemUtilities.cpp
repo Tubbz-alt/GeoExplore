@@ -6,7 +6,7 @@
 #include "FilesystemUtilities.hpp"
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Exceptions.hpp>
+#include "../core/Exceptions.hpp"
 
 /// C++ Standard Libraries
 #include <fstream>

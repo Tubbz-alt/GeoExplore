@@ -8,6 +8,7 @@
 
 /// GeoExplore Libraries
 #include "BaseResource.hpp"
+#include "Image.hpp"
 #include "../core/Exceptions.hpp"
 #include "../io/ImageDriverBase.hpp"
 
@@ -100,7 +101,7 @@ class DiskResource : public BaseResource<PixelType> {
         /**
          * Set the driver
         */
-        void setDriver( boost::shared_ptr<GEO::IO::ImageDriverBase>& image_driver ){
+        void setDriver( boost::shared_ptr<IO::ImageDriverBase>& image_driver ){
             m_image_driver = image_driver;
         }
 
@@ -113,6 +114,9 @@ class DiskResource : public BaseResource<PixelType> {
 
 
 }; /// End of DiskResource Class
+
+// Define the typedef alias
+template <typename PixelType> using DiskImage = Image_<PixelType,GEO::IMG::DiskResource<PixelType> >;
 
 } /// End of IMG Namespace
 } /// End of GEO Namespace

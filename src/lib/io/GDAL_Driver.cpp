@@ -6,7 +6,7 @@
 #include "GDAL_Driver.hpp"
 
 /// GeoExplore Libraries
-#include <GeoExplore/utilities/StringUtilities.hpp>
+#include "../utilities/StringUtilities.hpp"
 
 /// C++ Libraries
 #include <iostream>
@@ -29,7 +29,8 @@ ImageDriverGDAL::ImageDriverGDAL(){
 /**
  * ImageDriverGDAL Constructor
 */
-ImageDriverGDAL::ImageDriverGDAL( const boost::filesystem::path& pathname ){
+ImageDriverGDAL::ImageDriverGDAL( const boost::filesystem::path& pathname )
+{    
     m_path = pathname;
     
     // initialize the drivers

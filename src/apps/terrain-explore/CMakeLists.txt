@@ -5,14 +5,9 @@
 #    Purpose:  Build script for the Terrain-Explore utility
 #
 
-#  Define Required CMake Version (Required newer than 2.8.9 for Qt5 macros)
-cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
-
 # Define the project name
 project(terrain-explore)
 
-#  Allow C++ 11x
-SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 #  Set the executable output path
 #set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../bin )
@@ -23,25 +18,6 @@ set( CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake
 )
 
-#-----------------------------------#
-#-     Find GeoExplore Library     -#
-#-----------------------------------#
-find_library( GeoExplore_LIBRARY
-                REQUIRED
-                NAMES
-                    GeoExplore
-                HINTS
-                    ${PROJECT_BINARY_DIR}/../../lib
-)
-
-#-------------------#
-#-    Find Boost   -#
-#-------------------#
-find_package( Boost 
-                COMPONENTS
-                    filesystem
-                REQUIRED
-)
 
 #-----------------------------------#
 #-     Find C++ Thread Library     -#

@@ -21,11 +21,11 @@
 #include <gdal_priv.h>
 
 /// GeoExplore Libraries
-#include <GeoExplore/core/Exceptions.hpp>
-#include <GeoExplore/image/ChannelType.hpp>
-#include <GeoExplore/image/Image.hpp>
-#include <GeoExplore/image/MemoryResource.hpp>
-#include <GeoExplore/io/ImageDriverBase.hpp>
+#include "../core/Exceptions.hpp"
+#include "../image/ChannelType.hpp"
+#include "../image/Image.hpp"
+#include "../image/MemoryResource.hpp"
+#include "../io/ImageDriverBase.hpp"
 
 namespace GEO{
 namespace IO{
