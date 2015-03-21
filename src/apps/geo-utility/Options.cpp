@@ -72,6 +72,11 @@ void Options::Load_Configuration_File()
         else if( std::string(cit->name()) == "dem-configuration" ){
             Parse_DEM_Configuration( *cit );
         }
+
+        // Parse the image list
+        else if( std::string(cit->name()) == "image-list" ){
+            Parse_Image_List( *cit );
+        }
     }
 
 }
@@ -182,4 +187,33 @@ void Options::Parse_DEM_Configuration( pugi::xml_node& dem_config_node ){
 
     }
 }
+
+/**
+ * Parse the image list
+*/
+void Options::Parse_Image_List( pugi::xml_node& image_list_node ){
+
+    // Get the list of nodes
+    for( pugi::xml_node_iterator it = image_list_node.begin(); 
+                                 it != image_list_node.end();
+                                 it++ )
+    {
+
+        // Grab the image node
+        if( std::string(it->name()) == "image" ){
+            
+            // get the path
+            std::string pathname = it->attribute("path").as_string();
+
+            // Add to list
+            Add_Image_Path( pathname );
+
+        }
+
+
+    }
+
+
+}
+
 

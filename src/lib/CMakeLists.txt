@@ -83,6 +83,7 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/PixelBase.hpp
     image/PixelGray.hpp
     image/PixelRGB.hpp
+    image/PixelRGBA.hpp
 )
 
 #  IO Module
@@ -112,6 +113,7 @@ set( GEOEXPLORE_THIRDPARTY_HEADERS
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
     utilities/FilesystemUtilities.hpp
+    utilities/OpenCV_Utilities.hpp
     utilities/StringUtilities.hpp
 )
 
@@ -180,6 +182,7 @@ set( GEOEXPLORE_THIRDPARTY_SOURCES
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
     utilities/FilesystemUtilities.cpp
+    utilities/OpenCV_Utilities.cpp
     utilities/StringUtilities.cpp
 )
 

@@ -127,5 +127,17 @@ void Initialize_Data( Data_Container& data,
     }
 
     // Load the requested images
+    std::vector<boost::filesystem::path> image_list = options.Get_Image_List();
+    data.image_list.resize(image_list.size(), IMG::Image<IMG::PixelRGBA_u8>::ptr_t(new IMG::Image<IMG::PixelRGBA_u8>()));
+    for( int idx=0; idx < image_list.size(); idx++ ){
+
+        // Load each image
+        std::cout << "Loading: " << image_list[idx] << std::endl;
+        GEO::IO::read_image( image_list[idx], *data.image_list[idx] );
+        
+        // Open the image
+        UTILS::OCV::View_Image(*data.image_list[idx], "Window to open." );
+    }
+
 }
 

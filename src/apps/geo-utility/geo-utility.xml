@@ -3,7 +3,7 @@
     
     <!-- Image List -->
     <image-list>
-        <image path="data/unit-test/images/lenna.jpg" />
+        <image path="data/unit-tests/images/lenna.jpg" />
     </image-list>
 
     <!-- Render Configuration Information -->

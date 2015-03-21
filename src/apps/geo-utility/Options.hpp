@@ -104,7 +104,7 @@ class Options{
         /**
          * Get the image list
          */
-        inline std::deque<boost::filesystem::path> Get_Image_List()const{
+        inline std::vector<boost::filesystem::path> Get_Image_List()const{
             return m_image_paths;
         }
 
@@ -141,7 +141,7 @@ class Options{
         /**
          * Parse the Image List
         */
-        void Parse_Image_List( pugi::xml_node* image_list_node );
+        void Parse_Image_List( pugi::xml_node& image_list_node );
 
 
         /// Application Name
@@ -168,7 +168,7 @@ class Options{
         std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> m_dem_drivers;
 
         /// List of Images
-        std::deque<boost::filesystem::path> m_image_paths;
+        std::vector<boost::filesystem::path> m_image_paths;
 
 }; // End of Options Class
 

@@ -298,7 +298,10 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
  * Read an image and return the image data
 */
 template <typename PixelType>
-std::shared_ptr<std::vector<PixelType> > load_image_data( const boost::filesystem::path& image_pathname, int& rowCount, int& colCount ){
+std::shared_ptr<std::vector<PixelType> > load_image_data( const boost::filesystem::path& image_pathname,        
+                                                          int& rowCount, 
+                                                          int& colCount )
+{
    
     // create the GDAL Driver
     ImageDriverGDAL::ptr_t gdal_driver( new ImageDriverGDAL(image_pathname));

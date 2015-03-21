@@ -35,8 +35,8 @@ class Image_{
         /**
          * @brief Constructor
         */
-        Image_(){
-
+        Image_()
+        {
         }
 
 

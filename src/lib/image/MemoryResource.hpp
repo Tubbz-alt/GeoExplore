@@ -28,6 +28,9 @@ class MemoryResource : public BaseResource<PixelType> {
 
     public:
         
+        /// Pointer Type
+        typedef std::shared_ptr<MemoryResource<PixelType>> ptr_t;
+
         /**
          * @brief Constructor
         */

@@ -41,7 +41,10 @@ GEO::ImageDriverType compute_driver( const boost::filesystem::path& pathname,
 
 
 /**
- * Read an Image
+ * @brief Read an Image.
+ * 
+ * @param[in] pathname Image file to read.
+ * @param[out] image Image container to read into.
 */
 template<typename PixelType>
 void read_image( boost::filesystem::path const& pathname, 

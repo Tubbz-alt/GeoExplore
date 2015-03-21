@@ -37,6 +37,7 @@
 #include "image/PixelCast.hpp"
 #include "image/PixelGray.hpp"
 #include "image/PixelRGB.hpp"
+#include "image/PixelRGBA.hpp"
 
 /// IO Module
 #include "io/GDAL_Driver.hpp"
@@ -52,6 +53,7 @@
 
 /// Utility Module
 #include "utilities/FilesystemUtilities.hpp"
+#include "utilities/OpenCV_Utilities.hpp"
 #include "utilities/StringUtilities.hpp"
 
 

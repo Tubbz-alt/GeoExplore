@@ -9,18 +9,23 @@
 // GeoExplore Libraries
 #include <GeoExplore.hpp>
 
+// C++ Standard Libraries
+#include <vector>
+
+using namespace GEO;
+
 class Data_Container{
 
     public:
 
         /// DEM Manager
-        GEO::DEM::DEM_Manager::ptr_t dem_manager;
+        DEM::DEM_Manager::ptr_t dem_manager;
 
         /// Elevation Tile
-        GEO::DEM::ElevationTileUTM_d::ptr_t elevation_tile;
+        DEM::ElevationTileUTM_d::ptr_t elevation_tile;
 
         /// Image Tile 
-
+        std::vector<IMG::Image<IMG::PixelRGBA_u8>::ptr_t> image_list; 
 
 }; /// End of Data_Container Class
 
