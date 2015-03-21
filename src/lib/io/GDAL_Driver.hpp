@@ -127,10 +127,14 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
 
 
         /**
-         * Get image data
+         * @brief Get image pixel data.
+         * 
+         * @param[in] image_data Reference to pixel data.
+         * @param[in] image_data_size Size of the image pixel buffer
          */
         template<typename PixelType>
-        void getPixels( std::shared_ptr<std::vector<PixelType> >& image_data, const int& image_data_size ){
+        void getPixels( std::shared_ptr<std::vector<PixelType> >& image_data, 
+                        const int& image_data_size ){
             
             // if the dataset is not open, then do nothing
             if( isOpen() == false ){
@@ -189,8 +193,6 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
                     
                     // read data
                     band->RasterIO( GF_Read, 0, r, xsize, 1, pafScanline, xsize, 1, GDT_Float32, 0, 0);
-
-                    
 
                     //add data to vector
                     for( size_t c=0; c<xsize; c++ ){
@@ -334,16 +336,21 @@ std::shared_ptr<std::vector<PixelType> > load_image_data( const boost::filesyste
  * Load an image and return a resource
 */
 template<typename PixelType>
-IMG::MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname ){
+IMG::MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname )
+{
 
     /// create the output
     IMG::MemoryResource<PixelType> output;
 
     // get the pixel data
     int rowSize, colSize;
-    std::shared_ptr<std::vector<PixelType> > pixels = load_image_data<PixelType>( image_pathname, rowSize, colSize );
+    std::shared_ptr<std::vector<PixelType> > pixels = load_image_data<PixelType>( image_pathname, 
+                                                                                  rowSize, 
+                                                                                  colSize );
 
-    output.setPixelData( pixels, rowSize, colSize );
+    output.setPixelData( pixels, 
+                         rowSize, 
+                         colSize );
 
     // return the resource
     return output;
@@ -353,7 +360,9 @@ IMG::MemoryResource<PixelType> load_image( const boost::filesystem::path& image_
  * Write an image to a GDAL format
 */
 template<typename PixelType, typename ResourceType>
-void write_image( IMG::Image_<PixelType,ResourceType>const&  output_image, boost::filesystem::path const& pathname ){
+void write_image( IMG::Image_<PixelType,ResourceType>const&  output_image,  
+                  boost::filesystem::path const& pathname )
+{
 
     // Identify the driver
     std::string driverShortName = getShortDriverFromFilename(pathname);

@@ -38,6 +38,7 @@
 #include "image/PixelGray.hpp"
 #include "image/PixelRGB.hpp"
 #include "image/PixelRGBA.hpp"
+#include "image/Pixel_Types.hpp"
 
 /// IO Module
 #include "io/GDAL_Driver.hpp"

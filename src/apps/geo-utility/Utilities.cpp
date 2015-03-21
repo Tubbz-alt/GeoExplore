@@ -132,7 +132,6 @@ void Initialize_Data( Data_Container& data,
     for( int idx=0; idx < image_list.size(); idx++ ){
 
         // Load each image
-        std::cout << "Loading: " << image_list[idx] << std::endl;
         GEO::IO::read_image( image_list[idx], *data.image_list[idx] );
         
         // Open the image
