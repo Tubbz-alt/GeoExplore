@@ -33,10 +33,11 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
          */
          A_DEM_IO_Driver_Flat( const double& elevation_meters );
          
+        
         /**
          * Check if elevation value is covered
         */
-        virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
             return true;
         }
         
@@ -44,8 +45,8 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
         /**
          * Check if elevation value is covered
         */
-        virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate_min,
-                               CRD::CoordinateGeographic_d const& coordinate_max )const
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate_min,
+                                     CRD::CoordinateGeographic_d const& coordinate_max )const
         {
             return true;
         }
@@ -94,6 +95,15 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
                                                                  A_Size<int>            const&  tile_size,
                                                                  double                 const&  gsd );
 
+        
+        /**
+         * @brief Return the DEM Driver Type.
+         *
+         * @return DEM_IO_Driver_Type.
+        */
+        inline virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
+            return DEM_IO_Driver_Type::FLAT;
+        }
 
 
     private:

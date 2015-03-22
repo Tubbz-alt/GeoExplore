@@ -6,9 +6,13 @@
 #ifndef __SRC_COORDINATE_COORDINATEUTM_HPP__
 #define __SRC_COORDINATE_COORDINATEUTM_HPP__
 
-/// GeoExplore Libraries
+// GeoExplore Libraries
 #include "../core/Enumerations.hpp"
 #include "CoordinateBase.hpp"
+
+// C++ Standard Libraries
+#include <cmath>
+
 
 namespace GEO{
 namespace CRD{
@@ -36,7 +40,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
           :  CoordinateBase<DATATYPE>(0, Datum::WGS84),
              m_zone(31),
              m_is_northern(true),
-             m_easting_meters(166021.4), 
+             m_easting_meters((DATATYPE)166021.4), 
              m_northing_meters(0) 
         {
         }
@@ -203,6 +207,28 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
         /**
+         * @brief Mag2 Operator
+         *
+         * @return { @f{ $x^2 + y^2 + z^2$} }
+        */
+        DATATYPE Mag2()const{
+            return ((easting_meters()  * easting_meters()  ) + 
+                    (northing_meters() * northing_meters() ) +
+                    (this->altitude_meters() * this->altitude_meters() ));
+        }
+
+
+        /**
+         * @brief Mag Operator
+         *
+         * @return Sqrt of Mag2
+        */
+        DATATYPE Mag()const{
+            return std::sqrt(Mag2());
+        }
+
+
+        /**
          * @brief Clone the data
          *
          * Return coordinate clone.
@@ -222,6 +248,8 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         /**
          * @brief Addition Operator.
          *
+         * Note that the zone and hemisphere are ignored.  The first coordinate (this) is used.
+         *
          * @param[in] rhs Coordinate to add to.
          *
          * @return Sum of this coordinate and the other coordinate.
@@ -235,7 +263,56 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                                             this->m_altitude_meters + rhs.altitude_meters(),
                                             this->m_datum );
         }
+        
 
+        /**
+         * @brief Subtraction Operator.
+         *
+         * Note that the zone and hemisphere are ignored.  The first coordinate (this) is used.
+         *
+         * @param[in] rhs Other coordinate to subtract.
+         *
+         * @return difference between this coordinate an the other.
+        */
+        CoordinateUTM<DATATYPE> operator - ( const CoordinateUTM<DATATYPE>& rhs )const
+        {
+            return CoordinateUTM<DATATYPE>( m_zone,
+                                            m_is_northern,
+                                            easting_meters()  - rhs.easting_meters(),
+                                            northing_meters() - rhs.northing_meters(),
+                                            this->altitude_meters() - rhs.altitude_meters(),
+                                            this->datum()   );
+        }
+
+
+        /**
+         * @brief Compare the distance between 2 coordinates
+         *
+         * @param[in] coordinate1 First Coordinate to Compare.
+         * @param[in] coordinate2 Second Coordinate to Compare.
+         *
+         * @return Distance in meters.  -1 if there was an issue.
+        */
+        static double Distance( CoordinateUTM<DATATYPE> const& coordinate1,
+                                CoordinateUTM<DATATYPE> const& coordinate2 ){
+            
+            // Check zone and hemisphere
+            if( coordinate1.zone() != coordinate2.zone() )
+            { 
+                return -1; 
+            }
+            if( coordinate1.Is_Northern_Hemisphere() != coordinate2.Is_Northern_Hemisphere() )
+            { 
+                return -1;
+            }
+
+            // Subtrace Points
+            CoordinateUTM<DATATYPE> diff_coordinate = coordinate1 - coordinate2;
+
+            // Do the distance formula
+            return diff_coordinate.Mag();
+        }
+        
 
         /**
          * @brief Return the type

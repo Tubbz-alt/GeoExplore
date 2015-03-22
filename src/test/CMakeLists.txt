@@ -37,6 +37,10 @@ set( GEOEXPLORE_TEST_HEADERS
 #------------------------------------------#
 set( GEOEXPLORE_TEST_SOURCES
     geo-explore-unit-tests.cpp
+    coordinate/TEST_CoordinateUTM.cpp
+    dem/TEST_An_Elevation_Tile.cpp
+    dem/TEST_DEM_IO_Driver_Types.cpp
+    dem/TEST_DEM_Manager.cpp
     io/TEST_GDAL_Driver.cpp
     io/TEST_Image_IO.cpp
     io/TEST_OpenCV_Driver.cpp

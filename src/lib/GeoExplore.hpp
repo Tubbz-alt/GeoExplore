@@ -19,11 +19,7 @@
 #include "coordinate/CoordinateUTM.hpp"
 
 /// Dem Module
-#include "dem/A_DEM_IO_Driver_Base.hpp"
-#include "dem/A_DEM_IO_Driver_Flat.hpp"
-#include "dem/A_DEM_IO_Driver_SRTM.hpp"
-#include "dem/An_Elevation_Tile.hpp"
-#include "dem/DEM_Manager.hpp"
+#include "dem.hpp"
 
 /// Image Module
 #include "image/BaseResource.hpp"

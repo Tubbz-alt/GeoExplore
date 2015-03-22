@@ -9,6 +9,8 @@
 #include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
 #include "An_Elevation_Tile.hpp"
+#include "DEM_IO_Driver_Types.hpp"
+
 
 namespace GEO{
 namespace DEM{
@@ -72,6 +74,15 @@ class A_DEM_IO_Driver_Base{
         virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
                                                                  A_Size<int>            const&  tile_size,
                                                                  double                 const&  gsd ) = 0;
+        
+        /**
+         * @brief Return the DEM Driver Type.
+         *
+         * @return DEM_IO_Driver_Type.
+        */
+        virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
+            return DEM_IO_Driver_Type::BASE;
+        }
 
 }; /// End of A_DEM_IO_Driver_Base
 

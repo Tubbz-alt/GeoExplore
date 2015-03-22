@@ -32,7 +32,13 @@ class DEM_Manager{
         
 
         /**
-         * Create Elevation Tile
+         * @brief Create Elevation Tile
+         *
+         * @param[in] min_corner Minimum corner in the tile.
+         * @param[in] image_size Size of the tile in pixels.
+         * @param[in] gsd Ground-Sampling-Distance in meters-per-pixels.
+         *
+         * @return Elevation tile
         */
         template <typename CoordinateType>
         ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CoordinateType const&  min_corner,
@@ -72,6 +78,26 @@ class DEM_Manager{
         */
         void Add_DEM_IO_Driver( A_DEM_IO_Driver_Base::ptr_t driver );
 
+    
+        /**
+         * @brief Get the number of DEM IO Drivers
+         * 
+         * @return Number of DEM IO Drivers registered.
+        */
+        inline int Get_Number_Of_DEM_IO_Drivers()const{
+            return m_drivers.size();
+        }
+
+
+        /**
+         * @brief Get the list of dem drivers
+         * 
+         * @return DEM driver list
+        */
+        inline std::vector<A_DEM_IO_Driver_Base::ptr_t> Get_DEM_IO_Drivers()const{
+            return m_drivers;
+        }
+        
     private:
 
         /// DEM Driver

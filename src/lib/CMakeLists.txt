@@ -66,10 +66,12 @@ set( GEOEXPLORE_COORDINATE_HEADERS
 
 #  DEM Module
 set( GEOEXPLORE_DEM_HEADERS
+    dem.hpp
     dem/A_DEM_IO_Driver_Base.hpp
     dem/A_DEM_IO_Driver_Flat.hpp
     dem/A_DEM_IO_Driver_SRTM.hpp
     dem/An_Elevation_Tile.hpp
+    dem/DEM_IO_Driver_Types.hpp
     dem/DEM_Manager.hpp
 )
 
@@ -154,6 +156,7 @@ set( GEOEXPLORE_COORDINATE_SOURCES
 
 #   Dem Sources
 set( GEOEXPLORE_DEM_SOURCES
+    dem/DEM_IO_Driver_Types.cpp
     dem/DEM_Manager.cpp
     dem/A_DEM_IO_Driver_FLAT.cpp
 )

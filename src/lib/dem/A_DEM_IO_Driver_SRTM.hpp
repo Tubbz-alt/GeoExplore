@@ -34,6 +34,15 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
             return false;
         }
 
+        
+        /**
+         * @brief Return the DEM Driver Type.
+         *
+         * @return DEM_IO_Driver_Type.
+        */
+        inline virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
+            return DEM_IO_Driver_Type::SRTM;
+        }
 
 
 }; // End of A_DEM_IO_Driver_SRTM
