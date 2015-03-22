@@ -11,14 +11,6 @@
 #include <type_traits>
 #include <vector>
 
-/// Boost C++ Libraries
-#include <boost/filesystem.hpp>
-
-/// GDAL Libraries
-#include <cpl_conv.h>
-#include <cpl_string.h>
-#include <gdal.h>
-#include <gdal_priv.h>
 
 /// GeoExplore Libraries
 #include "../core/Exceptions.hpp"
@@ -26,6 +18,9 @@
 #include "../image/Image.hpp"
 #include "../image/MemoryResource.hpp"
 #include "../io/ImageDriverBase.hpp"
+#include "../utilities/FilesystemUtilities.hpp"
+#include "gdal_utils/GDAL_Utilities.hpp"
+
 
 namespace GEO{
 namespace IO{
@@ -33,7 +28,7 @@ namespace GDAL{
 
 
 /**
- * Convert generic ChannelType to a GDAL Type
+ * @brief Convert generic ChannelType to a GDAL Type.
 */
 template<typename CType>
 GDALDataType ctype2gdaltype(){
@@ -61,69 +56,231 @@ GDALDataType ctype2gdaltype(){
 
 
 /**
- * Get Short Driver Name from Filename
-*/
-std::string getShortDriverFromFilename( const boost::filesystem::path& filename );
-
-/**
  * @class ImageDriverGDAL
 */
-class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
+template <typename ResourceType>
+class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
     public:
 
+        /// Pixel Type
+        typedef typename ResourceType::pixel_type pixel_type;
+
+
         /// Pointer Type
-        typedef std::shared_ptr<ImageDriverGDAL> ptr_t;
+        typedef std::shared_ptr<ImageDriverGDAL<ResourceType>> ptr_t;
+        
         
         /**
-         * Default Constructor
+         * @brief Constructor
         */
-        ImageDriverGDAL();
+        ImageDriverGDAL()
+          :  ImageDriverBase<ResourceType>(),
+             m_driver(nullptr),
+             m_dataset(nullptr)
+        {
+        }
+        
         
         /**
-         * Default Constructor
+         * @brief Constructor given image pathname.
+         *
+         * @param[in] pathname Image pathname.
         */
-        ImageDriverGDAL( const boost::filesystem::path& pathname );
+        ImageDriverGDAL( const boost::filesystem::path& pathname )
+          : m_path(pathname),
+            m_driver(nullptr),
+            m_dataset(nullptr)
+        {
+        }
+
+        
+        /**
+         * @brief Destructor
+        */
+        ~ImageDriverGDAL()
+        {
+            if( Is_Open() == true ){
+                Close();
+            }
+        }
+        
 
         /**
-         * Destructor
+         * @brief Check if the driver is supported for write.
+         *
+         * @param[in] pathname Pathname to check.
+         *
+         * @return True if supported, false otherwise.
         */
-        ~ImageDriverGDAL();
+        static bool Is_Write_Supported( boost::filesystem::path const& pathname ){
+            
+            // Get the file type
+            FS::FileType file_type = FS::Get_File_Type( pathname );
+
+            // Check NITF
+            if( file_type == FS::FileType::NITF ){ return true; }
+
+            // Check TIFF
+            if( file_type == FS::FileType::TIFF ){ return true; }
+           
+            // Otherwise, return false
+            return false;
+        }
+        
         
         /**
-         * Check if the driver is open
+         * @brief Check if the driver is supported for reading.
+         *
+         * @param[in] pathname to check.
+         *
+         * @return True if supported, false otherwise.
         */
-        bool isOpen()const;
-        
-        /**
-         * Open the driver
-        */
-        virtual void open();
-        
-        /**
-         * Open the driver given a filename
-        */
-        virtual void open( boost::filesystem::path const& pathname );
+        static bool Is_Read_Supported( boost::filesystem::path const& pathname )
+        {
+            // Get the file type
+            FS::FileType file_type = FS::Get_File_Type( pathname );
+
+            // Check JPEG
+            if( file_type == FS::FileType::JPEG ){ return true; }
+
+            // Check JP2
+            if( file_type == FS::FileType::JPEG2000 ){ return true; }
+
+            // Check DTED
+            if( file_type == FS::FileType::DTED ){ return true; }
+
+            // Check SRTM
+            if( file_type == FS::FileType::SRTM ){ return true; }
+
+            // Check NITF
+            if( file_type == FS::FileType::NITF ){ return true; }
+            
+            // Check TIFF
+            if( file_type == FS::FileType::TIFF ){ return true; }
+
+            // Otherwise, return false 
+            return false;
+
+        }
+       
 
         /**
-         * Close the driver
+         * @brief Check if the driver is open.
+         *
+         * @return True if the driver is open.
         */
-        void close();
-        
-        /**
-         * Return the driver type
-        */
-        virtual ImageDriverType type()const;
-        
-        /**
-         * Return the number of rows
-        */
-        virtual int rows();
+        bool Is_Open()const
+        {
+            if( m_dataset == NULL ){
+                return false;
+            }
+            return true;
+        }
+
 
         /**
-         * Return the number of columns
+         * @brief Open the driver
         */
-        virtual int cols();
+        virtual void Open()
+        {
+
+            /// if the dataset is already open, then do nothing
+            if( Is_Open() == true ){
+                std::cout << "error: dataset already open" << std::endl;
+                return;
+            }
+
+            // make sure the file exists
+            if( boost::filesystem::exists( m_path ) == false ){
+                throw std::runtime_error( std::string(m_path.native() + " does not exist.").c_str());
+            }
+
+            /// Register the driver
+            GDALAllRegister();
+
+        	// load the dataset 
+            m_dataset = (GDALDataset*) GDALOpen( m_path.c_str(), GA_ReadOnly);
+	
+            // if dataset is null, then there was a problem
+        	if( m_dataset == NULL ){
+                std::cout << "GDALOpen returned a null object." << std::endl;
+		        return;
+        	}
+	
+            // make sure we have pixel data inside the raster
+            if( m_dataset->GetRasterCount() <= 0 ){
+                std::cout << "File has no pixel data." << std::endl;
+                return;
+            }
+	
+            //extract the driver infomation
+            m_driver = m_dataset->GetDriver();
+    
+        }
+        
+
+        /**
+         * @brief Open the driver given a filename.
+         *
+         * @param[in] pathname Image pathname to load the driver with.
+        */
+        virtual void Open( boost::filesystem::path const& pathname )
+        {
+            m_path = pathname;
+            Open();
+        }
+
+
+        /**
+         * @brief Close the driver
+        */
+        void Close()
+        {
+            if( Is_Open() == false ){
+                GDALClose((GDALDatasetH)m_dataset);
+                m_dataset = NULL;
+                m_driver = NULL;
+            }
+        }
+        
+        
+        /**
+         * @brief Return the driver type.
+         *
+         * @return Image driver type enumeration.
+        */
+        virtual ImageDriverType Get_ImageDriverType()const
+        {
+            return ImageDriverType::GDAL;
+        }
+
+        
+        /**
+         * @brief Return the number of rows.
+         *
+         * @return Number of rows in image.
+        */
+        virtual int Rows() const
+        {
+            if( m_dataset == nullptr || m_dataset == NULL ){
+                return -1;    
+            }
+            return m_dataset->GetRasterYSize();
+        }
+
+
+        /**
+         * @brief Return the number of columns.
+         *
+         * @return Number of columns in image.
+        */
+        virtual int Cols() const{
+            if( m_dataset == nullptr || m_dataset == NULL){
+                return -1;
+            }
+            return m_dataset->GetRasterXSize();
+        }
 
 
         /**
@@ -132,25 +289,27 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
          * @param[in] image_data Reference to pixel data.
          * @param[in] image_data_size Size of the image pixel buffer
          */
-        template<typename PixelType>
-        void getPixels( std::shared_ptr<std::vector<PixelType> >& image_data, 
-                        const int& image_data_size ){
+        void Get_Pixels( std::shared_ptr<std::vector<pixel_type> >& image_data, 
+                         const int& image_data_size )
+        {
             
             // if the dataset is not open, then do nothing
-            if( isOpen() == false ){
+            if( Is_Open() == false )
+            {
                 std::cout << "warning: dataset is not open." << std::endl;
                 return;
             }
 
             // make sure the vector is properly sized
-            if( image_data_size != (rows()*cols())){
+            if( image_data_size != (Rows()*Cols()))
+            {
                 throw GEO::GeneralException("Error: image data must be pre-allocated to the required size.", __FILE__, __LINE__);
             }
         
         
             // get image dimensions
-            int xsize = cols();
-            int ysize = rows();
+            int xsize = Cols();
+            int ysize = Rows();
 
             // start iterating through each band
             float* pafScanline;
@@ -158,19 +317,24 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
     
             // get driver type
             std::string driverType;
-            if( m_driver->GetDescription() != NULL ){
+            if( m_driver->GetDescription() != NULL )
+            {
                 driverType = m_driver->GetDescription();
             }
 
             // set the bit depth if we are nitf
             int NITF_ABPP=16;
-            if( driverType == "NITF" ){
-                if( m_dataset->GetMetadataItem("NITF_ABPP") != NULL ){
+            if( driverType == "NITF" )
+            {
+                if( m_dataset->GetMetadataItem("NITF_ABPP") != NULL )
+                {
                     std::string abpp = m_dataset->GetMetadataItem("NITF_ABPP");
-                    if( abpp == "12" ){
+                    if( abpp == "12" )
+                    {
                         NITF_ABPP=12;
                     }
-                    else if( abpp == "14" ){
+                    else if( abpp == "14" )
+                    {
                         NITF_ABPP=14;
                     }
                 }
@@ -199,30 +363,26 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
                         
                         /// Convert datatypes
                         if( gdalDataType == GDT_Byte ){
-                            value = IMG::range_cast<IMG::ChannelTypeUInt8, typename PixelType::channeltype>( pafScanline[c] );
+                            value = IMG::range_cast<IMG::ChannelTypeUInt8, typename pixel_type::channeltype>( pafScanline[c] );
                         } else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
-                            value = IMG::range_cast<IMG::ChannelTypeUInt12,typename PixelType::channeltype>( pafScanline[c] );
+                            value = IMG::range_cast<IMG::ChannelTypeUInt12,typename pixel_type::channeltype>( pafScanline[c] );
                         } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
-                            value = IMG::range_cast<IMG::ChannelTypeUInt16,typename PixelType::channeltype>( pafScanline[c] );                        
+                            value = IMG::range_cast<IMG::ChannelTypeUInt16,typename pixel_type::channeltype>( pafScanline[c] );                        
                         } else {
                             value = pafScanline[c];
                         }
 
 
-                        if( m_dataset->GetRasterCount() == 1 && (*image_data)[0].dims() == 3 ){
+                        if( m_dataset->GetRasterCount() == 1 && (*image_data)[0].Dims() == 3 ){
                             (*image_data)[r*xsize + c] = value;
                         }
                         else {
                             (*image_data)[r*xsize + c][i] = value;
                         }
-                        
-
                     }
 
                     // clear data
                     CPLFree( pafScanline );
-
-
                 }
             }
         
@@ -231,16 +391,17 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
         /**
          * Get the pixel value
         */
-        template <typename PixelType>
-        PixelType getPixel( const int& x, const int& y ){
+        virtual pixel_type Get_Pixel( const int& row, 
+                                      const int& col )
+        {
             
             // make sure the driver is open 
-            if( isOpen() == false ){
-                open();
+            if( Is_Open() == false ){
+                Open();
             }
             
             // create output
-            PixelType output;
+            pixel_type output;
 
             // iterate over each channel
             float data;
@@ -255,22 +416,22 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
                 
 
                 // read data
-                band->RasterIO( GF_Read, x, y, 1, 1, &data, 1, 1, GDT_Float32, 0, 0);
+                band->RasterIO( GF_Read, col, row, 1, 1, &data, 1, 1, GDT_Float32, 0, 0);
 
                 /// Convert datatypes
                 if( gdalDataType == GDT_Byte ){
-                    value = IMG::range_cast<IMG::ChannelTypeUInt8, typename PixelType::channeltype>( data );
+                    value = IMG::range_cast<IMG::ChannelTypeUInt8, typename pixel_type::channeltype>( data );
                 //} else if( (gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ) || (NITF_ABPP == 12 )){
-                //    value = IMG::range_cast<IMG::ChannelTypeUInt12,typename PixelType::channeltype>( data );
+                //    value = IMG::range_cast<IMG::ChannelTypeUInt12,typename pixel_type::channeltype>( data );
                 } else if( gdalDataType == GDT_Int16 || gdalDataType == GDT_UInt16 ){
-                    value = IMG::range_cast<IMG::ChannelTypeUInt16,typename PixelType::channeltype>( data );                        
+                    value = IMG::range_cast<IMG::ChannelTypeUInt16,typename pixel_type::channeltype>( data );                        
                 } else {
                     value = data;
                 }
 
                     
                 // if the current channel is less than the total channels for the pixeltype
-                if( i <= output.dims() && output.dims() > 1 ){
+                if( i <= output.Dims() && output.Dims() > 1 ){
                     output[i] = value;
                 }
                 // otherwise, just set it equal
@@ -281,6 +442,94 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
 
             return output;
         }
+
+
+        /**
+         * @brief Read an image from file.
+         *
+         * @param[in] pathname Image pathname.
+         *
+         * @return Image resource.
+        */
+        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  boost::filesystem::path const& pathname )
+        {
+
+            /// create the output
+            typename IMG::MemoryResource<pixel_type>::ptr_t output(new IMG::MemoryResource<pixel_type>());
+
+            // Open the dataset
+            Open();
+
+            // Make sure we had no major issues
+            if( Is_Open() == false ){
+                return output;
+            }
+
+            // create the pixeldata
+            std::shared_ptr<std::vector<pixel_type> > pixeldata( new std::vector<pixel_type>(Rows() * Cols()));
+
+            // pass the container to the driver
+            Get_Pixels( pixeldata, Rows()*Cols() );
+
+
+            output->Set_Pixel_Data( pixeldata, 
+                                    Rows(), 
+                                    Cols() );
+
+            // return the resource
+            return output;
+        }
+        
+        
+        /**
+         * @brief Write an image to a GDAL format.
+         *
+         * @param[in] output_image Output image to write.
+         * @param[in] pathname Image path to write to.
+        */ 
+        void Write_Image( IMG::Image_<pixel_type,ResourceType>const&  output_image,  
+                          boost::filesystem::path const& pathname )
+        {
+
+            // Identify the driver
+            std::string driverShortName = Get_Short_Driver_From_Filename(pathname);
+            if( driverShortName == "" ){
+                throw std::runtime_error(pathname.native() + std::string(" does not have a supported gdal driver."));
+            }
+
+            // Get the gdal driver
+            GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+    
+            // make sure the driver can create images
+            if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATE, FALSE )){
+                if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATECOPY, FALSE )){
+                    throw std::runtime_error(driverShortName + " Driver cannot create or copy images.");
+                }
+                throw std::runtime_error(driverShortName + " Driver cannot write images.");
+            }
+    
+            // run create
+            GDALDataset* dataset = gdal_driver->Create( pathname.c_str(), 
+                                                        100,//output_image.cols(), 
+                                                        100,//output_image.rows(), 
+                                                        1,//output_image.channels(),
+                                                        GDT_Byte,
+                                                        NULL
+                                                       );
+    
+            // iterate over each channel
+            for( size_t i=0; i<output_image.Channels(); i++ ){
+                GDALRasterBand* band = dataset->GetRasterBand(i+1);
+                for( size_t x=0; x<output_image.Cols(); x++ )
+                for( size_t y=0; y<output_image.Rows(); y++ ){
+                    band->RasterIO( GF_Write, 0, 0, x, y, &output_image(y,x)[i], 1, 1, GDT_Byte, 0, 0);
+                }
+            }
+
+            // close the dataset
+            GDALClose(dataset);
+        }
+
         
     private:
         
@@ -294,116 +543,6 @@ class ImageDriverGDAL : public GEO::IO::ImageDriverBase{
         GDALDataset* m_dataset;
 
 }; /// End of ImageDriverBase Class
-
-
-/**
- * Read an image and return the image data
-*/
-template <typename PixelType>
-std::shared_ptr<std::vector<PixelType> > load_image_data( const boost::filesystem::path& image_pathname,        
-                                                          int& rowCount, 
-                                                          int& colCount )
-{
-   
-    // create the GDAL Driver
-    ImageDriverGDAL::ptr_t gdal_driver( new ImageDriverGDAL(image_pathname));
-
-    // open the dataset
-    gdal_driver->open();
-
-    // make sure our loader did not have any major issues
-    if( gdal_driver->isOpen() == false ){
-        rowCount = 0;
-        colCount = 0;
-        return nullptr;
-    }
-
-    // create the main container with the expected size
-    colCount = gdal_driver->cols();
-    rowCount = gdal_driver->rows();
-    
-
-    // create the pixeldata
-    std::shared_ptr<std::vector<PixelType> > pixeldata( new std::vector<PixelType>(rowCount * colCount));
-
-    // pass the container to the driver
-    gdal_driver->getPixels( pixeldata, rowCount * colCount );
-
-    return pixeldata;
-}
-
-/**
- * Load an image and return a resource
-*/
-template<typename PixelType>
-IMG::MemoryResource<PixelType> load_image( const boost::filesystem::path& image_pathname )
-{
-
-    /// create the output
-    IMG::MemoryResource<PixelType> output;
-
-    // get the pixel data
-    int rowSize, colSize;
-    std::shared_ptr<std::vector<PixelType> > pixels = load_image_data<PixelType>( image_pathname, 
-                                                                                  rowSize, 
-                                                                                  colSize );
-
-    output.setPixelData( pixels, 
-                         rowSize, 
-                         colSize );
-
-    // return the resource
-    return output;
-}
-
-/**
- * Write an image to a GDAL format
-*/
-template<typename PixelType, typename ResourceType>
-void write_image( IMG::Image_<PixelType,ResourceType>const&  output_image,  
-                  boost::filesystem::path const& pathname )
-{
-
-    // Identify the driver
-    std::string driverShortName = getShortDriverFromFilename(pathname);
-    if( driverShortName == "" ){
-        throw std::runtime_error(pathname.native() + std::string(" does not have a supported gdal driver."));
-    }
-
-    // create the driver
-    GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
-    
-    // make sure the driver can create images
-    if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATE, FALSE )){
-        if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATECOPY, FALSE )){
-            throw std::runtime_error(driverShortName + " Driver cannot create or copy images.");
-        }
-        throw std::runtime_error(driverShortName + " Driver cannot write images.");
-    }
-    
-    // run create
-    std::cout << "Path: " << pathname.c_str() << std::endl;
-    GDALDataset* dataset = gdal_driver->Create( pathname.c_str(), 
-                                                100,//output_image.cols(), 
-                                                100,//output_image.rows(), 
-                                                1,//output_image.channels(),
-                                                GDT_Byte,
-                                                NULL
-                                               );
-    
-    // iterate over each channel
-    for( size_t i=0; i<output_image.channels(); i++ ){
-
-        GDALRasterBand* band = dataset->GetRasterBand(i+1);
-        for( size_t x=0; x<output_image.cols(); x++ )
-        for( size_t y=0; y<output_image.rows(); y++ ){
-            band->RasterIO( GF_Write, 0, 0, x, y, &output_image(y,x)[i], 1, 1, GDT_Byte, 0, 0);
-        }
-    }
-
-    // close the dataset
-    GDALClose(dataset);
-}
 
 
 } /// End of GDAL Namespace

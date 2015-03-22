@@ -42,11 +42,9 @@ class An_Elevation_Tile {
                            const A_Size<int>&       elevation_tile_size,
                            const double&            gsd )
             : m_elevation_data(new IMG::Image_<IMG::PixelGray_df,IMG::MemoryResource<IMG::PixelGray_df> >(elevation_tile_size, IMG::PixelGray_df(0))),
-              m_bottom_left_corner(bottom_left_corner),
-              m_gsd(gsd)
+              m_gsd(gsd),
+              m_bottom_left_corner(bottom_left_corner)
         {
-            // Create data
-
         }
 
 
@@ -64,10 +62,9 @@ class An_Elevation_Tile {
                            const ElevationDataType&    default_elevation_value_meters )
             : m_elevation_data(new IMG::Image_<IMG::PixelGray_df,IMG::MemoryResource<IMG::PixelGray_df>>( elevation_tile_size,        
                                                                                                          IMG::PixelGray_df(default_elevation_value_meters))),
-              m_bottom_left_corner(bottom_left_corner),
-              m_gsd(gsd)
+              m_gsd(gsd),
+              m_bottom_left_corner(bottom_left_corner)
         {
-
         }
     
 

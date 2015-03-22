@@ -15,52 +15,93 @@ namespace IMG{
 
 /**
  * @class BaseResource
+ *
+ * @brief Base pixel resource driver type.
 */
 template <typename PixelType>
 class BaseResource{
 
     public:
         
+        /// PixelType
+        typedef PixelType pixel_type;
+
+
+        /// Pointer Type
+        typedef std::shared_ptr<BaseResource<PixelType>> ptr_t;
+
 
         /**
-         * Return the pixel value
+         * @brief Return the pixel value.
+         * 
+         * @param[in] idx Index to fetch.
+         *
+         * @return Pixel value at the position.
         */
         virtual PixelType operator[]( const int& idx )const = 0;
 
+
         /**
-         * Return the pixel reference
+         * @brief Return the pixel reference.
+         *
+         * @param[in] idx Index to fetch.
+         *
+         * @return Reference to pixel at index.
         */
         virtual PixelType& operator[]( const int& idx ) = 0;
         
-        /**
-         * Return the pixel value
-        */
-        virtual PixelType  operator()( const int& x, const int& y ) const = 0;
 
         /**
-         * Return the pixel reference
+         * @brief Return the pixel value.
+         *
+         * @param[in] row Row to fetch.
+         * @param[in] col Column to fetch.
+         *
+         * @return Pixel value at index position.
         */
-        virtual PixelType& operator()( const int& x, const int& y ) = 0;
+        virtual PixelType  operator()( const int& row,      
+                                       const int& col ) const = 0;
+
+
+        /**
+         * @brief Return the pixel reference.
+         *
+         * @param[in] row Row to fetch.
+         * @param[in] col Column to fetch.
+         * 
+         * @return Reference to pixel at position.
+        */
+        virtual PixelType& operator()( const int& row,
+                                       const int& col ) = 0;
         
-        /**
-         * Return the number of image rows
-        */
-        virtual int rows()const = 0;
 
         /**
-         * Return the number of image columns
+         * @brief Return the number of image rows.
+         *
+         * @return Image row count.
+        */
+        virtual int Rows()const = 0;
+
+
+        /**
+         * @brief Return the number of image columns.
+         *
          * @return column count
         */
-        virtual int cols()const = 0;
+        virtual int Cols()const = 0;
         
+
         /**
-         * Return the number of pixel channels
+         * @brief Return the number of pixel channels.
+         *
+         * @return Channel count.
         */
-        virtual int channels()const = 0;
+        virtual int Channels()const = 0;
 
-}; /// End of BaseResource Class
 
-} /// End of IMG Namespace
-} /// End of GEO Namespace
+}; // End of BaseResource Class
+
+} // End of IMG Namespace
+} // End of GEO Namespace
 
 #endif

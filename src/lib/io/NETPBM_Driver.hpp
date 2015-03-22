@@ -39,14 +39,14 @@ void write_pgm_image( IMG::BaseResource<PixelType> const& data,
     FILE *fp = fopen( filename.c_str(), "wb" ); // open in binary mode
 
     // write data out
-    fprintf( fp, "P5\n%d %d\n255\n", data.cols(), data.rows());
+    fprintf( fp, "P5\n%d %d\n255\n", data.Cols(), data.Rows());
     
     unsigned char info;
-    for( int y=0; y<data.rows(); y++ ){
-    for( int x=0; x<data.cols(); x++ ){
+    for( int y=0; y<data.Rows(); y++ ){
+    for( int x=0; x<data.Cols(); x++ ){
 
         // create the RGB Pixel to convert.  This needs to convert any pixel type regardless of pixel type or channel type
-        IMG::PixelGray_u8 output = IMG::pixel_cast<IMG::PixelGray_u8>(data[y*data.cols() + x]);
+        IMG::PixelGray_u8 output = IMG::pixel_cast<IMG::PixelGray_u8>(data[y*data.Cols() + x]);
 
         // write rgb to file
         info = output[0];
@@ -73,14 +73,14 @@ void write_ppm_image( IMG::BaseResource<PixelType> const& data,
     FILE *fp = fopen( filename.c_str(), "wb" ); // open in binary mode
 
     // write data out
-    fprintf( fp, "P6\n%d %d\n255\n", data.cols(), data.rows());
+    fprintf( fp, "P6\n%d %d\n255\n", data.Cols(), data.Rows());
     
     unsigned char color[3];
-    for( int y=0; y<data.rows(); y++ ){
-    for( int x=0; x<data.cols(); x++ ){
+    for( int y=0; y<data.Rows(); y++ ){
+    for( int x=0; x<data.Cols(); x++ ){
 
         // create the RGB Pixel to convert.  This needs to convert any pixel type regardless of pixel type or channel type
-        IMG::PixelRGB_u8 output = IMG::pixel_cast<IMG::PixelRGB_u8>(data[y*data.cols() + x]);
+        IMG::PixelRGB_u8 output = IMG::pixel_cast<IMG::PixelRGB_u8>(data[y*data.Cols() + x]);
 
         // write rgb to file
         color[0] = output[0];

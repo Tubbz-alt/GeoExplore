@@ -5,9 +5,13 @@
 #    Purpose:  Build script for the Geo-Utility
 #
 
+
+#  Set C++ 11
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+
 #  Set the executable output path
-set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin )
-set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../lib )
+set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
+set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
 
 #--------------------------------#
@@ -24,6 +28,7 @@ find_package( Threads )
 #-     Find GDAL Library      -#
 #------------------------------#
 find_package( GDAL REQUIRED )
+include_directories( ${GDAL_INCLUDE_DIR} )
 
 #------------------------------------------#
 #-      Define Required Header Files      -#

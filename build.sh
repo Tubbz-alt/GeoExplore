@@ -139,7 +139,12 @@ test_software(){
     MAKE_ARGS="$2"
     
     #  Get the build directory
-    BUILD_DIRECTORY="${4}"
+    BUILD_DIRECTORY="."
+    if [ "$BUILD_TYPE" = 'release' -o "$BUILD_TYPE" = 'RELEASE' ]; then
+        BUILD_DIRECTORY='release'
+    else
+        BUILD_DIRECTORY='debug'
+    fi
 
     #  Create the directory
     mkdir -p ${BUILD_DIRECTORY}
@@ -148,7 +153,7 @@ test_software(){
     pushd ${BUILD_DIRECTORY}
 
     #  Run CMake
-    cmake ${CMAKE_LOCATION} ${CMAKE_EXTRA_ARGS}
+    cmake .. ${CMAKE_EXTRA_ARGS}
     if [ ! "$?" = '0' ]; then
         echo 'error: CMake encountered error. Please see output.' 1>&2;
         exit 1
@@ -162,7 +167,7 @@ test_software(){
     fi
 
     #  Run Unit Test
-    ./geoexplore-unit-test
+    ./bin/geo-explore-unit-tests
     
     #  Exit directory
     popd
@@ -410,7 +415,7 @@ fi
 #-     Test GeoExplore     -#
 #---------------------------#
 if [ "$RUN_TEST" = '1' ]; then
-    test_software '../../install/test'  ${BUILD_TYPE} "${MAKE_ARGS}" 'test'
+    test_software ${BUILD_TYPE} "${MAKE_ARGS}"
 fi
 
 

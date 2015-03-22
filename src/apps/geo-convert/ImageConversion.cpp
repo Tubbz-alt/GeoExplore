@@ -22,10 +22,10 @@ void convert_images( const Options& options ){
 
         // read the image
         GEO::IMG::Image<GEO::IMG::PixelRGB_d> input_image;
-        GEO::IO::read_image( options.inputs[i], input_image );
+        GEO::IO::Read_Image( options.inputs[i], input_image );
 
         // write the image
-        GEO::IO::write_image( input_image, options.outputs[i] );
+        GEO::IO::Write_Image( input_image, options.outputs[i] );
     }
 
 

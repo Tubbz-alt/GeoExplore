@@ -138,7 +138,7 @@ void convert_coordinates( Options const& options ){
         
         // convert to output
         // utm
-        if( converted_coordinate->type() == GEO::CoordinateType::UTM ){
+        if( converted_coordinate->Get_Type() == GEO::CoordinateType::UTM ){
             GEO::CRD::CoordinateUTM_d::ptr_t output = std::dynamic_pointer_cast<GEO::CRD::CoordinateUTM_d>(converted_coordinate);
             cout << output->zone() << ",";
             cout << (int64_t)output->easting_meters() << ",";
@@ -146,7 +146,7 @@ void convert_coordinates( Options const& options ){
             cout << (int64_t)output->altitude_meters() << endl;
         }
         // geodetic dd
-        else if( converted_coordinate->type() == GEO::CoordinateType::Geographic ){
+        else if( converted_coordinate->Get_Type() == GEO::CoordinateType::Geographic ){
             GEO::CRD::CoordinateGeographic_d::ptr_t output = std::dynamic_pointer_cast<GEO::CRD::CoordinateGeographic_d>(converted_coordinate);
             cout << std::fixed << output->latitude_degrees() << "," << output->longitude_degrees() << "," << output->altitude_meters() << endl;
         } else {

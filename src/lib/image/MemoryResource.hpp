@@ -31,6 +31,9 @@ class MemoryResource : public BaseResource<PixelType> {
         /// Pointer Type
         typedef std::shared_ptr<MemoryResource<PixelType>> ptr_t;
 
+        /// Pixel Type
+        typedef PixelType pixel_type;
+
         /**
          * @brief Constructor
         */
@@ -130,29 +133,40 @@ class MemoryResource : public BaseResource<PixelType> {
             }
             return (*m_data)[idx];
         }
+
         
         /**
-         * Get the pixel value
+         * @brief Get the pixel value at the specified row and column.
+         *
+         * @param[in] row Row to fetch.
+         * @param[in] col Column to fetch.
+         * 
+         * @return Pixel value at the position.
         */
-        virtual PixelType operator()( const int& x, const int& y )const{
+        virtual PixelType operator()( const int& row, 
+                                      const int& col )const
+        {
             
             /// make sure the image has memory initialized
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return (*m_data)[m_cols*y + x];
+            return (*m_data)[m_cols*row + col];
         }
+
         
         /**
          * Get the pixel reference
         */
-        virtual PixelType& operator()( const int& x, const int& y ){
+        virtual PixelType& operator()( const int& row, 
+                                       const int& col )
+        {
             
             /// make sure the image has memory initialized
             if( m_data == nullptr ){
                 throw MemoryResourceNotInitializedException(__FILE__,__LINE__);
             }
-            return (*m_data)[m_cols*y + x];
+            return (*m_data)[m_cols*row + col];
         }
 
         /**
@@ -160,7 +174,7 @@ class MemoryResource : public BaseResource<PixelType> {
          *
          * @return row count
         */
-        virtual int rows()const{
+        virtual int Rows()const{
             return m_rows;
         }
 
@@ -169,39 +183,44 @@ class MemoryResource : public BaseResource<PixelType> {
          *
          * @return column count
         */
-        virtual int cols()const{
+        virtual int Cols()const{
             return m_cols;
         }
         
-        /**
-         * Return the number of channels
-        */
-        virtual int channels()const{
-            return PixelType().dims();
-        }
 
         /**
-         * Clone (Deep Copy)
+         * @brief Return the number of channels in resource.
+         *
+         * @return Number of channels for resource pixeltype.
         */
-        MemoryResource<PixelType> clone()const{
+        virtual int Channels()const{
+            return PixelType().Dims();
+        }
+
+
+        /**
+         * @brief Clone (Deep Copy)
+        */
+        MemoryResource<PixelType> Clone()const{
             
             /// Create the output
             MemoryResource<PixelType> output;
 
             // copy row and columns
-            output.m_rows = rows();
-            output.m_cols = cols();
+            output.m_rows = Rows();
+            output.m_cols = Cols();
 
             // copy the data
             output.m_data = std::shared_ptr<std::vector<PixelType> >(new std::vector<PixelType>(output.m_rows*output.m_cols));
 
-            for( size_t i=0; i<(rows()*cols()); i++ ){
+            for( size_t i=0; i<(Rows()*Cols()); i++ ){
                 (*output.m_data)[i] = (*m_data)[i];
             }
 
             // return the data
             return output;
         }
+
 
         /**
          * Shallow Copy
@@ -212,8 +231,8 @@ class MemoryResource : public BaseResource<PixelType> {
             if( this != &rhs ){
 
                 // set the rows and column counts
-                this->m_rows = rhs.rows();
-                this->m_cols = rhs.cols();
+                this->m_rows = rhs.Rows();
+                this->m_cols = rhs.Cols();
 
                 // copy the memory pointer
                 this->m_data = rhs.m_data;
@@ -224,19 +243,24 @@ class MemoryResource : public BaseResource<PixelType> {
             return (*this);
         }
         
+
         /**
          * Assign Pixel Data
         */
-        void setPixelData( std::shared_ptr<std::vector<PixelType> > const& data, const int& rows, const int& cols ){
+        void Set_Pixel_Data( std::shared_ptr<std::vector<PixelType> > const& data, 
+                             const int& rows, 
+                             const int& cols )
+        {
             m_rows = rows;
             m_cols = cols;
             m_data = data;
         }
+
         
         /**
          * Get pixel data
         */
-        std::shared_ptr<std::vector<PixelType> > getPixelData()const{
+        std::shared_ptr<std::vector<PixelType> > Get_Pixel_Data()const{
             return m_data;
         }
 
@@ -251,10 +275,13 @@ class MemoryResource : public BaseResource<PixelType> {
         /// number of columns
         int m_cols;
 
+
 }; /// End of MemoryResource Class
+
 
 // Define our typedef alias'
 template <typename PixelType> using Image = Image_<PixelType,GEO::IMG::MemoryResource<PixelType> >;
+
 
 } /// End of IMG Namespace
 } /// End of GEO Namespace

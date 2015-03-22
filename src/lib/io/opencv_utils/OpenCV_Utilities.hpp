@@ -5,12 +5,12 @@
  *
  * @brief Contains OpenCV-Related helper functions.
 */
-#ifndef __GEOEXPLORE_SRC_UTILS_OPENCV_UTILITIES_HPP__
-#define __GEOEXPLORE_SRC_UTILS_OPENCV_UTILITIES_HPP__
+#ifndef __GEOEXPLORE_LIB_IO_OPENCV_UTILITIES_HPP__
+#define __GEOEXPLORE_LIB_IO_OPENCV_UTILITIES_HPP__
 
 // GeoExplore Libraries
-#include "../image/Image.hpp"
-#include "../image/Pixel_Types.hpp"
+#include "../../image/Image.hpp"
+#include "../../image/Pixel_Types.hpp"
 
 // OpenCV Libraries
 #include <opencv2/core/core.hpp>
@@ -18,7 +18,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 namespace GEO{
-namespace UTILS{
+namespace IO{
 namespace OCV{
 
 
@@ -56,12 +56,12 @@ void View_Image( IMG::Image_<PixelType, ResourceType> const& image,
 {
 
     // Make sure the image loaded properly
-    if( image.rows() <= 0 || image.cols() <= 0 ){
+    if( image.Rows() <= 0 || image.Cols() <= 0 ){
         return;
     }
 
     // Create output image
-    cv::Mat view_image( image.rows(), image.cols(), CV_8UC3 );
+    cv::Mat view_image( image.Rows(), image.Cols(), CV_8UC3 );
 
     // Iterate over image
     for( int r=0; r<view_image.rows; r++ )
@@ -76,8 +76,8 @@ void View_Image( IMG::Image_<PixelType, ResourceType> const& image,
 }
 
 
-} // End of OCV   Namespace
-} // End of UTILS Namespace
-} // End of GEO   Namespace
+} // End of OCV Namespace
+} // End of IO  Namespace
+} // End of GEO Namespace
 
 #endif

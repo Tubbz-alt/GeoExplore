@@ -28,55 +28,91 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
         /// Define datatype
         typedef typename ChannelType::type datatype;
     
-        /**
-         * Default Constructor
-        */
-        PixelGray() : m_data{channeltype::minValue}, 
-                     PixelBase<PixelGray<ChannelType>,ChannelType>(){}
         
         /**
-         * Parameterized Constructor
+         * @brief Constructor
         */
-        PixelGray( datatype const& b ) : 
-                           m_data{ b }, 
-                           PixelBase<PixelGray<ChannelType>,ChannelType>(){} 
+        PixelGray() 
+          :  PixelBase<PixelGray<ChannelType>,ChannelType>(),
+             m_data{ channeltype::minValue }
+        {
+        }
         
 
         /**
-         * Get the red value
+         * @brief Constructor
+         *
+         * @param[in] gray_value Grayscale values to set.
+        */
+        PixelGray( datatype const& gray_value ) 
+          :  PixelBase<PixelGray<ChannelType>,ChannelType>(),
+             m_data{ gray_value } 
+        {
+        } 
+        
+
+        /**
+         * @brief Get the gray value.
+         *
+         * @return Grayscale value.
         */
         virtual datatype val()const{ 
             return m_data; 
         }
 
+
         /**
-         * Get the red reference
+         * @brief Get the grayscale reference.
+         *
+         * @return Reference to grayscale value.
         */
         virtual datatype& val(){ 
             return m_data; 
         }
     
-        /// return the dimensionality
-        virtual int dims()const{ return 1; }
-        
+
         /**
-         * Accessor operator
+         * @brief Get the dimensionality.
+         *
+         * @return The number of channels or dimensions in channel.
+        */
+        virtual int Dims()const{ 
+            return 1; 
+        }
+        
+
+        /**
+         * @brief Pixel accessor operator.
+         *
+         * @param[in] idx Index to reference.
+         *
+         * @return grayscale reference value.
         */
         virtual datatype& operator[]( const int& idx){
             return m_data;
         }
         
+
         /**
-         * Accessor Operator
+         * @brief Pixel accessor operator.
+         *
+         * @param[in] idx Index to reference.
+         *
+         * @return Value of grayscale value.
         */
         virtual datatype operator[](const int& idx)const{
             return m_data;
         }
 
         /**
-         * Compare Pixel
+         * @brief Compare Pixels
+         *
+         * @param[in] rhs Pixel to compare.
+         *
+         * @return True if they are the same, false otherwise.
         */
-        virtual bool operator == ( const PixelGray<ChannelType>& rhs )const{
+        virtual bool operator == ( const PixelGray<ChannelType>& rhs )const
+        {
             return (m_data == rhs.m_data);
         }
         

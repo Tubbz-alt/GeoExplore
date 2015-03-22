@@ -50,30 +50,42 @@ class CoordinateBase{
               m_datum(datum)
         {
         }
-        
+       
+
         /**
-         * Get the altitude
+         * @brief Get the altitude in meters.
+         *
+         * @return Altitude in meters.
          */
         inline DATATYPE altitude_meters()const{ 
             return m_altitude_meters; 
         }
 
+
         /**
-         * Set the altitude
+         * @brief Set the altitude in meters.
+         *
+         * @return Altitude reference in meters. 
          */
         inline DATATYPE& altitude_meters(){ 
             return m_altitude_meters; 
         }
         
+
         /**
-         * Get the coordinate system
+         * @brief Get the coordinate system datum.
+         *
+         * @return Coordinate system datum.
          */
         inline Datum datum()const{
             return m_datum; 
         }
 
+
         /**
-         * Set the coordinate system
+         * @brief Set the coordinate system datum.
+         *
+         * @return Datum reference.
          */
         inline Datum& datum(){ 
             return m_datum; 
@@ -81,7 +93,9 @@ class CoordinateBase{
 
         
         /**
-         * Clone the object
+         * @brief Clone the object.
+         *
+         * @return Cloned coordinate.
          */
         CoordinateBase<DATATYPE>::ptr_t clone()const{ 
             return CoordinateBase<DATATYPE>::ptr_t( new CoordinateBase<DATATYPE>(m_altitude_meters, 
@@ -90,9 +104,11 @@ class CoordinateBase{
 
 
         /*
-         * Get the type
+         * @brief Get the type.
+         *
+         * @return Coordinate type enumeration.
          */
-        virtual CoordinateType type(){ 
+        virtual CoordinateType Get_Type(){ 
             return CoordinateType::Base; 
         }
 
@@ -106,6 +122,7 @@ class CoordinateBase{
         
 
 }; /// End of CoordinateBase class
+
 
 /// Common Typdefs
 typedef CoordinateBase<double> CoordinateBaseDouble;

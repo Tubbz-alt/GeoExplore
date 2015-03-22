@@ -22,7 +22,7 @@ namespace FS{
 /**
  * Get the file type
 */
-FileType getFileType( const boost::filesystem::path& pathname ){
+FileType Get_File_Type( const boost::filesystem::path& pathname ){
 
     // get the extension
     std::string ext = string_toLower(pathname.extension().native());
@@ -46,6 +46,16 @@ FileType getFileType( const boost::filesystem::path& pathname ){
     // DTED
     if( ext == ".dt0" || ext == ".dt1" || ext == ".dt2" )
         return FileType::DTED;
+
+    // SRTM
+    if( ext == ".hgt" ){
+        return FileType::SRTM;
+    }
+
+    // TIFF
+    if( ext == ".tiff" || ext == ".tif" ){
+        return FileType::TIFF;
+    }
 
 
     // otherwise return unknown type

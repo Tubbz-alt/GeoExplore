@@ -56,6 +56,9 @@ void Options::Load_Configuration_File()
 
     // Parse the document
     pugi::xml_parse_result result = doc.load_file(m_configuration_file.c_str());
+    if( result == false ){
+        throw std::runtime_error("File parsed with errors");
+    }
 
     // Look for root node
     pugi::xml_node root = doc.child("geo-utility");
@@ -88,9 +91,6 @@ void Options::Parse_Render_Configuration( pugi::xml_node& render_config_node )
 {
     
     // Temp variables
-    double tempDouble;
-    int tempInt;
-    char tempChar;
     std::string tempStr;
 
     // Get the image information

@@ -31,11 +31,11 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
          * Constructor
         */
         PixelRGBA() 
-            : m_data{ channeltype::minValue,
-                      channeltype::minValue,
-                      channeltype::minValue,
-                      channeltype::minValue }, 
-              PixelBase<PixelRGBA<ChannelType>,ChannelType>()
+            :  PixelBase<PixelRGBA<ChannelType>,ChannelType>(),
+               m_data{ channeltype::minValue,
+                       channeltype::minValue,
+                       channeltype::minValue,
+                       channeltype::minValue } 
         {
         }
 
@@ -46,11 +46,13 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
          * @param[in] gray_value Value to set all pixels to.
         */
         PixelRGBA( datatype const& gray_value ) 
-          :  m_data{ gray_value, 
+          :   PixelBase<PixelRGBA<ChannelType>,ChannelType>(),
+              m_data{ gray_value, 
                      gray_value, 
                      gray_value, 
-                     channeltype::maxValue },
-             PixelBase<PixelRGBA<ChannelType>,ChannelType>(){}               
+                     channeltype::maxValue }
+        {
+        }
         
         
         /**
@@ -63,11 +65,11 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
         PixelRGBA( datatype const& red, 
                    datatype const& green, 
                    datatype const& blue ) 
-          :  m_data{ red, 
+          :   PixelBase<PixelRGBA<ChannelType>,ChannelType>(),
+              m_data{ red, 
                      green, 
                      blue,
-                     channeltype::maxValue},
-              PixelBase<PixelRGBA<ChannelType>,ChannelType>()
+                     channeltype::maxValue}
         {
         }
         
@@ -84,11 +86,11 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
                    datatype const& green,
                    datatype const& blue,
                    datatype const& alpha )
-          :  m_data{ red,
+          :  PixelBase<PixelRGBA<ChannelType>,ChannelType>(),
+             m_data{ red,
                      green,
                      blue, 
-                     alpha },
-             PixelBase<PixelRGBA<ChannelType>,ChannelType>()
+                     alpha }
         {
         }
 
@@ -139,10 +141,14 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
             return m_data[2]; 
         }
 
-        /// return the dimensionality
-        virtual int dims()const{ 
-            return 3; 
+        
+        /**
+         * @brief Get the dimensions of the pixel.
+        */
+        virtual int Dims()const{ 
+            return 4; 
         }
+
 
         /**
          * @brief Function Operator
@@ -190,6 +196,9 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
 
 
 }; /// End of class PixelRGBA
+
+typedef PixelRGBA<ChannelTypeDoubleFree> PixelRGBADoubleFree;
+typedef PixelRGBA<ChannelTypeDoubleFree> PixelRGBA_df;
 
 typedef PixelRGBA<ChannelTypeDouble>  PixelRGBADouble;
 typedef PixelRGBA<ChannelTypeDouble>  PixelRGBA_Double;

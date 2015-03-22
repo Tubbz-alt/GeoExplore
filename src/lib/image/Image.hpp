@@ -100,8 +100,8 @@ class Image_{
          *
          * @return row count
         */
-        int rows()const{
-            return m_resource.rows();
+        int Rows()const{
+            return m_resource.Rows();
         }
 
         /**
@@ -109,8 +109,8 @@ class Image_{
          * 
          * @return column count
         */
-        int cols()const{
-            return m_resource.cols();
+        int Cols()const{
+            return m_resource.Cols();
         }
 
         /**
@@ -118,8 +118,8 @@ class Image_{
          * 
          * @return number of channels.
         */
-        int channels()const{
-            return m_resource.channels();
+        int Channels()const{
+            return m_resource.Channels();
         }
         
         /**
@@ -152,14 +152,14 @@ class Image_{
          *
          * @param[in] resource Resource data to pull data from.
         */
-        void setResource( ResourceType const& resource){
+        void Set_Resource( ResourceType const& resource){
             m_resource = resource;
         }
         
         /**
          * @brief Get the resource information
         */
-        ResourceType getResource()const{
+        ResourceType Get_Resource()const{
             return m_resource;
         }
 

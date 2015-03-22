@@ -132,10 +132,10 @@ void Initialize_Data( Data_Container& data,
     for( int idx=0; idx < image_list.size(); idx++ ){
 
         // Load each image
-        GEO::IO::read_image( image_list[idx], *data.image_list[idx] );
+        GEO::IO::Read_Image( image_list[idx], *data.image_list[idx] );
         
         // Open the image
-        UTILS::OCV::View_Image(*data.image_list[idx], "Window to open." );
+        IO::OCV::View_Image(*data.image_list[idx], "Window to open." );
     }
 
 }

@@ -36,25 +36,35 @@ class PixelBase {
         PixelBase(){}
         
         /**
-         * Return channel value
+         * @brief Return channel value at specified index.
+         *
+         * @param[in] idx Index to get.
         */
         virtual typename channeltype::type operator[](const int& idx)const{
+            
             throw NotImplementedException("PixelBase operator[]", __FILE__, __LINE__);
             typename channeltype::type value;
             return value;
         }
         
+
         /**
-         * Return the channel reference
+         * @brief Return the channel reference.
         */
         virtual typename channeltype::type& operator[](const int& idx){
             throw NotImplementedException("PixelBase &operator[]", __FILE__, __LINE__ );
         }
 
-        /// Dimensionality
-        virtual int dims()const{ 
+        
+        /**
+         * @brief Fetch the dimensionality.
+         *
+         * @return number of channels or dimensions in pixel.
+         */
+        virtual int Dims()const{ 
             throw GeneralException("error: PixelBase has no dimensionality.", __FILE__, __LINE__);
         }
+
 
         /**
          * Compare the pixel

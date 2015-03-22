@@ -7,6 +7,7 @@
 #define __GEOEXPLORE_UTILITIES_FILESYSTEMUTILITIES_HPP__
 
 /// C++ Standard Libraries
+#include <cinttypes>
 #include <string>
 
 /// Boost C++ Libraries
@@ -19,20 +20,21 @@ namespace FS{
 /**
  * @class FileType
 */
-enum class FileType{
-    UNKNOWN,
-    JPEG,
-    JPEG2000,
-    PNG,
-    NITF,
-    DTED,
-    SRTM,
+enum class FileType : uint16_t {
+    UNKNOWN = 0,
+    JPEG = 1,
+    JPEG2000 = 2,
+    PNG = 3,
+    NITF = 4,
+    DTED = 5,
+    SRTM = 6,
+    TIFF = 7,
 };
 
 /**
  * Get File Type
 */
-FileType getFileType( const boost::filesystem::path& pathname );
+FileType Get_File_Type( const boost::filesystem::path& pathname );
 
 } /// End of FS Namespace
 } /// End of GEO Namespace

@@ -29,12 +29,13 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
                                                               Datum const& output_datum ){
 
     // compare before and after types.  Return a copy of the input if the before and after are the same
-    if( coordinate->datum() == output_datum &&  coordinate->type() == output_coordinate_type ){
+    if( coordinate->datum() == output_datum &&  coordinate->Get_Type() == output_coordinate_type ){
         return coordinate->clone();
     }
     
     // check if we have a Geographic to UTM
-    if( coordinate->type() == CoordinateType::Geographic && output_coordinate_type == CoordinateType::UTM ){
+    if( coordinate->Get_Type() == CoordinateType::Geographic && 
+        output_coordinate_type == CoordinateType::UTM ){
     
         // cast the input to the proper type
         typename CoordinateGeographic<DATATYPE>::ptr_t input = std::dynamic_pointer_cast<CoordinateGeographic<DATATYPE> >(coordinate);
@@ -58,7 +59,7 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
     }
 
     // check if we have UTM to geodetic
-    if( coordinate->type() == CoordinateType::UTM && output_coordinate_type == CoordinateType::Geographic ){
+    if( coordinate->Get_Type() == CoordinateType::UTM && output_coordinate_type == CoordinateType::Geographic ){
 
         // cast the input to UTM
         typename CoordinateUTM<DATATYPE>::ptr_t input = std::dynamic_pointer_cast<CoordinateUTM<DATATYPE> >(coordinate);

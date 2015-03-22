@@ -15,6 +15,8 @@ namespace IMG{
 
 /**
  * @class PixelRGB
+ *
+ * @brief RGB Pixel Type.
 */
 template <typename ChannelType>
 class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
@@ -28,34 +30,62 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
         typedef typename ChannelType::type datatype;
 
         /**
-         * Default Constructor
+         * @brief Constructor
         */
-        PixelRGB() : m_data{channeltype::minValue,channeltype::minValue,channeltype::minValue}, 
-                     PixelBase<PixelRGB<ChannelType>,ChannelType>(){}
+        PixelRGB() 
+          :  PixelBase<PixelRGB<ChannelType>,ChannelType>(),
+             m_data{ channeltype::minValue,
+                     channeltype::minValue,
+                     channeltype::minValue }
+        {
+        }
+        
+
+        /**
+         * @brief Constructor
+         *
+         * @param[in] gray_value Grayscale value to set.
+        */
+        PixelRGB( datatype const& gray_value ) 
+          :  PixelBase<PixelRGB<ChannelType>,ChannelType>(),
+             m_data{ gray_value,
+                     gray_value,
+                     gray_value }
+        {
+        }
+        
         
         /**
-         * Parameterized Constructor
+         * @brief Constructor
+         *
+         * @param[in] red Red pixel value.
+         * @param[in] green Green pixel value.
+         * @param[in] blue Blue pixel value.
         */
-        PixelRGB( datatype const& b ) : 
-                        m_data{ b, b, b}, 
-                        PixelBase<PixelRGB<ChannelType>,ChannelType>(){}               
+        PixelRGB( datatype const& red, 
+                  datatype const& green, 
+                  datatype const& blue ) 
+           :  PixelBase<PixelRGB<ChannelType>,ChannelType>(),
+              m_data{ red, 
+                      green, 
+                      blue }
+        {
+        }
+
+
         /**
-         * Parameterized Constructor
-        */
-        PixelRGB( datatype const& r, 
-                  datatype const& g, 
-                  datatype const& b ) : m_data{ r, g, b},
-                                        PixelBase<PixelRGB<ChannelType>,ChannelType>(){}
-        
-        /**
-         * Get the red value
+         * @brief Get the red value.
+         *
+         * @return value of the red or 0 position.
         */
         virtual datatype r()const{ 
             return m_data[0]; 
         }
 
         /**
-         * Get the red reference
+         * @brief Get the red reference
+         *
+         * @return Reference to value of the red position.
         */
         virtual datatype& r(){ 
             return m_data[0]; 
@@ -87,8 +117,14 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
             return m_data[2]; 
         }
 
-        /// return the dimensionality
-        virtual int dims()const{ return 3; }
+        /**
+         * @brief Get the number of channels or dimensions in pixel.
+         *
+         * @return Dimensionality.
+        */
+        virtual int Dims()const{ 
+            return 3; 
+        }
 
         /**
          * Accessor operator
@@ -121,6 +157,9 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
 
 
 }; /// End of class PixelRGB
+
+typedef PixelRGB<ChannelTypeDoubleFree> PixelRGBDoubleFree;
+typedef PixelRGB<ChannelTypeDoubleFree> PixelRGB_df;
 
 typedef PixelRGB<ChannelTypeDouble>  PixelRGBDouble;
 typedef PixelRGB<ChannelTypeDouble>  PixelRGB_Double;

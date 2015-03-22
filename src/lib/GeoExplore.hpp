@@ -41,11 +41,7 @@
 #include "image/Pixel_Types.hpp"
 
 /// IO Module
-#include "io/GDAL_Driver.hpp"
-#include "io/ImageDriverBase.hpp"
-#include "io/ImageIO.hpp"
-#include "io/NETPBM_Driver.hpp"
-#include "io/OpenCV_Driver.hpp"
+#include "io.hpp"
 
 /// Math Module
 #include "math/A_Rectangle.hpp"
@@ -53,9 +49,7 @@
 #include "math/A_Polygon.hpp"
 
 /// Utility Module
-#include "utilities/FilesystemUtilities.hpp"
-#include "utilities/OpenCV_Utilities.hpp"
-#include "utilities/StringUtilities.hpp"
+#include "utilities.hpp"
 
 
 #endif

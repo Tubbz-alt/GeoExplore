@@ -15,6 +15,8 @@ namespace CRD{
 
 /**
  * @class CoordinateUTM
+ *
+ * @brief UTM Coordinate Class.
  */
 template<typename DATATYPE>
 class CoordinateUTM : public CoordinateBase<DATATYPE>{
@@ -28,26 +30,42 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         typedef std::shared_ptr<CoordinateUTM<DATATYPE> > ptr_t;
 
         /**
-         * Default Constructor
+         * @brief Constructor
          */
-        CoordinateUTM() : m_zone(31),
-                          m_is_northern(true),
-                          m_easting_meters(166021.4), 
-                          m_northing_meters(0), 
-                          CoordinateBase<DATATYPE>(0, Datum::WGS84){}
+        CoordinateUTM() 
+          :  CoordinateBase<DATATYPE>(0, Datum::WGS84),
+             m_zone(31),
+             m_is_northern(true),
+             m_easting_meters(166021.4), 
+             m_northing_meters(0) 
+        {
+        }
+
         
         /**
-         * Parameterized Constructor
+         * @brief  Constructor
+         *
+         * @param[in] datum Datum to use.
         */
-        CoordinateUTM( Datum const& datum ) : 
-                m_zone(31),
-                m_is_northern(true),
-                m_easting_meters(166021.4),
-                m_northing_meters(0),
-                CoordinateBase<DATATYPE>(0, datum){}
+        CoordinateUTM( Datum const& datum ) 
+          :  CoordinateBase<DATATYPE>(0, datum), 
+             m_zone(31),
+             m_is_northern(true),
+             m_easting_meters(166021.4),
+             m_northing_meters(0)
+        {
+        }
+
 
         /**
-         * Parameterized Constructor
+         * @brief Constructor
+         *
+         * @param[in] zone UTM Zone to use.
+         * @param[in] is_northern True if in northern hemisphere.
+         * @param[in] easting_meters Easting (x) value in meters.
+         * @param[in] northing_meters Northing (y) value in meters.
+         * @param[in] altitude_meters Altitude (z) value in meters.
+         * @param[in] datum Datum of coordinate to use.
          */
         CoordinateUTM( int const&      zone,
                        bool const&     is_northern,
@@ -55,24 +73,39 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                        datatype const& northing_meters, 
                        datatype const& altitude_meters = 0, 
                        Datum const& datum = Datum::WGS84 ) 
-            : m_zone(zone),
+            : CoordinateBase<DATATYPE>(altitude_meters, datum ),
+              m_zone(zone),
               m_is_northern(is_northern),
               m_easting_meters(easting_meters),
-              m_northing_meters(northing_meters),
-              CoordinateBase<DATATYPE>(altitude_meters, datum){}
-            
-        /**
-         * Get the zone
-        */
-        int zone()const{ return m_zone; }
+              m_northing_meters(northing_meters)
+        {
+        }
+         
 
         /**
-         * Set the zone
+         * @brief Get the utm zone.
+         * 
+         * @return UTM Zone.
         */
-        int& zone(){ return m_zone; }
+        int zone()const{ 
+            return m_zone; 
+        }
+
 
         /**
-         * @brief Check if coordinate is in Northern Hemisphere
+         * @brief Set the utm zone.
+         *
+         * @return UTM Zone Reference.
+        */
+        int& zone(){ 
+            return m_zone; 
+        }
+
+
+        /**
+         * @brief Check if coordinate is in Northern Hemisphere.
+         *
+         * @return True if in the northern hemisphere, false if in southern.
         */
         bool   Is_Northern_Hemisphere()const{ 
             return m_is_northern; 
@@ -80,7 +113,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         
         
         /**
-         * Set if the coordinate is in the northern hemisphere or not.
+         * @brief Set if the coordinate is in the northern hemisphere or not.
+         *
+         * @return Northern hemisphere bool reference.
          */
         bool&  Is_Northern_Hemisphere(){ 
             return m_is_northern; 
@@ -88,35 +123,49 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
         /**
-         * @brief Get the Easting
+         * @brief Get the Easting in Meters.
+         *
+         * @return Easting in meters.
          */
         datatype easting_meters()const{ 
             return m_easting_meters; 
         }
 
+
         /**
-         * Set the Easting
+         * @brief Set the Easting in Meters.
+         *
+         * @return Easting in meters.
          */
         datatype& easting_meters(){ 
             return m_easting_meters; 
         }
 
+
         /**
-         * Get the northing
+         * @brief Get the northing in meters.
+         *
+         * @return Northing in meters.
          */
         datatype northing_meters()const{ 
             return m_northing_meters; 
         }
 
+
         /**
-         * @brief Set the northing
+         * @brief Set the northing in meters.
+         *
+         * @return Northing in meters.
          */
         datatype& northing_meters(){ 
             return m_northing_meters; 
         }
 
+
         /**
          * @brief Get the X Value
+         *
+         * @return X Value.
         */
         datatype x()const{
             return m_easting_meters;
@@ -125,6 +174,8 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
         /**
          * @brief Get the x reference
+         *
+         * @return X reference.
         */
         datatype& x(){
             return m_easting_meters;
@@ -132,7 +183,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
         /**
-         * @brief Get the Y Value
+         * @brief Get the Y Value.
+         *
+         * @return Y value.
         */
         datatype y()const{
             return m_northing_meters;
@@ -140,7 +193,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
         /**
-         * @brief Get the y reference
+         * @brief Get the y reference.
+         * 
+         * @return Y reference value.
         */
         datatype& y(){
             return m_northing_meters;
@@ -149,8 +204,10 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
         /**
          * @brief Clone the data
+         *
+         * Return coordinate clone.
          */
-        CoordinateUTM<DATATYPE>::ptr_t clone()const{ 
+        CoordinateUTM<DATATYPE>::ptr_t Clone()const{ 
             return CoordinateUTM<DATATYPE>::ptr_t( 
                     new CoordinateUTM<DATATYPE>(
                                 m_zone,
@@ -163,9 +220,14 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         
 
         /**
-         * @brief Addition Operator
+         * @brief Addition Operator.
+         *
+         * @param[in] rhs Coordinate to add to.
+         *
+         * @return Sum of this coordinate and the other coordinate.
         */
-        CoordinateUTM<DATATYPE> operator + ( const CoordinateUTM<DATATYPE>& rhs )const{
+        CoordinateUTM<DATATYPE> operator + ( const CoordinateUTM<DATATYPE>& rhs )const
+        {
             return CoordinateUTM<DATATYPE>( m_zone,
                                             m_is_northern,
                                             m_easting_meters + rhs.m_easting_meters,
@@ -178,7 +240,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         /**
          * @brief Return the type
         */
-        virtual CoordinateType type(){ 
+        virtual CoordinateType Get_Type(){ 
             return CoordinateType::UTM; 
         }
 
@@ -186,6 +248,9 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         
         /// Zone
         int      m_zone;
+        
+        /// Hemisphere
+        bool m_is_northern;
 
         /// Easting
         datatype m_easting_meters;
@@ -193,8 +258,6 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         /// Northing
         datatype m_northing_meters;
         
-        /// Hemisphere
-        bool m_is_northern;
 
 }; /// End of CoordinateUTM Class
 

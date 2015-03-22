@@ -10,6 +10,8 @@
 #-----------------------------------------#
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
+# Configure C++11
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 #  Set the executable output path
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
@@ -88,11 +90,16 @@ set( GEOEXPLORE_IMAGE_HEADERS
 
 #  IO Module
 set( GEOEXPLORE_IO_HEADERS
+    io.hpp
+    io/gdal_utils.hpp
+    io/opencv_utils.hpp
     io/GDAL_Driver.hpp
     io/ImageDriverBase.hpp
-    io/ImageIO.hpp
+    io/Image_IO.hpp
     io/OGR_Driver.hpp
     io/OpenCV_Driver.hpp
+    io/gdal_utils/GDAL_Utilities.hpp
+    io/opencv_utils/OpenCV_Utilities.hpp
 )
 
 #   Math Module
@@ -112,8 +119,8 @@ set( GEOEXPLORE_THIRDPARTY_HEADERS
 
 #   Utility Module
 set( GEOEXPLORE_UTILITIES_HEADERS
+    utilities.hpp
     utilities/FilesystemUtilities.hpp
-    utilities/OpenCV_Utilities.hpp
     utilities/StringUtilities.hpp
 )
 
@@ -160,12 +167,10 @@ set( GEOEXPLORE_IMAGE_SOURCES
 
 #   IO Module
 set( GEOEXPLORE_IO_SOURCES
-    io/GDAL_Driver.cpp
-    io/ImageDriverBase.cpp
-    io/ImageIO.cpp
+    io/Image_IO.cpp
     io/NETPBM_Driver.cpp
     io/OGR_Driver.cpp
-    io/OpenCV_Driver.cpp
+    io/gdal_utils/GDAL_Utilities.cpp
 )
 
 #  Math Modules
@@ -182,7 +187,6 @@ set( GEOEXPLORE_THIRDPARTY_SOURCES
 #   Utilities Module
 set( GEOEXPLORE_UTILITIES_SOURCES
     utilities/FilesystemUtilities.cpp
-    utilities/OpenCV_Utilities.cpp
     utilities/StringUtilities.cpp
 )
 

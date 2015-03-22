@@ -15,6 +15,13 @@ PROJECT( Geo-Convert )
 SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 
+#------------------------------#
+#-     Find GDAL Library      -#
+#------------------------------#
+find_package( GDAL REQUIRED )
+include_directories( ${GDAL_INCLUDE_DIR} )
+
+
 #------------------------------------------#
 #-      Define Required Header Files      -#
 #------------------------------------------#
