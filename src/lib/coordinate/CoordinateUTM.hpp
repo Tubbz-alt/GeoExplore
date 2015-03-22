@@ -12,6 +12,8 @@
 
 // C++ Standard Libraries
 #include <cmath>
+#include <sstream>
+#include <string>
 
 
 namespace GEO{
@@ -319,6 +321,28 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         */
         virtual CoordinateType Get_Type(){ 
             return CoordinateType::UTM; 
+        }
+
+
+        /**
+         * @brief Convert to a pretty string.
+         *
+         * @return Pretty String
+         */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "CoordinateUTM:\n";
+            sin << "   Zone: " << m_zone << std::endl;
+            sin << "   Is_Northern: ";
+            if( Is_Northern_Hemisphere() == true ){ sin << " True\n";}
+            else{ sin << " False\n"; }
+            sin << "   Easting Meters : " << easting_meters() << std::endl;
+            sin << "   Northing Meters: " << northing_meters() << std::endl;
+            sin << "   Altitude Meters: " << this->altitude_meters() << std::endl;
+            sin << "   Datum          : " << Datum2WKT_string(this->datum()) << std::endl;
+            sin << std::endl;
+        
+            return sin.str();
         }
 
     private:

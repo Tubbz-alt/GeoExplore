@@ -35,7 +35,7 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
                m_data{ channeltype::minValue,
                        channeltype::minValue,
                        channeltype::minValue,
-                       channeltype::minValue } 
+                       channeltype::maxValue } 
         {
         }
 
@@ -186,6 +186,19 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
                      ( m_data[1] == rhs.m_data[1] ) && 
                      ( m_data[2] == rhs.m_data[2] ) &&
                      ( m_data[3] == rhs.m_data[3] ) );
+        }
+
+
+        /**
+         * @brief Return a black pixel.
+         *
+         * @return Black pixel.
+        */
+        static PixelRGBA<ChannelType> Black(){
+            return PixelRGBA<ChannelType>( channeltype::minValue,
+                                           channeltype::minValue,
+                                           channeltype::minValue,
+                                           channeltype::maxValue );
         }
 
 

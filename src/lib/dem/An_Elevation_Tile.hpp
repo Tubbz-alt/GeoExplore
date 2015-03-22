@@ -37,6 +37,10 @@ class An_Elevation_Tile {
         
         /**
          * @brief Constructor
+         *
+         * @param[in] bottom_left_corner Bottom-left corner coordinate.
+         * @param[in] elevation_tile_size Size of the tile in pixels.
+         * @param[in] gsd Ground-Sampling-Distance in meters-per-pixel.
         */
         An_Elevation_Tile( const CoordinateType&    bottom_left_corner,
                            const A_Size<int>&       elevation_tile_size,

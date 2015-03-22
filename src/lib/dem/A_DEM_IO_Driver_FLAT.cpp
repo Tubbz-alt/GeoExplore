@@ -14,8 +14,6 @@ namespace DEM{
 A_DEM_IO_Driver_Flat::A_DEM_IO_Driver_Flat( const double& elevation_meters )
   : m_elevation_meters(elevation_meters)
 {
-
-
 }
 
 

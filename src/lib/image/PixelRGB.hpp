@@ -148,6 +148,17 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
                      ( m_data[1] == rhs.m_data[1] ) && 
                      ( m_data[2] == rhs.m_data[2] ) );
         }
+        
+        /**
+         * @brief Return a black pixel
+         *
+         * @return Black pixel
+         */
+        static PixelRGB<ChannelType> Black(){
+            return PixelRGB<ChannelType>( channeltype::minValue,
+                                          channeltype::minValue,
+                                          channeltype::minValue );
+        }
 
 
     private:

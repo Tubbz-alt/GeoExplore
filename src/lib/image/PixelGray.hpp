@@ -115,7 +115,26 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
         {
             return (m_data == rhs.m_data);
         }
+
+
+        /**
+         * @brief Return a black pixel.
+         *
+         * @return Black pixel
+        */
+        static PixelGray<ChannelType> Black(){
+            return PixelGray<ChannelType>( channeltype::minValue );
+        }
         
+        /**
+         * @brief Return a White pixel.
+         *
+         * @return White pixel.
+        */
+        static PixelGray<ChannelType> White(){
+            return PixelGray<ChannelType>( channeltype::maxValue );
+        }
+
 
     private:
 

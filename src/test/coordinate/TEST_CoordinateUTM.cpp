@@ -172,7 +172,13 @@ TEST( CoordinateUTM, SubtractionOperator ){
 */
 TEST( CoordinateUTM, Mag2 ){
 
-    FAIL();
+    // EPS
+    const double eps = 0.00001;
+
+    // Create a UTM coordinate
+    CRD::CoordinateUTM_d  utm_coord_01( 11, true, 1, 2, 3);
+
+    ASSERT_NEAR( utm_coord_01.Mag2(), 14, eps );
 
 }
 
@@ -181,7 +187,13 @@ TEST( CoordinateUTM, Mag2 ){
 */
 TEST( CoordinateUTM, Mag ){
 
-    FAIL();
+    // EPS
+    const double eps = 0.0001;
+
+    // Create a utm coordinate
+    CRD::CoordinateUTM_d utm_coord_01( 11, true, 1, 2, 3);
+
+    ASSERT_NEAR( utm_coord_01.Mag(), std::sqrt(14), eps );
 
 }
 
@@ -190,8 +202,20 @@ TEST( CoordinateUTM, Mag ){
 */
 TEST( CoordinateUTM, Distance ){
 
+    // Create UTM Coordinates
+    CRD::CoordinateUTM_d coord01( 11, true, 1, 2, 3);
+    CRD::CoordinateUTM_d coord02( 11, true, -1, 2, 3);
+    CRD::CoordinateUTM_d coord03( 11, true, -1,-2,-3);
+    
+    // Compute Distances
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord01, coord01), 0, 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord02, coord02), 0, 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord03, coord03), 0, 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord01, coord02), 2, 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord01, coord03), std::sqrt(4+16+36), 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord02, coord01), 2, 0.0001 );
+    ASSERT_NEAR( CRD::CoordinateUTM_d::Distance( coord03, coord01), std::sqrt(4+16+36), 0.0001 );
 
-    FAIL();
 
 }
 

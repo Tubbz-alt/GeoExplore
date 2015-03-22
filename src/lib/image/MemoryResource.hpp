@@ -94,7 +94,7 @@ class MemoryResource : public BaseResource<PixelType> {
          */
         MemoryResource( const A_Size<int>& image_size,
                         const PixelType&   pixel )
-            : m_data(new std::vector<PixelType>(image_size.Width() * image_size.Height())),
+            : m_data(new std::vector<PixelType>(image_size.Width() * image_size.Height(), pixel)),
               m_rows(image_size.Height()),
               m_cols(image_size.Width())
         {

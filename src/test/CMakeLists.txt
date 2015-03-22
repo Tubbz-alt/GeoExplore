@@ -32,6 +32,17 @@ set( GEOEXPLORE_TEST_HEADERS
 )
 
 
+#------------------------------------------------#
+#-      Define the Image Module Test Files      -#
+#------------------------------------------------#
+set( GEOEXPLORE_IMAGE_MODULE_TESTS
+    image/TEST_ChannelType.cpp
+    image/TEST_MemoryResource.cpp
+    image/TEST_PixelGray.cpp
+    image/TEST_PixelRGB.cpp
+    image/TEST_PixelRGBA.cpp
+)
+
 #------------------------------------------#
 #-      Define Required Source Files      -#
 #------------------------------------------#
@@ -41,6 +52,7 @@ set( GEOEXPLORE_TEST_SOURCES
     dem/TEST_An_Elevation_Tile.cpp
     dem/TEST_DEM_IO_Driver_Types.cpp
     dem/TEST_DEM_Manager.cpp
+    ${GEOEXPLORE_IMAGE_MODULE_TESTS}
     io/TEST_GDAL_Driver.cpp
     io/TEST_Image_IO.cpp
     io/TEST_OpenCV_Driver.cpp
