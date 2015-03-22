@@ -161,6 +161,7 @@ set( GEOEXPLORE_DEM_SOURCES
 
 #   Image Module
 set( GEOEXPLORE_IMAGE_SOURCES
+    image/ChannelType.cpp
     image/MetadataContainer.cpp
     image/MetadataContainerBase.cpp
 )

@@ -166,11 +166,12 @@ test_software(){
         exit 1
     fi
 
-    #  Run Unit Test
-    ./bin/geo-explore-unit-tests
-    
     #  Exit directory
     popd
+    
+    #  Run Unit Test
+    ./${BUILD_DIRECTORY}/bin/geo-explore-unit-tests
+    
     
     #  Test the geo-convert function
     #./tests/bash/apps/geo-convert-test.sh

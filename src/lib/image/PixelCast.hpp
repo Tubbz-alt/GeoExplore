@@ -64,7 +64,7 @@ typename std::enable_if<std::is_same<OutputPixelType, PixelRGBA<typename OutputP
     return PixelRGBA<typename OutputPixelType::channeltype>( range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[0] ),
                                                              range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[1] ),
                                                              range_cast<InputChannelType,typename OutputPixelType::channeltype>( pixel[2] ),
-                                                             OutputPixelType::maxValue );
+                                                             OutputPixelType::channeltype::maxValue );
 }
 
 

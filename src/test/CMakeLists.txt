@@ -38,6 +38,7 @@ set( GEOEXPLORE_TEST_HEADERS
 set( GEOEXPLORE_TEST_SOURCES
     geo-explore-unit-tests.cpp
     io/TEST_GDAL_Driver.cpp
+    io/TEST_Image_IO.cpp
     io/TEST_OpenCV_Driver.cpp
     utilities/TEST_FilesystemUtilities.cpp
 )

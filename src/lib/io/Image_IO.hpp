@@ -120,7 +120,7 @@ void Read_Image( boost::filesystem::path const& pathname,
     }
     
     // Load the Driver
-    output_image.Set_Resource( *driver->Read_Image(pathname));
+    output_image.Set_Resource( driver->Read_Image(pathname));
 }
 
 

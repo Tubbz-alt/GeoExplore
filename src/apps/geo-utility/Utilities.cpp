@@ -135,7 +135,7 @@ void Initialize_Data( Data_Container& data,
         GEO::IO::Read_Image( image_list[idx], *data.image_list[idx] );
         
         // Open the image
-        IO::OCV::View_Image(*data.image_list[idx], "Window to open." );
+        IO::OPENCV::View_Image(*data.image_list[idx], "Window to open." );
     }
 
 }

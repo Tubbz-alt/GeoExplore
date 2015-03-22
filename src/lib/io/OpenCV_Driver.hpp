@@ -12,8 +12,9 @@
 #include "../image/Image.hpp"
 #include "../image/PixelCast.hpp"
 #include "../image/Pixel_Types.hpp"
-#include "../io/ImageDriverBase.hpp"
 #include "../utilities/FilesystemUtilities.hpp"
+#include "ImageDriverBase.hpp"
+#include "opencv_utils/OpenCV_Utilities.hpp"
 
 
 /// OpenCV Libraries
@@ -305,7 +306,30 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
         */
         virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  boost::filesystem::path const& pathname )
         {
-            return nullptr;
+
+            // Make sure the image exists
+            if( boost::filesystem::exists( pathname ) == false ){
+                return nullptr;
+            }
+
+            // Open the OpenCV Image
+            cv::Mat cv_image = cv::imread( pathname.c_str() );
+
+            // Create the image resource
+            typename IMG::MemoryResource<pixel_type>::ptr_t new_resource( new IMG::MemoryResource<pixel_type>(cv_image.rows, cv_image.cols));
+            
+            // set the pixel values
+            for( int r=0; r<cv_image.rows; r++ )
+            for( int c=0; c<cv_image.cols; c++ ){
+                
+                // cast the pixel
+                new_resource->operator()(r,c) = IMG::pixel_cast<pixel_type>(IMG::PixelRGB_u8( cv_image.at<cv::Vec3b>(r,c)[2],
+                                                                                              cv_image.at<cv::Vec3b>(r,c)[1],
+                                                                                              cv_image.at<cv::Vec3b>(r,c)[0]));
+
+            }
+
+            return new_resource;
         }
 
 

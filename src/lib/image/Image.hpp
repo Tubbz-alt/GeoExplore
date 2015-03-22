@@ -152,8 +152,10 @@ class Image_{
          *
          * @param[in] resource Resource data to pull data from.
         */
-        void Set_Resource( ResourceType const& resource){
-            m_resource = resource;
+        void Set_Resource( typename ResourceType::ptr_t const& resource){
+            if( resource != nullptr ){
+                m_resource = *resource;
+            }
         }
         
         /**

@@ -19,7 +19,7 @@
 
 namespace GEO{
 namespace IO{
-namespace OCV{
+namespace OPENCV{
 
 
 template <typename PixelType>
@@ -76,7 +76,7 @@ void View_Image( IMG::Image_<PixelType, ResourceType> const& image,
 }
 
 
-} // End of OCV Namespace
+} // End of OPENCV Namespace
 } // End of IO  Namespace
 } // End of GEO Namespace
 
