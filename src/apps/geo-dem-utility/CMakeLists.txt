@@ -27,6 +27,7 @@ include_directories( ${GDAL_INCLUDE_DIR} )
 #------------------------------------------#
 set( GEO_DEM_UTILITY_HEADERS
     GDU_Options.hpp
+    GDU_Utilities.hpp
 )
 
 
@@ -36,6 +37,7 @@ set( GEO_DEM_UTILITY_HEADERS
 set( GEO_DEM_UTILITY_SOURCES
     geo-dem-utility.cpp
     GDU_Options.cpp
+    GDU_Utilities.cpp
 )
 
 

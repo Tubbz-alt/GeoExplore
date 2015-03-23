@@ -49,6 +49,12 @@ find_package( Boost
 #-     Define Required Header Files      -#
 #-----------------------------------------#
 
+#   Config Module
+set( GEOEXPLORE_CONFIG_HEADERS
+    config/A_Command_Line_Parser.hpp
+)
+
+
 #   Core Module
 set( GEOEXPLORE_CORE_HEADERS
     core/Enumerations.hpp
@@ -130,6 +136,7 @@ set( GEOEXPLORE_UTILITIES_HEADERS
 
 #  Combine modules
 set( GEOEXPLORE_HEADERS
+    ${GEOEXPLORE_CONFIG_HEADERS}
     ${GEOEXPLORE_CORE_HEADERS}
     ${GEOEXPLORE_COORDINATE_HEADERS}
     ${GEOEXPLORE_DEM_HEADERS}
@@ -144,6 +151,12 @@ set( GEOEXPLORE_HEADERS
 #----------------------------------------#
 #-     Define Required Source Files     -#
 #----------------------------------------#
+
+#    Config Module
+set( GEOEXPLORE_CONFIG_SOURCES
+    config/A_Command_Line_Parser.cpp
+)
+
 
 #    Core Module
 set( GEOEXPLORE_CORE_SOURCES
@@ -200,6 +213,7 @@ set( GEOEXPLORE_UTILITIES_SOURCES
 
 #   Combine Modules
 set( GEOEXPLORE_SOURCES
+    ${GEOEXPLORE_CONFIG_SOURCES}
     ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
     ${GEOEXPLORE_DEM_SOURCES}

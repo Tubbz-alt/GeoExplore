@@ -8,6 +8,9 @@
 #ifndef __GEOEXPLORE_HPP__
 #define __GEOEXPLORE_HPP__
 
+/// Config Module
+#include "config.hpp"
+
 /// Core Module
 #include "core/A_Size.hpp"
 #include "core/Enumerations.hpp"

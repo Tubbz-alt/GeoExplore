@@ -9,6 +9,7 @@
 
 // DEM Utility Libraries
 #include "GDU_Options.hpp"
+#include "GDU_Utilities.hpp"
 
 
 using namespace GEO;
@@ -18,6 +19,8 @@ using namespace GEO;
 */
 int main( int argc, char* argv[] ){
 
+    // Parse the Command-Line Options
+    GDU_Options options = Parse_Command_Line( argc, argv );
 
 
     return 0;
