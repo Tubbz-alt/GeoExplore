@@ -8,6 +8,7 @@
 // GeoExplore Libraries
 #include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
+#include "../core/A_Status.hpp"
 #include "An_Elevation_Tile.hpp"
 #include "DEM_IO_Driver_Types.hpp"
 
@@ -25,25 +26,50 @@ class A_DEM_IO_Driver_Base{
         /// Pointer Type
         typedef std::shared_ptr<A_DEM_IO_Driver_Base> ptr_t;
         
+        
+        /**
+         * @brief Initialize the driver.
+        */
+        virtual Status Initialize(){
+            return Status(StatusType::SUCCESS);
+        }
 
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate Geographic coordinate to test.
+         *
+         * @return True if covered, false otherwise.
         */
         virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const = 0;
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] min_coordinate Minimum coordinate in geographic.
+         * @param[in] max_coordinate Maximum coordinate in geographic.
+         *
+         * @return True if the bounding region is covered. False otherwise.
         */
         virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
                                CRD::CoordinateGeographic_d const& max_coordinate )const = 0;
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate UTM Coordinate to check.
+         *
+         * @return True if covered, false otherwise.
         */
         virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const = 0;
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation range is covered.
+         *
+         * @param[in] min_coordinate Minimum coordinate in UTM.
+         * @param[in] max_coordinate Maximum coordinate in UTM.
+         *
+         * @return True if covered, false otherwise.
         */
         virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
                                CRD::CoordinateUTM_d const& max_coordinate )const = 0;

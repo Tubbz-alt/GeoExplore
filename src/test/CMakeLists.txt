@@ -36,6 +36,7 @@ set( GEOEXPLORE_TEST_HEADERS
 #-       Define the DEM Module Test Files       -#
 #------------------------------------------------#
 set( GEOEXPLORE_DEM_MODULE_TESTS
+    dem/TEST_A_DEM_IO_Driver_SRTM.cpp
     dem/TEST_An_Elevation_Tile.cpp
     dem/TEST_DEM_IO_Driver_Types.cpp
     dem/TEST_DEM_Manager.cpp
@@ -57,6 +58,8 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
 #------------------------------------------#
 set( GEOEXPLORE_TEST_SOURCES
     geo-explore-unit-tests.cpp
+    core/TEST_A_Status.cpp
+    core/TEST_Status_Enumerations.cpp
     coordinate/TEST_CoordinateUTM.cpp
     ${GEOEXPLORE_DEM_MODULE_TESTS}
     ${GEOEXPLORE_IMAGE_MODULE_TESTS}

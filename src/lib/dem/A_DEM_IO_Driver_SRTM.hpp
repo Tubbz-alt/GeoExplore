@@ -4,9 +4,13 @@
 // C++ Standard Libraries
 #include <memory>
 
+// Boost Libraries
+#include <boost/filesystem.hpp>
+
 // GeoExplore Libraries
 #include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
+#include "../core/A_Status.hpp"
 #include "A_DEM_IO_Driver_Base.hpp"
 
 namespace GEO{
@@ -19,18 +23,69 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
 
     public:
         
+        /**
+         * @brief Construct the DEM IO Driver with a path to SRTM data.
+         *
+         * @param[in] srtm_path Path to SRTM data.  
+         */
+        A_DEM_IO_Driver_SRTM( boost::filesystem::path const& pathname );
+
+
+        /**
+         * @brief Initialize driver.
+         *
+         * @return Status of the operation.
+         */
+        Status Initialize();
+
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate Geographic coordinate to test.
+         * 
+         * @return True if covered. False otherwise.
         */
-        virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
             return false;
         }
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation range is covered
+         *
+         * @param[in] min_coordinate Coordinate to test.
+         * @param[in] max_coordinate Coordinate to test.
+         * 
+         * @return True if covered. False otherwise.
         */
-        virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const{
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
+                                      CRD::CoordinateGeographic_d const& max_coordinate )const{
+            return false;
+        }
+
+        
+        /**
+         * @brief Check if elevation value is covered
+         *
+         * @param[in] coordinate Coordinate to test.
+         * 
+         * @return True if covered. False otherwise.
+        */
+        inline virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const{
+            return false;
+        }
+        
+        
+        /**
+         * @brief Check if elevation range is covered
+         *
+         * @param[in] min_coordinate Coordinate to test.
+         * @param[in] max_coordinate Coordinate to test.
+         * 
+         * @return True if covered. False otherwise.
+        */
+        inline virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
+                                      CRD::CoordinateUTM_d const& max_coordinate )const{
             return false;
         }
 
@@ -43,7 +98,41 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         inline virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
             return DEM_IO_Driver_Type::SRTM;
         }
+        
+        /**
+         * @brief Create Elevation Tile
+         *
+         * @param[in] min_corner Minimum corner of tile.
+         * @param[in] tile_size Size of tile in pixels.
+         * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         *
+         * @return Elevation tile.
+        */
+        virtual ElevationTileUTM_d::ptr_t  Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
+                                                                  A_Size<int>     const&  tile_size,
+                                                                  double          const&  gsd );
+        
+        /**
+         * @brief Create Elevation Tile
+         *
+         * @param[in] min_corner Minimum corner of tile.
+         * @param[in] tile_size Size of tile in pixels.
+         * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         *
+         * @return Elevation tile.
+        */
+        virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
+                                                                 A_Size<int>            const&  tile_size,
+                                                                 double                 const&  gsd );
 
+    
+    private:
+
+        /// path to srtm data
+        boost::filesystem::path m_srtm_pathname;
+
+        /// List of SRTM Files
+        std::vector<boost::filesystem::path> m_srtm_file_list;
 
 }; // End of A_DEM_IO_Driver_SRTM
 

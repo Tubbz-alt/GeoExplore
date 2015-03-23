@@ -54,6 +54,8 @@ set( GEOEXPLORE_CORE_HEADERS
     core/Enumerations.hpp
     core/Exceptions.hpp
     core/A_Size.hpp
+    core/A_Status.hpp
+    core/Status_Enumerations.hpp
 )
 
 
@@ -147,6 +149,7 @@ set( GEOEXPLORE_HEADERS
 set( GEOEXPLORE_CORE_SOURCES
     core/Enumerations.cpp
     core/Exceptions.cpp
+    core/A_Status.cpp
 )
 
 #    Coordinate Module
@@ -159,6 +162,7 @@ set( GEOEXPLORE_DEM_SOURCES
     dem/DEM_IO_Driver_Types.cpp
     dem/DEM_Manager.cpp
     dem/A_DEM_IO_Driver_FLAT.cpp
+    dem/A_DEM_IO_Driver_SRTM.cpp
 )
 
 
