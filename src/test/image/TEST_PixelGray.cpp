@@ -28,7 +28,7 @@ TEST( PixelGray, Constructor_default ){
     IMG::PixelGray_u32  pix07;
 
     // Check values
-    ASSERT_NEAR( pix01[0], 0, EPS );  
+    ASSERT_NEAR( pix01[0],-1, EPS );  
     ASSERT_NEAR( pix02[0], 0, EPS );
     ASSERT_EQ( pix03[0], 0 );
     ASSERT_EQ( pix04[0], 0 );
