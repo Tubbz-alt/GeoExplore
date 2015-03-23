@@ -13,6 +13,9 @@ add_subdirectory(geo-convert)
 #  Create the geo-explore application
 #add_subdirectory(geo-explore)
 
+#  Create the geo-dem-utility application
+add_subdirectory(geo-dem-utility)
+
 #  Create the geo-info application
 add_subdirectory(geo-info)
 
