@@ -36,6 +36,8 @@ enum class CoreStatusReason : uint32_t {
     UNKNOWN = 1 /*< Unknown reason. */,
     UNINITIALIZED = 2 /*< Uninitialized value.*/,
     PATH_DOES_NOT_EXIST = 3 /*< Path does not exist.*/,
+    FILE_NOT_SUPPORTED  = 4 /*< Path is not valid file type.*/,
+    GENERAL_IO_ERROR    = 5 /*< Problem parsing file.*/,
 }; // End of CoreStatusReason Enumeration
 
 

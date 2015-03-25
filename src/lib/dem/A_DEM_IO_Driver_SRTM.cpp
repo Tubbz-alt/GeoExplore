@@ -53,6 +53,10 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
 
             // Check if srtm
             if( FS::Get_File_Type(temp_path) == FS::FileType::SRTM ){
+
+                // Get the extent of the file
+
+                // Add the path to the list
                 m_srtm_file_list.push_back(temp_path);
             }
         }

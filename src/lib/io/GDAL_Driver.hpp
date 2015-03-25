@@ -14,10 +14,12 @@
 
 /// GeoExplore Libraries
 #include "../core/Exceptions.hpp"
+#include "../core/A_Status.hpp"
 #include "../image/ChannelType.hpp"
 #include "../image/Image.hpp"
 #include "../image/MemoryResource.hpp"
 #include "../io/ImageDriverBase.hpp"
+#include "../math/A_Matrix.hpp"
 #include "../utilities/FilesystemUtilities.hpp"
 #include "gdal_utils/GDAL_Utilities.hpp"
 
@@ -242,6 +244,30 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 m_dataset = NULL;
                 m_driver = NULL;
             }
+        }
+
+
+        /**
+         * @brief Get the GDAL ADF Geo Transform.
+         *
+         * @param[out] adfGeoTransform
+         *
+         * @return True if it exists, false otherwise.
+        */
+        bool Get_GDAL_Geo_Transform( double*& adfGeoTransform )const{
+            
+            // make sure the dataset is not null
+            if( m_dataset == NULL || m_dataset == nullptr ){
+                return false;
+            }
+
+            // Get the geo transform
+            if( m_dataset->GetGeoTransform( adfGeoTransform ) == CE_None ){
+                return false;
+            }
+
+            // return success
+            return true;
         }
         
         
@@ -530,6 +556,72 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             GDALClose(dataset);
         }
 
+
+        /**
+         * @brief Compute Image Extent
+         *
+         * @param[in] pathname Path to image file.
+         * @param[out] status Status of the operation.
+         */
+        template<typename CoordinateModuleType>
+        static void Compute_Image_Extent( boost::filesystem::path const& pathname,
+                                          Status&                        status )
+        {
+            
+            // Make sure it is read supported
+            if( Is_Read_Supported( pathname ) == false ){
+                status = Status( StatusType::FAILURE, 
+                                 CoreStatusReason::FILE_NOT_SUPPORTED,
+                                 "File not GDAL Readable.");
+                return;
+            }
+
+            // Create a driver
+            ImageDriverGDAL<ResourceType> driver(pathname);
+
+            // Open the driver
+            driver.Open();
+
+            // Get the extent
+            double adfGeoTransform[6];
+            if( driver->Get_GDAL_Geo_Transform( adfGeoTransform ) == false ){
+                status = Status( StatusType::FAILURE, 
+                                 CoreStatusReason::GENERAL_IO_ERROR,
+                                 "GDAL Transform Does Not Exist.");
+                return;
+            }
+
+            // Define our pixels
+            MATH::A_Matrix pixel_tl(3,1); pixel_tl(0,0) =              0; pixel_tl(1,0) =              0; pixel_tl(2,0) = 1;
+            MATH::A_Matrix pixel_tr(3,1); pixel_tr(0,0) = driver->Cols(); pixel_tr(1,0) =              0; pixel_tr(2,0) = 1;
+            MATH::A_Matrix pixel_bl(3,1); pixel_bl(0,0) =              0; pixel_bl(1,0) = driver->Rows(); pixel_bl(2,0) = 1;
+            MATH::A_Matrix pixel_br(3,1); pixel_br(0,0) = driver->Cols(); pixel_br(1,0) = driver->Rows(); pixel_br(2,0) = 1;
+
+            // build the transform
+            MATH::A_Matrix Transform(3,3);
+            Transform(0,0) = adfGeoTransform[1]; 
+            Transform(0,1) = adfGeoTransform[2]; 
+            Transform(0,2) = adfGeoTransform[0]; 
+            Transform(1,0) = adfGeoTransform[4]; 
+            Transform(1,1) = adfGeoTransform[5]; 
+            Transform(1,2) = adfGeoTransform[3];
+            Transform(2,2) = 1;
+
+            // Compute the world coordinates
+            MATH::A_Matrix world_tl = Transform * pixel_tl;
+            MATH::A_Matrix world_tr = Transform * pixel_tr;
+            MATH::A_Matrix world_bl = Transform * pixel_bl;
+            MATH::A_Matrix world_br = Transform * pixel_br;
+
+            std::cout << world_tl.ToPrettyString() << std::endl;
+            std::cout << world_tr.ToPrettyString() << std::endl;
+            std::cout << world_bl.ToPrettyString() << std::endl;
+            std::cout << world_br.ToPrettyString() << std::endl;
+
+            // Close the driver
+            driver.Close();
+
+        }
         
     private:
         
@@ -542,7 +634,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
         /// Dataset
         GDALDataset* m_dataset;
 
-}; /// End of ImageDriverBase Class
+}; /// End of ImageDriverGDAL Class
 
 
 } /// End of GDAL Namespace

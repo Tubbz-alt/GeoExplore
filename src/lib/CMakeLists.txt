@@ -114,6 +114,8 @@ set( GEOEXPLORE_IO_HEADERS
 
 #   Math Module
 set( GEOEXPLORE_MATH_HEADERS
+    math/A_Matrix.hpp
+    math/A_Matrix_Eigen.hpp
     math/A_Rectangle.hpp
     math/A_Point.hpp
     math/A_Polygon.hpp
@@ -196,6 +198,7 @@ set( GEOEXPLORE_IO_SOURCES
 
 #  Math Modules
 set( GEOEXPLORE_MATH_SOURCES
+    math/A_Matrix_Eigen.cpp
 )
 
 

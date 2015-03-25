@@ -11,6 +11,9 @@
 #include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
 #include "../core/A_Status.hpp"
+#include "../image/MemoryResource.hpp"
+#include "../io/GDAL_Driver.hpp"
+#include "../math/A_Rectangle.hpp"
 #include "A_DEM_IO_Driver_Base.hpp"
 
 namespace GEO{
@@ -23,6 +26,13 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
 
     public:
         
+        /// Resource Type
+        typedef IMG::MemoryResource<IMG::PixelGray_df> resource_type;
+
+        /// Driver Type
+        typedef IO::GDAL::ImageDriverGDAL<resource_type> io_driver_type;
+
+
         /**
          * @brief Construct the DEM IO Driver with a path to SRTM data.
          *
@@ -133,6 +143,9 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
 
         /// List of SRTM Files
         std::vector<boost::filesystem::path> m_srtm_file_list;
+
+        /// List of SRTM Extents
+        std::vector<MATH::A_Rectangle2d> m_srtm_file_extents;
 
 }; // End of A_DEM_IO_Driver_SRTM
 

@@ -2,11 +2,12 @@
 #define __GEOEXPLORE_MATH_A_POLYGON_HPP__
 
 namespace GEO{
+namespace MATH{
 
 /**
  * @class A_Polygon
 */
-template< typename DataType>
+template< typename PointType>
 class A_Polygon{
 
     public:
@@ -22,7 +23,8 @@ class A_Polygon{
 
 }; /// End of A_Polygon Class
 
-} // End of GEO Namespace
+} // End of MATH Namespace
+} // End of GEO  Namespace
 
 #endif
 

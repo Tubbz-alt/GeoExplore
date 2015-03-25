@@ -31,6 +31,31 @@ include_directories( ${GDAL_INCLUDE_DIR} )
 set( GEOEXPLORE_TEST_HEADERS
 )
 
+#---------------------------------------------------#
+#-       Define the Config Module Test Files       -#
+#---------------------------------------------------#
+set( GEOEXPLORE_CONFIG_MODULE_TESTS
+    config/TEST_A_Command_Line_Parser.cpp
+)
+
+
+#-------------------------------------------------------#
+#-       Define the Coordinate Module Test Files       -#
+#-------------------------------------------------------#
+set( GEOEXPLORE_COORDINATE_MODULE_TESTS
+    coordinate/TEST_CoordinateGeographic.cpp
+    coordinate/TEST_CoordinateUTM.cpp
+)
+
+
+#-------------------------------------------------#
+#-       Define the Core Module Test Files       -#
+#-------------------------------------------------#
+set( GEOEXPLROE_CORE_MODULE_TESTS
+    core/TEST_A_Status.cpp
+    core/TEST_Status_Enumerations.cpp
+)
+
 
 #------------------------------------------------#
 #-       Define the DEM Module Test Files       -#
@@ -40,6 +65,17 @@ set( GEOEXPLORE_DEM_MODULE_TESTS
     dem/TEST_An_Elevation_Tile.cpp
     dem/TEST_DEM_IO_Driver_Types.cpp
     dem/TEST_DEM_Manager.cpp
+)
+
+
+#----------------------------------------------#
+#-     Define the Math Module Test Files      -#
+#----------------------------------------------#
+set( GEOEXPLORE_MATH_MODULE_TESTS
+    math/TEST_A_Matrix_Eigen.cpp
+    math/TEST_A_Point.cpp
+    math/TEST_A_Polygon.cpp
+    math/TEST_A_Rectangle.cpp
 )
 
 #------------------------------------------------#
@@ -58,10 +94,11 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
 #------------------------------------------#
 set( GEOEXPLORE_TEST_SOURCES
     geo-explore-unit-tests.cpp
-    core/TEST_A_Status.cpp
-    core/TEST_Status_Enumerations.cpp
-    coordinate/TEST_CoordinateUTM.cpp
+    ${GEOEXPLORE_CONFIG_MODULE_TESTS}
+    ${GEOEXPLORE_COORDINATE_MODULE_TESTS}
+    ${GEOEXPLORE_CORE_MODULE_TESTS}
     ${GEOEXPLORE_DEM_MODULE_TESTS}
+    ${GEOEXPLORE_MATH_MODULE_TESTS}
     ${GEOEXPLORE_IMAGE_MODULE_TESTS}
     io/TEST_GDAL_Driver.cpp
     io/TEST_Image_IO.cpp
