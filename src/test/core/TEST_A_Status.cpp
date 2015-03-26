@@ -18,6 +18,10 @@ TEST( Status, Constructors ){
     // TEST 01
     Status status01( StatusType::SUCCESS );
     ASSERT_EQ( status01.Get_Status_Type(), StatusType::SUCCESS );
+
+    // Test 2
+    Status status02;
+    ASSERT_EQ( status02.Get_Status_Type(), StatusType::SUCCESS );
     
 }
 

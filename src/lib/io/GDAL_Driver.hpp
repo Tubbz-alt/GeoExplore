@@ -13,6 +13,7 @@
 
 
 /// GeoExplore Libraries
+#include "../coordinate/CoordinateConversion.hpp"
 #include "../core/Exceptions.hpp"
 #include "../core/A_Status.hpp"
 #include "../image/ChannelType.hpp"
@@ -20,6 +21,8 @@
 #include "../image/MemoryResource.hpp"
 #include "../io/ImageDriverBase.hpp"
 #include "../math/A_Matrix.hpp"
+#include "../math/A_Point.hpp"
+#include "../math/Matrix_Conversions.hpp"
 #include "../utilities/FilesystemUtilities.hpp"
 #include "gdal_utils/GDAL_Utilities.hpp"
 
@@ -195,7 +198,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
             // make sure the file exists
             if( boost::filesystem::exists( m_path ) == false ){
-                throw std::runtime_error( std::string(m_path.native() + " does not exist.").c_str());
+                return;
             }
 
             /// Register the driver
@@ -248,13 +251,36 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
 
         /**
+         * @brief Get the OGR Spatial Reference Object.
+         *
+         * @param[out] ogr_reference OGR Spatial Reference Object.
+         *
+         * @return True if it exists, false otherwise.
+        */
+        bool Get_OGR_Spatial_Reference( OGRSpatialReference& ogr_reference )const{
+
+            // Check that the dataset is not null
+            if( m_dataset == NULL || m_dataset == nullptr ){
+                return false;
+            }
+
+            // Get the Geo Reference
+            char* wkt = (char*)m_dataset->GetProjectionRef();
+            ogr_reference.importFromWkt(&wkt);
+
+            // Return success;
+            return true;
+        }
+
+
+        /**
          * @brief Get the GDAL ADF Geo Transform.
          *
          * @param[out] adfGeoTransform
          *
          * @return True if it exists, false otherwise.
         */
-        bool Get_GDAL_Geo_Transform( double*& adfGeoTransform )const{
+        bool Get_GDAL_Geo_Transform( double adfGeoTransform[6] )const{
             
             // make sure the dataset is not null
             if( m_dataset == NULL || m_dataset == nullptr ){
@@ -262,7 +288,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             }
 
             // Get the geo transform
-            if( m_dataset->GetGeoTransform( adfGeoTransform ) == CE_None ){
+            if( m_dataset->GetGeoTransform( adfGeoTransform ) != CE_None ){
                 return false;
             }
 
@@ -584,7 +610,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
             // Get the extent
             double adfGeoTransform[6];
-            if( driver->Get_GDAL_Geo_Transform( adfGeoTransform ) == false ){
+            if( driver.Get_GDAL_Geo_Transform( adfGeoTransform ) == false ){
                 status = Status( StatusType::FAILURE, 
                                  CoreStatusReason::GENERAL_IO_ERROR,
                                  "GDAL Transform Does Not Exist.");
@@ -592,31 +618,46 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             }
 
             // Define our pixels
-            MATH::A_Matrix pixel_tl(3,1); pixel_tl(0,0) =              0; pixel_tl(1,0) =              0; pixel_tl(2,0) = 1;
-            MATH::A_Matrix pixel_tr(3,1); pixel_tr(0,0) = driver->Cols(); pixel_tr(1,0) =              0; pixel_tr(2,0) = 1;
-            MATH::A_Matrix pixel_bl(3,1); pixel_bl(0,0) =              0; pixel_bl(1,0) = driver->Rows(); pixel_bl(2,0) = 1;
-            MATH::A_Matrix pixel_br(3,1); pixel_br(0,0) = driver->Cols(); pixel_br(1,0) = driver->Rows(); pixel_br(2,0) = 1;
+            MATH::A_Point2d world_tl = GDAL_Pixel_To_World( MATH::A_Point2d(             0,             0), adfGeoTransform );
+            MATH::A_Point2d world_tr = GDAL_Pixel_To_World( MATH::A_Point2d( driver.Cols(),             0), adfGeoTransform );
+            MATH::A_Point2d world_bl = GDAL_Pixel_To_World( MATH::A_Point2d(             0, driver.Rows()), adfGeoTransform );
+            MATH::A_Point2d world_br = GDAL_Pixel_To_World( MATH::A_Point2d( driver.Cols(), driver.Rows()), adfGeoTransform );
+            
 
-            // build the transform
-            MATH::A_Matrix Transform(3,3);
-            Transform(0,0) = adfGeoTransform[1]; 
-            Transform(0,1) = adfGeoTransform[2]; 
-            Transform(0,2) = adfGeoTransform[0]; 
-            Transform(1,0) = adfGeoTransform[4]; 
-            Transform(1,1) = adfGeoTransform[5]; 
-            Transform(1,2) = adfGeoTransform[3];
-            Transform(2,2) = 1;
+            // Get the Projection
+            OGRSpatialReference oSRS;
+            driver.Get_OGR_Spatial_Reference( oSRS );
 
-            // Compute the world coordinates
-            MATH::A_Matrix world_tl = Transform * pixel_tl;
-            MATH::A_Matrix world_tr = Transform * pixel_tr;
-            MATH::A_Matrix world_bl = Transform * pixel_bl;
-            MATH::A_Matrix world_br = Transform * pixel_br;
+            // Get the Datum 
+            std::cout << "Datum is: " << oSRS.GetAttrValue("DATUM") << std::endl;
+            Datum datum_type = Datum::WGS84;
 
-            std::cout << world_tl.ToPrettyString() << std::endl;
-            std::cout << world_tr.ToPrettyString() << std::endl;
-            std::cout << world_bl.ToPrettyString() << std::endl;
-            std::cout << world_br.ToPrettyString() << std::endl;
+            // Check if geographic
+            if( oSRS.IsGeographic() ){
+                 
+                // Convert to the coordinate type
+                CoordinateModuleType geo_tl = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_tl.y(), world_tl.x(), 0, datum_type ));
+                CoordinateModuleType geo_tr = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_tr.y(), world_tr.x(), 0, datum_type ));
+                CoordinateModuleType geo_bl = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_bl.y(), world_bl.x(), 0, datum_type ));
+                CoordinateModuleType geo_br = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_br.y(), world_br.x(), 0, datum_type ));
+                
+                // Pass to rectangle
+
+
+            }
+
+            // Check if projected
+            else if( oSRS.IsProjected() ){
+                throw std::runtime_error("Not implemented.");
+            }
+
+            // Otherwise, I am wrong and need further help
+            else{
+                status = Status( StatusType::FAILURE, 
+                                 GDALStatusReason::UNKNOWN_PROJECTION_TYPE,
+                                 std::string("Unknown projection type: ") + std::string(driver.m_dataset->GetProjectionRef()));
+                return;
+            }
 
             // Close the driver
             driver.Close();

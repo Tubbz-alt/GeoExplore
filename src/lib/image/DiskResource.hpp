@@ -81,6 +81,7 @@ class DiskResource : public BaseResource<PixelType> {
                                        const int& col )
         {
             throw std::runtime_error("PixelType& operator() Not Implemented in DiskResource.hpp");
+            return m_dummy_value;
         }
         
         
@@ -107,6 +108,7 @@ class DiskResource : public BaseResource<PixelType> {
         virtual PixelType& operator[]( const int& index )
         {
             std::runtime_error("PixelType& operator[] Not Implemented in DiskResource.hpp");
+            return m_dummy_value;
         }
 
 
@@ -155,7 +157,9 @@ class DiskResource : public BaseResource<PixelType> {
 
         /// Specified image driver
         typename IO::ImageDriverBase<DiskResource<PixelType>>::ptr_t  m_image_driver;
-
+        
+        /// Dummy Pixel Value
+        PixelType m_dummy_value;
 
 
 }; /// End of DiskResource Class

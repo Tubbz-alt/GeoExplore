@@ -46,7 +46,7 @@ ElevationTileUTM_d::ptr_t A_DEM_IO_Driver_Flat::Create_Elevation_Tile( CRD::Coor
 {
 
     // Convert to UTM
-    CRD::CoordinateUTM_d min_corner_utm = CRD::convert_coordinate( min_corner_geographic );
+    CRD::CoordinateUTM_d min_corner_utm = CRD::convert_coordinate<CRD::CoordinateUTM_d>( min_corner_geographic );
 
     // Create tile
     ElevationTileUTM_d::ptr_t  elevation_tile(new ElevationTileUTM_d( min_corner_utm, 

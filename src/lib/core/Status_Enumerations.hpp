@@ -40,6 +40,12 @@ enum class CoreStatusReason : uint32_t {
     GENERAL_IO_ERROR    = 5 /*< Problem parsing file.*/,
 }; // End of CoreStatusReason Enumeration
 
+/**
+ * GDAL Status Reason
+*/
+enum class GDALStatusReason : uint32_t {
+    UNKNOWN_PROJECTION_TYPE = 6 /*< Unknown OGR Coordinate Type */,
+}; // End of GDALStatusReason
 
 } // End of GEO Namespace
 

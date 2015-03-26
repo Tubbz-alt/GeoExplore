@@ -53,6 +53,7 @@ set( GEOEXPLORE_COORDINATE_MODULE_TESTS
 #-------------------------------------------------#
 set( GEOEXPLROE_CORE_MODULE_TESTS
     core/TEST_A_Status.cpp
+    core/TEST_Enumerations.cpp
     core/TEST_Status_Enumerations.cpp
 )
 
@@ -76,6 +77,7 @@ set( GEOEXPLORE_MATH_MODULE_TESTS
     math/TEST_A_Point.cpp
     math/TEST_A_Polygon.cpp
     math/TEST_A_Rectangle.cpp
+    math/TEST_Matrix_Conversions.cpp
 )
 
 #------------------------------------------------#
@@ -94,6 +96,8 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
 #------------------------------------------#
 set( GEOEXPLORE_TEST_SOURCES
     geo-explore-unit-tests.cpp
+    Unit_Testing_Only/Coordinate_Test_Harness.cpp
+    Unit_Testing_Only/Coordinate_Test_Harness.hpp
     ${GEOEXPLORE_CONFIG_MODULE_TESTS}
     ${GEOEXPLORE_COORDINATE_MODULE_TESTS}
     ${GEOEXPLORE_CORE_MODULE_TESTS}

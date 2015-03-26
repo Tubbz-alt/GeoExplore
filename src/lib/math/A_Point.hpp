@@ -291,6 +291,9 @@ class A_Point{
 
 }; /// End of A_Point Class
 
+// Template Aliases
+template <typename DataType> using A_Point2 = A_Point<DataType,2>;
+template <typename DataType> using A_Point3 = A_Point<DataType,3>;
 
 // Typedefs
 typedef A_Point<double,2>   A_Point2d;

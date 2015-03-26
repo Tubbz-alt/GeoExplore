@@ -43,9 +43,7 @@
 #include "io.hpp"
 
 /// Math Module
-#include "math/A_Rectangle.hpp"
-#include "math/A_Point.hpp"
-#include "math/A_Polygon.hpp"
+#include "math.hpp"
 
 /// Utility Module
 #include "utilities.hpp"

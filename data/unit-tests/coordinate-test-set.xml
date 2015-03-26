@@ -1,0 +1,20 @@
+<GeoExplore>
+
+    <Unit_Test_Data>
+        
+        <coordinate_test_harness>
+            
+            <coordinates>
+                
+                <coordinate name="Mount Whitney">
+                    <position_geographic latitude_degrees="36.578581" longitude_degrees="-118.291995" elevation_meters="4421" datum="WGS84"/>
+                    <position_utm  zone="11" is_northern="true"  easting_meters="384409"   northing_meters="4048901" elevation_meters="4421" datum="WGS84" />
+                </coordinate>
+    
+            </coordinates>
+
+        </coordinate_test_harness>
+
+    </Unit_Test_Data>
+
+</GeoExplore>

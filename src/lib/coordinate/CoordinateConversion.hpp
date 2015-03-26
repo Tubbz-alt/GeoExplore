@@ -16,6 +16,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <type_traits>
 
 namespace GEO{
 namespace CRD{
@@ -90,6 +91,22 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
 
 
 /**
+ * @brief Convert from Geographic to Geographic
+ *
+ * @note This is more to allow templated code to compile.
+ *
+ * @param[in] coordinate Geographic Coordinate.
+ *
+ * @return Copy of this coordinate (Geographic).
+*/
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
+        convert_coordinate( CoordinateGeographic<typename OutputCoordinateType::datatype> const& coordinate ){
+    return coordinate;
+}
+
+
+/**
  * Convert from Geographic to UTM
  *
  * @param[in] coordinate Lat/Lon Coordinate to convert
@@ -97,12 +114,14 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
  *
  * @return  UTM coordinate.
 */
-template<typename DATATYPE>
-CoordinateUTM<DATATYPE>  convert_coordinate( CoordinateGeographic<DATATYPE> const& coordinate, 
-                                             Datum const& output_datum ){
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typename OutputCoordinateType::datatype>>::value, CoordinateUTM<typename OutputCoordinateType::datatype> >::type
+        convert_coordinate( CoordinateGeographic<typename OutputCoordinateType::datatype> const& coordinate, 
+                                             Datum const& output_datum )
+{
 
     // create the output coordinate with the proper datum
-    CoordinateUTM<DATATYPE> output;
+    CoordinateUTM<typename OutputCoordinateType::datatype> output;
     output.datum() = output_datum;
 
     // pass the inputs to the OGR converter
@@ -164,9 +183,10 @@ CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeographic<DATATYPE> const
  *
  * @return UTM Coordinate output.
 */
-template <typename DATATYPE>
-CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeographic<DATATYPE> const& coordinate, const int& zone ){
-    return convert_coordinate(coordinate, zone, coordinate.datum());
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typename OutputCoordinateType::datatype>>::value, CoordinateUTM<typename OutputCoordinateType::datatype> >::type
+    convert_coordinate( CoordinateGeographic<typename OutputCoordinateType::datatype> const& coordinate, const int& zone ){
+    return convert_coordinate<OutputCoordinateType>(coordinate, zone, coordinate.datum());
 }
 
 
@@ -177,19 +197,22 @@ CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeographic<DATATYPE> const
   * 
   * @return UTM Coordinate output
  */
-template<typename DATATYPE>
-CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeographic<DATATYPE> const& coordinate ){
-    return convert_coordinate(coordinate, coordinate.datum());
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typename OutputCoordinateType::datatype>>::value, CoordinateUTM<typename OutputCoordinateType::datatype> >::type
+    convert_coordinate( CoordinateGeographic<typename OutputCoordinateType::datatype> const& coordinate ){
+    return convert_coordinate<OutputCoordinateType>(coordinate, coordinate.datum());
 }
+
 
 /**
  * Convert from UTM to Geographic
 */
-template<typename DATATYPE>
-CoordinateGeographic<DATATYPE> convert_coordinate( CoordinateUTM<DATATYPE> const& coordinate, const Datum& outputDatum ){
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
+        convert_coordinate( CoordinateUTM<typename OutputCoordinateType::datatype> const& coordinate, const Datum& outputDatum ){
     
     // create the output coordinate
-    CoordinateGeographic<DATATYPE> output;
+    CoordinateGeographic<typename OutputCoordinateType::datatype> output;
     output.datum() = outputDatum;
 
     // pass inputs to the ogr converter
@@ -211,9 +234,10 @@ CoordinateGeographic<DATATYPE> convert_coordinate( CoordinateUTM<DATATYPE> const
 /**
  * Convert from UTM to geodetic with a forced datum
 */
-template<typename DATATYPE>
-CoordinateGeographic<DATATYPE> convert_coordinate( CoordinateUTM<DATATYPE> const& coordinate ){
-    return convert_coordinate(coordinate, coordinate.datum());
+template <typename OutputCoordinateType>
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
+         convert_coordinate( CoordinateUTM<typename OutputCoordinateType::datatype> const& coordinate ){
+    return convert_coordinate<OutputCoordinateType>(coordinate, coordinate.datum());
 }
 
 

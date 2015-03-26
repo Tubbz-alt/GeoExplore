@@ -31,6 +31,7 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
         /// Pointer type
         typedef std::shared_ptr<CoordinateGeographic<DATATYPE> > ptr_t;
 
+
         /**
          * @brief Constructor
          */
@@ -67,7 +68,7 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
                               datatype const& longitude_degrees,
                               datatype const& altitude_meters = 0,
                               Datum const& datum = Datum::WGS84 ) 
-            :  CoordinateBase<DATATYPE>( 0, datum ),
+            :  CoordinateBase<DATATYPE>( altitude_meters, datum ),
                m_latitude_degrees(latitude_degrees), 
                m_longitude_degrees(longitude_degrees)
         {

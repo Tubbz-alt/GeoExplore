@@ -37,7 +37,35 @@ std::string Get_Short_Driver_From_Filename( const boost::filesystem::path& filen
     return "";
 }
 
+/**
+ * @brief Coordinate
+*/
+MATH::A_Point2d GDAL_Pixel_To_World( MATH::A_Point2d const& pixel, 
+                                     const double* adfGeoTransform )
+{
 
+    // Create output point
+    MATH::A_Point2d output;
+    output.x() = adfGeoTransform[0] + adfGeoTransform[1] * pixel.x() + adfGeoTransform[2] * pixel.y();
+    output.y() = adfGeoTransform[3] + adfGeoTransform[4] * pixel.x() + adfGeoTransform[5] * pixel.y();
+
+    return output;
+}
+
+
+/**
+ * Convert GDAL Datum String to Datum Types
+*/
+Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string ){
+
+    // Check if datum string is wgs84
+    if( datum_string == "WGS_1984" ){
+        return Datum::WGS84;
+    }
+
+    // return unknown
+    return Datum::UNKNOWN;
+}
 
 
 } // End of GDAL Namespace

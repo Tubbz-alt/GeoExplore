@@ -15,7 +15,12 @@
 #include <cpl_string.h>
 #include <gdal.h>
 #include <gdal_priv.h>
+#include <ogr_spatialref.h>
 
+
+// IPL Libraries
+#include "../../core/Enumerations.hpp"
+#include "../../math/A_Point.hpp"
 
 namespace GEO{
 namespace IO{
@@ -30,6 +35,17 @@ namespace GDAL{
 std::string Get_Short_Driver_From_Filename( const boost::filesystem::path& filename );
 
 
+/**
+ * @brief Project Coordinate
+*/
+MATH::A_Point2d GDAL_Pixel_To_World( MATH::A_Point2d const& pixel, 
+                                     const double* adfGeoTransform );
+
+
+/**
+ * @brief Convert GDAL Datum String to Datum Types
+*/
+Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string );
 
 
 } // End of GDAL Namespace

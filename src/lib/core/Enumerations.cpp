@@ -8,8 +8,52 @@
 /// C++ Standard Libraries
 #include <stdexcept>
 
+// GeoExplore Libraries
+#include "../utilities/StringUtilities.hpp"
+
 
 namespace GEO{
+
+/**
+ * Convert a Datum to String
+*/
+std::string DatumToString( const Datum& datum )
+{
+    // Check if WGS84
+    if( datum == Datum::WGS84 ){
+        return "WGS84";
+    }
+
+    // Check if NAD83
+    if( datum == Datum::NAD83 ){
+        return "NAD83";
+    }
+
+    // Return Unknown
+    return "UNKNOWN";
+}
+
+
+/**
+ * Convert a String to Datum.
+*/
+Datum StringToDatum( std::string const& datum_string ){
+
+    // Check if WGS 84
+    if( string_toLower(datum_string) == "wgs84" ){
+        return Datum::WGS84;
+    }
+    
+    // Check if NAD83
+    if( string_toLower(datum_string) == "nad83" ){
+        return Datum::NAD83;
+    }
+
+
+    // Return unknown
+    return Datum::UNKNOWN;
+}
+
 
 /**
  * Convert a DATUM to a Well-Known Text String
@@ -18,10 +62,6 @@ std::string Datum2WKT_string( Datum const& datum ){
 
     switch(datum){
         
-        /// If we have EGM96
-        case Datum::EGM96:
-            return "EGM96";
-
         /// If we have WGS84
         case Datum::WGS84:
             return "WGS84";
@@ -31,8 +71,9 @@ std::string Datum2WKT_string( Datum const& datum ){
             return "NAD83";
 
         default:
-            throw std::runtime_error("Unknown datum.");
+            return "UNKNOWN";
     }
+    return "UNKNOWN";
 }
 
 /** 

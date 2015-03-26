@@ -7,6 +7,18 @@
 
 namespace GEO{
 
+
+/**
+ * Status Constructor
+*/
+Status::Status()
+  : m_status_type(StatusType::SUCCESS),
+    m_status_reason(StatusReason::NO_ERROR),
+    m_status_details("")
+{
+}
+
+
 /**
  * Status Constructor
 */

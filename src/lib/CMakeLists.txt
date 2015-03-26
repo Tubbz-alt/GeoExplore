@@ -119,6 +119,7 @@ set( GEOEXPLORE_MATH_HEADERS
     math/A_Rectangle.hpp
     math/A_Point.hpp
     math/A_Polygon.hpp
+    math/Matrix_Conversions.hpp
 )
 
 

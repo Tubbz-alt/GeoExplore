@@ -21,6 +21,11 @@ class Status{
 
     public:
         
+        /**
+         * @brief Constructor
+        */
+        Status();
+
         
         /**
          * @brief Constructor
