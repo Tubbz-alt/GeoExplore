@@ -17,6 +17,16 @@ using namespace GEO;
 // Instance of the coordinate test harness
 static Coordinate_Test_Harness::ptr_t coordinate_harness_instance = nullptr;
 
+/**
+ * Constructor
+*/
+Coordinate_Test_Set::Coordinate_Test_Set( const std::string& name,  
+                                          const std::vector<CRD::CoordinateBase<double>::ptr_t>& coordinate_list )
+  : m_name(name),
+    m_coordinate_list( coordinate_list )
+{
+
+}
 
 /**
  * Constructor
@@ -70,6 +80,9 @@ Status Coordinate_Test_Harness::Parse_Configuration_File( boost::filesystem::pat
                        "Pathname does not exist." );
     }
 
+    // Temp Coordinate List
+    std::vector<CRD::CoordinateBase<double>::ptr_t> temp_coordinate_list;
+
     // Create the pugixml document
     pugi::xml_document doc;
 
@@ -103,6 +116,9 @@ Status Coordinate_Test_Harness::Parse_Configuration_File( boost::filesystem::pat
         // Get the name
         std::string coordinate_name = cit->attribute("name").as_string();
         
+        // Clear the temporary coordinate list
+        temp_coordinate_list.clear();
+
         // Iterate over each position node
         for( pugi::xml_node_iterator pit = coordinate_node.begin(); 
              pit != coordinate_node.end(); 
@@ -111,7 +127,27 @@ Status Coordinate_Test_Harness::Parse_Configuration_File( boost::filesystem::pat
 
             // Process Geographic
             if( std::string(pit->name()) == "position_utm" ){
+                
+                // Latitude
+                double latitude_degrees = pit->attribute("latitude_degrees").as_double();
 
+                // Longitude
+                double longitude_degrees = pit->attribute("longitude_degrees").as_double();
+
+                /// Elevation
+                double elevation_meters = pit->attribute("elevation_meters").as_double();
+
+                // Datum
+                Datum datum_type = StringToDatum( pit->attribute("datum").as_string());
+
+                // Create coordinate
+                CRD::CoordinateBase<double>::ptr_t temp_coordinate( new CRD::CoordinateGeographic_d( latitude_degrees, 
+                                                                                                     longitude_degrees,
+                                                                                                     elevation_meters,
+                                                                                                     datum_type ));
+
+                // Add to list
+                temp_coordinate_list.push_back( temp_coordinate );
 
             }
 
@@ -142,6 +178,10 @@ Status Coordinate_Test_Harness::Parse_Configuration_File( boost::filesystem::pat
                                                                                               northing_meters,
                                                                                               elevation_meters,
                                                                                               datum ));
+
+                // Add to the list
+                temp_coordinate_list.push_back(temp_coordinate);
+
             }
 
             // Otherwise, throw an error
@@ -154,6 +194,11 @@ Status Coordinate_Test_Harness::Parse_Configuration_File( boost::filesystem::pat
 
 
         }
+
+        // Add the set
+        m_coordinate_test_sets.push_back( Coordinate_Test_Set( coordinate_name,
+                                                               temp_coordinate_list ));
+
     }
 
     // return success

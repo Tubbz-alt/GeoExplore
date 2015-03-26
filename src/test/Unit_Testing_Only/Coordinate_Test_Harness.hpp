@@ -25,9 +25,21 @@ class Coordinate_Test_Set{
 
     public:
 
+        /** 
+         * @brief Constructor
+        */
+        Coordinate_Test_Set( std::string const& name,
+                             std::vector<GEO::CRD::CoordinateBase<double>::ptr_t> const& coordinate_list );
+
+
 
     private:
+        
+        /// Coordinate Name
+        std::string m_name;
 
+        /// Coordinate List
+        std::vector<GEO::CRD::CoordinateBase<double>::ptr_t> m_coordinate_list;
 
 }; // End of Coordinate_Test_Set Class
 
