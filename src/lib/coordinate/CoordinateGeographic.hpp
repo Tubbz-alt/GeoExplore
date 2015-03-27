@@ -11,6 +11,7 @@
 
 // GeoExplore Libraries
 #include "../core/Enumerations.hpp"
+#include "../math/A_Point.hpp"
 #include "CoordinateBase.hpp"
 
 namespace GEO{
@@ -72,6 +73,25 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
                m_latitude_degrees(latitude_degrees), 
                m_longitude_degrees(longitude_degrees)
         {
+        }
+
+        
+        /**
+         * @brief Build a coordinate from an ND point.
+         *
+         * @param[in] point Point to set. If the point has more than 2 dimensions, it will set the z.
+         * @param[in] datum Datum to use.
+         */
+        template <int Dimensions>
+        CoordinateGeographic( MATH::A_Point<datatype,Dimensions> const& point, 
+                              Datum const& datum = Datum::WGS84 )
+          :  CoordinateBase<DATATYPE>( 0, datum ),
+             m_latitude_degrees( point.y() ),
+             m_longitude_degrees( point.x() )
+        {
+            if( point.Dims() >= 3 ){
+                this->altitude_meters() = point.z();
+            }
         }
 
 
@@ -164,6 +184,43 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
         */
         inline datatype& y(){
             return m_latitude_degrees;
+        }
+        
+        
+        /**
+         * @brief Addition Operator
+         *
+         * @param[in] other Other coordinate to add.
+         *
+         * @return Added Coordinate.
+        */
+        CoordinateGeographic<DATATYPE> operator+ ( CoordinateGeographic<DATATYPE> const& other )const
+        {
+            // Create output
+            CoordinateGeographic<DATATYPE> output;
+            output.m_latitude_degrees  = m_latitude_degrees      + other.m_latitude_degrees;
+            output.m_longitude_degrees = m_longitude_degrees     + other.m_longitude_degrees;
+            output.m_altitude_meters   = this->m_altitude_meters + other.m_altitude_meters;
+            output.m_datum = this->m_datum;
+            return output;
+        }
+        
+        /**
+         * @brief Subtraction Operator
+         *
+         * @param[in] other Other coordinate to subtract
+         *
+         * @return Subtracted Coordinate.
+        */
+        CoordinateGeographic<DATATYPE> operator - ( CoordinateGeographic<DATATYPE> const& other )const
+        {
+            // Create output
+            CoordinateGeographic<DATATYPE> output;
+            output.m_latitude_degrees  = m_latitude_degrees  - other.m_latitude_degrees;
+            output.m_longitude_degrees = m_longitude_degrees - other.m_longitude_degrees;
+            output.m_altitude_meters   = this->m_altitude_meters - other.m_altitude_meters;
+            output.m_datum = this->m_datum;
+            return output;
         }
 
 

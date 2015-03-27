@@ -27,16 +27,28 @@ class Coordinate_Test_Set{
 
         /** 
          * @brief Constructor
+         *
+         * @param[in] coordinate_name Name of the coordinate.
+         * @param[in] coordinate_list List of coordinates.
         */
-        Coordinate_Test_Set( std::string const& name,
-                             std::vector<GEO::CRD::CoordinateBase<double>::ptr_t> const& coordinate_list );
+        Coordinate_Test_Set( std::string const&                                           coordinate_name,
+                             std::vector<GEO::CRD::CoordinateBase<double>::ptr_t> const&  coordinate_list );
 
+        
+        /**
+         * @brief Get the Coordinate Name
+         *
+         * @return Coordinate Name
+         */
+        inline std::string Get_Coordinate_Name()const{
+            return m_coordinate_name;
+        }
 
 
     private:
         
         /// Coordinate Name
-        std::string m_name;
+        std::string m_coordinate_name;
 
         /// Coordinate List
         std::vector<GEO::CRD::CoordinateBase<double>::ptr_t> m_coordinate_list;

@@ -370,12 +370,25 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGBA_u8>> DriverType02;
 
     // Run the method
-    DriverType01::Compute_Image_Extent<CRD::CoordinateUTM_d>( path01, status );
+    MATH::A_Rectangle<CRD::CoordinateUTM_d> rectangle01 = DriverType01::Compute_Image_Extent<CRD::CoordinateUTM_d>( path01, status );
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
     
-    DriverType02::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path02, status );
+    MATH::A_Rectangle<CRD::CoordinateGeographic_d> rectangle02 = DriverType02::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path02, status );
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    
+    // Expected values
+    const int exp_zone_01 = 45;
+    const bool exp_is_northern_01 = true;
+    const double exp_easting_meters_01 = 313117.6;
+    const double exp_northing_meters_01 = 3651215.4;
+    const Datum exp_datum_01 = Datum::WGS84;
 
+    // Check the extents
+    ASSERT_EQ( rectangle01.TL().zone(), exp_zone_01 );
+    ASSERT_TRUE( rectangle01.TL().Is_Northern_Hemisphere() );
+    ASSERT_NEAR( rectangle01.TL().easting_meters(),   exp_easting_meters_01,  eps );
+    ASSERT_NEAR( rectangle01.TL().northing_meters(),  exp_northing_meters_01, eps );
+    ASSERT_EQ( rectangle01.TL().datum(),            exp_datum_01 );
     FAIL();
 }
 

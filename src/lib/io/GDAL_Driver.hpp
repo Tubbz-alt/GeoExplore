@@ -22,6 +22,7 @@
 #include "../io/ImageDriverBase.hpp"
 #include "../math/A_Matrix.hpp"
 #include "../math/A_Point.hpp"
+#include "../math/A_Rectangle.hpp"
 #include "../math/Matrix_Conversions.hpp"
 #include "../utilities/FilesystemUtilities.hpp"
 #include "gdal_utils/GDAL_Utilities.hpp"
@@ -590,8 +591,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          * @param[out] status Status of the operation.
          */
         template<typename CoordinateModuleType>
-        static void Compute_Image_Extent( boost::filesystem::path const& pathname,
-                                          Status&                        status )
+        static MATH::A_Rectangle<CoordinateModuleType> 
+                                    Compute_Image_Extent( boost::filesystem::path const& pathname,
+                                                          Status&                        status )
         {
             
             // Make sure it is read supported
@@ -599,7 +601,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 status = Status( StatusType::FAILURE, 
                                  CoreStatusReason::FILE_NOT_SUPPORTED,
                                  "File not GDAL Readable.");
-                return;
+                return MATH::A_Rectangle<CoordinateModuleType>();
             }
 
             // Create a driver
@@ -608,14 +610,17 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             // Open the driver
             driver.Open();
 
-            // Get the extent
+            // Get the GDAL Geo Transform
             double adfGeoTransform[6];
             if( driver.Get_GDAL_Geo_Transform( adfGeoTransform ) == false ){
                 status = Status( StatusType::FAILURE, 
                                  CoreStatusReason::GENERAL_IO_ERROR,
                                  "GDAL Transform Does Not Exist.");
-                return;
+                return MATH::A_Rectangle<CoordinateModuleType>();
             }
+
+            // Build the output rectangle
+            MATH::A_Rectangle<CoordinateModuleType> output;
 
             // Define our pixels
             MATH::A_Point2d world_tl = GDAL_Pixel_To_World( MATH::A_Point2d(             0,             0), adfGeoTransform );
@@ -641,8 +646,16 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 CoordinateModuleType geo_bl = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_bl.y(), world_bl.x(), 0, datum_type ));
                 CoordinateModuleType geo_br = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_br.y(), world_br.x(), 0, datum_type ));
                 
+                
+                // Compute Bounds
+                double minX = std::min( geo_tl.x(), std::min( geo_tr.x(), std::min( geo_bl.x(), geo_br.x())));
+                double minY = std::min( geo_tl.y(), std::min( geo_tr.y(), std::min( geo_bl.y(), geo_br.y())));
+                double maxX = std::max( geo_tl.x(), std::max( geo_tr.x(), std::max( geo_bl.x(), geo_br.x())));
+                double maxY = std::max( geo_tl.y(), std::max( geo_tr.y(), std::max( geo_bl.y(), geo_br.y())));
+                
                 // Pass to rectangle
-
+                output = MATH::A_Rectangle<CoordinateModuleType>( CoordinateModuleType( MATH::A_Point2d( minX, minY ) ), 
+                                                                  CoordinateModuleType( MATH::A_Point2d( maxX, maxY ) ));
 
             }
 
@@ -656,12 +669,14 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 status = Status( StatusType::FAILURE, 
                                  GDALStatusReason::UNKNOWN_PROJECTION_TYPE,
                                  std::string("Unknown projection type: ") + std::string(driver.m_dataset->GetProjectionRef()));
-                return;
+                return MATH::A_Rectangle<CoordinateModuleType>();
             }
 
             // Close the driver
             driver.Close();
-
+            
+            // Return the output
+            return output;
         }
         
     private:

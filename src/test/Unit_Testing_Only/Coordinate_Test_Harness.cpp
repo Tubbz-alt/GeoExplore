@@ -20,9 +20,9 @@ static Coordinate_Test_Harness::ptr_t coordinate_harness_instance = nullptr;
 /**
  * Constructor
 */
-Coordinate_Test_Set::Coordinate_Test_Set( const std::string& name,  
+Coordinate_Test_Set::Coordinate_Test_Set( const std::string& coordinate_name,  
                                           const std::vector<CRD::CoordinateBase<double>::ptr_t>& coordinate_list )
-  : m_name(name),
+  : m_coordinate_name(coordinate_name),
     m_coordinate_list( coordinate_list )
 {
 

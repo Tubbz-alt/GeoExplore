@@ -8,6 +8,7 @@
 
 // GeoExplore Libraries
 #include "../core/Enumerations.hpp"
+#include "../math/A_Point.hpp"
 #include "CoordinateBase.hpp"
 
 // C++ Standard Libraries
@@ -85,6 +86,26 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
               m_easting_meters(easting_meters),
               m_northing_meters(northing_meters)
         {
+        }
+
+
+        /**
+         * @brief Construct a coordinate from a 2d point.
+         *
+         * @param[in] point Point to set.
+         * @param[in] datum Datum to use.
+        */
+        template <int Dimensions>
+        CoordinateUTM( MATH::A_Point<datatype,Dimensions> const& point,
+                       const int& utm_zone = -1,
+                       const Datum& datum = Datum::WGS84 )
+          : CoordinateBase<DATATYPE>( 0, datum ),
+            m_easting_meters(point.x()),
+            m_northing_meters(point.y())
+        {
+            if( point.Dims() >= 3 ){
+                this->altitude_meters() = point.z();
+            }
         }
          
 
@@ -266,6 +287,26 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                                             this->m_datum );
         }
         
+        
+        /**
+         * @brief Addition Operator.
+         *
+         * Note that the zone and hemisphere are ignored.  The first coordinate (this) is used.
+         *
+         * @param[in] rhs Coordinate to add to.
+         *
+         * @return Sum of this coordinate and the other coordinate.
+        */
+        CoordinateUTM<DATATYPE> operator + ( const MATH::A_Point3<DATATYPE>& rhs )const
+        {
+            return CoordinateUTM<DATATYPE>( m_zone,
+                                            m_is_northern,
+                                            m_easting_meters + rhs.x(),
+                                            m_northing_meters + rhs.y(),
+                                            this->m_altitude_meters + rhs.z(),
+                                            this->m_datum );
+        }
+
 
         /**
          * @brief Subtraction Operator.
@@ -283,6 +324,25 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
                                             easting_meters()  - rhs.easting_meters(),
                                             northing_meters() - rhs.northing_meters(),
                                             this->altitude_meters() - rhs.altitude_meters(),
+                                            this->datum()   );
+        }
+        
+        /**
+         * @brief Subtraction Operator.
+         *
+         * Note that the zone and hemisphere are ignored.  The first coordinate (this) is used.
+         *
+         * @param[in] rhs Other coordinate to subtract.
+         *
+         * @return difference between this coordinate an the other.
+        */
+        CoordinateUTM<DATATYPE> operator - ( const MATH::A_Point3<DATATYPE>& rhs )const
+        {
+            return CoordinateUTM<DATATYPE>( m_zone,
+                                            m_is_northern,
+                                            easting_meters()  - rhs.x(),
+                                            northing_meters() - rhs.y(),
+                                            this->altitude_meters() - rhs.z(),
                                             this->datum()   );
         }
 

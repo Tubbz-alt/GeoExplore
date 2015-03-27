@@ -39,7 +39,7 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     // Create argument list
     int argc = 5;
     char** argv = new char*[5];
-    argv[0] = (char*)"main.out";
+    argv[0] = (char*)"./main.out";
     argv[1] = (char*)"-help";
     argv[2] = (char*)"--render";
     argv[3] = (char*)"-c";
@@ -48,6 +48,13 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     // Create the parser
     CONFIG::A_Command_Line_Parser parser(argc, argv);
 
+    // Check the application name
+    ASSERT_EQ( parser.Get_Application_Name(), "./main.out");
+
+    // Check for flags
+    ASSERT_TRUE( parser.Check_If_Flag_Exists("-help") );
+    ASSERT_TRUE( parser.Check_If_Flag_Exists("-c") );
+    ASSERT_FALSE( parser.Check_If_Flag_Exists("-C") );
 
     FAIL();
 

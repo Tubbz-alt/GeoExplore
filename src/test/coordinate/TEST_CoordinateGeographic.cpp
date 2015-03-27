@@ -53,4 +53,49 @@ TEST( CoordinateGeographic, Constructor ){
 
 }
 
+/**
+ * Test Addition
+*/
+TEST( CoordinateGeographic, Addition_Operator ){
+
+    // EPS
+    const double eps = 0.0001;
+
+    // Create the coordinates
+    CRD::CoordinateGeographic_d coordinate01( 12,-23, 123, Datum::WGS84 );
+    CRD::CoordinateGeographic_d coordinate02(-12,-23, 123, Datum::WGS84 );
+    
+    // Add
+    CRD::CoordinateGeographic_d coordinate03 = coordinate01 + coordinate02;
+
+    // Check values
+    ASSERT_NEAR( coordinate03.latitude_degrees(),  0, eps );
+    ASSERT_NEAR( coordinate03.longitude_degrees(),-46, eps );
+    ASSERT_NEAR( coordinate03.altitude_meters(),  246, eps );
+    ASSERT_EQ( coordinate03.datum(), Datum::WGS84 );
+}
+
+
+/**
+ * Test Subtraction
+*/
+TEST( CoordinateGeographic, Subtraction_Operator ){
+
+    // EPS
+    const double eps = 0.0001;
+
+    // Create the coordinates
+    CRD::CoordinateGeographic_d coordinate01( 12,-23, 123, Datum::WGS84 );
+    CRD::CoordinateGeographic_d coordinate02(-12,-23, 123, Datum::WGS84 );
+    
+    // Subtract
+    CRD::CoordinateGeographic_d coordinate03 = coordinate01 - coordinate02;
+
+    // Check values
+    ASSERT_NEAR( coordinate03.latitude_degrees(), 24, eps );
+    ASSERT_NEAR( coordinate03.longitude_degrees(), 0, eps );
+    ASSERT_NEAR( coordinate03.altitude_meters(), 0, eps );
+    ASSERT_EQ( coordinate03.datum(), Datum::WGS84 );
+}
+
 
