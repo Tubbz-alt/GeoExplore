@@ -47,6 +47,16 @@ enum class GDALStatusReason : uint32_t {
     UNKNOWN_PROJECTION_TYPE = 6 /*< Unknown OGR Coordinate Type */,
 }; // End of GDALStatusReason
 
+
+/**
+ * @brief Image Transform Reasons
+*/
+enum class TransformStatusReason : uint32_t {
+    INPUT_IMAGE_NULL = 7,
+    OUTPUT_IMAGE_NULL = 8,
+    INVALID_THREADS   = 9,
+}; // End of TransformStatusReason
+
 } // End of GEO Namespace
 
 #endif

@@ -6,6 +6,10 @@
 #ifndef __GEOEXPLORE_SRC_MATH_A_POINT_HPP__
 #define __GEOEXPLORE_SRC_MATH_A_POINT_HPP__
 
+// C++ Standard Libraries
+#include <sstream>
+#include <string>
+
 namespace GEO{
 namespace MATH{
 
@@ -280,6 +284,21 @@ class A_Point{
 
             // return output point
             return output;
+        }
+
+        /**
+         * @brief Create human-readible string.
+         *
+         * @return Pretty string.
+        */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "A_Point" << Dimensions << ": ";
+            sin << m_data[0];
+            for( int i=1; i<Dimensions; i++ ){
+                sin << ", " << m_data[i];
+            }
+            return sin.str();
         }
 
 

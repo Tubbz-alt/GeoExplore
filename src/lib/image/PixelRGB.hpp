@@ -148,7 +148,38 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
                      ( m_data[1] == rhs.m_data[1] ) && 
                      ( m_data[2] == rhs.m_data[2] ) );
         }
+
         
+        /**
+         * @brief Addition Operator
+         *
+         * @param[in] other Other pixel to add.
+         *
+         * @return Sum of this pixel and the other.
+        */
+        PixelRGB<ChannelType> operator + ( const PixelRGB<ChannelType>& other )const
+        {
+            return PixelRGB<ChannelType>( m_data[0] + other.m_data[0],
+                                          m_data[1] + other.m_data[1],
+                                          m_data[2] + other.m_data[2] );
+        }
+
+
+        /**
+         * @brief Subtraction Operator
+         *
+         * @param[in] other Other pixel to subtract.
+         *
+         * @return Difference of this pixel and the other.
+        */
+        PixelRGB<ChannelType> operator - ( const PixelRGB<ChannelType>& other )const
+        {
+            return PixelRGB<ChannelType>( m_data[0] - other.m_data[0],
+                                          m_data[1] - other.m_data[1],
+                                          m_data[2] - other.m_data[2] );
+        }
+
+
         /**
          * @brief Return a black pixel
          *
@@ -159,7 +190,18 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
                                           channeltype::minValue,
                                           channeltype::minValue );
         }
-
+        
+        
+        /**
+         * @brief Return a whiite pixel
+         *
+         * @return White pixel
+         */
+        static PixelRGB<ChannelType> White(){
+            return PixelRGB<ChannelType>( channeltype::maxValue,
+                                          channeltype::maxValue,
+                                          channeltype::maxValue );
+        }
 
     private:
 

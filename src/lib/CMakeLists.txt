@@ -85,6 +85,8 @@ set( GEOEXPLORE_DEM_HEADERS
 
 #  Image Module
 set( GEOEXPLORE_IMAGE_HEADERS
+    image.hpp
+    image/transforms.hpp
     image/BaseResource.hpp
     image/ChannelType.hpp
     image/DiskResource.hpp
@@ -96,6 +98,9 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/PixelGray.hpp
     image/PixelRGB.hpp
     image/PixelRGBA.hpp
+    image/transforms/ImageTransformBase.hpp
+    image/transforms/ImageTransformColor.hpp
+    image/transforms/ImageTransformInvert.hpp
 )
 
 #  IO Module

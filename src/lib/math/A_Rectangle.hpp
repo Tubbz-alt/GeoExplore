@@ -79,7 +79,7 @@ class A_Rectangle : public A_Polygon<PointType> {
          * @return Top-Left Corner.
          */
         PointType TL()const{
-            return (m_min_corner + A_Point3<typename PointType::datatype>(0,m_height));
+            return (m_min_corner + A_Point2<typename PointType::datatype>(0,m_height));
         }
 
 
@@ -89,7 +89,7 @@ class A_Rectangle : public A_Polygon<PointType> {
          * @return Top-Right Corner.
         */
         PointType TR()const{
-            return (m_min_corner + A_Point3<typename PointType::datatype>(m_width,m_height));
+            return (m_min_corner + A_Point2<typename PointType::datatype>(m_width,m_height));
         }
 
 
@@ -99,7 +99,7 @@ class A_Rectangle : public A_Polygon<PointType> {
          * @return Bottom-Right Corner.
         */
         PointType BR()const{
-            return (m_min_corner + A_Point3<typename PointType::datatype>(m_width,0));
+            return (m_min_corner + A_Point2<typename PointType::datatype>(m_width,0));
         }
 
 

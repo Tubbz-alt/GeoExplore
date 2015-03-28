@@ -25,19 +25,7 @@
 #include "dem.hpp"
 
 /// Image Module
-#include "image/BaseResource.hpp"
-#include "image/ChannelType.hpp"
-#include "image/Image.hpp"
-#include "image/DiskResource.hpp"
-#include "image/MemoryResource.hpp"
-#include "image/MetadataContainer.hpp"
-#include "image/MetadataContainerBase.hpp"
-#include "image/PixelBase.hpp"
-#include "image/PixelCast.hpp"
-#include "image/PixelGray.hpp"
-#include "image/PixelRGB.hpp"
-#include "image/PixelRGBA.hpp"
-#include "image/Pixel_Types.hpp"
+#include "image.hpp"
 
 /// IO Module
 #include "io.hpp"

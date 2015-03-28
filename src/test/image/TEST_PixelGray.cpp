@@ -161,3 +161,26 @@ TEST( PixelGray, White_Operator ){
 
 
 }
+
+/**
+ * Check the addition operator
+*/
+TEST( PixelGray, Addition_Operator ){
+
+    IMG::PixelGray_df pix01(1);
+    IMG::PixelGray_df pix02(-2);
+
+    ASSERT_NEAR( (pix01+pix02)[0], -1, 0.0001 );
+}
+
+/**
+ * Check the subtraction operator
+*/
+TEST( PixelGray, Subtraction_Operator ){
+
+    IMG::PixelGray_df pix01(1);
+    IMG::PixelGray_df pix02(-2);
+
+    ASSERT_NEAR( (pix01-pix02)[0], 3, 0.0001 );
+}
+

@@ -118,6 +118,32 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
 
 
         /**
+         * @brief Addition Operator
+         *
+         * @param[in] other Other pixel to add.
+         *
+         * @return Sum of this pixel and the other.
+        */
+        PixelGray<ChannelType> operator + ( const PixelGray<ChannelType>& other )const
+        {
+            return PixelGray<ChannelType>( m_data + other.m_data);
+        }
+        
+        
+        /**
+         * @brief Subtraction Operator
+         *
+         * @param[in] other Other pixel to subtraction.
+         *
+         * @return Difference of this pixel and the other.
+        */
+        PixelGray<ChannelType> operator - ( const PixelGray<ChannelType>& other )const
+        {
+            return PixelGray<ChannelType>( m_data - other.m_data);
+        }
+
+
+        /**
          * @brief Return a black pixel.
          *
          * @return Black pixel

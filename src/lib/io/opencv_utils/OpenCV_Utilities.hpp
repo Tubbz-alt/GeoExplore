@@ -33,6 +33,34 @@ class OpenCV_Type_Converter{
 };
 
 template <>
+class OpenCV_Type_Converter<IMG::PixelGray_u8>{
+
+    public:
+        
+        /**
+         * @brief Convert from a PixelGray to cv::Vec3b
+        */
+        static cv::Vec3b pixel_cast( IMG::PixelGray_u8 const& pixel_value ){
+            return cv::Vec3b( pixel_value[0], pixel_value[1], pixel_value[2]);
+        }
+
+}; // End of OpenCV_Type_Converter Class
+
+template <>
+class OpenCV_Type_Converter<IMG::PixelRGB_u8>{
+
+    public:
+
+        /**
+         * @brief Convert form a PixelRGB type to cv::Vec3b
+        */
+        static cv::Vec3b pixel_cast( IMG::PixelRGB_u8 const& pixel_value ){
+            return cv::Vec3b( pixel_value[2], pixel_value[1], pixel_value[0]);
+        }
+
+}; 
+
+template <>
 class OpenCV_Type_Converter<IMG::PixelRGBA_u8>{
 
     public:
@@ -46,8 +74,13 @@ class OpenCV_Type_Converter<IMG::PixelRGBA_u8>{
 
 }; 
 
+
 /**
  * @brief View the requested image using OpenCV's Highgui Module
+ *
+ * @param[in] image Image to view.
+ * @param[in] window_name Name of the window to render on.
+ * @param[in] wait_time_milliseconds Time to show image. If time <= 0, then it will wait for keyboard input.
  */
 template <typename PixelType, typename ResourceType>
 void View_Image( IMG::Image_<PixelType, ResourceType> const& image, 

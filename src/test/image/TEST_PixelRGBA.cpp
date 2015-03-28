@@ -270,3 +270,125 @@ TEST( PixelRGBA, Equivalent_Operator ){
 
 
 }
+
+/**
+ * Check the addition operator
+*/
+TEST( PixelRGBA, Addition_Operator ){
+
+    IMG::PixelRGBA_df pix01(1);
+    IMG::PixelRGBA_df pix02(-2);
+
+    ASSERT_NEAR( (pix01+pix02)[0], -1, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[1], 3, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[2], 3, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[3], 1, 0.0001 );
+}
+
+/**
+ * Check the subtraction operator
+*/
+TEST( PixelRGBA, Subtraction_Operator ){
+
+    IMG::PixelRGBA_df pix01(1);
+    IMG::PixelRGBA_df pix02(-2);
+
+    ASSERT_NEAR( (pix01-pix02)[0], 3, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[1], 3, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[2], 3, 0.0001 );
+    ASSERT_NEAR( (pix01-pix02)[3], 1, 0.0001 );
+}
+
+
+
+/**
+ * Check the White Operator
+*/
+TEST( PixelRGBA, Black_Operator ){
+    
+    // Define Eps
+    const double EPS = 0.0001;
+
+    // Check results
+    ASSERT_NEAR( IMG::PixelRGBA_d::Black()[0], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::Black()[1], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::Black()[2], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::Black()[3], 1, EPS );
+    
+    ASSERT_NEAR( IMG::PixelRGBA_df::Black()[0],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::Black()[1],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::Black()[2],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::Black()[3], 1, EPS );
+
+    ASSERT_EQ( IMG::PixelRGBA_u8::Black()[0],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::Black()[1],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::Black()[2],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::Black()[3],  IMG::ChannelTypeUInt8::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u12::Black()[0], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::Black()[1], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::Black()[2], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::Black()[3], IMG::ChannelTypeUInt12::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u14::Black()[0], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::Black()[1], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::Black()[2], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::Black()[3], IMG::ChannelTypeUInt14::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u16::Black()[0], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::Black()[1], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::Black()[2], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::Black()[3], IMG::ChannelTypeUInt16::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u32::Black()[0], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::Black()[1], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::Black()[2], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::Black()[3], IMG::ChannelTypeUInt32::maxValue );
+
+}
+
+/**
+ * Check the White Operator
+*/
+TEST( PixelRGBA, White_Operator ){
+    
+    // Define Eps
+    const double EPS = 0.0001;
+
+    // Check results
+    ASSERT_NEAR( IMG::PixelRGBA_d::White()[0], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::White()[1], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::White()[2], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_d::White()[3], 1, EPS );
+    
+    ASSERT_NEAR( IMG::PixelRGBA_df::White()[0], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::White()[1], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::White()[2], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGBA_df::White()[3], 1, EPS );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u8::White()[0],  IMG::ChannelTypeUInt8::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::White()[1],  IMG::ChannelTypeUInt8::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::White()[2],  IMG::ChannelTypeUInt8::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u8::White()[3],  IMG::ChannelTypeUInt8::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u12::White()[0], IMG::ChannelTypeUInt12::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::White()[1], IMG::ChannelTypeUInt12::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::White()[2], IMG::ChannelTypeUInt12::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u12::White()[3], IMG::ChannelTypeUInt12::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u14::White()[0], IMG::ChannelTypeUInt14::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::White()[1], IMG::ChannelTypeUInt14::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::White()[2], IMG::ChannelTypeUInt14::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u14::White()[3], IMG::ChannelTypeUInt14::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u16::White()[0], IMG::ChannelTypeUInt16::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::White()[1], IMG::ChannelTypeUInt16::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::White()[2], IMG::ChannelTypeUInt16::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u16::White()[3], IMG::ChannelTypeUInt16::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGBA_u32::White()[0], IMG::ChannelTypeUInt32::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::White()[1], IMG::ChannelTypeUInt32::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::White()[2], IMG::ChannelTypeUInt32::maxValue );
+    ASSERT_EQ( IMG::PixelRGBA_u32::White()[3], IMG::ChannelTypeUInt32::maxValue );
+
+}

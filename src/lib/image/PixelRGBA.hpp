@@ -188,17 +188,61 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
                      ( m_data[3] == rhs.m_data[3] ) );
         }
 
+        
+        /**
+         * @brief Addition Operator
+         *
+         * @param[in] other Other pixel to add.
+         *
+         * @return Sum of this pixel and the other.
+         */
+        PixelRGBA<ChannelType> operator + ( const PixelRGBA<ChannelType>& other )const
+        {
+            return PixelRGBA<ChannelType>( m_data[0] + other.m_data[0],
+                                           m_data[1] + other.m_data[1],
+                                           m_data[2] + other.m_data[2],
+                                           ChannelType::maxValue );
+        }
+        
+        
+        /**
+         * @brief Subtraction Operator
+         *
+         * @param[in] other Other pixel to subtraction.
+         *
+         * @return Difference of this pixel and the other.
+         */
+        PixelRGBA<ChannelType> operator - ( const PixelRGBA<ChannelType>& other )const
+        {
+            return PixelRGBA<ChannelType>( m_data[0] - other.m_data[0],
+                                           m_data[1] - other.m_data[1],
+                                           m_data[2] - other.m_data[2],
+                                           ChannelType::maxValue );
+        }
+
 
         /**
-         * @brief Return a black pixel.
+         * @brief return a black pixel.
          *
-         * @return Black pixel.
+         * @return black pixel.
         */
         static PixelRGBA<ChannelType> Black(){
-            return PixelRGBA<ChannelType>( channeltype::minValue,
-                                           channeltype::minValue,
-                                           channeltype::minValue,
-                                           channeltype::maxValue );
+            return PixelRGBA<ChannelType>( ChannelType::minValue,
+                                           ChannelType::minValue,
+                                           ChannelType::minValue,
+                                           ChannelType::maxValue );
+        }
+        
+        /**
+         * @brief Return a white pixel
+         *
+         * @return White pixel
+         */
+        static PixelRGBA<ChannelType> White(){
+            return PixelRGBA<ChannelType>( ChannelType::maxValue,
+                                           ChannelType::maxValue,
+                                           ChannelType::maxValue,
+                                           ChannelType::maxValue );
         }
 
 
