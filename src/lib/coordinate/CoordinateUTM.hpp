@@ -232,7 +232,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         /**
          * @brief Mag2 Operator
          *
-         * @return { @f{ $x^2 + y^2 + z^2$} }
+         * @return { @f{ $x^2 + y^2 + z^2$ } }
         */
         DATATYPE Mag2()const{
             return ((easting_meters()  * easting_meters()  ) + 
