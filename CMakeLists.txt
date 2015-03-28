@@ -31,13 +31,6 @@ PROJECT( Geo-Explore )
 #---------------------#
 FIND_PACKAGE( Eigen3 )
 
-if( EIGEN3_FOUND )
-    message("Eigen3 Found")
-    message("Eigen3 Include: ${EIGEN3_INCLUDE_DIR}")
-    include_directories( ${EIGEN3_INCLUDE_DIR})
-else()
-    message("Eigen3 Not Found")
-endif()
 
 
 #-------------------#
@@ -51,11 +44,9 @@ find_package( Boost
                     regex
                 REQUIRED
 )
-include_directories(${Boost_INCLUDE_DIRS})
 if( NOT ${Boost_FOUND} )
     MESSAGE( FATAL_ERROR "Unable to find Boost Libraries.")
 endif()
-MESSAGE("Boost Include Directory: ${Boost_INCLUDE_DIRS}")
 
 
 #------------------------------------#

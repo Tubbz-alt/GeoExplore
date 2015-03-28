@@ -18,37 +18,27 @@ set( CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake
 )
 
+
+# Configure C++11
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+
 #----------------------------------#
 #-       Find QT5 Libraries       -#
 #----------------------------------#
+
+#  Find includes
+SET( CMAKE_INCLUDE_CURRENT_DIR ON )
+
+#  Run Automoc
+SET( CMAKE_AUTOMOC ON )
+
 if( DEFINED ENV{QT5_CMAKE_PATH} )
     set(Qt5_DIR $ENV{QT5_CMAKE_PATH})
 endif()
-find_package( Qt5
-                COMPONENTS
-                    OpenGL
-                    Widgets
-                    Core
-            )
-if( NOT Qt5_FOUND )
-    MESSAGE( FATAL_ERROR "Qt5 was not found. Consider setting QT5_CMAKE_PATH to the Qt5Config.cmake directory.")
-endif()
+find_package( Qt5Widgets )
 
 #  Tell CMake to use the necessary modules
-set( QT_USE_QTOPENGL ON )
-
-#  Tell CMake to run moc when necessary
-set( CMAKE_AUTOMOC ON )
-
-#  Include Qt5
-#  Some builds of Qt5 apparently use different names for this variable
-include_directories(${Qt5Core_INCLUDES}
-                    ${Qt5Core_INCLUDE_DIRS}
-                    ${Qt5Widgets_INCLUDES} 
-                    ${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5OpenGL_INCLUDES} 
-                    ${Qt5OpenGL_INCLUDE_DIRS}
-                    )
+#set( QT_USE_QTOPENGL ON )
 
 #  Force position independent code (which should be a default
 #  however Qt5 complains if this isn't here)
@@ -90,6 +80,14 @@ set( GUI_SOURCES
     gui/utils/coordinate/CoordinateConversionWidget.cpp
 )
 
+
+#--------------------------------------#
+#-      Add Remaining Includes        -#
+#--------------------------------------#
+
+#  boost
+include_directories(${Boost_INCLUDE_DIRS})
+
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
@@ -104,7 +102,6 @@ add_executable( geo-explore
 qt5_use_modules( geo-explore 
                  Widgets
                  OpenGL
-                 Core
                  )
 
 target_link_libraries( geo-explore

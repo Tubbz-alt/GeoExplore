@@ -11,8 +11,8 @@
 #include <GeoExplore.hpp>
 
 /// GUI Libraries
-#include "MainWindow.hpp"
-#include "Global_Options.hpp"
+#include "core/Global_Options.hpp"
+#include "gui/MainWindow.hpp"
 
 /// C++ Libraries
 #include <iostream>

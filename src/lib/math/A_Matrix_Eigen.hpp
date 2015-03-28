@@ -6,14 +6,20 @@
 #ifndef __GEOEXPLORE_LIB_MATH_A_MATRIX_EIGEN_HPP__
 #define __GEOEXPLORE_LIB_MATH_A_MATRIX_EIGEN_HPP__
 
-// Eigen Libraries
-#include <Eigen/Dense>
-
 // C++ Standard Libraries
 #include <string>
 
 namespace GEO{
 namespace MATH{
+namespace EIGEN3{
+
+/**
+ * @class A_Matrix_Eigen_Impl
+*/
+class A_Matrix_Eigen_Impl;
+
+} // End of EIGEN3 Namespace
+
 
 /**
  * @class A_Matrix_Eigen
@@ -43,9 +49,7 @@ class A_Matrix_Eigen{
          * 
          * @return Number of matrix rows.
         */
-        inline int Rows()const{
-            return m_matrix.rows();
-        }
+        int Rows()const;
 
 
         /**
@@ -53,9 +57,7 @@ class A_Matrix_Eigen{
          *
          * @return Number of matrix columns.
         */
-        inline int Cols()const{
-            return m_matrix.cols();
-        }
+        int Cols()const;
 
         
         /**
@@ -67,10 +69,7 @@ class A_Matrix_Eigen{
          * @return Value at row and column.
         */
         double operator()( const int& row,
-                           const int& col )const
-        {
-            return m_matrix(row,col);
-        }
+                           const int& col )const;
 
 
         /**
@@ -82,10 +81,7 @@ class A_Matrix_Eigen{
          * @return Reference to value at row and column.
         */
         double& operator()( const int& row,
-                            const int& col )
-        {
-            return m_matrix(row,col);
-        }
+                            const int& col );
         
 
         /**
@@ -107,9 +103,12 @@ class A_Matrix_Eigen{
 
 
     private:
-        
+    
+        // Class Name
+        std::string m_class_name;
+
         // Internal Matrix
-        Eigen::MatrixXd m_matrix;
+        std::shared_ptr<EIGEN3::A_Matrix_Eigen_Impl> m_matrix;
 
 
 }; // End of A_Matrix_Eigen Class

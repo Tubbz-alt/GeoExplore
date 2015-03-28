@@ -32,6 +32,7 @@ if( DEFINED ENV{QT5_CMAKE_PATH} )
 endif()
 find_package( Qt5
                 COMPONENTS
+                    Gui
                     OpenGL
                     Widgets
                     Core
@@ -46,15 +47,6 @@ set( QT_USE_QTOPENGL ON )
 
 #  Tell CMake to always look for includes in the MOC path
 set( CMAKE_AUTOMOC ON )
-
-#  Include Qt5
-#  Some builds of Qt5 apparently use different names for this variable
-include_directories(${Qt5Widgets_INCLUDES}
-                    ${Qt5OpenGL_INCLUDES}
-)
-include_directories(${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5OpenGL_INCLUDE_DIRS}
-)
 
 #  Force position independent code (which should be a default
 #  however Qt5 complains if this isn't here)
@@ -74,7 +66,6 @@ find_package( OpenGL REQUIRED )
 #-  Find OpenGL Extension Wrangler (GLEW)  -#
 #-------------------------------------------#
 find_package( GLEW REQUIRED )
-include_directories( ${GLEW_INCLUDE_DIR})
 
 #------------------------------------------#
 #-      Define Required Header Files      -#
@@ -94,11 +85,32 @@ set( TERRAINEXPLORE_SOURCES
     TerrainViewer.cpp
 )
 
+#----------------------------------#
+#-      Process All Includes      -#
+#----------------------------------#
+
+#  Boost Includes
+include_directories( ${Boost_INCLUDE_DIRS} )
+
+#  Glew Includes
+include_directories( ${GLEW_INCLUDE_DIR})
+
+
+#  Include Qt5
+#  Some builds of Qt5 apparently use different names for this variable
+include_directories(${Qt5Widgets_INCLUDES}
+                    ${Qt5OpenGL_INCLUDES}
+)
+include_directories(${Qt5Widgets_INCLUDE_DIRS}
+                    ${Qt5Core_INCLUDE_DIRS}
+                    ${Qt5Gui_INCLUDE_DIRS}
+                    ${Qt5OpenGL_INCLUDE_DIRS}
+)
+
+
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
-#include_directories( "${PROJECT_BINARY_DIR}/../../include" )
-
 add_executable( terrain-explore
                 ${TERRAINEXPLORE_SOURCES}
                 ${TERRAINEXPLORE_HEADERS}

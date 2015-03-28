@@ -119,12 +119,15 @@ set( GEOEXPLORE_IO_HEADERS
 
 #   Math Module
 set( GEOEXPLORE_MATH_HEADERS
+    math.hpp
+    math/eigen3_utils.hpp
     math/A_Matrix.hpp
     math/A_Matrix_Eigen.hpp
     math/A_Rectangle.hpp
     math/A_Point.hpp
     math/A_Polygon.hpp
     math/Matrix_Conversions.hpp
+    math/eigen3_utils/Eigen3_Utilities.hpp
 )
 
 
@@ -205,6 +208,7 @@ set( GEOEXPLORE_IO_SOURCES
 #  Math Modules
 set( GEOEXPLORE_MATH_SOURCES
     math/A_Matrix_Eigen.cpp
+    math/eigen3_utils/Eigen3_Utilities.cpp
 )
 
 
@@ -232,6 +236,16 @@ set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_THIRDPARTY_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}
 )
+
+
+#-------------------------------------------#
+#-       Process Include Directories       -#
+#-------------------------------------------#
+
+#  Eigen
+if( EIGEN3_FOUND )
+    include_directories( ${EIGEN3_INCLUDE_DIR})
+endif()
 
 #-----------------------------------------#
 #-      Generate the Shared Object       -#
