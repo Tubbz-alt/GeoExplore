@@ -29,27 +29,62 @@ TEST( ImageTransformInvert, Invert_Image )
     for( int r=0; r<gray_image->Rows(); r++ )
     for( int c=0; c<gray_image->Cols(); c++ ){
         
-        if( ((r/10) + (c/10)) % 2 == 0 ){
+        if( (r/10) %2 == 0 && (c/10) % 2 == 0 ){
             (*gray_image)(r,c) = IMG::PixelGray_u8(255);
             (*rgb_image)(r,c)   = IMG::PixelRGB_u8(255,255,255);
         }
-        else{
+        else if((r/10) % 2 == 0 ){
             (*gray_image)(r,c) = IMG::PixelGray_u8(0);
-            (*rgb_image)(r,c)  = IMG::PixelRGB_u8(0,0,0);
+            (*rgb_image)(r,c)   = IMG::PixelRGB_u8(255,0,0);
+        }
+        else if((c/10) % 2 == 0 ){
+            (*gray_image)(r,c) = IMG::PixelGray_u8(0);
+            (*rgb_image)(r,c)   = IMG::PixelRGB_u8(0,255,0);
+        }
+        else{
+            (*gray_image)(r,c) = IMG::PixelGray_u8(255);
+            (*rgb_image)(r,c)  = IMG::PixelRGB_u8(0,0,255);
         }
 
     }
 
-    IO::OPENCV::View_Image( *gray_image, "Image" );
-    IO::OPENCV::View_Image(  *rgb_image, "Image" );
     
     // Invert the image
     IMG::Invert_Image<IMG::PixelGray_u8>( gray_image, gray_image );
     IMG::Invert_Image<IMG::PixelRGB_u8>( rgb_image, rgb_image );
 
-    IO::OPENCV::View_Image( *gray_image, "Image" );
-    IO::OPENCV::View_Image(  *rgb_image, "Image" );
-    FAIL();
+
+    // Validate the result
+    for( int r=0; r<gray_image->Rows(); r++ )
+    for( int c=0; c<gray_image->Cols(); c++ ){
+        
+        if( (r/10) %2 == 0 && (c/10) % 2 == 0 ){
+            ASSERT_EQ( (*gray_image)(r,c), 0 );
+            ASSERT_EQ( (*rgb_image)(r,c)[0], 0);
+            ASSERT_EQ( (*rgb_image)(r,c)[1], 0);
+            ASSERT_EQ( (*rgb_image)(r,c)[2], 0);
+        }
+        else if((r/10) % 2 == 0 ){
+            ASSERT_EQ( (*gray_image)(r,c), 255 );
+            ASSERT_EQ( (*rgb_image)(r,c)[0],   0);
+            ASSERT_EQ( (*rgb_image)(r,c)[1], 255);
+            ASSERT_EQ( (*rgb_image)(r,c)[2], 255);
+        }
+        else if((c/10) % 2 == 0 ){
+            ASSERT_EQ( (*gray_image)(r,c), 255 );
+            ASSERT_EQ( (*rgb_image)(r,c)[0], 255);
+            ASSERT_EQ( (*rgb_image)(r,c)[1],   0);
+            ASSERT_EQ( (*rgb_image)(r,c)[2], 255);
+        }
+        else{
+            ASSERT_EQ( (*gray_image)(r,c), 0 );
+            ASSERT_EQ( (*rgb_image)(r,c)[0], 255);
+            ASSERT_EQ( (*rgb_image)(r,c)[1], 255);
+            ASSERT_EQ( (*rgb_image)(r,c)[2],   0);
+        }
+
+    }
+
 
 }
 
