@@ -14,9 +14,9 @@
 #include <iostream>
 #include <cstddef> // offsetof
 
-/**
- * Default constructor
- */
+/******************************************/
+/*          Default constructor           */
+/******************************************/
 TerrainViewer::TerrainViewer(QWidget* parent) :
     QGLWidget(parent),
     m_windowSize(800, 600)
@@ -24,12 +24,19 @@ TerrainViewer::TerrainViewer(QWidget* parent) :
     setMouseTracking(true);
 }
 
+
+/*************************************/
+/*           Destructor              */
+/*************************************/
 TerrainViewer::~TerrainViewer()
 {
     glDeleteProgram(m_program);
     glDeleteBuffers(1, &m_vboGeometry);
 }
 
+/*************************************/
+/*          Minimum Size Hint        */
+/*************************************/
 QSize TerrainViewer::minimumSizeHint() const
 {
     return QSize(640, 480);

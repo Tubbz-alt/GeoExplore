@@ -24,33 +24,6 @@ set( CMAKE_MODULE_PATH
 #-----------------------------------#
 find_package( Threads )
 
-#--------------------------#
-#-  Find Qt5 Libraries    -#
-#--------------------------#
-if( DEFINED ENV{QT5_CMAKE_PATH} )
-    set(Qt5_DIR $ENV{QT5_CMAKE_PATH})
-endif()
-find_package( Qt5
-                COMPONENTS
-                    Gui
-                    OpenGL
-                    Widgets
-                    Core
-)
-if( NOT Qt5_FOUND )
-    MESSAGE("Qt5 was not found. Consider setting QT5_CMAKE_PATH to the Qt5Config.cmake directory.")
-    return()
-endif()
-
-#  Tell CMake to use the necessary modules
-set( QT_USE_QTOPENGL ON )
-
-#  Tell CMake to always look for includes in the MOC path
-set( CMAKE_AUTOMOC ON )
-
-#  Force position independent code (which should be a default
-#  however Qt5 complains if this isn't here)
-add_definitions(-fPIC)
 
 #-----------------#
 #-  Find Lib Z   -#
@@ -85,6 +58,23 @@ set( TERRAINEXPLORE_SOURCES
     TerrainViewer.cpp
 )
 
+
+#--------------------------#
+#-  Find Qt4 Libraries    -#
+#--------------------------#
+set(QT_USE_QTOPENGL TRUE)
+
+find_package( Qt4 REQUIRED )
+
+include( ${QT_USE_FILE} )
+
+add_definitions( ${QT_DEFINITIONS} )
+
+include_directories( ${CMAKE_BINARY_DIR} )
+
+QT4_WRAP_CPP( MOC_SRCS ${TERRAINEXPLORE_HEADERS} )
+
+
 #----------------------------------#
 #-      Process All Includes      -#
 #----------------------------------#
@@ -96,40 +86,20 @@ include_directories( ${Boost_INCLUDE_DIRS} )
 include_directories( ${GLEW_INCLUDE_DIR})
 
 
-#  Include Qt5
-#  Some builds of Qt5 apparently use different names for this variable
-include_directories(${Qt5Widgets_INCLUDES}
-                    ${Qt5OpenGL_INCLUDES}
-)
-include_directories(${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5Core_INCLUDE_DIRS}
-                    ${Qt5Gui_INCLUDE_DIRS}
-                    ${Qt5OpenGL_INCLUDE_DIRS}
-)
-
-
 #---------------------------------#
 #-     Build the Application     -#
 #---------------------------------#
 add_executable( terrain-explore
                 ${TERRAINEXPLORE_SOURCES}
                 ${TERRAINEXPLORE_HEADERS}
-                ${TERRAINEXPLORE_HEADERS_MOC}
-)
-
-#  Allows functionality of QMake through CMake
-qt5_use_modules( terrain-explore 
-                 Widgets
-                 OpenGL
-                 Core
+                ${MOC_SRCS}
 )
 
 target_link_libraries( terrain-explore 
                 GeoExplore
                 ${CMAKE_THREAD_LIBS_INIT}
                 ${Boost_LIBRARIES}
-                ${Qt5Widgets_LIBRARY}
-                ${Qt5OpenGL_LIBRARY}
+                ${QT_LIBRARIES}
                 ${OPENGL_LIBRARIES}
                 ${GLEW_LIBRARY}
                 ${ZLIB_LIBRARY}

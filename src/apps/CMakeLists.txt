@@ -19,9 +19,11 @@ add_subdirectory(geo-dem-utility)
 #  Create the geo-info application
 add_subdirectory(geo-info)
 
+add_subdirectory(geo-render-utility)
+
 #  Create the geo-utility application
 add_subdirectory(geo-utility)
 
 #  Create the terrain explore application
-#add_subdirectory(terrain-explore)
+add_subdirectory(terrain-explore)
 

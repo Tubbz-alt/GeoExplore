@@ -55,8 +55,17 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     ASSERT_TRUE( parser.Check_If_Flag_Exists("-help") );
     ASSERT_TRUE( parser.Check_If_Flag_Exists("-c") );
     ASSERT_FALSE( parser.Check_If_Flag_Exists("-C") );
+    
+    // Check for flags and values
+    bool flag_found, value_found;
 
-    FAIL();
+    ASSERT_EQ( parser.Query_Flag_Value_As_String("-c", flag_found, value_found ), "file.txt" );
+    ASSERT_TRUE( flag_found );
+    ASSERT_TRUE( value_found );
+
+    ASSERT_EQ( parser.Query_Flag_Value_As_String("file.txt", flag_found, value_found), "");
+    ASSERT_TRUE( flag_found );
+    ASSERT_FALSE( value_found );
 
 }
 

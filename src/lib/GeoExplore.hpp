@@ -12,8 +12,7 @@
 #include "config.hpp"
 
 /// Core Module
-#include "core/A_Size.hpp"
-#include "core/Enumerations.hpp"
+#include "core.hpp"
 
 /// Coordinate Module
 #include "coordinate/CoordinateBase.hpp"

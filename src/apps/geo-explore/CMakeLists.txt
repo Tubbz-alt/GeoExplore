@@ -22,29 +22,6 @@ set( CMAKE_MODULE_PATH
 # Configure C++11
 SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
-#----------------------------------#
-#-       Find QT5 Libraries       -#
-#----------------------------------#
-
-#  Find includes
-SET( CMAKE_INCLUDE_CURRENT_DIR ON )
-
-#  Run Automoc
-SET( CMAKE_AUTOMOC ON )
-
-if( DEFINED ENV{QT5_CMAKE_PATH} )
-    set(Qt5_DIR $ENV{QT5_CMAKE_PATH})
-endif()
-find_package( Qt5Widgets )
-
-#  Tell CMake to use the necessary modules
-#set( QT_USE_QTOPENGL ON )
-
-#  Force position independent code (which should be a default
-#  however Qt5 complains if this isn't here)
-add_definitions(-fPIC)
-
-
 #-----------------------------------#
 #-     Find C++ Thread Library     -#
 #-----------------------------------#
@@ -80,6 +57,25 @@ set( GUI_SOURCES
     gui/utils/coordinate/CoordinateConversionWidget.cpp
 )
 
+#----------------------------------#
+#-       Find QT5 Libraries       -#
+#----------------------------------#
+
+find_package( Qt4 REQUIRED )
+
+include( ${QT_USE_FILE} )
+
+add_definitions( ${QT_DEFINITIONS} )
+
+include_directories( ${CMAKE_BINARY_DIR} )
+ 
+  
+# Next, using precompiler, compiler and linker
+   
+# using Qt meta-system (precompiler)
+QT4_WRAP_CPP( MOC_SRCS ${GUI_HEADERS} )
+
+
 
 #--------------------------------------#
 #-      Add Remaining Includes        -#
@@ -96,17 +92,12 @@ include_directories(../../lib)
 add_executable( geo-explore 
                 ${GUI_SOURCES}
                 ${GUI_HEADERS}
+                ${MOC_SRCS}
 )
-
-#  Allows functionality of QMake through CMake
-qt5_use_modules( geo-explore 
-                 Widgets
-                 OpenGL
-                 )
 
 target_link_libraries( geo-explore
                 GeoExplore
-                ${Qt5Widgets_LIBRARIES}
+                ${QT_LIBRARIES}
                 ${Boost_LIBRARIES}
 )
 

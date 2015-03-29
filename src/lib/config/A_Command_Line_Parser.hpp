@@ -52,6 +52,21 @@ class A_Command_Line_Parser{
          * @return True if exists, false otherwise.
         */
         bool Check_If_Flag_Exists( const std::string& flag );
+
+
+        /**
+         * @brief Query Flag and Value and return as string.
+         *
+         * @param[in]  flag Flag to test.
+         * @param[out] flag_found True if flag was found.
+         * @param[out] value_found True if value was found.
+         *
+         * @return Resulting value as string.
+         */
+        std::string Query_Flag_Value_As_String( std::string const&  flag,
+                                                bool&               flag_found,
+                                                bool&               value_found );
+
     
 
     private:

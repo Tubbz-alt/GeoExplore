@@ -1,0 +1,16 @@
+<geo-render-utility>
+
+    <!-- Viewer Configuration Items -->
+    <viewer-window>
+        <name value="Geo-Explore Render Utility"/>
+        <size width="1920" height="1080" />
+    </viewer-window>
+
+    <!-- Terrain Data Configuration -->
+    <terrain>
+        <sources>
+            <source type="srtm" path="data/unit-tests/dems/srtm" />
+        </sources>
+    </terrain>
+
+</geo-render-utility>

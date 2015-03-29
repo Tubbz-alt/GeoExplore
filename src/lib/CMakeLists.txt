@@ -57,6 +57,7 @@ set( GEOEXPLORE_CONFIG_HEADERS
 
 #   Core Module
 set( GEOEXPLORE_CORE_HEADERS
+    core.hpp
     core/Enumerations.hpp
     core/Exceptions.hpp
     core/A_Size.hpp
