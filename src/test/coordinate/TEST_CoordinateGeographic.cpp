@@ -25,6 +25,7 @@ TEST( CoordinateGeographic, Constructor ){
     CRD::CoordinateGeographic_d coord03( 39.1, -120.1 );
     CRD::CoordinateGeographic_d coord04( 39.1, -120.1, 100 );
     CRD::CoordinateGeographic_d coord05( 39.1, -120.1, 100, Datum::NAD83 );
+    CRD::CoordinateGeographic_d coord06( 39.1, -120.1, Datum::NAD83 );
 
     ASSERT_NEAR( coord01.latitude_degrees(), 0, 0.00001 );
     ASSERT_NEAR( coord01.longitude_degrees(), 0, 0.00001 );
@@ -50,6 +51,11 @@ TEST( CoordinateGeographic, Constructor ){
     ASSERT_NEAR( coord05.longitude_degrees(), -120.1, 0.00001 );
     ASSERT_NEAR( coord05.altitude_meters(), 100, 0.00001 );
     ASSERT_EQ( coord05.datum(), Datum::NAD83 );
+    
+    ASSERT_NEAR( coord06.latitude_degrees(), 39.1, 0.00001 );
+    ASSERT_NEAR( coord06.longitude_degrees(), -120.1, 0.00001 );
+    ASSERT_NEAR( coord06.altitude_meters(), 0, 0.00001 );
+    ASSERT_EQ( coord06.datum(), Datum::NAD83 );
 
 }
 

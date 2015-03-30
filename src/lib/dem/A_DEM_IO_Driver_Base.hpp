@@ -26,13 +26,20 @@ class A_DEM_IO_Driver_Base{
         /// Pointer Type
         typedef std::shared_ptr<A_DEM_IO_Driver_Base> ptr_t;
         
+
+        /**
+         * @brief Constructor
+        */
+        A_DEM_IO_Driver_Base();
+
         
         /**
          * @brief Initialize the driver.
+         *
+         * @return Status of the operation. 
         */
-        virtual Status Initialize(){
-            return Status(StatusType::SUCCESS);
-        }
+        virtual Status Initialize();
+
 
         /**
          * @brief Check if elevation value is covered.
@@ -42,7 +49,8 @@ class A_DEM_IO_Driver_Base{
          * @return True if covered, false otherwise.
         */
         virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const = 0;
-        
+       
+
         /**
          * @brief Check if elevation value is covered.
          *
@@ -53,6 +61,7 @@ class A_DEM_IO_Driver_Base{
         */
         virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
                                CRD::CoordinateGeographic_d const& max_coordinate )const = 0;
+
         
         /**
          * @brief Check if elevation value is covered.
@@ -62,6 +71,7 @@ class A_DEM_IO_Driver_Base{
          * @return True if covered, false otherwise.
         */
         virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const = 0;
+
         
         /**
          * @brief Check if elevation range is covered.
@@ -88,6 +98,7 @@ class A_DEM_IO_Driver_Base{
                                                                   A_Size<int>     const&  tile_size,
                                                                   double          const&  gsd ) = 0;
         
+
         /**
          * @brief Create Elevation Tile
          *
@@ -101,14 +112,29 @@ class A_DEM_IO_Driver_Base{
                                                                  A_Size<int>            const&  tile_size,
                                                                  double                 const&  gsd ) = 0;
         
+
         /**
          * @brief Return the DEM Driver Type.
          *
          * @return DEM_IO_Driver_Type.
         */
-        virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
-            return DEM_IO_Driver_Type::BASE;
-        }
+        virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const;
+
+
+        /**
+         * @brief Check if Driver is Initialized.
+         *
+         * @param[out] status Initialization status.
+         *
+         * @return True if initialized, false otherwise.
+        */
+        virtual bool Is_Initialized( Status& status )const;
+
+    private:
+
+        /// Class Name
+        std::string m_class_name;
+
 
 }; /// End of A_DEM_IO_Driver_Base
 

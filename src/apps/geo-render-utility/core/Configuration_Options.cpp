@@ -11,17 +11,19 @@
 // GeoExplore Libraries
 #include "../../../lib/config/A_Command_Line_Parser.hpp"
 
-/**
- * COnstructor
-*/
+
+/******************************************************/
+/*                   Constructor                      */
+/******************************************************/
 Configuration_Options::Configuration_Options()
  : m_viewer_window_size(GEO::A_Size<int>(2000,1000))
 {
 }
 
-/**
- * Initialize
-*/
+
+/******************************************************/
+/*                    Initialize                      */
+/******************************************************/
 void Configuration_Options::Initialize( int argc, char* argv[] )
 {
 
@@ -34,9 +36,9 @@ void Configuration_Options::Initialize( int argc, char* argv[] )
 }
 
 
-/**
- * Parse the Command-Line
-*/
+/******************************************************/
+/*              Parse the Command-Line                */
+/******************************************************/
 void Configuration_Options::Parse_Command_Line( int argc, char* argv[] )
 {
 
@@ -60,9 +62,10 @@ void Configuration_Options::Parse_Command_Line( int argc, char* argv[] )
 
 }
 
-/** 
- * Parse the configuration file
-*/
+
+/******************************************************/
+/*           Parse the configuration file             */
+/******************************************************/
 void Configuration_Options::Parse_Configuration_File()
 {
 
@@ -88,18 +91,74 @@ void Configuration_Options::Parse_Configuration_File()
     // Iterate over nodes
     for (pugi::xml_node_iterator cit = root.begin(); cit != root.end(); cit++ ){
 
-        // Parse the render-configuration
-        if( std::string(cit->name()) == "viewer-window" ){
+        // Parse the render configuration
+        if( std::string(cit->name()) == "render" ){
+            Parse_Render_Configuration( *cit );
+        }
+
+        // Parse the viewer-configuration
+        else if( std::string(cit->name()) == "viewer-window" ){
             Parse_Viewer_Configuration( *cit );
+        }
+
+        // Parse the DEM 
+        else if( std::string(cit->name()) == "terrain" ){
+            Parse_Terrain_Configuration( *cit );
+        }
+
+        // Otherwise there was an error
+        else{
+            std::cerr << "error: Unknown node in geo-render-utility node (" << cit->name() << ")." << std::endl;
+            std::exit(-1);
         }
     }
 
 }
 
 
-/**
- * Parse the render-configuration
-*/
+/******************************************************/
+/*            Parse the render-configuration          */
+/******************************************************/
+void Configuration_Options::Parse_Render_Configuration( pugi::xml_node& render_config_node )
+{
+    // Get the center-coordinate node
+    pugi::xml_node center_node = render_config_node.child("center-coordinate");
+
+    // Get the type
+    std::string type = GEO::string_toLower(center_node.attribute("type").as_string());
+    if( type == "utm" ){
+
+        // Get the coordinate data
+        int zone = center_node.attribute("zone").as_int();
+        bool isNorth = center_node.attribute("is_northern").as_bool();
+        double easting = center_node.attribute("easting_meters").as_double();
+        double northing = center_node.attribute("northing_meters").as_double();
+        GEO::Datum datum = GEO::StringToDatum(center_node.attribute("datum").as_string());
+        
+        m_render_center_coordinate = GEO::CRD::CoordinateUTM_d( zone, isNorth, easting, northing, 0, datum );
+    }
+    else if( type == "geographic" ){
+
+        // Get the coordinate data
+        double latitude = center_node.attribute("latitude_degrees").as_double();
+        double longitude = center_node.attribute("longitude_degrees").as_double();
+        GEO::Datum datum = GEO::StringToDatum(center_node.attribute("datum").as_string());
+
+        // Convert to UTM
+        GEO::CRD::CoordinateGeographic_d geog_coord( latitude, longitude, datum );
+        m_render_center_coordinate = GEO::CRD::convert_coordinate<GEO::CRD::CoordinateUTM_d>( geog_coord );
+
+    }
+    else{
+        std::cerr << "error: Unknown coordinate type in render center-coordinate (" << type << ")." << std::endl;
+        std::exit(-1);
+    }
+
+}
+
+/******************************************************/
+/*            Parse the viewer-configuration          */
+/******************************************************/
 void Configuration_Options::Parse_Viewer_Configuration( pugi::xml_node& viewer_config_node )
 {
     // Get the window name
@@ -117,13 +176,14 @@ void Configuration_Options::Parse_Viewer_Configuration( pugi::xml_node& viewer_c
 }
 
 
-/**
- * Parse the Terrain Configuration node.
-*/
+/**********************************************************/
+/*          Parse the Terrain Configuration node.         */
+/**********************************************************/
 void Configuration_Options::Parse_Terrain_Configuration( pugi::xml_node& terrain_config_node )
 {
 
-    // Get the window path
+    // Temp Variables
+    GEO::Status temp_status;
     std::string temp_str;
 
     // Get the sources node
@@ -152,7 +212,18 @@ void Configuration_Options::Parse_Terrain_Configuration( pugi::xml_node& terrain
             temp_str = source_node.attribute("path").as_string();
 
             // Construct the datasource
-            m_dem_driver_list.push_back(GEO::DEM::A_DEM_IO_Driver_SRTM::ptr_t(new GEO::DEM::A_DEM_IO_Driver_SRTM( temp_str )));
+            GEO::DEM::A_DEM_IO_Driver_SRTM::ptr_t temp_driver(new GEO::DEM::A_DEM_IO_Driver_SRTM( temp_str ));
+            
+            // Initialize
+            temp_status = temp_driver->Initialize();
+            if( temp_status.Get_Status_Type() != GEO::StatusType::SUCCESS ){
+                std::cerr << "error: Unable to initialize the SRTM data source. Details: " << temp_status.Get_Status_Details() << std::endl;
+                std::exit(-1);
+            }
+
+            // Add driver
+            m_dem_driver_list.push_back(temp_driver);
+
         }
 
         // Otherwise, there is a problem
@@ -167,9 +238,9 @@ void Configuration_Options::Parse_Terrain_Configuration( pugi::xml_node& terrain
 }
 
 
-/**
- * Print Usage Instructions
-*/
+/*********************************************/
+/*         Print Usage Instructions          */
+/*********************************************/
 void Configuration_Options::Usage()const{
 
 

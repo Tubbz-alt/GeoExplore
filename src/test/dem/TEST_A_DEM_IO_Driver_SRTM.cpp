@@ -40,6 +40,9 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Path ){
 
     // Build the drivers
     DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
 
     FAIL();
 }

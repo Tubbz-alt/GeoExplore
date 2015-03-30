@@ -38,13 +38,14 @@ enum class CoreStatusReason : uint32_t {
     PATH_DOES_NOT_EXIST = 3 /*< Path does not exist.*/,
     FILE_NOT_SUPPORTED  = 4 /*< Path is not valid file type.*/,
     GENERAL_IO_ERROR    = 5 /*< Problem parsing file.*/,
+    NOT_IMPLEMENTED     = 6 /*< Method or object not implemented yet.*/,
 }; // End of CoreStatusReason Enumeration
 
 /**
  * GDAL Status Reason
 */
 enum class GDALStatusReason : uint32_t {
-    UNKNOWN_PROJECTION_TYPE = 6 /*< Unknown OGR Coordinate Type */,
+    UNKNOWN_PROJECTION_TYPE = 7 /*< Unknown OGR Coordinate Type */,
 }; // End of GDALStatusReason
 
 
@@ -52,9 +53,9 @@ enum class GDALStatusReason : uint32_t {
  * @brief Image Transform Reasons
 */
 enum class TransformStatusReason : uint32_t {
-    INPUT_IMAGE_NULL = 7,
-    OUTPUT_IMAGE_NULL = 8,
-    INVALID_THREADS   = 9,
+    INPUT_IMAGE_NULL = 8,
+    OUTPUT_IMAGE_NULL = 9,
+    INVALID_THREADS   = 10,
 }; // End of TransformStatusReason
 
 } // End of GEO Namespace

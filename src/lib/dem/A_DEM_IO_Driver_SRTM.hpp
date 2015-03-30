@@ -46,7 +46,17 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          *
          * @return Status of the operation.
          */
-        Status Initialize();
+        virtual Status Initialize();
+
+
+        /**
+         * @brief Check if driver is initialized.
+         *
+         * @param[out] status Status of the operation.
+         *
+         * @return True if initialized. False otherwise.
+        */
+        virtual bool Is_Initialized( Status& status )const;
 
         
         /**
@@ -138,12 +148,22 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
     
     private:
 
+        /// Class Name
+        std::string m_class_name;
+
+        
+        /// Initialization Status
+        Status m_initialization_status;
+
+
         /// path to srtm data
         boost::filesystem::path m_srtm_pathname;
 
+        
         /// List of SRTM Files
         std::vector<boost::filesystem::path> m_srtm_file_list;
 
+        
         /// List of SRTM Extents
         std::vector<MATH::A_Rectangle2d> m_srtm_file_extents;
 

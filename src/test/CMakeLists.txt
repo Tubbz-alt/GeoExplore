@@ -86,11 +86,14 @@ set( GEOEXPLORE_MATH_MODULE_TESTS
 set( GEOEXPLORE_IMAGE_MODULE_TESTS
     image/TEST_ChannelType.cpp
     image/TEST_Image.cpp
+    image/TEST_Image_Utilities.cpp
     image/TEST_MemoryResource.cpp
     image/TEST_PixelGray.cpp
     image/TEST_PixelRGB.cpp
     image/TEST_PixelRGBA.cpp
+    image/transforms/TEST_ImageTransformColorMap.cpp
     image/transforms/TEST_ImageTransformInvert.cpp
+    image/transforms/TEST_ImageTransformNormalize.cpp
 )
 
 #------------------------------------------#

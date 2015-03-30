@@ -13,26 +13,46 @@ namespace GEO{
 namespace DEM{
 
 
-/**
- * Constructor
-*/
+/*************************************************************/
+/*                      Constructor                          */
+/*************************************************************/
 A_DEM_IO_Driver_SRTM::A_DEM_IO_Driver_SRTM( boost::filesystem::path const& pathname )
-  : m_srtm_pathname( pathname )
+  : m_class_name("A_DEM_IO_Driver"),
+    m_initialization_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED, "Uninitialized.")),
+    m_srtm_pathname( pathname )
 {
 }
 
 
-/**
- * Initialize
-*/
+/*************************************************************/
+/*                  Check if Initialized                     */
+/*************************************************************/
+bool A_DEM_IO_Driver_SRTM::Is_Initialized( Status& status )const
+{
+    // Set the status
+    status = m_initialization_status;
+
+    // Check status
+    if( m_initialization_status.Get_Status_Type() != StatusType::SUCCESS ){
+        return false;
+    }
+    return true;
+}
+
+
+/*************************************************************/
+/*                         Initialize                        */
+/*************************************************************/
 Status A_DEM_IO_Driver_SRTM::Initialize(){
     
     // Make sure the path exists
     if( boost::filesystem::exists(m_srtm_pathname) == false ){
-        return Status( StatusType::FAILURE, 
-                       CoreStatusReason::PATH_DOES_NOT_EXIST,
-                       "SRTM path does not exist.");
+        m_initialization_status = Status( StatusType::FAILURE, 
+                                          CoreStatusReason::PATH_DOES_NOT_EXIST,
+                                          "SRTM path does not exist.");
+        return m_initialization_status;
     }
+
     
     // If the path is a file, then check if SRTM
     if( boost::filesystem::is_regular_file(m_srtm_pathname) == true &&
@@ -40,6 +60,7 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
     {
         m_srtm_file_list.push_back(m_srtm_pathname);
     }
+
 
     // If the path is a directory, search for files
     else if( boost::filesystem::is_directory(m_srtm_pathname) == true ){
@@ -62,29 +83,32 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
         }
     }
     else{
-        return Status( StatusType::FAILURE, 
-                       CoreStatusReason::PATH_DOES_NOT_EXIST,
-                       "SRTM path does not exist.");
-        
+        m_initialization_status = Status( StatusType::FAILURE, 
+                                          CoreStatusReason::PATH_DOES_NOT_EXIST,
+                                          "SRTM path does not exist.");
+        return m_initialization_status;
     }
+
 
     // Make sure we have some files
     if( m_srtm_file_list.size() <= 0 ){
-        return Status( StatusType::FAILURE, 
-                       CoreStatusReason::PATH_DOES_NOT_EXIST,
-                       "Directory contains no SRTM files.");
-
+        m_initialization_status = Status( StatusType::FAILURE, 
+                                          CoreStatusReason::PATH_DOES_NOT_EXIST,
+                                          "Directory contains no SRTM files.");
+        return m_initialization_status;
     }
+
     
     // Return success
-    return Status( StatusType::SUCCESS );
+    m_initialization_status = Status( StatusType::SUCCESS );
+    return m_initialization_status;
 
 }
 
 
-/**
- * Create Elevation Tile
-*/
+/*************************************************************/
+/*                   Create Elevation Tile                   */
+/*************************************************************/
 ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
                                                                         A_Size<int>     const&  tile_size,
                                                                         double          const&  gsd )
@@ -94,9 +118,9 @@ ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::Coo
 }
 
         
-/**
- * Create Elevation tile
-*/
+/*************************************************************/
+/*                  Create Elevation tile                    */
+/*************************************************************/
 ElevationTileUTM_d::ptr_t A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
                                                                        A_Size<int>            const&  tile_size,
                                                                        double                 const&  gsd )

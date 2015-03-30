@@ -53,6 +53,14 @@ class Configuration_Options{
             return m_viewer_window_size;
         }
 
+        
+        /**
+         * @brief Get the DEM IO Driver List
+        */
+        inline std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> Get_DEM_Driver_List()const{
+            return m_dem_driver_list;
+        }
+
 
     private:
 
@@ -68,6 +76,12 @@ class Configuration_Options{
         void Parse_Configuration_File();
 
         
+        /**
+         * @brief Parse the Render Configuration
+        */
+        void Parse_Render_Configuration( pugi::xml_node& render_config_node );
+
+
         /**
          * @brief Parse the Viewer Configuration
         */
@@ -88,6 +102,9 @@ class Configuration_Options{
 
         /// Configuration File Path
         boost::filesystem::path m_configuration_path;
+        
+        /// Render Center Point
+        GEO::CRD::CoordinateUTM_d m_render_center_coordinate;
 
         /// Window Name
         std::string m_viewer_window_name;

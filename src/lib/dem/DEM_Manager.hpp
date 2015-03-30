@@ -74,11 +74,21 @@ class DEM_Manager{
         }
 
         /**
-         * Add DEM Driver
+         * @brief Add DEM IO Driver to DEM Manager.
+         *
+         * @param[in] driver Driver to add.
         */
         void Add_DEM_IO_Driver( A_DEM_IO_Driver_Base::ptr_t driver );
 
+        
+        /**
+         * @brief Add DEM IO Driver List to DEM Manager.
+         *
+         * @param[in] driver_list Driver list to add.
+        */
+        void Add_DEM_IO_Drivers( std::vector<A_DEM_IO_Driver_Base::ptr_t> const& driver_list );
     
+
         /**
          * @brief Get the number of DEM IO Drivers
          * 

@@ -73,6 +73,7 @@ class ImageTransformInvert : public ImageTransformColor<InputPixelType,OutputPix
  *
  * @param[in]   input_image Image to invert.
  * @param[out]  output_image Image result.
+ * @param[in] number_threads Number of threads to process with.
  *
  * @return Status of the operation.
 */

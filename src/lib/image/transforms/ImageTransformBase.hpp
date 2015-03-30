@@ -8,6 +8,7 @@
 
 // GeoExplore Libraries
 #include "../Image.hpp"
+#include "../MemoryResource.hpp"
 #include "../../core/A_Status.hpp"
 #include "../../math/A_Point.hpp"
 

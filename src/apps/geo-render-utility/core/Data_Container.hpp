@@ -24,15 +24,33 @@ class Data_Container{
         
         /// Pointer Type
         typedef std::shared_ptr<Data_Container> ptr_t;
-        
+       
+        /**
+         * @brief Constructor
+        */
+        Data_Container();
+
+
         /**
          * @brief Load and configure the internal data.
         */
         void Load_Data( const Configuration_Options& options );
 
+        
+        /**
+         * Fetch the terrain manager
+        */
+        inline GEO::DEM::DEM_Manager::ptr_t Get_DEM_Manager()const{
+            return m_dem_manager;
+        }
+
+    private:
+        
+        /// Class Name
+        std::string m_class_name;
 
         /// Terrain DEM Manager
-        GEO::DEM::DEM_Manager::ptr_t dem_manager;
+        GEO::DEM::DEM_Manager::ptr_t m_dem_manager;
 
 }; // End of Data_Container Class
 

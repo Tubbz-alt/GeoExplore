@@ -12,7 +12,13 @@
 // IMage Color Transform
 #include "transforms/ImageTransformColor.hpp"
 
+// Image Color Map
+#include "transforms/ImageTransformColorMap.hpp"
+
 // Invert Image
 #include "transforms/ImageTransformInvert.hpp"
+
+// Normalize Image
+#include "transforms/ImageTransformNormalize.hpp"
 
 #endif

@@ -26,12 +26,14 @@ class Image_{
         /// Pointer Type
         typedef std::shared_ptr<Image_<PixelType,ResourceType>> ptr_t;
 
+
         /// define our pixeltype
         typedef PixelType pixeltype;
 
         
         /// define the datatype
         typedef typename pixeltype::channeltype datatype;
+
 
         /**
          * @brief Constructor
@@ -122,6 +124,7 @@ class Image_{
         int Channels()const{
             return m_resource.Channels();
         }
+
         
         /**
          * @brief Get the pixel data at the specified index
@@ -130,9 +133,10 @@ class Image_{
          *
          * @returns Pixel value at Image[i]
         */
-        PixelType operator[]( const int& idx ){
+        PixelType operator[]( const int& idx )const{
             return m_resource[idx];
         }
+
         
         /**
          * @brief Get the pixel value.

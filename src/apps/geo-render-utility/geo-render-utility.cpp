@@ -84,11 +84,14 @@ void Initialize_Context( Configuration_Options const& options )
 */
 void Run_Render_Program()
 {
+
     // Start main loop
     do{
 
 
-
+        
+        // Poll for Events
+		glfwPollEvents();
 
     }
 	while( glfwGetKey(gl_context->Get_GLFW_Window(), GLFW_KEY_ESCAPE ) != GLFW_PRESS &&

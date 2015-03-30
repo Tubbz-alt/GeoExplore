@@ -92,6 +92,7 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/ChannelType.hpp
     image/DiskResource.hpp
     image/Image.hpp
+    image/Image_Utilities.hpp
     image/MemoryResource.hpp
     image/MetadataContainerBase.hpp
     image/MetadataContainer.hpp
@@ -101,7 +102,9 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/PixelRGBA.hpp
     image/transforms/ImageTransformBase.hpp
     image/transforms/ImageTransformColor.hpp
+    image/transforms/ImageTransformColorMap.hpp
     image/transforms/ImageTransformInvert.hpp
+    image/transforms/ImageTransformNormalize.hpp
 )
 
 #  IO Module
@@ -186,6 +189,7 @@ set( GEOEXPLORE_COORDINATE_SOURCES
 set( GEOEXPLORE_DEM_SOURCES
     dem/DEM_IO_Driver_Types.cpp
     dem/DEM_Manager.cpp
+    dem/A_DEM_IO_Driver_Base.cpp
     dem/A_DEM_IO_Driver_FLAT.cpp
     dem/A_DEM_IO_Driver_SRTM.cpp
 )

@@ -1,5 +1,11 @@
 <geo-render-utility>
 
+    <!-- Render Configuration Items -->
+    <render>
+        <center-coordinate type="geographic" latitude_degrees="39.5"  longitude_degrees="-119.5" datum="wgs84" />
+    </render>
+
+
     <!-- Viewer Configuration Items -->
     <viewer-window>
         <name value="Geo-Explore Render Utility"/>

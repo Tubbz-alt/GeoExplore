@@ -56,6 +56,24 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
         {
         }
 
+        
+        /**
+         * @brief Constructor
+         *
+         * @param[in] latitude_degrees Latitude in degrees.
+         * @param[in] longitude_degrees Longitude in degrees.
+         * @param[in] altitude_meters Altitude in meters.
+         * @param[in] datum Datum.
+         */
+        CoordinateGeographic( datatype const& latitude_degrees, 
+                              datatype const& longitude_degrees,
+                              Datum const& datum ) 
+            :  CoordinateBase<DATATYPE>( 0, datum ),
+               m_latitude_degrees(latitude_degrees), 
+               m_longitude_degrees(longitude_degrees)
+        {
+        }
+
 
         /**
          * @brief Constructor
