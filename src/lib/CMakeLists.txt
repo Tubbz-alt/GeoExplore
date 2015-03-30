@@ -130,6 +130,7 @@ set( GEOEXPLORE_MATH_HEADERS
     math/A_Rectangle.hpp
     math/A_Point.hpp
     math/A_Polygon.hpp
+    math/Common_Equations.hpp
     math/Matrix_Conversions.hpp
     math/eigen3_utils/Eigen3_Utilities.hpp
 )

@@ -202,6 +202,57 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
                                           channeltype::maxValue,
                                           channeltype::maxValue );
         }
+        
+        
+        /**
+         * @brief Return a Red Pixel
+         *
+         * @return Red Pixel.
+        */
+        static PixelRGB<ChannelType> Red(){
+            return PixelRGB<ChannelType>( channeltype::maxValue,
+                                          channeltype::minValue,
+                                          channeltype::minValue );
+        }
+        
+        
+        /**
+         * @brief Return a Green Pixel
+         *
+         * @return Green Pixel.
+        */
+        static PixelRGB<ChannelType> Green(){
+            return PixelRGB<ChannelType>( channeltype::minValue,
+                                          channeltype::maxValue,
+                                          channeltype::minValue );
+        }
+
+
+        /**
+         * @brief Return a Blue Pixel.
+         *
+         * @return Blue Pixel.
+        */
+        static PixelRGB<ChannelType> Blue(){
+            return PixelRGB<ChannelType>( channeltype::minValue,
+                                          channeltype::minValue,
+                                          channeltype::maxValue );
+        }
+
+        
+        /**
+         * @brief Print Pretty String
+         *
+         * @return Pretty String
+        */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "PixelRGB<" << channeltype::ToTechnicalString() << ">( ";
+            sin << (int)m_data[0] << ", ";
+            sin << (int)m_data[1] << ", "; 
+            sin << (int)m_data[2] << ")";
+            return sin.str();
+        }
 
     private:
 

@@ -303,3 +303,125 @@ TEST( PixelRGB, White_Operator ){
     ASSERT_EQ( IMG::PixelRGB_u32::White()[2], IMG::ChannelTypeUInt32::maxValue );
 
 }
+
+
+/**
+ * Check the Red Operator
+*/
+TEST( PixelRGB, Red_Operator ){
+    
+    // Define Eps
+    const double EPS = 0.0001;
+
+    // Check results
+    ASSERT_NEAR( IMG::PixelRGB_d::Red()[0], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Red()[1], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Red()[2], 0, EPS );
+    
+    ASSERT_NEAR( IMG::PixelRGB_df::Red()[0], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Red()[1],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Red()[2],-1, EPS );
+    
+    ASSERT_EQ( IMG::PixelRGB_u8::Red()[0],  IMG::ChannelTypeUInt8::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Red()[1],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Red()[2],  IMG::ChannelTypeUInt8::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u12::Red()[0], IMG::ChannelTypeUInt12::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Red()[1], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Red()[2], IMG::ChannelTypeUInt12::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u14::Red()[0], IMG::ChannelTypeUInt14::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Red()[1], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Red()[2], IMG::ChannelTypeUInt14::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u16::Red()[0], IMG::ChannelTypeUInt16::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Red()[1], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Red()[2], IMG::ChannelTypeUInt16::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u32::Red()[0], IMG::ChannelTypeUInt32::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Red()[1], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Red()[2], IMG::ChannelTypeUInt32::minValue );
+
+}
+
+
+/**
+ * Check the Green Operator
+*/
+TEST( PixelRGB, Green_Operator ){
+    
+    // Define Eps
+    const double EPS = 0.0001;
+
+    // Check results
+    ASSERT_NEAR( IMG::PixelRGB_d::Green()[0], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Green()[1], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Green()[2], 0, EPS );
+    
+    ASSERT_NEAR( IMG::PixelRGB_df::Green()[0],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Green()[1], 1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Green()[2],-1, EPS );
+    
+    ASSERT_EQ( IMG::PixelRGB_u8::Green()[0],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Green()[1],  IMG::ChannelTypeUInt8::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Green()[2],  IMG::ChannelTypeUInt8::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u12::Green()[0], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Green()[1], IMG::ChannelTypeUInt12::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Green()[2], IMG::ChannelTypeUInt12::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u14::Green()[0], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Green()[1], IMG::ChannelTypeUInt14::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Green()[2], IMG::ChannelTypeUInt14::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u16::Green()[0], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Green()[1], IMG::ChannelTypeUInt16::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Green()[2], IMG::ChannelTypeUInt16::minValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u32::Green()[0], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Green()[1], IMG::ChannelTypeUInt32::maxValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Green()[2], IMG::ChannelTypeUInt32::minValue );
+
+}
+
+
+/**
+ * Check the Red Operator
+*/
+TEST( PixelRGB, Blue_Operator ){
+    
+    // Define Eps
+    const double EPS = 0.0001;
+
+    // Check results
+    ASSERT_NEAR( IMG::PixelRGB_d::Blue()[0], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Blue()[1], 0, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_d::Blue()[2], 1, EPS );
+    
+    ASSERT_NEAR( IMG::PixelRGB_df::Blue()[0],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Blue()[1],-1, EPS );
+    ASSERT_NEAR( IMG::PixelRGB_df::Blue()[2], 1, EPS );
+    
+    ASSERT_EQ( IMG::PixelRGB_u8::Blue()[0],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Blue()[1],  IMG::ChannelTypeUInt8::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u8::Blue()[2],  IMG::ChannelTypeUInt8::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u12::Blue()[0], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Blue()[1], IMG::ChannelTypeUInt12::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u12::Blue()[2], IMG::ChannelTypeUInt12::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u14::Blue()[0], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Blue()[1], IMG::ChannelTypeUInt14::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u14::Blue()[2], IMG::ChannelTypeUInt14::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u16::Blue()[0], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Blue()[1], IMG::ChannelTypeUInt16::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u16::Blue()[2], IMG::ChannelTypeUInt16::maxValue );
+    
+    ASSERT_EQ( IMG::PixelRGB_u32::Blue()[0], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Blue()[1], IMG::ChannelTypeUInt32::minValue );
+    ASSERT_EQ( IMG::PixelRGB_u32::Blue()[2], IMG::ChannelTypeUInt32::maxValue );
+
+}
+
+

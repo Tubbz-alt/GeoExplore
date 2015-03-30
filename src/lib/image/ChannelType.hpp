@@ -61,6 +61,15 @@ class ChannelType<double, 1>{
         /// Minimum Value
         static constexpr type minValue = 0;
 
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<double,1>";
+        }
+
 }; /// End of ChannelType<double,1> specialization
 
 /**
@@ -82,6 +91,15 @@ class ChannelType<double, 2>{
 
         /// max value
         static constexpr type minValue = -1;
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<double,2>";
+        }
 
 }; /// End of ChannelType<double,2> Specialization
 
@@ -104,7 +122,16 @@ class ChannelType<uint8_t, 8>{
 
         /// Minimum Value
         static constexpr type minValue = 0;
-
+        
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<uint8_t,8>";
+        }
 
 }; /// End of ChannelType<uint8_t,8> specialization
 
@@ -128,6 +155,16 @@ class ChannelType<uint16_t, 12>{
 
         /// Minimum Value
         static constexpr type minValue = 0;
+        
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<uint16_t,12>";
+        }
 
 }; /// End of ChannelType<uint16_t,12> specialization
 
@@ -152,6 +189,16 @@ class ChannelType<uint16_t, 14>{
 
         /// Minimum Value
         static constexpr type minValue = 0;
+        
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<uint16_t,14>";
+        }
 
 }; /// End of ChannelType<uint16_t,14> specialization
 
@@ -175,6 +222,16 @@ class ChannelType<uint16_t,16>{
 
         /// Minimum Value
         static constexpr type minValue = 0;
+        
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<uint16_t,16>";
+        }
 
 }; /// End of ChannelType<uint16_t,16> specialization
 
@@ -199,6 +256,15 @@ class ChannelType<uint32_t,32>{
 
         /// Minimum Value
         static constexpr type minValue = 0;
+        
+        /** 
+         * @brief Print Technical String
+         * 
+         * @return Technical String
+        */
+        static std::string ToTechnicalString(){
+            return "ChannelType<uint32_t,32>";
+        }
 
 }; /// End of ChannelType<uint32_t,32> specialization
 

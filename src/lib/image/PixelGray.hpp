@@ -160,7 +160,18 @@ class PixelGray : public PixelBase<PixelGray<ChannelType>,ChannelType>{
         static PixelGray<ChannelType> White(){
             return PixelGray<ChannelType>( channeltype::maxValue );
         }
+        
 
+        /**
+         * @brief Print as Pretty String.
+         *
+         * @return Pretty string.
+        */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "PixelGray<" << channeltype::ToTechnicalString() << ">(" << m_data << ")";
+            return sin.str();
+        }
 
     private:
 

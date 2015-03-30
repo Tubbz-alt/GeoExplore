@@ -77,6 +77,7 @@ set( GEOEXPLORE_MATH_MODULE_TESTS
     math/TEST_A_Point.cpp
     math/TEST_A_Polygon.cpp
     math/TEST_A_Rectangle.cpp
+    math/TEST_Common_Equations.cpp
     math/TEST_Matrix_Conversions.cpp
 )
 
