@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/dem/A_DEM_IO_Driver_FLAT.hpp"
+#include "../../lib/dem/A_DEM_IO_Driver_Flat.hpp"
 #include "../../lib/dem/An_Elevation_Tile.hpp"
 #include "../../lib/dem/DEM_Manager.hpp"
 
@@ -37,10 +37,11 @@ TEST( DEM_Manager, Add_DEM_Drivers_invalid ){
 /**
  * Test the Flat Elevation Manager
 */
-TEST( DEM_Manager, Create_Elevation_Tile_FLAT_Driver_01 ){
+TEST( DEM_Manager, Create_Elevation_Tile_Flat_Driver_01 ){
 
     // Misc Variable
     const double eps = 0.0001;
+    Status status;
 
     // Create the DEM Manager
     DEM::DEM_Manager manager;
@@ -63,8 +64,12 @@ TEST( DEM_Manager, Create_Elevation_Tile_FLAT_Driver_01 ){
     // Build an Elevation tile
     DEM::ElevationTileUTM_d::ptr_t elevation_tile = manager.Create_Elevation_Tile( min_corner,
                                                                                    tile_size,
-                                                                                   tile_gsd );
+                                                                                   tile_gsd,
+                                                                                   status );
     
+    // Make sure succeeded
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+
     // Make sure the tile is not null
     ASSERT_NE( elevation_tile, nullptr );
     

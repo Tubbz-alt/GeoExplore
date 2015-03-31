@@ -35,31 +35,53 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
          
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate Coordinate to test.
+         *
+         * @return True if covered, false otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const
+        {
             return true;
         }
         
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate_min Minimum coordinate to test.
+         * @param[in] coordinate_max Maximum coordinate to test.
+         *
+         * @return True if covered, false otherwise.
         */
         inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate_min,
-                                     CRD::CoordinateGeographic_d const& coordinate_max )const
+                                      CRD::CoordinateGeographic_d const& coordinate_max )const
         {
             return true;
         }
 
+
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered
+         *
+         * @param[in] coordinate Coordinate to check.
+         *
+         * @return True if covered. False otherwise.
         */
-        virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const{
+        virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const
+        {
             return true;
         }
+
         
         /**
-         * Check if elevation value is covered
+         * @brief Check if elevation value is covered.
+         *
+         * @param[in] coordinate_min Min coordinate to cover.
+         * @param[in] coordinate_max Max coordinate to cover.
+         *
+         * @return True if covered. False otherwise.
         */
         virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate_min,
                                CRD::CoordinateUTM_d const& coordinate_max )const
@@ -75,12 +97,14 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
         virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
-                                                                 A_Size<int>     const&  tile_size,
-                                                                 double          const&  gsd );
+                                                                 A_Size<int>          const&  tile_size,
+                                                                 double               const&  gsd,
+                                                                 Status&                      status );
         
         /**
          * @brief Create Elevation Tile
@@ -88,12 +112,14 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
         virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
-                                                                 A_Size<int>            const&  tile_size,
-                                                                 double                 const&  gsd );
+                                                                 A_Size<int>                 const&  tile_size,
+                                                                 double                      const&  gsd,
+                                                                 Status&                             status );
 
         
         /**

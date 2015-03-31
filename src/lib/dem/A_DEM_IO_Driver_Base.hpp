@@ -91,12 +91,14 @@ class A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
-        virtual ElevationTileUTM_d::ptr_t  Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
-                                                                  A_Size<int>     const&  tile_size,
-                                                                  double          const&  gsd ) = 0;
+        virtual ElevationTileUTM_d::ptr_t  Create_Elevation_Tile( CRD::CoordinateUTM_d const&   min_corner,
+                                                                  A_Size<int>     const&        tile_size,
+                                                                  double          const&        gsd,
+                                                                  Status&                       status ) = 0;
         
 
         /**
@@ -105,12 +107,14 @@ class A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
-        virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
-                                                                 A_Size<int>            const&  tile_size,
-                                                                 double                 const&  gsd ) = 0;
+        virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&   min_corner,
+                                                                 A_Size<int>            const&        tile_size,
+                                                                 double                 const&        gsd,
+                                                                 Status&                              status ) = 0;
         
 
         /**

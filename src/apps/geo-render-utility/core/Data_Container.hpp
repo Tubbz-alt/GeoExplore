@@ -8,12 +8,16 @@
 
 // GeoExplore Libraries
 #include "../../../lib/dem/DEM_Manager.hpp"
+#include "../../../lib/image/Image.hpp"
+#include "../../../lib/image/Pixel_Types.hpp"
 
 // Render Utility Libraries
 #include "Configuration_Options.hpp"
 
 // C++ Standard Libraries
 #include <memory>
+
+using namespace GEO;
 
 /**
  * @class Data_Container
@@ -52,7 +56,11 @@ class Data_Container{
         /// Terrain DEM Manager
         GEO::DEM::DEM_Manager::ptr_t m_dem_manager;
 
+        /// List of images
+        std::vector<IMG::Image<IMG::PixelRGBA_u8>::ptr_t>  m_image_list;
+
 }; // End of Data_Container Class
+
 
 
 #endif

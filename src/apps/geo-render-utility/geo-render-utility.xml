@@ -3,6 +3,7 @@
     <!-- Render Configuration Items -->
     <render>
         <center-coordinate type="geographic" latitude_degrees="39.5"  longitude_degrees="-119.5" datum="wgs84" />
+        <gsd value="0.25" />
     </render>
 
 

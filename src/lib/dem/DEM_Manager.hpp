@@ -37,13 +37,15 @@ class DEM_Manager{
          * @param[in] min_corner Minimum corner in the tile.
          * @param[in] image_size Size of the tile in pixels.
          * @param[in] gsd Ground-Sampling-Distance in meters-per-pixels.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile
         */
         template <typename CoordinateType>
         ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CoordinateType const&  min_corner,
                                                          A_Size<int>    const&  image_size,
-                                                         double         const&  gsd )
+                                                         double         const&  gsd,
+                                                         Status&                status )
         {
             // Create elevation tile
             ElevationTileUTM_d::ptr_t tile = nullptr;
@@ -63,10 +65,14 @@ class DEM_Manager{
                 if( m_drivers[didx]->Coverage( min_corner, max_corner ) == true ){
                     return m_drivers[didx]->Create_Elevation_Tile(  min_corner, 
                                                                     image_size, 
-                                                                    gsd );   
+                                                                    gsd,
+                                                                    status );   
                 }
 
             }
+
+            // Return success
+            status = Status( StatusType::SUCCESS );
 
             // return tile
             return tile;

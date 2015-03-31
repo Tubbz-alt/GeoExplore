@@ -19,6 +19,7 @@ UTILS::GL::OpenGL_Context::ptr_t gl_context;
 Data_Container::ptr_t data_container;
 
 using namespace std;
+using namespace GEO;
 
 
 /**
@@ -110,4 +111,6 @@ void Finalize_Context()
     gl_context->Finalize_Viewer();
 
 }
+
+
 

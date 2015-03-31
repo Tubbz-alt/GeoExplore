@@ -16,9 +16,11 @@
 #include "../../../lib/thirdparty/pugixml/pugixml.hpp"
 
 // GeoExplore
+#include <coordinate/CoordinateUTM.hpp>
 #include "../../../lib/core.hpp"
 #include "../../../lib/dem/A_DEM_IO_Driver_SRTM.hpp"
 
+using namespace GEO;
 
 /** 
  * @class Configuration_Options
@@ -36,8 +38,24 @@ class Configuration_Options{
          * @brief Initialize
         */
         void Initialize( int argc, char* argv[] );
-    
+
+
+        /**
+         * @brief Get the render center coordinate.
+        */
+        inline CRD::CoordinateUTM_d Get_Render_Center_Coordinate()const{
+            return m_render_center_coordinate;
+        }
+
         
+        /**
+          * @brief Get the Render GSD Node
+         */
+         inline double Get_Render_GSD()const{
+             return m_render_gsd;
+         }
+
+
         /**
          * @brief Get the Viewer Window Name
         */
@@ -49,7 +67,7 @@ class Configuration_Options{
         /**
          * @brief Get the Window Viewer Size
         */
-        inline GEO::A_Size<int> Get_Viewer_Window_Size()const{
+        inline A_Size<int> Get_Viewer_Window_Size()const{
             return m_viewer_window_size;
         }
 
@@ -57,7 +75,7 @@ class Configuration_Options{
         /**
          * @brief Get the DEM IO Driver List
         */
-        inline std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> Get_DEM_Driver_List()const{
+        inline std::vector<DEM::A_DEM_IO_Driver_Base::ptr_t> Get_DEM_Driver_List()const{
             return m_dem_driver_list;
         }
 
@@ -104,16 +122,19 @@ class Configuration_Options{
         boost::filesystem::path m_configuration_path;
         
         /// Render Center Point
-        GEO::CRD::CoordinateUTM_d m_render_center_coordinate;
+        CRD::CoordinateUTM_d m_render_center_coordinate;
+    
+        /// Render GSD
+        double m_render_gsd;
 
         /// Window Name
         std::string m_viewer_window_name;
 
         /// Window Size
-        GEO::A_Size<int> m_viewer_window_size;
+        A_Size<int> m_viewer_window_size;
         
         /// Terrain Driver List
-        std::vector<GEO::DEM::A_DEM_IO_Driver_Base::ptr_t> m_dem_driver_list;
+        std::vector<DEM::A_DEM_IO_Driver_Base::ptr_t> m_dem_driver_list;
 
 
 }; // End of Configuration_Options Class

@@ -191,7 +191,7 @@ set( GEOEXPLORE_DEM_SOURCES
     dem/DEM_IO_Driver_Types.cpp
     dem/DEM_Manager.cpp
     dem/A_DEM_IO_Driver_Base.cpp
-    dem/A_DEM_IO_Driver_FLAT.cpp
+    dem/A_DEM_IO_Driver_Flat.cpp
     dem/A_DEM_IO_Driver_SRTM.cpp
 )
 

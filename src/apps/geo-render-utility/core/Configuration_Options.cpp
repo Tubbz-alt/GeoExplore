@@ -16,7 +16,8 @@
 /*                   Constructor                      */
 /******************************************************/
 Configuration_Options::Configuration_Options()
- : m_viewer_window_size(GEO::A_Size<int>(2000,1000))
+ : m_render_gsd(0.25),
+   m_viewer_window_size(A_Size<int>(2000,1000))
 {
 }
 
@@ -43,7 +44,7 @@ void Configuration_Options::Parse_Command_Line( int argc, char* argv[] )
 {
 
     // Create a command-line parser
-    GEO::CONFIG::A_Command_Line_Parser parser(argc, argv);
+    CONFIG::A_Command_Line_Parser parser(argc, argv);
 
     // Temp Flags
     std::string tempStr;
@@ -121,11 +122,17 @@ void Configuration_Options::Parse_Configuration_File()
 /******************************************************/
 void Configuration_Options::Parse_Render_Configuration( pugi::xml_node& render_config_node )
 {
+
+    // Get the render gsd node
+    if( render_config_node.child("gsd") != NULL ){
+        m_render_gsd = render_config_node.child("gsd").attribute("value").as_double();
+    }
+
     // Get the center-coordinate node
     pugi::xml_node center_node = render_config_node.child("center-coordinate");
 
     // Get the type
-    std::string type = GEO::string_toLower(center_node.attribute("type").as_string());
+    std::string type = string_toLower(center_node.attribute("type").as_string());
     if( type == "utm" ){
 
         // Get the coordinate data
@@ -133,20 +140,20 @@ void Configuration_Options::Parse_Render_Configuration( pugi::xml_node& render_c
         bool isNorth = center_node.attribute("is_northern").as_bool();
         double easting = center_node.attribute("easting_meters").as_double();
         double northing = center_node.attribute("northing_meters").as_double();
-        GEO::Datum datum = GEO::StringToDatum(center_node.attribute("datum").as_string());
+        Datum datum = StringToDatum(center_node.attribute("datum").as_string());
         
-        m_render_center_coordinate = GEO::CRD::CoordinateUTM_d( zone, isNorth, easting, northing, 0, datum );
+        m_render_center_coordinate = CRD::CoordinateUTM_d( zone, isNorth, easting, northing, 0, datum );
     }
     else if( type == "geographic" ){
 
         // Get the coordinate data
         double latitude = center_node.attribute("latitude_degrees").as_double();
         double longitude = center_node.attribute("longitude_degrees").as_double();
-        GEO::Datum datum = GEO::StringToDatum(center_node.attribute("datum").as_string());
+        Datum datum = StringToDatum(center_node.attribute("datum").as_string());
 
         // Convert to UTM
-        GEO::CRD::CoordinateGeographic_d geog_coord( latitude, longitude, datum );
-        m_render_center_coordinate = GEO::CRD::convert_coordinate<GEO::CRD::CoordinateUTM_d>( geog_coord );
+        CRD::CoordinateGeographic_d geog_coord( latitude, longitude, datum );
+        m_render_center_coordinate = CRD::convert_coordinate<CRD::CoordinateUTM_d>( geog_coord );
 
     }
     else{
@@ -171,7 +178,7 @@ void Configuration_Options::Parse_Viewer_Configuration( pugi::xml_node& viewer_c
     int height = window_size_node.attribute("height").as_int();
 
     // Set the size
-    m_viewer_window_size = GEO::A_Size<int>(width,height);
+    m_viewer_window_size = A_Size<int>(width,height);
 
 }
 
@@ -183,7 +190,7 @@ void Configuration_Options::Parse_Terrain_Configuration( pugi::xml_node& terrain
 {
 
     // Temp Variables
-    GEO::Status temp_status;
+    Status temp_status;
     std::string temp_str;
 
     // Get the sources node
@@ -206,17 +213,17 @@ void Configuration_Options::Parse_Terrain_Configuration( pugi::xml_node& terrain
         temp_str = source_node.attribute("type").as_string();
 
         // Parse SRTM
-        if( "srtm" == GEO::string_toLower(temp_str) ){
+        if( "srtm" == string_toLower(temp_str) ){
             
             // Get the path
             temp_str = source_node.attribute("path").as_string();
 
             // Construct the datasource
-            GEO::DEM::A_DEM_IO_Driver_SRTM::ptr_t temp_driver(new GEO::DEM::A_DEM_IO_Driver_SRTM( temp_str ));
+            DEM::A_DEM_IO_Driver_SRTM::ptr_t temp_driver(new DEM::A_DEM_IO_Driver_SRTM( temp_str ));
             
             // Initialize
             temp_status = temp_driver->Initialize();
-            if( temp_status.Get_Status_Type() != GEO::StatusType::SUCCESS ){
+            if( temp_status.Get_Status_Type() != StatusType::SUCCESS ){
                 std::cerr << "error: Unable to initialize the SRTM data source. Details: " << temp_status.Get_Status_Details() << std::endl;
                 std::exit(-1);
             }

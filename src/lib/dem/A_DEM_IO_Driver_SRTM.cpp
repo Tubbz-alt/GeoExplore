@@ -110,9 +110,13 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
 /*                   Create Elevation Tile                   */
 /*************************************************************/
 ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
-                                                                        A_Size<int>     const&  tile_size,
-                                                                        double          const&  gsd )
+                                                                        A_Size<int>          const&  tile_size,
+                                                                        double               const&  gsd,
+                                                                        Status&                      status )
 {
+
+    
+    status = Status(StatusType::FAILURE, CoreStatusReason::NOT_IMPLEMENTED, "Not Implemented");
 
     return nullptr;
 }
@@ -122,9 +126,12 @@ ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::Coo
 /*                  Create Elevation tile                    */
 /*************************************************************/
 ElevationTileUTM_d::ptr_t A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
-                                                                       A_Size<int>            const&  tile_size,
-                                                                       double                 const&  gsd )
+                                                                       A_Size<int>                 const&  tile_size,
+                                                                       double                      const&  gsd,
+                                                                       Status&                             status )
 {
+    
+    status = Status(StatusType::FAILURE, CoreStatusReason::NOT_IMPLEMENTED, "Not Implemented");
 
     return nullptr;
 }

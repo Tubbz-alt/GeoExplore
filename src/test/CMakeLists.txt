@@ -62,6 +62,7 @@ set( GEOEXPLROE_CORE_MODULE_TESTS
 #-       Define the DEM Module Test Files       -#
 #------------------------------------------------#
 set( GEOEXPLORE_DEM_MODULE_TESTS
+    dem/TEST_A_DEM_IO_Driver_Flat.cpp
     dem/TEST_A_DEM_IO_Driver_SRTM.cpp
     dem/TEST_An_Elevation_Tile.cpp
     dem/TEST_DEM_IO_Driver_Types.cpp

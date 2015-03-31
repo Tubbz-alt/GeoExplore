@@ -79,7 +79,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @return True if covered. False otherwise.
         */
         inline virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
-                                      CRD::CoordinateGeographic_d const& max_coordinate )const{
+                                      CRD::CoordinateGeographic_d const& max_coordinate )const
+        {
             return false;
         }
 
@@ -91,7 +92,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * 
          * @return True if covered. False otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const{
+        inline virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const
+        {
             return false;
         }
         
@@ -105,7 +107,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @return True if covered. False otherwise.
         */
         inline virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
-                                      CRD::CoordinateUTM_d const& max_coordinate )const{
+                                      CRD::CoordinateUTM_d const& max_coordinate )const
+        {
             return false;
         }
 
@@ -115,7 +118,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          *
          * @return DEM_IO_Driver_Type.
         */
-        inline virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const{
+        inline virtual DEM_IO_Driver_Type Get_DEM_IO_Driver_Type()const
+        {
             return DEM_IO_Driver_Type::SRTM;
         }
         
@@ -125,12 +129,14 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
         virtual ElevationTileUTM_d::ptr_t  Create_Elevation_Tile( CRD::CoordinateUTM_d const&  min_corner,
-                                                                  A_Size<int>     const&  tile_size,
-                                                                  double          const&  gsd );
+                                                                  A_Size<int>          const&  tile_size,
+                                                                  double               const&  gsd,
+                                                                  Status&                      status );
         
         /**
          * @brief Create Elevation Tile
@@ -138,12 +144,14 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @param[in] min_corner Minimum corner of tile.
          * @param[in] tile_size Size of tile in pixels.
          * @param[in] gsd Ground sampling distance in meters-per-pixel.
+         * @param[out] status Status of the operation.
          *
          * @return Elevation tile.
         */
         virtual ElevationTileUTM_d::ptr_t Create_Elevation_Tile( CRD::CoordinateGeographic_d const&  min_corner,
-                                                                 A_Size<int>            const&  tile_size,
-                                                                 double                 const&  gsd );
+                                                                 A_Size<int>                 const&  tile_size,
+                                                                 double                      const&  gsd,
+                                                                 Status&                             status );
 
     
     private:

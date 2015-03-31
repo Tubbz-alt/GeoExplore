@@ -7,6 +7,7 @@
 #define __GEOEXPLORE_LIB_MATH_A_MATRIX_EIGEN_HPP__
 
 // C++ Standard Libraries
+#include <memory>
 #include <string>
 
 namespace GEO{

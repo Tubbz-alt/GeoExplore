@@ -15,6 +15,25 @@ set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
 
 #--------------------------------#
+#-     Find GLFW 3 Library      -#
+#--------------------------------#
+find_package( glfw3 REQUIRED )
+if( EXISTS ${GLFW3_LIBRARY} )
+    
+    LIST(APPEND GLFW_LIBRARY_LIST ${GLFW3_LIBRARY})
+
+    if(APPLE)
+        MESSAGE("Finding Mac GLFW Libraries")
+    elseif(UNIX)
+        
+        #  Find X11
+        FIND_PACKAGE(X11 REQUIRED)
+        LIST(APPEND GLFW_LIBRARY_LIST ${X11_LIBRARIES})
+    endif()
+endif()
+
+
+#--------------------------------#
 #-     Find OpenCV Library      -#
 #--------------------------------#
 find_package( OpenCV REQUIRED )
@@ -77,8 +96,9 @@ target_link_libraries( geo-render-utility
                 ${Boost_LIBRARIES}
                 ${GDAL_LIBRARY}
                 ${OpenCV_LIBS}
-                /opt/local/lib/libglfw.dylib
-                /opt/local/lib/libGLEW.dylib
+                GLEW
+                ${GLFW_LIBRARY_LIST}
+                pthread
                 ${OPENGL_LIBRARIES}
 )
 
