@@ -13,6 +13,9 @@ project(terrain-explore)
 #set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../bin )
 #set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/../../lib )
 
+#  Set C++ 11
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+
 #  Set list of directories to search for cmake modules
 set( CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake
