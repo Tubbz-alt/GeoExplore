@@ -70,6 +70,14 @@ set( GEOEXPLORE_DEM_MODULE_TESTS
 )
 
 
+#-------------------------------------------------#
+#-    Define the Filesystem Module Test Files    -#
+#-------------------------------------------------#
+set( GEOEXPLORE_FILESYSTEM_MODULE_TESTS 
+    filesystem/TEST_FilesystemPath.cpp
+    filesystem/TEST_PathFormatType.cpp
+)
+
 #----------------------------------------------#
 #-     Define the Math Module Test Files      -#
 #----------------------------------------------#
@@ -98,6 +106,26 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
     image/transforms/TEST_ImageTransformNormalize.cpp
 )
 
+
+#------------------------------------------#
+#-       Define the IO Module Tests       -#
+#------------------------------------------#
+set( GEOEXPLORE_IO_MODULE_TESTS 
+    io/TEST_GDAL_Driver.cpp
+    io/TEST_Image_IO.cpp
+    io/TEST_OpenCV_Driver.cpp
+)
+
+#------------------------------------------#
+#-       Define the Utility Module Tests  -#
+#------------------------------------------#
+set( GEOEXPLORE_UTILITY_MODULE_TESTS
+    utilities/TEST_FilesystemUtilities.cpp
+    utilities/TEST_StringUtilities.cpp
+    utilities/TEST_System_Utilities.cpp
+)
+
+
 #------------------------------------------#
 #-      Define Required Source Files      -#
 #------------------------------------------#
@@ -109,12 +137,11 @@ set( GEOEXPLORE_TEST_SOURCES
     ${GEOEXPLORE_COORDINATE_MODULE_TESTS}
     ${GEOEXPLORE_CORE_MODULE_TESTS}
     ${GEOEXPLORE_DEM_MODULE_TESTS}
+    ${GEOEXPLORE_FILESYSTEM_MODULE_TESTS}
     ${GEOEXPLORE_MATH_MODULE_TESTS}
     ${GEOEXPLORE_IMAGE_MODULE_TESTS}
-    io/TEST_GDAL_Driver.cpp
-    io/TEST_Image_IO.cpp
-    io/TEST_OpenCV_Driver.cpp
-    utilities/TEST_FilesystemUtilities.cpp
+    ${GEOEXPLORE_IO_MODULE_TESTS}
+    ${GEOEXPLORE_UTILITY_MODULE_TESTS}
 )
 
 

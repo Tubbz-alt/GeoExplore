@@ -43,6 +43,7 @@ find_package( Boost
                 COMPONENTS
                     system
                     filesystem
+                    regex
                 REQUIRED )
 
 #-----------------------------------------#
@@ -84,6 +85,13 @@ set( GEOEXPLORE_DEM_HEADERS
     dem/DEM_Manager.hpp
 )
 
+#  Filesystem Headers
+set( GEOEXPLORE_FILESYSTEM_HEADERS
+    filesystem.hpp
+    filesystem/FilesystemPath.hpp
+    filesystem/PathFormatType.hpp
+)
+
 #  Image Module
 set( GEOEXPLORE_IMAGE_HEADERS
     image.hpp
@@ -121,6 +129,14 @@ set( GEOEXPLORE_IO_HEADERS
     io/opencv_utils/OpenCV_Utilities.hpp
 )
 
+
+#   Log Module
+set( GEOEXPLORE_LOG_HEADERS
+    log.hpp
+    log/Logger.hpp
+)
+
+
 #   Math Module
 set( GEOEXPLORE_MATH_HEADERS
     math.hpp
@@ -148,6 +164,7 @@ set( GEOEXPLORE_UTILITIES_HEADERS
     utilities.hpp
     utilities/FilesystemUtilities.hpp
     utilities/StringUtilities.hpp
+    utilities/System_Utilities.hpp
 )
 
 #  Combine modules
@@ -156,8 +173,10 @@ set( GEOEXPLORE_HEADERS
     ${GEOEXPLORE_CORE_HEADERS}
     ${GEOEXPLORE_COORDINATE_HEADERS}
     ${GEOEXPLORE_DEM_HEADERS}
+    ${GEOEXPLORE_FILESYSTEM_HEADERS}
     ${GEOEXPLORE_IMAGE_HEADERS}
     ${GEOEXPLORE_IO_HEADERS}
+    ${GEOEXPLORE_LOG_HEADERS}
     ${GEOEXPLORE_MATH_HEADERS}
     ${GEOEXPLORE_THIRDPARTY_HEADERS}
     ${GEOEXPLORE_UTILITIES_HEADERS}
@@ -195,6 +214,11 @@ set( GEOEXPLORE_DEM_SOURCES
     dem/A_DEM_IO_Driver_SRTM.cpp
 )
 
+#   Filesystem Module
+set( GEOEXPLORE_FILESYSTEM_SOURCES
+    filesystem/FilesystemPath.cpp
+)
+
 
 #   Image Module
 set( GEOEXPLORE_IMAGE_SOURCES
@@ -210,6 +234,12 @@ set( GEOEXPLORE_IO_SOURCES
     io/OGR_Driver.cpp
     io/gdal_utils/GDAL_Utilities.cpp
 )
+
+#  Log Modules
+set( GEOEXPLORE_LOG_SOURCES
+    log/Logger.cpp
+)
+
 
 #  Math Modules
 set( GEOEXPLORE_MATH_SOURCES
@@ -228,6 +258,7 @@ set( GEOEXPLORE_THIRDPARTY_SOURCES
 set( GEOEXPLORE_UTILITIES_SOURCES
     utilities/FilesystemUtilities.cpp
     utilities/StringUtilities.cpp
+    utilities/System_Utilities.cpp
 )
 
 #   Combine Modules
@@ -236,8 +267,10 @@ set( GEOEXPLORE_SOURCES
     ${GEOEXPLORE_CORE_SOURCES}
     ${GEOEXPLORE_COORDINATE_SOURCES}
     ${GEOEXPLORE_DEM_SOURCES}
+    ${GEOEXPLORE_FILESYSTEM_SOURCES}
     ${GEOEXPLORE_IMAGE_SOURCES}
     ${GEOEXPLORE_IO_SOURCES}
+    ${GEOEXPLORE_LOG_SOURCES}
     ${GEOEXPLORE_MATH_SOURCES}
     ${GEOEXPLORE_THIRDPARTY_SOURCES}
     ${GEOEXPLORE_UTILITIES_SOURCES}

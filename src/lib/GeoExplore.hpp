@@ -23,6 +23,9 @@
 /// Dem Module
 #include "dem.hpp"
 
+// Filesystem Module
+#include "filesystem.hpp"
+
 /// Image Module
 #include "image.hpp"
 

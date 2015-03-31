@@ -18,7 +18,7 @@ usage(){
     echo ''
     echo '    -h, --help    : Print usage instructions.'
     echo '    -m, --make    : Build GeoExplore.'
-    echo '    -t, --test    : Build and run unit tests.'
+    echo '    -t, --test  <pattern [optional]>   : Build and run unit tests.'
     echo '    -i, --install : Deploy GeoExplore to $PREFIX'
     echo "                    Note: PREFIX=$PREFIX"
     echo "    -v, --verbose : Show all build commands"
@@ -170,8 +170,10 @@ test_software(){
     popd
     
     #  Run Unit Test
-    ./${BUILD_DIRECTORY}/bin/geo-explore-unit-tests
+    CMD="./${BUILD_DIRECTORY}/bin/geo-explore-unit-tests  --gtest_filter=$TEST_FLAG_VALUE_STR"
     
+    echo "Running \"$CMD\""
+    $CMD
     
     #  Test the geo-convert function
     #./tests/bash/apps/geo-convert-test.sh
@@ -273,6 +275,10 @@ PREFIX_FLAG=0
 CMAKE_EXTRA_ARGS=''
 CMAKE_ARGS_FLAG=0
 
+TEST_FLAG_SET=0
+TEST_FLAG_VALUE_SET=0
+TEST_FLAG_VALUE_STR=''
+
 #  Process Command-Line Arguments
 for ARG in "$@"; do
 
@@ -287,21 +293,25 @@ for ARG in "$@"; do
         #   Clean GeoExplore
         '-c' | '--clean' )
             RUN_CLEAN=1
+            TEST_FLAG_SET=0
             ;;
 
         #   Test GeoExplore
         '-t' | '--test' )
             RUN_TEST=1
+            TEST_FLAG_SET=1
             ;;
 
         #   Make GeoExplore
         '-m' | '--make' )
             RUN_MAKE=1
+            TEST_FLAG_SET=0
             ;;
 
         #   Install GeoExplore
         '-i' | '--install' )
             RUN_INSTALL=1
+            TEST_FLAG_SET=0
             ;;
        
         #   Build verbose
@@ -309,30 +319,36 @@ for ARG in "$@"; do
             BUILD_VERBOSE=1
             THREAD_FLAG=0
             PREFIX_FLAG=0
+            TEST_FLAG_SET=0
             ;;
 
         #   Number of threads
         '-j' )
             THREAD_FLAG=1
+            TEST_FLAG_SET=0
             ;;
         
         #   Copy Header Files
         '--headers' )
             COPY_HEADERS=1
+            TEST_FLAG_SET=0
             ;;
         #  Set Prefix flag
         '--PREFIX' )
             PREFIX_FLAG=1
+            TEST_FLAG_SET=0
             ;;
 
         #  Create Documentation
         '-d' | '--docs' )
             RUN_DOCS=1
+            TEST_FLAG_SET=0
             ;;
 
         #  Cmake Arguments
         '--cmake-args')
             CMAKE_ARGS_FLAG=1
+            TEST_FLAG_SET=0
             ;;
 
         #   Other Responses
@@ -352,6 +368,12 @@ for ARG in "$@"; do
             elif [ "$PREFIX_FLAG" = '1' ]; then
                 PREFIX_FLAG=0
                 PREFIX=$ARG
+
+            #  If we need to grab the test flag
+            elif [ "$TEST_FLAG_SET" = '1' ]; then
+                TEST_FLAG_SET=0
+                TEST_FLAG_VALUE_SET=1
+                TEST_FLAG_VALUE_STR=$ARG
 
             #  Otherwise, we have an error
             else

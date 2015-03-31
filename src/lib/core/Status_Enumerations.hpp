@@ -48,6 +48,7 @@ enum class CoreStatusReason : uint32_t {
 enum class DemStatusReason : uint32_t {
     NO_DEM_IO_DRIVERS = 11,
     NO_TERRAIN_COVERAGE = 12,
+    NO_SRTM_PATHS = 13,
 }; // End of DEMStatusReason Enumeration
 
 /**

@@ -12,20 +12,16 @@
 #include <fstream>
 #include <iostream>
 
-/// Boost C++ Libraries
-#include <boost/filesystem.hpp>
-
-
 namespace GEO{
 namespace FS{
 
 /**
  * Get the file type
 */
-FileType Get_File_Type( const boost::filesystem::path& pathname ){
+FileType Get_File_Type( const FilesystemPath& pathname ){
 
     // get the extension
-    std::string ext = string_toLower(pathname.extension().native());
+    std::string ext = string_toLower(pathname.Get_Extension().ToString());
     
     // JPEG 2000
     if( ext == ".jp2" )

@@ -4,13 +4,11 @@
 // C++ Standard Libraries
 #include <memory>
 
-// Boost Libraries
-#include <boost/filesystem.hpp>
-
 // GeoExplore Libraries
 #include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
 #include "../core/A_Status.hpp"
+#include "../filesystem.hpp"
 #include "../image/MemoryResource.hpp"
 #include "../io/GDAL_Driver.hpp"
 #include "../math/A_Rectangle.hpp"
@@ -29,6 +27,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         /// Resource Type
         typedef IMG::MemoryResource<IMG::PixelGray_df> resource_type;
 
+
         /// Driver Type
         typedef IO::GDAL::ImageDriverGDAL<resource_type> io_driver_type;
 
@@ -38,7 +37,15 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          *
          * @param[in] srtm_path Path to SRTM data.  
          */
-        A_DEM_IO_Driver_SRTM( boost::filesystem::path const& pathname );
+        A_DEM_IO_Driver_SRTM( FS::FilesystemPath const& pathname );
+
+
+        /**
+         * @brief Construct the DEM IO Driver with a list of paths to SRTM data.
+         *
+         * @param[in] srtm_paths List of SRTM File paths or directories.
+        */
+        A_DEM_IO_Driver_SRTM( std::vector<FS::FilesystemPath> const& pathname );
 
 
         /**
@@ -70,21 +77,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
             return false;
         }
         
-        /**
-         * @brief Check if elevation range is covered
-         *
-         * @param[in] min_coordinate Coordinate to test.
-         * @param[in] max_coordinate Coordinate to test.
-         * 
-         * @return True if covered. False otherwise.
-        */
-        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
-                                      CRD::CoordinateGeographic_d const& max_coordinate )const
-        {
-            return false;
-        }
-
-        
+                
         /**
          * @brief Check if elevation value is covered
          *
@@ -97,6 +90,33 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
             return false;
         }
         
+        
+        /**
+         * @brief Check if region is covered.
+         *
+         * @param[min] min_coordinate Minimum coordinate.
+         * @param[min] max_coordinate Maximum coordinate.
+         *
+         * @return True if covered. False otherwise.
+        */
+        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
+                                      CRD::CoordinateGeographic_d const& max_coordinate )const;
+
+
+        /**
+         * @brief Check if elevation range is covered
+         *
+         * @param[in] min_coordinate Coordinate to test.
+         * @param[in] max_coordinate Coordinate to test.
+         * 
+         * @return True if covered. False otherwise.
+        */
+        inline virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
+                                      CRD::CoordinateUTM_d const& max_coordinate )const
+        {
+            return false;
+        }
+
         
         /**
          * @brief Query elevation in meters.
@@ -120,21 +140,6 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         */
         virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
                                                 Status& status ) const;
-
-
-        /**
-         * @brief Check if elevation range is covered
-         *
-         * @param[in] min_coordinate Coordinate to test.
-         * @param[in] max_coordinate Coordinate to test.
-         * 
-         * @return True if covered. False otherwise.
-        */
-        inline virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
-                                      CRD::CoordinateUTM_d const& max_coordinate )const
-        {
-            return false;
-        }
 
         
         /**
@@ -189,11 +194,11 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
 
 
         /// path to srtm data
-        boost::filesystem::path m_srtm_pathname;
+        std::vector<FS::FilesystemPath> m_srtm_pathnames;
 
         
         /// List of SRTM Files
-        std::vector<boost::filesystem::path> m_srtm_file_list;
+        std::vector<FS::FilesystemPath> m_srtm_file_list;
 
         
         /// List of SRTM Extents

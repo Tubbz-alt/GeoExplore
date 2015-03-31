@@ -17,13 +17,28 @@ namespace DEM{
 /*************************************************************/
 /*                      Constructor                          */
 /*************************************************************/
-A_DEM_IO_Driver_SRTM::A_DEM_IO_Driver_SRTM( boost::filesystem::path const& pathname )
-  : m_class_name("A_DEM_IO_Driver"),
-    m_initialization_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED, "Uninitialized.")),
-    m_srtm_pathname( pathname )
+A_DEM_IO_Driver_SRTM::A_DEM_IO_Driver_SRTM( FS::FilesystemPath const& pathname )
+  : A_DEM_IO_Driver_Base(),
+    m_class_name("A_DEM_IO_Driver_SRTM"),
+    m_initialization_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED, "Uninitialized."))
 {
+    // Add the pathnames
+    m_srtm_pathnames.push_back( pathname );
 }
 
+
+/*************************************************************/
+/*                      Constructor                          */
+/*************************************************************/
+A_DEM_IO_Driver_SRTM::A_DEM_IO_Driver_SRTM( std::vector<FS::FilesystemPath> const& pathnames )
+  : A_DEM_IO_Driver_Base(),
+    m_class_name("A_DEM_IO_Driver_SRTM"),
+    m_initialization_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED, "Uninitialized.")),
+    m_srtm_pathnames(pathnames)
+{
+
+}
+    
 
 /*************************************************************/
 /*                  Check if Initialized                     */
@@ -46,50 +61,64 @@ bool A_DEM_IO_Driver_SRTM::Is_Initialized( Status& status )const
 /*************************************************************/
 Status A_DEM_IO_Driver_SRTM::Initialize(){
     
-    // Make sure the path exists
-    if( boost::filesystem::exists(m_srtm_pathname) == false ){
-        m_initialization_status = Status( StatusType::FAILURE, 
-                                          CoreStatusReason::PATH_DOES_NOT_EXIST,
-                                          "SRTM path does not exist.");
+    // Misc Variables
+    Status temp_status;
+
+    // Make sure we have paths
+    if( m_srtm_pathnames.size() <= 0 ){
+        m_initialization_status = Status( StatusType::FAILURE,
+                                          DemStatusReason::NO_SRTM_PATHS,
+                                          "No SRTM Files to Initialize.");
         return m_initialization_status;
     }
 
     
-    // If the path is a file, then check if SRTM
-    if( boost::filesystem::is_regular_file(m_srtm_pathname) == true &&
-        FS::Get_File_Type(m_srtm_pathname) == FS::FileType::SRTM )
-    {
-        m_srtm_file_list.push_back(m_srtm_pathname);
-    }
+    // Iterate over each path
+    for( int i=0; i<(int)m_srtm_pathnames.size(); i++ ){
 
+        // Make sure path exists
+        if( m_srtm_pathnames[i].Exists() != true ){
+            //std::cerr << "error: SRTM Path (" << m_srtm_pathnames[i].ToString() << ") does not exist. Skipping." << std::endl;
+            continue;
+        }
 
-    // If the path is a directory, search for files
-    else if( boost::filesystem::is_directory(m_srtm_pathname) == true ){
-        
-        // Get list of files
-        boost::filesystem::recursive_directory_iterator it(m_srtm_pathname);
-        for( ; it != boost::filesystem::recursive_directory_iterator(); it++ ){
+        // If the path is a regular SRTM File, then process
+        if( m_srtm_pathnames[i].Is_Regular_File() == true  &&
+            FS::Get_File_Type(m_srtm_pathnames[i]) == FS::FileType::SRTM )
+        {
+
+            // Add to list of files
+            m_srtm_file_list.push_back(m_srtm_pathnames[i]);
+
+        }
+
+        // If the path is a directory, then iterate
+        else if( m_srtm_pathnames[i].Is_Directory() == true ){
             
-            // Get path
-            boost::filesystem::path temp_path = it->path();
+            // Get list of files
+            //boost::filesystem::recursive_directory_iterator it(m_srtm_pathname);
+            //for( ; it != boost::filesystem::recursive_directory_iterator(); it++ ){
+            
+                // Get path
+                //boost::filesystem::path temp_path = it->path();
 
-            // Check if srtm
-            if( FS::Get_File_Type(temp_path) == FS::FileType::SRTM ){
+                // Check if srtm
+                //if( FS::Get_File_Type(temp_path) == FS::FileType::SRTM ){
 
-                // Get the extent of the file
+                    // Get the extent of the file
 
-                // Add the path to the list
-                m_srtm_file_list.push_back(temp_path);
-            }
+                    // Add the path to the list
+                    //m_srtm_file_list.push_back(temp_path);
+                //}
+            //}
+        }
+
+        // Otherwise, we have an issue
+        else{
+            std::cerr << "error: Unknown configuration. Skipping path." << std::endl;
+            continue;
         }
     }
-    else{
-        m_initialization_status = Status( StatusType::FAILURE, 
-                                          CoreStatusReason::PATH_DOES_NOT_EXIST,
-                                          "SRTM path does not exist.");
-        return m_initialization_status;
-    }
-
 
     // Make sure we have some files
     if( m_srtm_file_list.size() <= 0 ){
@@ -104,6 +133,19 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
     m_initialization_status = Status( StatusType::SUCCESS );
     return m_initialization_status;
 
+}
+
+
+/***********************************************/
+/*            Check Terrain Coverage           */
+/***********************************************/
+bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
+                                     CRD::CoordinateGeographic_d const& max_coordinate )const
+{
+
+    // Iterate through file list
+    return false;
+        
 }
 
 

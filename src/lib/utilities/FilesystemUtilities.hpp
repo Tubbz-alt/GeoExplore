@@ -10,9 +10,8 @@
 #include <cinttypes>
 #include <string>
 
-/// Boost C++ Libraries
-#include <boost/filesystem.hpp>
-
+// GeoExplore Libraries
+#include "../filesystem.hpp"
 
 namespace GEO{
 namespace FS{
@@ -34,7 +33,7 @@ enum class FileType : uint16_t {
 /**
  * Get File Type
 */
-FileType Get_File_Type( const boost::filesystem::path& pathname );
+FileType Get_File_Type( const FilesystemPath& pathname );
 
 } /// End of FS Namespace
 } /// End of GEO Namespace

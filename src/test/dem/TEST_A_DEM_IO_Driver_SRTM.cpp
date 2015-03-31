@@ -16,8 +16,8 @@ using namespace GEO;
 TEST( A_DEM_IO_Driver_SRTM, Constructor_Invalid_SRTM_Path ){
 
     // Define our SRTM path
-    boost::filesystem::path srtm_file_path01 = "data/unit-test";
-    boost::filesystem::path srtm_file_path02 = "data/unit-tests/imagery";
+    FS::FilesystemPath srtm_file_path01 = "data/unit-test";
+    FS::FilesystemPath srtm_file_path02 = "data/unit-tests/imagery";
 
     // Build the drivers
     DEM::A_DEM_IO_Driver_SRTM  driver01( srtm_file_path01 );
@@ -33,10 +33,10 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Invalid_SRTM_Path ){
 /**
  * Test the Constructor
 */
-TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Path ){
+TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Directory_Path ){
 
     // Define our SRTM path
-    boost::filesystem::path srtm_file_path = "data/unit-tests/dems/srtm";
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
 
     // Build the drivers
     DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
@@ -47,4 +47,20 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Path ){
     FAIL();
 }
 
+/**
+ * Test the Driver Constructor using a single filename.
+ */
+TEST( A_DEM_IO_Driver_SRTM, Constructor_Single_SRTM_Path ){
 
+    FAIL();
+
+}
+
+/**
+ * TEst the SRTM Driver Constructor using a list of filenames 
+*/
+TEST( A_DEM_IO_Driver_SRTM, Constructor_List_SRTM_Paths ){
+
+    FAIL();
+
+}

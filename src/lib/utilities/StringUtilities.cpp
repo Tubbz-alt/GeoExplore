@@ -44,6 +44,27 @@ std::string string_toUpper( const string& in ){
     return value;
 }
 
+/**
+ * Trim string
+*/
+std::string string_trim( const std::string& str ){
+    std::string output = str;
+    boost::trim(output);
+    return output;
+}
+
+/**
+ * Trim String
+ */
+std::string string_trim( const std::string& str,
+                         const std::string& pattern )
+{
+    std::string output = str;
+    boost::trim_if(output, boost::is_any_of(pattern));
+    return output;
+}
+
+
  
 }/// End of GEO Namespace
 
