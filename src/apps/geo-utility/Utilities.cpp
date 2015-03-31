@@ -45,7 +45,7 @@ Options Parse_Command_Line( int argc, char* argv[] )
         }
 
         // Check if user provided a configuration file
-        else if( arg == "-c" | arg == "--config" ){
+        else if( arg == "-c" || arg == "--config" ){
             options.Set_Configuration_File( args.front() );
             args.pop_front();
         }
@@ -101,7 +101,7 @@ void Initialize_DEM_Manager( Options const& options ){
     GEO::DEM::The_DEM_Manager::Initialize();
 
     /// Add the terrain data sources
-    for( int i=0; i<options.Get_DEM_Drivers().size(); i++ ){
+    for( int i=0; i<(int)options.Get_DEM_Drivers().size(); i++ ){
         GEO::DEM::The_DEM_Manager::Instance_Of()->Add_DEM_IO_Driver( options.Get_DEM_Drivers()[i] );
     }
 }
@@ -113,15 +113,24 @@ void Initialize_Data( Data_Container& data,
                       Options const& options )
 {
 
+    // Status
+    Status status;
+
     // Activate the DEM Manager
     data.dem_manager = GEO::DEM::The_DEM_Manager::Instance_Of();
 
     // Create the elevation tile from the DEM Manager
     data.elevation_tile = data.dem_manager->Create_Elevation_Tile<GEO::CRD::CoordinateUTM<double>>( options.Get_Min_Image_Bound(),
                                                                                                     options.Get_Image_Size(),
-                                                                                                    options.Get_GSD());
+                                                                                                    options.Get_GSD(),
+                                                                                                    status );
     
     // Make sure the elevation tile initialize properly
+    if( status.Get_Status_Type() != StatusType::SUCCESS ){
+        std::stringstream sin;
+        sin << "error: Unable to get elevation tile. Details: " << status.Get_Status_Details();
+        throw std::runtime_error(sin.str());
+    }
     if( data.elevation_tile == nullptr ){
         throw std::runtime_error("error: Elevation tile returned was null.");
     }
@@ -129,7 +138,7 @@ void Initialize_Data( Data_Container& data,
     // Load the requested images
     std::vector<boost::filesystem::path> image_list = options.Get_Image_List();
     data.image_list.resize(image_list.size(), IMG::Image<IMG::PixelRGBA_u8>::ptr_t(new IMG::Image<IMG::PixelRGBA_u8>()));
-    for( int idx=0; idx < image_list.size(); idx++ ){
+    for( int idx=0; idx < (int)image_list.size(); idx++ ){
 
         // Load each image
         GEO::IO::Read_Image( image_list[idx], *data.image_list[idx] );

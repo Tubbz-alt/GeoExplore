@@ -29,6 +29,9 @@ Data_Container::Data_Container()
 /******************************************/
 void Data_Container::Load_Data( const Configuration_Options& options )
 {
+    // Status
+    Status status;
+
     // Initialize Terrain Manager
     m_dem_manager = DEM::DEM_Manager::ptr_t(new GEO::DEM::DEM_Manager());
 
