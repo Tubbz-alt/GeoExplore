@@ -45,6 +45,22 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     argv[3] = (char*)"-c";
     argv[4] = (char*)"file.txt";
 
+    std::vector<std::string> help_list;
+    help_list.push_back("-h");
+    help_list.push_back("-help");
+    
+    std::vector<std::string> usage_list;
+    usage_list.push_back("-u");
+    usage_list.push_back("-usage");
+
+    std::vector<std::string> config_list1;
+    config_list1.push_back("-c");
+    config_list1.push_back("--config");
+    
+    std::vector<std::string> config_list2;
+    config_list2.push_back("-r");
+    config_list2.push_back("--render-me");
+    
     // Create the parser
     CONFIG::A_Command_Line_Parser parser(argc, argv);
 
@@ -55,6 +71,9 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     ASSERT_TRUE( parser.Check_If_Flag_Exists("-help") );
     ASSERT_TRUE( parser.Check_If_Flag_Exists("-c") );
     ASSERT_FALSE( parser.Check_If_Flag_Exists("-C") );
+
+    ASSERT_TRUE( parser.Check_If_Flag_Exists(help_list));
+    ASSERT_FALSE( parser.Check_If_Flag_Exists(usage_list));
     
     // Check for flags and values
     bool flag_found, value_found;
@@ -62,6 +81,16 @@ TEST( A_Command_Line_Parser, Constructor_arguments ){
     ASSERT_EQ( parser.Query_Flag_Value_As_String("-c", flag_found, value_found ), "file.txt" );
     ASSERT_TRUE( flag_found );
     ASSERT_TRUE( value_found );
+
+    
+    ASSERT_EQ( parser.Query_Flag_Value_As_String(config_list1, flag_found, value_found ), "file.txt" );
+    ASSERT_TRUE( flag_found );
+    ASSERT_TRUE( value_found );
+    
+    ASSERT_EQ( parser.Query_Flag_Value_As_String(config_list2, flag_found, value_found ), "" );
+    ASSERT_FALSE( flag_found );
+    ASSERT_FALSE( value_found );    
+
 
     ASSERT_EQ( parser.Query_Flag_Value_As_String("file.txt", flag_found, value_found), "");
     ASSERT_TRUE( flag_found );

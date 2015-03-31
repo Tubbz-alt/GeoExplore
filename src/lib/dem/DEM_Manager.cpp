@@ -64,9 +64,10 @@ void DEM_Manager::Add_DEM_IO_Drivers( std::vector<A_DEM_IO_Driver_Base::ptr_t> c
 
 static DEM_Manager::ptr_t m_instance(nullptr);
 
-/**
- * Instance Of
-*/
+
+/*********************************/
+/*          Instance Of          */
+/*********************************/
 DEM_Manager::ptr_t The_DEM_Manager::Instance_Of(){
     if( m_instance == nullptr ){
         Initialize();
@@ -75,9 +76,9 @@ DEM_Manager::ptr_t The_DEM_Manager::Instance_Of(){
 }
 
 
-/**
- * Initialize
-*/
+/*********************************/
+/*           Initialize          */
+/*********************************/
 void The_DEM_Manager::Initialize(){    
     if( m_instance == nullptr ){
         m_instance.reset( new DEM_Manager());
@@ -85,9 +86,9 @@ void The_DEM_Manager::Initialize(){
 }
 
 
-/**
- * Constructor
-*/
+/*********************************/
+/*          Constructor          */
+/*********************************/
 The_DEM_Manager::The_DEM_Manager()
 {
 }

@@ -6,14 +6,12 @@
 #
 
 
-#------------------------------#
-#-    Set the Project Name    -#
-#------------------------------#
-PROJECT( Geo-DEM-Utility )
-
 #  Set C++ 11
 SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
+#  Set the executable output path
+set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
+set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
 
 #------------------------------#
 #-     Find GDAL Library      -#
@@ -27,6 +25,7 @@ include_directories( ${GDAL_INCLUDE_DIR} )
 #------------------------------------------#
 set( GEO_DEM_UTILITY_HEADERS
     GDU_Options.hpp
+    GDU_Render.hpp
     GDU_Utilities.hpp
 )
 
@@ -37,6 +36,7 @@ set( GEO_DEM_UTILITY_HEADERS
 set( GEO_DEM_UTILITY_SOURCES
     geo-dem-utility.cpp
     GDU_Options.cpp
+    GDU_Render.cpp
     GDU_Utilities.cpp
 )
 

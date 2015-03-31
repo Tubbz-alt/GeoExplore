@@ -26,9 +26,10 @@ A_Command_Line_Parser::A_Command_Line_Parser( int argc, char* argv[] )
 
 }
 
-/**
- * Check if a flag exists.
-*/
+
+/*****************************************************/
+/*                Check if a flag exists.            */
+/*****************************************************/
 bool A_Command_Line_Parser::Check_If_Flag_Exists( const std::string& flag )
 {
 
@@ -42,9 +43,27 @@ bool A_Command_Line_Parser::Check_If_Flag_Exists( const std::string& flag )
     return false;
 }
 
-/**
- * Get the Value
-*/
+
+/*****************************************************/
+/*                Check if a flag exists.            */
+/*****************************************************/
+bool A_Command_Line_Parser::Check_If_Flag_Exists( const std::vector<std::string>& flags )
+{
+
+    // Iterate over flags
+    for( int i=0; i<(int)flags.size(); i++ ){
+        if( Check_If_Flag_Exists(flags[i]) == true ){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+/*************************************/
+/*          Get the Value            */
+/*************************************/
 std::string A_Command_Line_Parser::Query_Flag_Value_As_String( const std::string& flag,   
                                                                bool&          flag_found,
                                                                bool&          value_found )
@@ -76,6 +95,28 @@ std::string A_Command_Line_Parser::Query_Flag_Value_As_String( const std::string
     return "";
 }
 
+/*************************************/
+/*          Get the Value            */
+/*************************************/
+std::string A_Command_Line_Parser::Query_Flag_Value_As_String( const std::vector<std::string>& flags,   
+                                                               bool&          flag_found,
+                                                               bool&          value_found )
+{
+    // temp stuff
+    std::string tempStr = "";
+
+    // Iterate over flags
+    for( int i=0; i<(int)flags.size(); i++ ){
+        
+        tempStr = Query_Flag_Value_As_String( flags[i], flag_found, value_found );
+        if( flag_found == true ){
+            return tempStr;
+        }
+
+    }
+
+    return tempStr;
+}
 
 } // End of CONFIG Namespace
 } // End of GEO Namespace

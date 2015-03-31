@@ -41,6 +41,15 @@ enum class CoreStatusReason : uint32_t {
     NOT_IMPLEMENTED     = 6 /*< Method or object not implemented yet.*/,
 }; // End of CoreStatusReason Enumeration
 
+
+/**
+ * @brief DEM Module Status Errors
+*/
+enum class DemStatusReason : uint32_t {
+    NO_DEM_IO_DRIVERS = 11,
+    NO_TERRAIN_COVERAGE = 12,
+}; // End of DEMStatusReason Enumeration
+
 /**
  * GDAL Status Reason
 */

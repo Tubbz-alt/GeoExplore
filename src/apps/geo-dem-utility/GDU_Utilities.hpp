@@ -9,10 +9,5 @@
 /// GDU Libraries
 #include "GDU_Options.hpp"
 
-/**
- * @brief Parse Command-Line Options
-*/
-GDU_Options Parse_Command_Line( int argc, char* argv[] );
-
 
 #endif

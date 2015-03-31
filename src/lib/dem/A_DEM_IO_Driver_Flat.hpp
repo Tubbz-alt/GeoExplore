@@ -89,7 +89,38 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
             return true;
         }
 
+        
+        /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
+                                                Status& status ) const
+        {
+            status = Status(StatusType::SUCCESS);
+            return m_elevation_meters;
+        }
 
+
+        /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
+                                                Status& status ) const
+        {
+            status = Status(StatusType::SUCCESS);
+            return m_elevation_meters;
+        }
+                                                
         
         /**
          * @brief Create Elevation Tile
@@ -105,6 +136,7 @@ class A_DEM_IO_Driver_Flat : public A_DEM_IO_Driver_Base{
                                                                  A_Size<int>          const&  tile_size,
                                                                  double               const&  gsd,
                                                                  Status&                      status );
+        
         
         /**
          * @brief Create Elevation Tile

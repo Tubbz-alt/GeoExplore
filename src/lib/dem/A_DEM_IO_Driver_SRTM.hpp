@@ -99,6 +99,30 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         
         
         /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
+                                                Status& status ) const;
+
+
+        /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
+                                                Status& status ) const;
+
+
+        /**
          * @brief Check if elevation range is covered
          *
          * @param[in] min_coordinate Coordinate to test.

@@ -84,6 +84,30 @@ class A_DEM_IO_Driver_Base{
         virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
                                CRD::CoordinateUTM_d const& max_coordinate )const = 0;
         
+        
+        /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
+                                                Status& status ) const = 0;
+
+
+        /**
+         * @brief Query elevation in meters.
+         *
+         * @param[in] coordinate Coordinate to query.
+         * @param[in] status Status of the operation.
+         *
+         * @return Elevation in meters.
+        */
+        virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
+                                                Status& status ) const = 0;
+
 
         /**
          * @brief Create Elevation Tile

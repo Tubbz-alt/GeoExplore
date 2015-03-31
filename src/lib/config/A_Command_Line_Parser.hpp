@@ -52,6 +52,16 @@ class A_Command_Line_Parser{
          * @return True if exists, false otherwise.
         */
         bool Check_If_Flag_Exists( const std::string& flag );
+        
+        
+        /**
+         * @brief Check if flag exists
+         * 
+         * @param[in] flags Flag list to test.
+         *
+         * @return True if exists, false otherwise.
+        */
+        bool Check_If_Flag_Exists( const std::vector<std::string>& flag );
 
 
         /**
@@ -67,7 +77,20 @@ class A_Command_Line_Parser{
                                                 bool&               flag_found,
                                                 bool&               value_found );
 
-    
+        
+        /**
+         * @brief Query Flag and Value and return as string.
+         *
+         * @param[in]  flags Flag list to test.
+         * @param[out] flag_found True if flag was found.
+         * @param[out] value_found True if value was found.
+         *
+         * @return Resulting value as string.
+         */
+        std::string Query_Flag_Value_As_String( std::vector<std::string> const&  flags,
+                                                bool&                            flag_found,
+                                                bool&                            value_found );
+
 
     private:
         

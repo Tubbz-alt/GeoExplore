@@ -6,6 +6,7 @@
 #include "A_DEM_IO_Driver_SRTM.hpp"
 
 // GeoExplore Libraries
+#include "../../lib/coordinate/CoordinateConversion.hpp"
 #include "../../lib/utilities/FilesystemUtilities.hpp"
 
 
@@ -105,6 +106,39 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
 
 }
 
+
+/*************************************************************/
+/*                   Query Elevation Tile                    */
+/*************************************************************/
+double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
+                                                     Status& status )const
+{
+
+    // Get the elevation
+    double elevation_meters = 0;
+
+    // Return success
+    status = Status(StatusType::SUCCESS);
+
+    return elevation_meters;
+
+}
+
+
+/*************************************************************/
+/*                   Query Elevation Tile                    */
+/*************************************************************/
+double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
+                                                     Status& status )const
+{
+
+    // Convert to Geographic
+    CRD::CoordinateGeographic_d coord_geog = CRD::convert_coordinate<CRD::CoordinateGeographic_d>(coordinate);
+    
+    // run geographic query
+    return Query_Elevation_Meters( coord_geog, status );
+
+}
 
 /*************************************************************/
 /*                   Create Elevation Tile                   */

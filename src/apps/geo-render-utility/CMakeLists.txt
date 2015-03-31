@@ -49,6 +49,11 @@ find_package( Threads )
 find_package( GDAL REQUIRED )
 include_directories( ${GDAL_INCLUDE_DIR} )
 
+#-------------------------------------------#
+#-  Find OpenGL Extension Wrangler (GLEW)  -#
+#-------------------------------------------#
+find_package( GLEW REQUIRED )
+
 #------------------------------------#
 #-  Find OpenGL Libraries (Drivers) -#
 #------------------------------------#
@@ -96,7 +101,7 @@ target_link_libraries( geo-render-utility
                 ${Boost_LIBRARIES}
                 ${GDAL_LIBRARY}
                 ${OpenCV_LIBS}
-                GLEW
+                ${GLEW_LIBRARY}
                 ${GLFW_LIBRARY_LIST}
                 pthread
                 ${OPENGL_LIBRARIES}

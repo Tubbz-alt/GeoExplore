@@ -72,7 +72,7 @@ class DEM_Manager{
             }
 
             // Return success
-            status = Status( StatusType::SUCCESS );
+            status = Status( StatusType::FAILURE, DemStatusReason::NO_TERRAIN_COVERAGE, "No terrain coverage.");
 
             // return tile
             return tile;
@@ -122,17 +122,25 @@ class DEM_Manager{
 
 }; // End of DEM_Manager Class
 
+
+/**
+ * @class The_DEM_Manager
+ *
+ * @brief Singleton instance of the DEM_Manager.
+*/
 class The_DEM_Manager{
 
     public:
 
         /**
-         * Initialize
+         * @brief Initialize the DEM Singleton Instance
         */
         static void Initialize();
 
         /**
-         * Get instance of DEM_Manager
+         * @brief Get instance of DEM_Manager.
+         *
+         * @return Instance of the DEM_Manager.
         */
         static DEM_Manager::ptr_t Instance_Of();
 
