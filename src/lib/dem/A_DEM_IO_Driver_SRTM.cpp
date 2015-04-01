@@ -94,7 +94,7 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
             // Get list of files
             std::vector<FS::FilesystemPath> pathlist = m_srtm_pathnames[i].Get_Contents(".*\\.hgt", true, FS::PathFormatType::ABSOLUTE);
             for( int pidx=0; pidx<pathlist.size(); pidx++ ){
-                Check_And_Add_SRTM_File( pathlist[i] );
+                Check_And_Add_SRTM_File( pathlist[pidx] );
             }
 
         }
@@ -178,7 +178,36 @@ bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& min_coor
                                      CRD::CoordinateGeographic_d const& max_coordinate )const
 {
 
+    // Overlap area eps
+    const double eps = 0.0001;
+
+    // Create a rectangle
+    MATH::A_Rectangle2d bbox( MATH::A_Point2d(std::min(min_coordinate.longitude_degrees(), max_coordinate.longitude_degrees()),
+                                              std::max(min_coordinate.latitude_degrees(),  max_coordinate.latitude_degrees())),
+                              std::fabs( min_coordinate.x() - max_coordinate.x()),
+                              std::fabs( min_coordinate.y() - max_coordinate.y()));
+
+    MATH::A_Rectangle2d overlap;
+    MATH::A_Rectangle2d shared_area;
+
     // Iterate through file list
+    for( size_t i=0; i<m_srtm_file_extents.size(); i++ ){
+
+        // Check if the boxes overlap
+        overlap =  m_srtm_file_extents[i].Intersection(bbox);
+        if( overlap.Area() > 0 ){
+            
+            // Get the different between this extent and the bbox
+            shared_area = overlap.Union(bbox);
+            
+            // If the intersection and the union have the same area
+            // then the boxes must overlap
+            if( std::fabs(shared_area.Area() - overlap.Area()) <= eps ){
+                return true;
+            }
+        }
+    }
+
     return false;
         
 }

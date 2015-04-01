@@ -155,9 +155,6 @@ TEST( ImageDriverGDAL, Get_OGR_Spatial_Reference_invalid_data ){
 */
 TEST( ImageDriverGDAL, Get_OGR_Spatial_Reference_valid_data ){
 
-    // Define EPS
-    const double eps = 0.00001;
-
     // pick some files to load
     FS::FilesystemPath path01("data/unit-tests/dems/srtm/N39W120.hgt");
     FS::FilesystemPath path02("data/unit-tests/images/i_3001a.ntf");
@@ -327,18 +324,26 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_invalid_data ){
     // Pick an invalid file
     FS::FilesystemPath path01("file-that-does-not-exist");
     FS::FilesystemPath path02("CMakeLists.txt");
+    FS::FilesystemPath path03("data/unit-tests/images/erdas_spnad83.tif");
 
     // Define the types
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGB_u8>>  DriverType01;
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGBA_u8>> DriverType02;
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelGray_df>> DriverType03;
 
-    // Run the method
+    // Run the method on a file that does not exist
     DriverType01::Compute_Image_Extent<CRD::CoordinateUTM_d>( path01, status );
     ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
     
+    // Run the method on a file that is not an image
+    DriverType02::Compute_Image_Extent<CRD::CoordinateUTM_d>( path02, status );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    
+    // Run the method on a file that we don't have support for yet.
+    DriverType03::Compute_Image_Extent<CRD::CoordinateUTM_d>( path03, status );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
 
-    FAIL();
+
 }
 
 /**
@@ -355,11 +360,9 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
 
     // pick some files to load
     FS::FilesystemPath path01("data/unit-tests/dems/srtm/N36W119.hgt");
-    FS::FilesystemPath path02("data/unit-tests/images/i_3001a.ntf");
 
     // Make sure the files exist
-    if( path01.Exists() == false ||
-        path02.Exists() == false )
+    if( path01.Exists() == false )
     {
         std::cerr << "Files don't exist. Test will fail." << std::endl;
         FAIL();
@@ -367,12 +370,11 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
 
     // Define our types
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGB_u8>>  DriverType01;
-    typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGBA_u8>> DriverType02;
 
     // Run the method
-    MATH::A_Rectangle<CRD::CoordinateGeographic_d> rectangle01_geographic = DriverType02::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path01, status );
+    MATH::A_Rectangle<CRD::CoordinateGeographic_d> rectangle01_geographic = DriverType01::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path01, status );
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
-    
+
     // Create our expected results
     CRD::CoordinateGeographic_d exp_path01_geographic_min( 35.9998611, -119.0001389, Datum::WGS84 );
     CRD::CoordinateGeographic_d exp_path01_geographic_max( 37.0001389, -117.9998611, Datum::WGS84 );

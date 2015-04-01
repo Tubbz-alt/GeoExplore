@@ -83,7 +83,8 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
         ImageDriverGDAL()
           :  ImageDriverBase<ResourceType>(),
              m_driver(nullptr),
-             m_dataset(nullptr)
+             m_dataset(nullptr),
+             m_current_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED,"Uninitialized."))
         {
         }
         
@@ -96,7 +97,8 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
         ImageDriverGDAL( const FS::FilesystemPath& pathname )
           : m_path(pathname),
             m_driver(nullptr),
-            m_dataset(nullptr)
+            m_dataset(nullptr),
+            m_current_status(Status(StatusType::FAILURE,CoreStatusReason::UNINITIALIZED,"Uninitialized."))
         {
         }
 
@@ -178,11 +180,29 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
         */
         bool Is_Open()const
         {
+            Status junk;
+            return Is_Open(junk);
+        }
+
+
+        /**
+          * @brief Check if the driver is open.
+          *
+          * @param[out] status Current program status.
+          *
+          * @return True if open. False otherwise.
+          */
+         bool Is_Open( Status& status )const{
+            
+            // Set the status
+            status = m_current_status;
+
+            // Check if dataset is null
             if( m_dataset == NULL ){
                 return false;
             }
             return true;
-        }
+         }
 
 
         /**
@@ -199,8 +219,12 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
             // make sure the file exists
             if( m_path.Exists() == false ){
+                m_current_status = Status( StatusType::FAILURE, 
+                                           CoreStatusReason::PATH_DOES_NOT_EXIST,
+                                           "File does not exist.");
                 return;
             }
+
 
             /// Register the driver
             GDALAllRegister();
@@ -210,19 +234,25 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 	
             // if dataset is null, then there was a problem
         	if( m_dataset == NULL ){
-                std::cout << "GDALOpen returned a null object." << std::endl;
+                m_current_status = Status( StatusType::FAILURE,
+                                           GDALStatusReason::DATASET_INITIALIZATION_ERROR,
+                                           "GDAL returned null object on open().");
 		        return;
         	}
 	
             // make sure we have pixel data inside the raster
             if( m_dataset->GetRasterCount() <= 0 ){
-                std::cout << "File has no pixel data." << std::endl;
+                m_current_status = Status( StatusType::FAILURE,
+                                           GDALStatusReason::RASTER_CONTAINS_NO_PIXEL_DATA,
+                                           "GDAL reports raster has no pixel data.");
                 return;
             }
 	
             //extract the driver infomation
             m_driver = m_dataset->GetDriver();
     
+            // Status is good
+            m_current_status = Status(StatusType::SUCCESS);
         }
         
 
@@ -661,14 +691,32 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
             // Check if projected
             else if( oSRS.IsProjected() ){
-                throw std::runtime_error("Not implemented.");
+
+                // Close the driver
+                driver.Close();
+
+                // Set the status
+                status = Status( StatusType::FAILURE, 
+                                 GDALStatusReason::UNKNOWN_PROJECTION_TYPE,
+                                 std::string("Unknown projection type: ") + std::string(driver.m_dataset->GetProjectionRef()));
+                
+                // Return error
+                return MATH::A_Rectangle<CoordinateModuleType>();
+                
             }
 
             // Otherwise, I am wrong and need further help
             else{
+
+                // Set the status
                 status = Status( StatusType::FAILURE, 
                                  GDALStatusReason::UNKNOWN_PROJECTION_TYPE,
                                  std::string("Unknown projection type: ") + std::string(driver.m_dataset->GetProjectionRef()));
+
+                // Close driver
+                driver.Close();
+
+                // return empty rectangle
                 return MATH::A_Rectangle<CoordinateModuleType>();
             }
 
@@ -689,6 +737,10 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
         /// Dataset
         GDALDataset* m_dataset;
+        
+        /// IO Status
+        Status m_current_status;
+
 
 }; /// End of ImageDriverGDAL Class
 

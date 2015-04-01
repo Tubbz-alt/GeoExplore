@@ -106,8 +106,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          *
          * @return True if covered. False otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
-                                      CRD::CoordinateGeographic_d const& max_coordinate )const;
+        virtual bool Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
+                               CRD::CoordinateGeographic_d const& max_coordinate )const;
 
 
         /**

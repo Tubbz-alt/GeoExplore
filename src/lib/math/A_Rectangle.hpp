@@ -125,6 +125,16 @@ class A_Rectangle : public A_Polygon<PointType> {
         datatype Height()const{
             return m_height;
         }
+
+
+        /**
+         * @brief Get the area.
+         *
+         * @return Area of rectangle.
+        */
+        double Area()const{
+            return (Width() * Height());
+        }
         
 
         /**
@@ -146,6 +156,55 @@ class A_Rectangle : public A_Polygon<PointType> {
             return true;
         }
 
+        /**
+         * @brief Get the Intersection of the image.
+         *
+         * @param[in] other Rectangle to compute intersection of.
+         *
+         * @return Rectangle composed of the overlap.
+         */
+        A_Rectangle<PointType> Intersection( A_Rectangle<PointType> const& other )const{
+
+            // First check that they even touch 
+            if( BL().x() > other.BR().x() || 
+                BL().y() > other.TL().y() || 
+                BR().x() < other.BL().x() ||
+                TL().y() < other.BL().y() ){
+                return A_Rectangle<PointType>();
+            }
+            
+            // Compute the max/min values
+            datatype minX = std::max( BL().x(), other.BL().x() );
+            datatype maxX = std::min( BR().x(), other.BR().x() );
+            datatype minY = std::max( BL().y(), other.BL().y() );
+            datatype maxY = std::min( TL().y(), other.TL().y() );
+
+            return A_Rectangle<PointType>( PointType( minX, minY),
+                                           maxX-minX, 
+                                           maxY-minY);
+        }
+
+
+        /**
+         * @brief Compute the Rectangle Union.
+         *
+         * @param[in] other Rectangle to compute the union of.
+         *
+         * @return Rectangle union.
+        */
+        A_Rectangle<PointType> Union( A_Rectangle<PointType>const& other )const{
+
+            // Compute ranges
+            datatype minX = std::min( BL().x(), other.BL().x());
+            datatype minY = std::min( BL().y(), other.BL().y());
+            datatype maxX = std::max( TR().x(), other.TR().x());
+            datatype maxY = std::max( TR().y(), other.TR().y());
+            
+            return A_Rectangle<PointType>( PointType( minX, minY), 
+                                           maxX-minX, 
+                                           maxY-minY);
+        }
+
 
         /**
          * @brief Get the Min Corner.
@@ -164,7 +223,7 @@ class A_Rectangle : public A_Polygon<PointType> {
          */
         std::string ToPrettyString()const{
             std::stringstream sin;
-            sin << "A_Rectangle: Min_Corner: " << m_min_corner.ToPrettyString() << std::endl;
+            sin << std::fixed << "A_Rectangle: Min_Corner: " << m_min_corner.ToPrettyString() << std::endl;
             sin << "             Width: " << m_width << std::endl;
             sin << "             Height: " << m_height << std::endl;
             return sin.str();

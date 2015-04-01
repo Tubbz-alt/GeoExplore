@@ -11,6 +11,23 @@
 
 using namespace GEO;
 
+
+bool Compare_Rectangles( MATH::A_Rectangle2d r1, 
+                         MATH::A_Rectangle2d r2,
+                         const double&       eps = 0.001 )
+{
+    
+    // Set to true if both are empty
+    if( std::fabs(r1.Area()) < eps && std::fabs(r2.Area()) < eps ){ return true; }
+
+    if( std::fabs(r1.BL().x() - r2.BL().x()) >= eps ){ return false; }
+    if( std::fabs(r1.BL().y() - r2.BL().y()) >= eps ){ return false; }
+    if( std::fabs(r1.TR().x() - r2.TR().x()) >= eps ){ return false; }
+    if( std::fabs(r1.TR().y() - r2.TR().y()) >= eps ){ return false; }
+
+    return true;
+}
+
 /**
  * Test the rectangle with points
 */
@@ -89,4 +106,98 @@ TEST( A_Rectangle, Inside ){
 
 }
 
+/**
+ * Test Rectangle Area
+*/
+TEST( A_Rectangle, Area ){
+
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(-1,-1),0,0).Area(), 0, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(-1,-1),1,1).Area(), 1, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(1,1),0,0).Area(), 0, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(1,1),2,3).Area(), 6, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(-1,-1),3,0).Area(), 0, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(-1,-1),2,0).Area(), 0, 0.00001 );
+    ASSERT_NEAR( MATH::A_Rectangle2d(MATH::A_Point2d(-1,-1),0,1).Area(), 0, 0.00001 );
+
+}
+
+/**
+ * Test Rectangle Intersection
+*/
+TEST( A_Rectangle, Intersection ){
+
+    // Create some rectangles
+    MATH::A_Rectangle2d r01( MATH::A_Point2d( 1, 1), 2, 2);
+    MATH::A_Rectangle2d r02( MATH::A_Point2d(-1,-1), 2, 2);
+    MATH::A_Rectangle2d r03( MATH::A_Point2d(-1,-1), 3, 3);
+    MATH::A_Rectangle2d r04( MATH::A_Point2d( 0,-1), 3, 3);
+    MATH::A_Rectangle2d r05( MATH::A_Point2d( 3, 3), 3, 3);
+    
+    // Define our expected rectangles
+    MATH::A_Rectangle2d exp_test_fail;
+    MATH::A_Rectangle2d exp_test_01 = r01;
+    MATH::A_Rectangle2d exp_test_02 = r02;
+    MATH::A_Rectangle2d exp_test_03 = r03;
+    MATH::A_Rectangle2d exp_test_04 = r02;
+    MATH::A_Rectangle2d exp_test_05( MATH::A_Point2d(0,-1), 1, 2);
+
+
+    // TEST 01 (Same Rectangles)
+    ASSERT_TRUE( Compare_Rectangles(r01.Intersection(r01), exp_test_01 ) );
+    ASSERT_TRUE( Compare_Rectangles(r02.Intersection(r02), exp_test_02 ) );
+    ASSERT_TRUE( Compare_Rectangles(r03.Intersection(r03), exp_test_03 ) );
+
+    // TEST 02 (One Inside the Other)
+    ASSERT_TRUE( Compare_Rectangles(r03.Intersection(r02), exp_test_04 ) );
+    ASSERT_TRUE( Compare_Rectangles(r02.Intersection(r03), exp_test_04 ) );
+
+    // TEST 03 (Sides overlap)
+    ASSERT_TRUE( Compare_Rectangles(r02.Intersection(r04), exp_test_05 ) );
+    ASSERT_TRUE( Compare_Rectangles(r04.Intersection(r02), exp_test_05 ) );
+
+
+    // TEST 04 (sides touch but no overlap)
+    ASSERT_TRUE( Compare_Rectangles(r01.Intersection(r02), exp_test_fail ) );
+    ASSERT_TRUE( Compare_Rectangles(r02.Intersection(r01), exp_test_fail ) );
+
+
+    // TEST 05 (No overlap)
+    ASSERT_TRUE( Compare_Rectangles(r03.Intersection(r05), exp_test_fail ) );
+    ASSERT_TRUE( Compare_Rectangles(r05.Intersection(r03), exp_test_fail ) );
+
+
+}
+
+
+/**
+ * Test Rectangle Union 
+ */
+TEST( A_Rectangle, Union ){
+
+    // Create some rectangles
+    MATH::A_Rectangle2d r01( MATH::A_Point2d( 1, 1), 2, 2);
+    MATH::A_Rectangle2d r02( MATH::A_Point2d(-1,-1), 2, 2);
+    MATH::A_Rectangle2d r03( MATH::A_Point2d(-1,-1), 3, 3);
+    MATH::A_Rectangle2d r04( MATH::A_Point2d( 0,-1), 3, 3);
+    MATH::A_Rectangle2d r05( MATH::A_Point2d( 3, 3), 3, 3);
+
+    // Test the Union
+    MATH::A_Rectangle2d exp_result_01( MATH::A_Point2d(-1, -1), 4, 3);
+
+    // TEST 01 Same Rectangles
+    ASSERT_TRUE( Compare_Rectangles(r01.Union(r01), r01));
+    ASSERT_TRUE( Compare_Rectangles(r02.Union(r02), r02));
+    ASSERT_TRUE( Compare_Rectangles(r03.Union(r03), r03));
+
+    // TEST 02 Overlapping Rectangles
+    ASSERT_TRUE( Compare_Rectangles( r02.Union(r03), r03 ));
+    ASSERT_TRUE( Compare_Rectangles( r03.Union(r02), r03 ));
+
+    // TEST 03 Sides Overlap 
+    ASSERT_TRUE( Compare_Rectangles( r03.Union(r04), exp_result_01 ));
+    ASSERT_TRUE( Compare_Rectangles( r04.Union(r03), exp_result_01 ));
+
+    
+
+}
 

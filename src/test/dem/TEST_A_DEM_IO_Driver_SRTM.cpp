@@ -87,6 +87,8 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_List_SRTM_Paths ){
 
     // Make sure that we have 2 files loaded
     ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+    ASSERT_EQ( driver.Get_SRTM_File_List()[0], srtm_file_paths[0] );
+    ASSERT_EQ( driver.Get_SRTM_File_List()[1], srtm_file_paths[1] );
 
 
 }
@@ -121,6 +123,20 @@ TEST( A_DEM_IO_Driver_SRTM, Coverage_Geographic ){
     CRD::CoordinateGeographic_d test_coordinate04( 37.1, -118.7);
     ASSERT_FALSE( driver.Coverage( test_coordinate03 ));
     ASSERT_FALSE( driver.Coverage( test_coordinate04 ));
+    
+    // Check Coverage for a range of points
+
+    // Good Values
+    CRD::CoordinateGeographic_d test_coordinate05( 39.1, -119.9);
+    CRD::CoordinateGeographic_d test_coordinate06( 39.4, -119.7);
+    ASSERT_TRUE( driver.Coverage( test_coordinate01, test_coordinate02 ) );
+    ASSERT_TRUE( driver.Coverage( test_coordinate05, test_coordinate06 ) );
+
+    // Bad Values
+    CRD::CoordinateGeographic_d test_coordinate07( 39.1, -120.1);
+    CRD::CoordinateGeographic_d test_coordinate08( 39.4, -119.9);
+    ASSERT_FALSE( driver.Coverage( test_coordinate03, test_coordinate04 ) );
+    ASSERT_FALSE( driver.Coverage( test_coordinate07, test_coordinate08 ) );
 
 }
 
