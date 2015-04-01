@@ -94,7 +94,7 @@ class A_DEM_IO_Driver_Base{
          * @return Elevation in meters.
         */
         virtual double  Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
-                                                Status& status ) const = 0;
+                                                Status& status ) = 0;
 
 
         /**
@@ -106,7 +106,7 @@ class A_DEM_IO_Driver_Base{
          * @return Elevation in meters.
         */
         virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
-                                                Status& status ) const = 0;
+                                                Status& status ) = 0;
 
 
         /**

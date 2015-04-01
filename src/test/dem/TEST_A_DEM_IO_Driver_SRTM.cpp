@@ -141,3 +141,116 @@ TEST( A_DEM_IO_Driver_SRTM, Coverage_Geographic ){
 }
 
 
+/**
+ * Test the Coverage Method.
+*/
+TEST( A_DEM_IO_Driver_SRTM, Coverage_UTM ){
+
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+    // Check coverage for a list of single points
+
+    // Good Values
+    CRD::CoordinateUTM_d test_coordinate01( 11, true, 328964.3, 3996711.3);
+    CRD::CoordinateUTM_d test_coordinate02( 11, true, 347553.8, 4029658.1);
+    ASSERT_TRUE( driver.Coverage( test_coordinate01 ) );
+    ASSERT_TRUE( driver.Coverage( test_coordinate02 ) );
+
+    // Bad Values
+    CRD::CoordinateUTM_d test_coordinate03( 11, true, 311679.8, 4030364.3);
+    CRD::CoordinateUTM_d test_coordinate04( 11, true, 348932.9, 4107317.9);
+    ASSERT_FALSE( driver.Coverage( test_coordinate03 ));
+    ASSERT_FALSE( driver.Coverage( test_coordinate04 ));
+    
+    // Check Coverage for a range of points
+
+    // Good Values
+    CRD::CoordinateUTM_d test_coordinate05( 11, true, 249215.6, 4331878.4);
+    CRD::CoordinateUTM_d test_coordinate06( 11, true, 267507.5, 4364645.0);
+    ASSERT_FALSE( driver.Coverage( test_coordinate01, test_coordinate02 ) );
+    ASSERT_FALSE( driver.Coverage( test_coordinate05, test_coordinate06 ) );
+
+    // Bad Values
+    /*
+    CRD::CoordinateGeographic_d test_coordinate07( 39.1, -120.1);
+    CRD::CoordinateGeographic_d test_coordinate08( 39.4, -119.9);
+    ASSERT_FALSE( driver.Coverage( test_coordinate03, test_coordinate04 ) );
+    ASSERT_FALSE( driver.Coverage( test_coordinate07, test_coordinate08 ) );
+    */
+}
+
+/**
+ * Query Geographic Coordinate
+*/
+TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_geographic )
+{
+    // Status 
+    Status status;
+
+    // EPS
+    const double eps = 0.000001;
+    
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+    // Define the coordinates
+    const CRD::CoordinateGeographic_d  test_coordinate_01( 36.578581, -118.291995, 4421, Datum::WGS84 );
+
+    // Query the tile
+    double elevation_meters = driver.Query_Elevation_Meters( test_coordinate_01, status );
+
+    // Make sure the operation succeeded
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( elevation_meters, test_coordinate_01.altitude_meters(), eps );
+
+
+}
+
+/**
+ * Query UTM Coordinate
+*/
+TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_utm ){
+    
+    // Status
+    Status status;
+
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+
+    // Define the coordinates 
+    const CRD::CoordinateUTM_d   test_coordinate_01( 11, true, 384409, 4048901, 4421, Datum::WGS84 );
+
+
+
+    FAIL();
+}
+

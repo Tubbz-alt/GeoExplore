@@ -565,6 +565,51 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
         
         
         /**
+         * @brief Read an image from file.
+         *
+         * @param[in] pathname Image pathname.
+         * @param[out] image Image data.
+         *
+         * @return Status of the operation.
+        */
+        static Status Read_Image(  FS::FilesystemPath const& pathname,
+                                   typename IMG::Image<pixel_type>::ptr_t& image )
+        {
+
+            // Status
+            Status status;
+            
+            // Make sure it is read supported
+            if( Is_Read_Supported( pathname ) == false ){
+                return Status( StatusType::FAILURE, 
+                               CoreStatusReason::FILE_NOT_SUPPORTED,
+                               "File not GDAL Readable.");
+            }
+
+            // Create a driver
+            ImageDriverGDAL<ResourceType> driver(pathname);
+
+            // Open the driver
+            driver.Open();
+
+            // Make sure the driver is open
+            if( driver.Is_Open(status) == false ){
+                return status;
+            }
+
+            // Load the memory resource
+            image->Set_Resource( driver.Read_Image(pathname));
+
+            // Close the driver
+            driver.Close();
+
+            // Return successful operation
+            return Status(StatusType::SUCCESS);
+        }
+
+        
+        
+        /**
          * @brief Write an image to a GDAL format.
          *
          * @param[in] output_image Output image to write.

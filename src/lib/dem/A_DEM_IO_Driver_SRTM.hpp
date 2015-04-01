@@ -28,6 +28,9 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         typedef IMG::MemoryResource<IMG::PixelGray_df> resource_type;
 
 
+        /// Pixel Type
+        typedef IMG::PixelGray_df pixel_type;
+
         /// Driver Type
         typedef IO::GDAL::ImageDriverGDAL<resource_type> io_driver_type;
 
@@ -92,10 +95,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * 
          * @return True if covered. False otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const
-        {
-            return false;
-        }
+        virtual bool Coverage( CRD::CoordinateUTM_d const& coordinate )const;
         
         
         /**
@@ -118,11 +118,8 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * 
          * @return True if covered. False otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
-                                      CRD::CoordinateUTM_d const& max_coordinate )const
-        {
-            return false;
-        }
+        virtual bool Coverage( CRD::CoordinateUTM_d const& min_coordinate,
+                               CRD::CoordinateUTM_d const& max_coordinate )const;
 
         
         /**
@@ -134,7 +131,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @return Elevation in meters.
         */
         virtual double  Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
-                                                Status& status ) const;
+                                                Status& status );
 
 
         /**
@@ -146,7 +143,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * @return Elevation in meters.
         */
         virtual double  Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
-                                                Status& status ) const;
+                                                Status& status );
 
         
         /**
@@ -158,6 +155,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         {
             return DEM_IO_Driver_Type::SRTM;
         }
+
         
         /**
          * @brief Create Elevation Tile
@@ -199,6 +197,16 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         */
         void Check_And_Add_SRTM_File( FS::FilesystemPath const& pathname );
         
+
+        /**
+         * @brief Load an SRTM Tile into memory.
+         *
+         * @param[in] index Index of the tile.
+         * 
+         * @return Status of the operation.
+         */
+        Status Load_SRTM_Tile( const int& index );
+        
         
         /// Class Name
         std::string m_class_name;
@@ -218,6 +226,10 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         
         /// List of SRTM Extents
         std::vector<MATH::A_Rectangle2d> m_srtm_file_extents;
+
+
+        /// List of Cached Elevation Tiles
+        std::vector<IMG::Image<pixel_type>::ptr_t> m_cached_tiles;
 
 }; // End of A_DEM_IO_Driver_SRTM
 

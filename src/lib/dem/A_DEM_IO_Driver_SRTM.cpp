@@ -145,6 +145,7 @@ void A_DEM_IO_Driver_SRTM::Check_And_Add_SRTM_File( FS::FilesystemPath const& pa
         if( status.Get_Status_Type() == StatusType::SUCCESS ){
             m_srtm_file_list.push_back(pathname);
             m_srtm_file_extents.push_back(rect_extent);
+            m_cached_tiles.push_back(nullptr);
         }
     }
 }
@@ -168,6 +169,18 @@ bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& coordina
 
     // Iterate through file list
     return false;
+}
+
+
+/***********************************************/
+/*            Check Terrain Coverage           */
+/***********************************************/
+bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateUTM_d const& coordinate )const
+{
+
+    // Convert to Geographic
+    CRD::CoordinateGeographic_d coordinate_geog = CRD::convert_coordinate<CRD::CoordinateGeographic_d>( coordinate );
+    return Coverage( coordinate_geog );
 }
 
 
@@ -212,21 +225,45 @@ bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& min_coor
         
 }
 
+/***********************************************/
+/*            Check Terrain Coverage           */
+/***********************************************/
+bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateUTM_d const& min_coordinate,
+                                     CRD::CoordinateUTM_d const& max_coordinate )const
+{
+    return false;
+}
+
 
 /*************************************************************/
 /*                   Query Elevation Tile                    */
 /*************************************************************/
 double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
-                                                     Status& status )const
+                                                     Status& status )
 {
 
-    // Get the elevation
-    double elevation_meters = 0;
+    // Iterate through each extent
+    for( size_t i=0; i<m_srtm_file_extents.size(); i++ )
+    {
+        if( m_srtm_file_extents[i].Inside( MATH::A_Point2d(coordinate.longitude_degrees(),
+                                                           coordinate.latitude_degrees())) )
+        {
+            // Check if we have the tile cached
+            if( m_cached_tiles[i] == nullptr ){
+                Load_SRTM_Tile( i );
+            }
+            
+            // We have overlap, query the pixel value
+            
+            
+        }
+    }
 
-    // Return success
-    status = Status(StatusType::SUCCESS);
-
-    return elevation_meters;
+    // Return failure
+    status = Status( StatusType::FAILURE, 
+                     DemStatusReason::NO_TERRAIN_COVERAGE,
+                     "No terrain coverage available for this driver.");
+    return 0;
 
 }
 
@@ -235,7 +272,7 @@ double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d
 /*                   Query Elevation Tile                    */
 /*************************************************************/
 double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateUTM_d const& coordinate,
-                                                     Status& status )const
+                                                     Status& status )
 {
 
     // Convert to Geographic
@@ -274,6 +311,22 @@ ElevationTileUTM_d::ptr_t A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::Coor
     status = Status(StatusType::FAILURE, CoreStatusReason::NOT_IMPLEMENTED, "Not Implemented");
 
     return nullptr;
+}
+
+
+/*************************************************************/
+/*            Load an Elevation Tile Into Memory             */
+/*************************************************************/
+Status A_DEM_IO_Driver_SRTM::Load_SRTM_Tile( const int& index ){
+
+    // Create Image Pointer
+    IMG::Image<pixel_type>::ptr_t  tile_data(new IMG::Image<pixel_type>());
+
+    // Load using the gdal driver
+    Status status;
+    status = io_driver_type::Read_Image( m_srtm_file_list[index], tile_data );  
+
+    return status;
 }
 
 
