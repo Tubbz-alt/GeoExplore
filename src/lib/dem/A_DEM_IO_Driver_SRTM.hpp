@@ -65,6 +65,15 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         */
         virtual bool Is_Initialized( Status& status )const;
 
+
+        /**
+         * @brief Get the SRTM File List.
+         *
+         * @return File List.
+         */
+        inline std::vector<FS::FilesystemPath> Get_SRTM_File_List()const{
+            return m_srtm_file_list;
+        }
         
         /**
          * @brief Check if elevation value is covered.
@@ -73,9 +82,7 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
          * 
          * @return True if covered. False otherwise.
         */
-        inline virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const{
-            return false;
-        }
+        virtual bool Coverage( CRD::CoordinateGeographic_d const& coordinate )const;
         
                 
         /**
@@ -185,6 +192,14 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
     
     private:
 
+        /**
+         * @brief Check if a file is SRTM and add if so.
+         *
+         * @param[in] pathname Path to test.
+        */
+        void Check_And_Add_SRTM_File( FS::FilesystemPath const& pathname );
+        
+        
         /// Class Name
         std::string m_class_name;
 

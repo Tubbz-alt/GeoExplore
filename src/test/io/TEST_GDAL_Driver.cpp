@@ -130,8 +130,8 @@ TEST( ImageDriverGDAL, Is_Write_Supported ){
 TEST( ImageDriverGDAL, Get_OGR_Spatial_Reference_invalid_data ){
 
     // Create some files
-    boost::filesystem::path path01("file-that-does-not-exist");
-    boost::filesystem::path path02("CMakeLists.txt");
+    FS::FilesystemPath path01("file-that-does-not-exist");
+    FS::FilesystemPath path02("CMakeLists.txt");
 
     // Create an empty driver
     IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGB_u8>>  driver01;
@@ -159,14 +159,14 @@ TEST( ImageDriverGDAL, Get_OGR_Spatial_Reference_valid_data ){
     const double eps = 0.00001;
 
     // pick some files to load
-    boost::filesystem::path path01("data/unit-tests/dems/srtm/N39W120.hgt");
-    boost::filesystem::path path02("data/unit-tests/images/i_3001a.ntf");
-    boost::filesystem::path path03("data/unit-tests/images/erdas_spnad83.tif");
+    FS::FilesystemPath path01("data/unit-tests/dems/srtm/N39W120.hgt");
+    FS::FilesystemPath path02("data/unit-tests/images/i_3001a.ntf");
+    FS::FilesystemPath path03("data/unit-tests/images/erdas_spnad83.tif");
 
     // Make sure the files exist
-    if( boost::filesystem::exists(path01) == false ||
-        boost::filesystem::exists(path02) == false ||
-        boost::filesystem::exists(path03) == false )
+    if( path01.Exists() == false ||
+        path02.Exists() == false ||
+        path03.Exists() == false )
     {
         std::cerr << "Files don't exist. Test will fail." << std::endl;
         FAIL();
@@ -213,7 +213,7 @@ TEST( ImageDriverGDAL, Get_GDAL_Geo_Transform_invalid_data ){
     double adf_transform[6];
 
     // Create some files
-    boost::filesystem::path path01("file-that-does-not-exist");
+    FS::FilesystemPath path01("file-that-does-not-exist");
 
     // Create an empty driver
     IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGB_u8>>  driver01;
@@ -246,12 +246,12 @@ TEST( ImageDriverGDAL, Get_GDAL_Geo_Transform_valid_data ){
     const double eps = 0.00001;
 
     // pick some files to load
-    boost::filesystem::path path01("data/unit-tests/dems/srtm/N39W120.hgt");
-    boost::filesystem::path path02("data/unit-tests/images/i_3001a.ntf");
+    FS::FilesystemPath path01("data/unit-tests/dems/srtm/N39W120.hgt");
+    FS::FilesystemPath path02("data/unit-tests/images/i_3001a.ntf");
 
     // Make sure the files exist
-    if( boost::filesystem::exists(path01) == false ||
-        boost::filesystem::exists(path02) == false )
+    if( path01.Exists() == false ||
+        path02.Exists() == false )
     {
         std::cerr << "Files don't exist. Test will fail." << std::endl;
         FAIL();
@@ -325,8 +325,8 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_invalid_data ){
     Status status;
 
     // Pick an invalid file
-    boost::filesystem::path path01("file-that-does-not-exist");
-    boost::filesystem::path path02("CMakeLists.txt");
+    FS::FilesystemPath path01("file-that-does-not-exist");
+    FS::FilesystemPath path02("CMakeLists.txt");
 
     // Define the types
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGB_u8>>  DriverType01;
@@ -354,12 +354,12 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
     const double eps = 0.00001;
 
     // pick some files to load
-    boost::filesystem::path path01("data/unit-tests/dems/srtm/N39W120.hgt");
-    boost::filesystem::path path02("data/unit-tests/images/i_3001a.ntf");
+    FS::FilesystemPath path01("data/unit-tests/dems/srtm/N36W119.hgt");
+    FS::FilesystemPath path02("data/unit-tests/images/i_3001a.ntf");
 
     // Make sure the files exist
-    if( boost::filesystem::exists(path01) == false ||
-        boost::filesystem::exists(path02) == false )
+    if( path01.Exists() == false ||
+        path02.Exists() == false )
     {
         std::cerr << "Files don't exist. Test will fail." << std::endl;
         FAIL();
@@ -370,25 +370,19 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
     typedef IO::GDAL::ImageDriverGDAL<IMG::MemoryResource<IMG::PixelRGBA_u8>> DriverType02;
 
     // Run the method
-    MATH::A_Rectangle<CRD::CoordinateUTM_d> rectangle01 = DriverType01::Compute_Image_Extent<CRD::CoordinateUTM_d>( path01, status );
+    MATH::A_Rectangle<CRD::CoordinateGeographic_d> rectangle01_geographic = DriverType02::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path01, status );
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
     
-    MATH::A_Rectangle<CRD::CoordinateGeographic_d> rectangle02 = DriverType02::Compute_Image_Extent<CRD::CoordinateGeographic_d>( path02, status );
-    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
-    
-    // Expected values
-    const int exp_zone_01 = 45;
-    const bool exp_is_northern_01 = true;
-    const double exp_easting_meters_01 = 313117.6;
-    const double exp_northing_meters_01 = 3651215.4;
-    const Datum exp_datum_01 = Datum::WGS84;
+    // Create our expected results
+    CRD::CoordinateGeographic_d exp_path01_geographic_min( 35.9998611, -119.0001389, Datum::WGS84 );
+    CRD::CoordinateGeographic_d exp_path01_geographic_max( 37.0001389, -117.9998611, Datum::WGS84 );
 
-    // Check the extents
-    ASSERT_EQ( rectangle01.TL().zone(), exp_zone_01 );
-    ASSERT_TRUE( rectangle01.TL().Is_Northern_Hemisphere() );
-    ASSERT_NEAR( rectangle01.TL().easting_meters(),   exp_easting_meters_01,  eps );
-    ASSERT_NEAR( rectangle01.TL().northing_meters(),  exp_northing_meters_01, eps );
-    ASSERT_EQ( rectangle01.TL().datum(),            exp_datum_01 );
-    FAIL();
+    // Check the corners for geographic
+    ASSERT_NEAR( rectangle01_geographic.BL().latitude_degrees(),  exp_path01_geographic_min.latitude_degrees(),  eps );
+    ASSERT_NEAR( rectangle01_geographic.BL().longitude_degrees(), exp_path01_geographic_min.longitude_degrees(), eps );
+    ASSERT_NEAR( rectangle01_geographic.TR().latitude_degrees(),  exp_path01_geographic_max.latitude_degrees(),  eps );
+    ASSERT_NEAR( rectangle01_geographic.TR().longitude_degrees(), exp_path01_geographic_max.longitude_degrees(), eps );
+    ASSERT_EQ( rectangle01_geographic.BL().datum(), Datum::WGS84 );
+
 }
 

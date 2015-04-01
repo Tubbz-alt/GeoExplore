@@ -59,3 +59,34 @@ TEST( A_Rectangle, Constructors_Point2d ){
 
 }
 
+
+/**
+ * Test theh Inside Method
+*/
+TEST( A_Rectangle, Inside ){
+
+    // Create a rectangle
+    MATH::A_Rectangle2d rectangle01( MATH::A_Point2d(-1,-2), 2, 4 );
+
+    // Test the corners
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d(-1,-2) ) );
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 1,-2) ) );
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d(-1, 2) ) );
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 1, 2) ) );
+
+    // Test some interior points
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 0, 0)));
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 0,-2)));
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 0, 2)));
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 1, 0)));
+    ASSERT_TRUE( rectangle01.Inside( MATH::A_Point2d( 1, 0)));
+    
+    // Test some exterior points
+    ASSERT_FALSE( rectangle01.Inside( MATH::A_Point2d( 3, 0)));
+    ASSERT_FALSE( rectangle01.Inside( MATH::A_Point2d( 0, 3)));
+    ASSERT_FALSE( rectangle01.Inside( MATH::A_Point2d( 3, 3)));
+    ASSERT_FALSE( rectangle01.Inside( MATH::A_Point2d(-3,-3)));
+
+}
+
+

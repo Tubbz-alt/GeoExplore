@@ -8,10 +8,8 @@
 
 /// GeoExplore Libraries
 #include "../core/Enumerations.hpp"
+#include "../filesystem.hpp"
 #include "../image/MemoryResource.hpp"
-
-/// Boost C++ Libraries
-#include <boost/filesystem.hpp>
 
 /// C++ Standard Libraries
 #include <memory>
@@ -90,7 +88,7 @@ class ImageDriverBase{
          *
          * @param[in] pathname Image pathname.
         */
-        virtual void Open( const boost::filesystem::path& pathname ) = 0;
+        virtual void Open( const FS::FilesystemPath& pathname ) = 0;
         
         /**
          * @brief Read an image from file.
@@ -99,7 +97,7 @@ class ImageDriverBase{
          *
          * @return Image resource.
         */
-        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  boost::filesystem::path const& pathname ) = 0;
+        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  FS::FilesystemPath const& pathname ) = 0;
 
         
         /**
@@ -109,7 +107,7 @@ class ImageDriverBase{
          * @param[in] pathname Image pathname to write to.
          */
         virtual void Write_Image( IMG::Image_<typename ResourceType::pixel_type,ResourceType>const& output_image, 
-                                  boost::filesystem::path const& pathname ) = 0;
+                                  FS::FilesystemPath const& pathname ) = 0;
 
 
 }; /// End of ImageDriverBase Class

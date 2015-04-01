@@ -83,34 +83,20 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
         }
 
         // If the path is a regular SRTM File, then process
-        if( m_srtm_pathnames[i].Is_Regular_File() == true  &&
-            FS::Get_File_Type(m_srtm_pathnames[i]) == FS::FileType::SRTM )
+        if( m_srtm_pathnames[i].Is_Regular_File() == true )
         {
-
-            // Add to list of files
-            m_srtm_file_list.push_back(m_srtm_pathnames[i]);
-
+            Check_And_Add_SRTM_File( m_srtm_pathnames[i] );
         }
 
         // If the path is a directory, then iterate
         else if( m_srtm_pathnames[i].Is_Directory() == true ){
             
             // Get list of files
-            //boost::filesystem::recursive_directory_iterator it(m_srtm_pathname);
-            //for( ; it != boost::filesystem::recursive_directory_iterator(); it++ ){
-            
-                // Get path
-                //boost::filesystem::path temp_path = it->path();
+            std::vector<FS::FilesystemPath> pathlist = m_srtm_pathnames[i].Get_Contents(".*\\.hgt", true, FS::PathFormatType::ABSOLUTE);
+            for( int pidx=0; pidx<pathlist.size(); pidx++ ){
+                Check_And_Add_SRTM_File( pathlist[i] );
+            }
 
-                // Check if srtm
-                //if( FS::Get_File_Type(temp_path) == FS::FileType::SRTM ){
-
-                    // Get the extent of the file
-
-                    // Add the path to the list
-                    //m_srtm_file_list.push_back(temp_path);
-                //}
-            //}
         }
 
         // Otherwise, we have an issue
@@ -133,6 +119,55 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
     m_initialization_status = Status( StatusType::SUCCESS );
     return m_initialization_status;
 
+}
+
+
+/******************************************************************************/
+/*             Check if a file is in the SRTM format and add if so.           */
+/******************************************************************************/
+void A_DEM_IO_Driver_SRTM::Check_And_Add_SRTM_File( FS::FilesystemPath const& pathname )
+{
+    // Status
+    Status status;
+
+    // Add to list of files
+    if( pathname.Is_Regular_File() && FS::Get_File_Type(pathname) == FS::FileType::SRTM )
+    {
+        
+        // Compute the extent
+        MATH::A_Rectangle<CRD::CoordinateGeographic_d> extent = IO::GDAL::ImageDriverGDAL<resource_type>::Compute_Image_Extent<CRD::CoordinateGeographic_d>( pathname, status ); 
+        
+        // Convert to rectangle of points
+        MATH::A_Rectangle2d rect_extent( MATH::A_Point2d(extent.BL().x(), extent.BL().y()), extent.Width(), extent.Height());
+        
+        
+        // Add the path list
+        if( status.Get_Status_Type() == StatusType::SUCCESS ){
+            m_srtm_file_list.push_back(pathname);
+            m_srtm_file_extents.push_back(rect_extent);
+        }
+    }
+}
+
+
+/***********************************************/
+/*            Check Terrain Coverage           */
+/***********************************************/
+bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& coordinate )const
+{
+
+    // Iterate through each extent
+    for( size_t i=0; i<m_srtm_file_extents.size(); i++ )
+    {
+        if( m_srtm_file_extents[i].Inside( MATH::A_Point2d(coordinate.longitude_degrees(),
+                                                           coordinate.latitude_degrees())) )
+        {
+            return true;
+        }
+    }
+
+    // Iterate through file list
+    return false;
 }
 
 

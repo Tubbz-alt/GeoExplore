@@ -93,7 +93,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          *
          * @param[in] pathname Image pathname.
         */
-        ImageDriverGDAL( const boost::filesystem::path& pathname )
+        ImageDriverGDAL( const FS::FilesystemPath& pathname )
           : m_path(pathname),
             m_driver(nullptr),
             m_dataset(nullptr)
@@ -119,7 +119,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          *
          * @return True if supported, false otherwise.
         */
-        static bool Is_Write_Supported( boost::filesystem::path const& pathname ){
+        static bool Is_Write_Supported( FS::FilesystemPath const& pathname ){
             
             // Get the file type
             FS::FileType file_type = FS::Get_File_Type( pathname );
@@ -142,7 +142,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          *
          * @return True if supported, false otherwise.
         */
-        static bool Is_Read_Supported( boost::filesystem::path const& pathname )
+        static bool Is_Read_Supported( FS::FilesystemPath const& pathname )
         {
             // Get the file type
             FS::FileType file_type = FS::Get_File_Type( pathname );
@@ -198,7 +198,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             }
 
             // make sure the file exists
-            if( boost::filesystem::exists( m_path ) == false ){
+            if( m_path.Exists() == false ){
                 return;
             }
 
@@ -206,7 +206,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             GDALAllRegister();
 
         	// load the dataset 
-            m_dataset = (GDALDataset*) GDALOpen( m_path.c_str(), GA_ReadOnly);
+            m_dataset = (GDALDataset*) GDALOpen( m_path.ToString().c_str(), GA_ReadOnly);
 	
             // if dataset is null, then there was a problem
         	if( m_dataset == NULL ){
@@ -231,7 +231,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          *
          * @param[in] pathname Image pathname to load the driver with.
         */
-        virtual void Open( boost::filesystem::path const& pathname )
+        virtual void Open( FS::FilesystemPath const& pathname )
         {
             m_path = pathname;
             Open();
@@ -504,7 +504,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          *
          * @return Image resource.
         */
-        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  boost::filesystem::path const& pathname )
+        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  FS::FilesystemPath const& pathname )
         {
 
             /// create the output
@@ -541,13 +541,13 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          * @param[in] pathname Image path to write to.
         */ 
         void Write_Image( IMG::Image_<pixel_type,ResourceType>const&  output_image,  
-                          boost::filesystem::path const& pathname )
+                          FS::FilesystemPath const& pathname )
         {
 
             // Identify the driver
             std::string driverShortName = Get_Short_Driver_From_Filename(pathname);
             if( driverShortName == "" ){
-                throw std::runtime_error(pathname.native() + std::string(" does not have a supported gdal driver."));
+                throw std::runtime_error(pathname.ToString() + std::string(" does not have a supported gdal driver."));
             }
 
             // Get the gdal driver
@@ -562,7 +562,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             }
     
             // run create
-            GDALDataset* dataset = gdal_driver->Create( pathname.c_str(), 
+            GDALDataset* dataset = gdal_driver->Create( pathname.ToString().c_str(), 
                                                         100,//output_image.cols(), 
                                                         100,//output_image.rows(), 
                                                         1,//output_image.channels(),
@@ -592,8 +592,8 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
          */
         template<typename CoordinateModuleType>
         static MATH::A_Rectangle<CoordinateModuleType> 
-                                    Compute_Image_Extent( boost::filesystem::path const& pathname,
-                                                          Status&                        status )
+                                    Compute_Image_Extent( FS::FilesystemPath const& pathname,
+                                                          Status&                   status )
         {
             
             // Make sure it is read supported
@@ -634,7 +634,6 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             driver.Get_OGR_Spatial_Reference( oSRS );
 
             // Get the Datum 
-            std::cout << "Datum is: " << oSRS.GetAttrValue("DATUM") << std::endl;
             Datum datum_type = Datum::WGS84;
 
             // Check if geographic
@@ -646,7 +645,6 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 CoordinateModuleType geo_bl = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_bl.y(), world_bl.x(), 0, datum_type ));
                 CoordinateModuleType geo_br = CRD::convert_coordinate<CoordinateModuleType>( CRD::CoordinateGeographic_d( world_br.y(), world_br.x(), 0, datum_type ));
                 
-                
                 // Compute Bounds
                 double minX = std::min( geo_tl.x(), std::min( geo_tr.x(), std::min( geo_bl.x(), geo_br.x())));
                 double minY = std::min( geo_tl.y(), std::min( geo_tr.y(), std::min( geo_bl.y(), geo_br.y())));
@@ -656,7 +654,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 // Pass to rectangle
                 output = MATH::A_Rectangle<CoordinateModuleType>( CoordinateModuleType( MATH::A_Point2d( minX, minY ) ), 
                                                                   CoordinateModuleType( MATH::A_Point2d( maxX, maxY ) ));
-
+            
+                // If we are utm, set the zone
+                Add_Zone_To_Rectangle( output, geo_tl ); 
             }
 
             // Check if projected
@@ -682,7 +682,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
     private:
         
         /// Filename
-        boost::filesystem::path m_path;
+        FS::FilesystemPath m_path;
 
         /// Driver
         GDALDriver* m_driver;

@@ -264,7 +264,32 @@ class CoordinateGeographic : public CoordinateBase<DATATYPE>{
         virtual CoordinateType Get_Type(){ 
             return CoordinateType::Geographic; 
         }
+        
+        
+        /**
+         * @brief Print as a GE string
+         *
+         * @return Google Earth Friendly String
+        */
+        std::string ToGoogleEarthString()const{
+            std::stringstream sin;
+            sin << "CoordinateGeographic: " << std::fixed << m_latitude_degrees;
+            sin <<  " " << m_longitude_degrees << " " << this->altitude_meters();
+            return sin.str();
+        }
 
+
+        /**
+         * @brief Print as a pretty string
+         *
+         * @return Pretty String
+        */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "CoordinateGeographic( latitude: " << std::fixed << m_latitude_degrees;
+            sin << ", longitude: " << m_longitude_degrees << " )";
+            return sin.str();
+        }
 
     protected:
         

@@ -192,7 +192,7 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
          *
          * @param[in] pathname Image pathname.
         */
-        virtual void Open( const boost::filesystem::path& pathname )
+        virtual void Open( const FS::FilesystemPath& pathname )
         {
         }
 
@@ -204,7 +204,7 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
          *
          * @return True if supported, false otherwise.
         */
-        static bool Is_Write_Supported( boost::filesystem::path const& pathname )
+        static bool Is_Write_Supported( FS::FilesystemPath const& pathname )
         {
             // Get file type
             FS::FileType file_type = FS::Get_File_Type(pathname);
@@ -230,7 +230,7 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
          *
          * @return True if supported, false otherwise.
         */
-        static bool Is_Read_Supported( boost::filesystem::path const& pathname ){
+        static bool Is_Read_Supported( FS::FilesystemPath const& pathname ){
             
             // Get file type
             FS::FileType file_type = FS::Get_File_Type(pathname);
@@ -304,16 +304,16 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
          *
          * @return Image resource.
         */
-        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  boost::filesystem::path const& pathname )
+        virtual typename IMG::MemoryResource<pixel_type>::ptr_t Read_Image(  FS::FilesystemPath const& pathname )
         {
 
             // Make sure the image exists
-            if( boost::filesystem::exists( pathname ) == false ){
+            if( pathname.Exists() == false ){
                 return nullptr;
             }
 
             // Open the OpenCV Image
-            cv::Mat cv_image = cv::imread( pathname.c_str() );
+            cv::Mat cv_image = cv::imread( pathname.ToString().c_str() );
 
             // Create the image resource
             typename IMG::MemoryResource<pixel_type>::ptr_t new_resource( new IMG::MemoryResource<pixel_type>(cv_image.rows, cv_image.cols));
@@ -341,7 +341,7 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
          * @param[in] pathname Image path to write to.
         */
         void Write_Image( IMG::Image_<pixel_type,ResourceType>const& output_image, 
-                          boost::filesystem::path const& pathname )
+                          FS::FilesystemPath const& pathname )
         {
             
             // convert the output image to an opencv structure
@@ -355,7 +355,7 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
             }
 
             // run imwrite
-            cv::imwrite( pathname.c_str(), image );
+            cv::imwrite( pathname.ToString().c_str(), image );
         }
         
 

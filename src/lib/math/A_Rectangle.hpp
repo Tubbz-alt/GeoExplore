@@ -6,6 +6,10 @@
 #include "A_Point.hpp"
 #include "A_Polygon.hpp"
 
+// C++ Standard Libraries
+#include <sstream>
+#include <string>
+
 namespace GEO{
 namespace MATH{
 
@@ -120,6 +124,50 @@ class A_Rectangle : public A_Polygon<PointType> {
         */
         datatype Height()const{
             return m_height;
+        }
+        
+
+        /**
+         * @brief Check if point is inside of the rectangle.
+         *
+         * @param[in] point Point to check.
+         *
+         * @return True if the point is in the rectangle, false otherwise.
+         */
+        bool Inside( PointType const& point )const
+        {
+            // Check if the point is inside the box
+            if( point.x() < m_min_corner.x() || point.x() > (m_min_corner.x() + m_width)){
+                return false;
+            }
+            if( point.y() < m_min_corner.y() || point.y() > (m_min_corner.y() + m_height)){
+                return false;
+            }
+            return true;
+        }
+
+
+        /**
+         * @brief Get the Min Corner.
+         *
+         * @return Min Corner.
+        */
+        PointType& Get_Min_Corner(){
+            return m_min_corner;
+        }
+
+        
+        /**
+         * @brief Print as a string.
+         *
+         * @return pretty string
+         */
+        std::string ToPrettyString()const{
+            std::stringstream sin;
+            sin << "A_Rectangle: Min_Corner: " << m_min_corner.ToPrettyString() << std::endl;
+            sin << "             Width: " << m_width << std::endl;
+            sin << "             Height: " << m_height << std::endl;
+            return sin.str();
         }
 
 

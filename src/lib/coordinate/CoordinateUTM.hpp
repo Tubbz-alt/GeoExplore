@@ -385,6 +385,23 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
 
 
         /**
+         * @brief Convert to Google Earth String.
+         *
+         * @return Google Earth-friendly string.
+         */
+        std::string ToGoogleEarthString()const{
+            std::stringstream sin;
+            sin << "CoordinateUTM: " << zone();
+            if( Is_Northern_Hemisphere() == true ){ sin << "N"; }
+            else{ sin << "S"; }
+
+            sin << " " << std::fixed << easting_meters() << " " << northing_meters() << " " << this->altitude_meters();
+            return sin.str();
+
+        }
+
+
+        /**
          * @brief Convert to a pretty string.
          *
          * @return Pretty String
@@ -392,7 +409,7 @@ class CoordinateUTM : public CoordinateBase<DATATYPE>{
         std::string ToPrettyString()const{
             std::stringstream sin;
             sin << "CoordinateUTM:\n";
-            sin << "   Zone: " << m_zone << std::endl;
+            sin << "   Zone: " << std::fixed << m_zone << std::endl;
             sin << "   Is_Northern: ";
             if( Is_Northern_Hemisphere() == true ){ sin << " True\n";}
             else{ sin << " False\n"; }

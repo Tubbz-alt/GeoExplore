@@ -44,7 +44,10 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Directory_Path ){
     // Check that the initialization method passes.
     ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
 
-    FAIL();
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+
 }
 
 /**
@@ -52,7 +55,17 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Valid_SRTM_Directory_Path ){
  */
 TEST( A_DEM_IO_Driver_SRTM, Constructor_Single_SRTM_Path ){
 
-    FAIL();
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm/N36W119.hgt";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 1);
 
 }
 
@@ -60,7 +73,55 @@ TEST( A_DEM_IO_Driver_SRTM, Constructor_Single_SRTM_Path ){
  * TEst the SRTM Driver Constructor using a list of filenames 
 */
 TEST( A_DEM_IO_Driver_SRTM, Constructor_List_SRTM_Paths ){
+    
+    // Define our SRTM path
+    std::vector<FS::FilesystemPath> srtm_file_paths;
+    srtm_file_paths.push_back("data/unit-tests/dems/srtm/N36W119.hgt");
+    srtm_file_paths.push_back("data/unit-tests/dems/srtm/N39W120.hgt");
 
-    FAIL();
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_paths );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
 
 }
+
+/**
+ * Test the Coverage Method.
+*/
+TEST( A_DEM_IO_Driver_SRTM, Coverage_Geographic ){
+
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+    // Check coverage for a list of single points
+
+    // Good Values
+    CRD::CoordinateGeographic_d test_coordinate01( 36.1, -118.9);
+    CRD::CoordinateGeographic_d test_coordinate02( 36.4, -118.7);
+    ASSERT_TRUE( driver.Coverage( test_coordinate01 ) );
+    ASSERT_TRUE( driver.Coverage( test_coordinate02 ) );
+
+    // Bad Values
+    CRD::CoordinateGeographic_d test_coordinate03( 36.4, -119.1);
+    CRD::CoordinateGeographic_d test_coordinate04( 37.1, -118.7);
+    ASSERT_FALSE( driver.Coverage( test_coordinate03 ));
+    ASSERT_FALSE( driver.Coverage( test_coordinate04 ));
+
+}
+
+

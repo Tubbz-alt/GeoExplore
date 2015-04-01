@@ -69,6 +69,13 @@ FilesystemPath  FilesystemPath::Append( FilesystemPath const& other )const{
 }
 
 /*******************************************************/
+/*                 Less-Than Operator                  */
+/*******************************************************/
+bool FilesystemPath::operator < (FilesystemPath const& other) const{
+    return (m_pathname.native() < other.m_pathname.native());
+}
+
+/*******************************************************/
 /*                Equivalent Operator                  */
 /*******************************************************/
 bool FilesystemPath::operator == ( FilesystemPath const& other )const{
@@ -216,6 +223,9 @@ std::vector<FilesystemPath> FilesystemPath::Get_Contents( std::string const& pat
             }
         }
     }
+
+    // Sort the list
+    std::sort( output.begin(), output.end() );
 
     return output;
 }

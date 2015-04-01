@@ -17,9 +17,6 @@
 #include "../io/OpenCV_Driver.hpp"
 #include "../utilities.hpp"
 
-/// Boost C++ Libraries
-#include <boost/filesystem.hpp>
-
 /// C++ Standard Libraries
 #include <iostream>
 
@@ -47,7 +44,7 @@ enum class DriverOptions{
  * @return Image driver pointer.  Nullptr if an error occurred.
 */
 template <typename ResourceType>
-typename ImageDriverBase<ResourceType>::ptr_t  Get_Read_Driver( const boost::filesystem::path& pathname, 
+typename ImageDriverBase<ResourceType>::ptr_t  Get_Read_Driver( const FS::FilesystemPath& pathname, 
                                                                 const DriverOptions& options = DriverOptions::NONE )    
 {
     
@@ -76,7 +73,7 @@ typename ImageDriverBase<ResourceType>::ptr_t  Get_Read_Driver( const boost::fil
  * @return Image driver pointer.  Nullptr if an error occurred.
 */
 template <typename ResourceType>
-typename ImageDriverBase<ResourceType>::ptr_t  Get_Write_Driver( const boost::filesystem::path& pathname, 
+typename ImageDriverBase<ResourceType>::ptr_t  Get_Write_Driver( const FS::FilesystemPath& pathname, 
                                                                  const DriverOptions& options = DriverOptions::NONE )
 {
     
@@ -102,13 +99,13 @@ typename ImageDriverBase<ResourceType>::ptr_t  Get_Write_Driver( const boost::fi
  * @param[out] image Image container to read into.
 */
 template<typename PixelType>
-void Read_Image( boost::filesystem::path const& pathname, 
+void Read_Image( FS::FilesystemPath const& pathname, 
                  IMG::Image_<PixelType, IMG::MemoryResource<PixelType>>& output_image )
 {
 
     // make sure the file exists
-    if( boost::filesystem::exists( pathname ) == false ){
-        throw std::runtime_error(std::string(std::string("error: File \"") + pathname.native() + std::string("\" does not exist.")).c_str());
+    if( pathname.Exists() == false ){
+        throw std::runtime_error(std::string(std::string("error: File \"") + pathname.ToString() + std::string("\" does not exist.")).c_str());
     }
 
     // decide which driver to use depending on the filename
@@ -128,13 +125,13 @@ void Read_Image( boost::filesystem::path const& pathname,
  * Read a Disk Image
 */
 template <typename PixelType>
-void Read_Image( boost::filesystem::path const& pathname, 
+void Read_Image( FS::FilesystemPath const& pathname, 
                  IMG::Image_<PixelType,IMG::DiskResource<PixelType> >& output_image )
 {
 
     // make sure the file exists
-    if( boost::filesystem::exists( pathname ) == false ){
-        throw std::runtime_error(std::string(std::string("error: File \"") + pathname.native() + std::string("\" does not exist.")).c_str());
+    if( pathname.Exists() == false ){
+        throw std::runtime_error(std::string(std::string("error: File \"") + pathname.ToString() + std::string("\" does not exist.")).c_str());
     }
 
     // compute the required driver
@@ -165,7 +162,7 @@ void Read_Image( boost::filesystem::path const& pathname,
 */
 template <typename PixelType, typename ResourceType>
 void Write_Image( IMG::Image_<PixelType,ResourceType>& output_image, 
-                  boost::filesystem::path const& pathname )
+                  FS::FilesystemPath const& pathname )
 {
 
     // determine the driver type

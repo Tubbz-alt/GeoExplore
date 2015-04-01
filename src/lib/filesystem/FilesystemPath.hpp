@@ -71,6 +71,16 @@ class FilesystemPath{
 
 
         /**
+         * @brief Less-Than Operator 
+         *
+         * @param[in] other Other path to test.
+         *
+         * @return True if path string is less than other path string.
+        */
+        bool operator < ( const FilesystemPath& other )const;
+
+
+        /**
          * @brief Check if Path Exists.
          *
          * @return True if it exists, false otherwise.

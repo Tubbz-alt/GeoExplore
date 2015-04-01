@@ -13,10 +13,10 @@ namespace GDAL{
 /**
  * Get the Short GDAL Driver from the filename
 */
-std::string Get_Short_Driver_From_Filename( const boost::filesystem::path& filename ){
+std::string Get_Short_Driver_From_Filename( const FS::FilesystemPath& filename ){
 
     // pull the extension
-    std::string ext = filename.extension().native();
+    std::string ext = filename.Get_Extension().ToString();
     std::string extl = string_toLower(ext);
 
     // png images

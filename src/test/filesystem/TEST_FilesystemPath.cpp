@@ -94,6 +94,18 @@ TEST( FilesystemPath, Assignment_Operators )
 
 
 /**
+ * Test the Less-Than Operator
+*/
+TEST( FilesystemPath, Less_Than_Operator ){
+
+    ASSERT_FALSE( FS::FilesystemPath("./foo") < FS::FilesystemPath("./foo"));
+    ASSERT_TRUE( FS::FilesystemPath("./foo") < FS::FilesystemPath("./foo1"));
+    ASSERT_TRUE( FS::FilesystemPath("bar") < FS::FilesystemPath("foo"));
+    ASSERT_FALSE( FS::FilesystemPath("foo") < FS::FilesystemPath("bar"));
+
+}
+
+/**
  * Test the Equivalent Operators 
 */
 TEST( FilesystemPath, Equivalent_Operators)
@@ -268,6 +280,20 @@ TEST( FilesystemPath, Get_Contents ){
     ASSERT_EQ( results_04[3].ToString(), cwd.ToString() + "/data/unit-tests/filesystem-test/file01.txt" );
     ASSERT_EQ( results_04[4].ToString(), cwd.ToString() + "/data/unit-tests/filesystem-test/file02.txt" );
 
+
+    // TEST 05 (Directory - pattern [.txt] , recursive, relative)    
+    std::vector<FS::FilesystemPath> results_05 = path03.Get_Contents(".*\\.txt", true, FS::PathFormatType::RELATIVE);
+    ASSERT_EQ( results_05.size(), 4 );
+    ASSERT_EQ( results_05[0].ToString(), "file01.txt" );
+    ASSERT_EQ( results_05[1].ToString(), "file02.txt" );
+    ASSERT_EQ( results_05[2].ToString(), "file03.txt" );
+    ASSERT_EQ( results_05[3].ToString(), "file10.txt" );
+
+    //    TEST 04 (Directory - pattern [..jpg], recursive, absolute )
+    std::vector<FS::FilesystemPath> results_06 = path03.Get_Contents(".*\\.jpg", true, FS::PathFormatType::ABSOLUTE);
+    ASSERT_EQ( results_06.size(), 2 );
+    ASSERT_EQ( results_06[0].ToString(), cwd.ToString() + "/data/unit-tests/filesystem-test/dir02/file06.jpg");
+    ASSERT_EQ( results_06[1].ToString(), cwd.ToString() + "/data/unit-tests/filesystem-test/dir03/file07.jpg");
 
 
 }

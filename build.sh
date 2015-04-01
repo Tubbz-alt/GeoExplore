@@ -169,8 +169,12 @@ test_software(){
     #  Exit directory
     popd
     
+    if [ "$TEST_FLAG_VALUE_SET" = '1' ]; then
+        GTEST_FILTER_STR="--gtest_filter=$TEST_FLAG_VALUE_STR"
+    fi
+
     #  Run Unit Test
-    CMD="./${BUILD_DIRECTORY}/bin/geo-explore-unit-tests  --gtest_filter=$TEST_FLAG_VALUE_STR"
+    CMD="./${BUILD_DIRECTORY}/bin/geo-explore-unit-tests  ${GTEST_FILTER_STR}"
     
     echo "Running \"$CMD\""
     $CMD
