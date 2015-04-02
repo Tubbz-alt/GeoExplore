@@ -83,6 +83,7 @@ set( GEOEXPLORE_DEM_HEADERS
     dem/An_Elevation_Tile.hpp
     dem/DEM_IO_Driver_Types.hpp
     dem/DEM_Manager.hpp
+    dem/SRTM_Utilities.hpp
 )
 
 #  Filesystem Headers
@@ -101,6 +102,7 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/DiskResource.hpp
     image/Image.hpp
     image/Image_Utilities.hpp
+    image/Interpolation.hpp
     image/MemoryResource.hpp
     image/MetadataContainerBase.hpp
     image/MetadataContainer.hpp
@@ -198,6 +200,7 @@ set( GEOEXPLORE_CORE_SOURCES
     core/Enumerations.cpp
     core/Exceptions.cpp
     core/A_Status.cpp
+    core/Status_Enumerations.cpp
 )
 
 #    Coordinate Module
@@ -212,6 +215,7 @@ set( GEOEXPLORE_DEM_SOURCES
     dem/A_DEM_IO_Driver_Base.cpp
     dem/A_DEM_IO_Driver_Flat.cpp
     dem/A_DEM_IO_Driver_SRTM.cpp
+    dem/SRTM_Utilities.cpp
 )
 
 #   Filesystem Module

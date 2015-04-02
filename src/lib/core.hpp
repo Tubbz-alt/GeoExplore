@@ -12,5 +12,7 @@
 // Enumerations
 #include "core/Enumerations.hpp"
 
+// Status
+#include "core/A_Status.hpp"
 
 #endif

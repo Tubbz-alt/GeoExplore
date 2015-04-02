@@ -198,7 +198,7 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_geographic )
     Status status;
 
     // EPS
-    const double eps = 0.000001;
+    const double eps = 10;
     
     // Define our SRTM path
     FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
@@ -213,7 +213,7 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_geographic )
     ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
 
     // Define the coordinates
-    const CRD::CoordinateGeographic_d  test_coordinate_01( 36.578581, -118.291995, 4421, Datum::WGS84 );
+    const CRD::CoordinateGeographic_d  test_coordinate_01( 36.578581, -118.291995, 4400, Datum::WGS84 );
 
     // Query the tile
     double elevation_meters = driver.Query_Elevation_Meters( test_coordinate_01, status );
@@ -232,6 +232,9 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_utm ){
     
     // Status
     Status status;
+    
+    // EPS
+    const double eps = 10;
 
     // Define our SRTM path
     FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
@@ -247,10 +250,15 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_utm ){
 
 
     // Define the coordinates 
-    const CRD::CoordinateUTM_d   test_coordinate_01( 11, true, 384409, 4048901, 4421, Datum::WGS84 );
+    const CRD::CoordinateUTM_d   test_coordinate_01( 11, true, 384409, 4048901, 4400, Datum::WGS84 );
+
+    // Query the tile
+    double elevation_meters = driver.Query_Elevation_Meters( test_coordinate_01, status );
+
+    // Make sure the operation succeeded
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( elevation_meters, test_coordinate_01.altitude_meters(), eps );
 
 
-
-    FAIL();
 }
 

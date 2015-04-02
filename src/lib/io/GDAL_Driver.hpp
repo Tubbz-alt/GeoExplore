@@ -559,6 +559,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                                     Rows(), 
                                     Cols() );
 
+            // Close the dataset
+            Close();
+
             // return the resource
             return output;
         }
@@ -589,19 +592,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             // Create a driver
             ImageDriverGDAL<ResourceType> driver(pathname);
 
-            // Open the driver
-            driver.Open();
-
-            // Make sure the driver is open
-            if( driver.Is_Open(status) == false ){
-                return status;
-            }
-
+            
             // Load the memory resource
             image->Set_Resource( driver.Read_Image(pathname));
-
-            // Close the driver
-            driver.Close();
 
             // Return successful operation
             return Status(StatusType::SUCCESS);

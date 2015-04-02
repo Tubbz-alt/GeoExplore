@@ -67,6 +67,7 @@ set( GEOEXPLORE_DEM_MODULE_TESTS
     dem/TEST_An_Elevation_Tile.cpp
     dem/TEST_DEM_IO_Driver_Types.cpp
     dem/TEST_DEM_Manager.cpp
+    dem/TEST_SRTM_Utilities.cpp
 )
 
 
@@ -97,6 +98,7 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
     image/TEST_ChannelType.cpp
     image/TEST_Image.cpp
     image/TEST_Image_Utilities.cpp
+    image/TEST_Interpolation.cpp
     image/TEST_MemoryResource.cpp
     image/TEST_PixelGray.cpp
     image/TEST_PixelRGB.cpp

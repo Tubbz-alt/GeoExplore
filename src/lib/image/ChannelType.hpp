@@ -70,6 +70,15 @@ class ChannelType<double, 1>{
             return "ChannelType<double,1>";
         }
 
+        /**
+         * @brief Print Pretty String
+         *
+         * @return Pretty String
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeDouble";
+        }
+
 }; /// End of ChannelType<double,1> specialization
 
 /**
@@ -83,14 +92,18 @@ class ChannelType<double, 2>{
         /// Accumulator type
         typedef double accumulator_type;
         
+        
         /// Type Parameter
         typedef double type;
 
+        
         /// min value
         static constexpr type maxValue = 1;
 
+        
         /// max value
         static constexpr type minValue = -1;
+        
         
         /** 
          * @brief Print Technical String
@@ -100,6 +113,17 @@ class ChannelType<double, 2>{
         static std::string ToTechnicalString(){
             return "ChannelType<double,2>";
         }
+
+        
+        /**
+         * @brief Print Pretty String
+         *
+         * @return Pretty String.
+         */
+        static std::string ToPrettyString(){
+            return "ChannelTypeDoubleFree";
+        }
+
 
 }; /// End of ChannelType<double,2> Specialization
 
@@ -133,6 +157,16 @@ class ChannelType<uint8_t, 8>{
             return "ChannelType<uint8_t,8>";
         }
 
+        
+        /**
+         * @brief Print Pretty String.
+         *
+         * @return Pretty String.
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeUInt8";
+        }
+
 }; /// End of ChannelType<uint8_t,8> specialization
 
 
@@ -164,6 +198,16 @@ class ChannelType<uint16_t, 12>{
         */
         static std::string ToTechnicalString(){
             return "ChannelType<uint16_t,12>";
+        }
+        
+        
+        /**
+         * @brief Print Pretty String.
+         *
+         * @return Pretty String.
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeUInt12";
         }
 
 }; /// End of ChannelType<uint16_t,12> specialization
@@ -199,6 +243,17 @@ class ChannelType<uint16_t, 14>{
         static std::string ToTechnicalString(){
             return "ChannelType<uint16_t,14>";
         }
+        
+        
+        /**
+         * @brief Print Pretty String.
+         *
+         * @return Pretty String.
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeUInt14";
+        }
+
 
 }; /// End of ChannelType<uint16_t,14> specialization
 
@@ -232,6 +287,16 @@ class ChannelType<uint16_t,16>{
         static std::string ToTechnicalString(){
             return "ChannelType<uint16_t,16>";
         }
+        
+        
+        /**
+         * @brief Print Pretty String.
+         *
+         * @return Pretty String.
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeUInt16";
+        }
 
 }; /// End of ChannelType<uint16_t,16> specialization
 
@@ -264,6 +329,16 @@ class ChannelType<uint32_t,32>{
         */
         static std::string ToTechnicalString(){
             return "ChannelType<uint32_t,32>";
+        }
+        
+        
+        /**
+         * @brief Print Pretty String.
+         *
+         * @return Pretty String.
+        */
+        static std::string ToPrettyString(){
+            return "ChannelTypeUInt32";
         }
 
 }; /// End of ChannelType<uint32_t,32> specialization

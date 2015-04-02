@@ -247,7 +247,7 @@ class PixelRGB : public PixelBase<PixelRGB<ChannelType>,ChannelType>{
         */
         std::string ToPrettyString()const{
             std::stringstream sin;
-            sin << "PixelRGB<" << channeltype::ToTechnicalString() << ">( ";
+            sin << "PixelRGB<" << channeltype::ToPrettyString() << ">( ";
             sin << (int)m_data[0] << ", ";
             sin << (int)m_data[1] << ", "; 
             sin << (int)m_data[2] << ")";

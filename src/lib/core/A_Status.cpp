@@ -65,6 +65,17 @@ std::string Status::Get_Status_Details()const{
     return m_status_details;
 }
 
+/**
+ * Output Stream Operator
+*/
+std::ostream& operator << ( std::ostream& ostr, const Status& status )
+{
+    ostr << "Status( StatusType: " << StatusTypeToString(status.Get_Status_Type());
+    ostr << ",  Reason: " << static_cast<int>(status.Get_Status_Reason());
+    ostr << ", Details: " << status.Get_Status_Details() << " )";
+    return ostr;
+}
+
 
 
 } // End of GEO Namespace

@@ -33,4 +33,13 @@ TEST( StatusReason, values ){
     ASSERT_EQ( static_cast<uint32_t>(CoreStatusReason::PATH_DOES_NOT_EXIST), 3 );
 }
 
+/**
+ * Test the StatusType to String
+*/
+TEST( StatusType, StatusTypeToString ){
+
+    ASSERT_EQ( StatusTypeToString(StatusType::SUCCESS), "SUCCESS" );
+    ASSERT_EQ( StatusTypeToString(StatusType::WARNING), "WARNING" );
+    ASSERT_EQ( StatusTypeToString(StatusType::FAILURE), "FAILURE" );
+}
 

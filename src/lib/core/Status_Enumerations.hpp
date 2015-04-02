@@ -8,7 +8,7 @@
 
 // C++ Standard Libraries
 #include <cinttypes>
-
+#include <string>
 
 namespace GEO{
 
@@ -20,6 +20,15 @@ enum class StatusType : uint8_t {
     WARNING = 1,
     FAILURE = 2,
 };  // End of StatusType Enumeration
+
+/**
+ * @brief Convert Status Type to String
+ *
+ * @param[in] status_type Status type to convert.
+ *
+ * @return Status type string.
+*/
+std::string StatusTypeToString( StatusType const& status_type );
 
 
 /**
@@ -49,6 +58,7 @@ enum class DemStatusReason : uint32_t {
     NO_DEM_IO_DRIVERS = 11,
     NO_TERRAIN_COVERAGE = 12,
     NO_SRTM_PATHS = 13,
+    OUT_OF_BOUNDS = 16,
 }; // End of DEMStatusReason Enumeration
 
 /**

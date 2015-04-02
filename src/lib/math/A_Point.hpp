@@ -7,6 +7,7 @@
 #define __GEOEXPLORE_SRC_MATH_A_POINT_HPP__
 
 // C++ Standard Libraries
+#include <iomanip>
 #include <sstream>
 #include <string>
 
@@ -291,10 +292,10 @@ class A_Point{
          *
          * @return Pretty string.
         */
-        std::string ToPrettyString()const{
+        std::string ToPrettyString( const int& precision = 8 )const{
             std::stringstream sin;
             sin << "A_Point" << Dimensions << ": ";
-            sin << m_data[0];
+            sin << std::fixed << std::setprecision(precision) << m_data[0];
             for( int i=1; i<Dimensions; i++ ){
                 sin << ", " << m_data[i];
             }

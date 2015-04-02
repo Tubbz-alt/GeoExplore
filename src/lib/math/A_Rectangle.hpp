@@ -221,9 +221,10 @@ class A_Rectangle : public A_Polygon<PointType> {
          *
          * @return pretty string
          */
-        std::string ToPrettyString()const{
+        std::string ToPrettyString( const int& precision = 8)const{
             std::stringstream sin;
-            sin << std::fixed << "A_Rectangle: Min_Corner: " << m_min_corner.ToPrettyString() << std::endl;
+            sin << std::fixed << std::setprecision(precision) << "A_Rectangle: Min_Corner: ";
+            sin << m_min_corner.ToPrettyString() << std::endl;
             sin << "             Width: " << m_width << std::endl;
             sin << "             Height: " << m_height << std::endl;
             return sin.str();

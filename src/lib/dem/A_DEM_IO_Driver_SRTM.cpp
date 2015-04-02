@@ -6,8 +6,10 @@
 #include "A_DEM_IO_Driver_SRTM.hpp"
 
 // GeoExplore Libraries
-#include "../../lib/coordinate/CoordinateConversion.hpp"
-#include "../../lib/utilities/FilesystemUtilities.hpp"
+#include "../coordinate/CoordinateConversion.hpp"
+#include "../image/Interpolation.hpp"
+#include "../utilities/FilesystemUtilities.hpp"
+#include "SRTM_Utilities.hpp"
 
 
 namespace GEO{
@@ -241,6 +243,8 @@ bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateUTM_d const& min_coordinate,
 double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d const& coordinate,
                                                      Status& status )
 {
+    // Status
+    Status temp_status;
 
     // Iterate through each extent
     for( size_t i=0; i<m_srtm_file_extents.size(); i++ )
@@ -250,11 +254,26 @@ double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d
         {
             // Check if we have the tile cached
             if( m_cached_tiles[i] == nullptr ){
-                Load_SRTM_Tile( i );
+                temp_status = Load_SRTM_Tile( i );
+                if( temp_status.Get_Status_Type() != StatusType::SUCCESS ){
+                    continue;
+                }
             }
             
             // We have overlap, query the pixel value
+            MATH::A_Point2d pixel = SRTM::Coordinate_To_SRTM_Pixel( coordinate,
+                                                                    m_srtm_file_extents[i],
+                                                                    m_cached_tiles[i]->Rows(),
+                                                                    m_cached_tiles[i]->Cols(),
+                                                                    temp_status );
             
+            // Make sure the pixel is valid
+            if( temp_status.Get_Status_Type() != StatusType::SUCCESS ){
+                continue;
+            }
+            
+            // Interpolate
+            return IMG::Interpolate_Nearest_Neighbor( *m_cached_tiles[i], pixel )[0]; 
             
         }
     }
@@ -324,10 +343,14 @@ Status A_DEM_IO_Driver_SRTM::Load_SRTM_Tile( const int& index ){
 
     // Load using the gdal driver
     Status status;
-    status = io_driver_type::Read_Image( m_srtm_file_list[index], tile_data );  
+    status = io_driver_type::Read_Image( m_srtm_file_list[index], tile_data ); 
+
+    // Tile pointer
+    m_cached_tiles[index] = tile_data;
 
     return status;
 }
+
 
 
 } // End of DEM Namespace

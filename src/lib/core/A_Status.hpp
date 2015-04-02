@@ -10,6 +10,7 @@
 #include "Status_Enumerations.hpp"
 
 // C++ Standard Libraries
+#include <iostream>
 #include <string>
 
 namespace GEO{
@@ -94,6 +95,16 @@ class Status{
 
 }; // End of Status Class
 
+
+/**
+ * @brief Print a Status to a C++ Output Stream.
+ *
+ * @param[in/out] ostr Output stream.
+ * @param[in] status Status to print.
+ *
+ * @return Output stream.
+ */
+std::ostream& operator << ( std::ostream& ostr, const Status& status );
 
 } // End of GEO Namespace
 
