@@ -16,7 +16,8 @@
 /*                   Constructor                      */
 /******************************************************/
 Configuration_Options::Configuration_Options()
- : m_render_gsd(0.25),
+ : m_max_thread_count(1),
+   m_render_gsd(0.25),
    m_viewer_window_size(A_Size<int>(2000,1000))
 {
 }
@@ -92,8 +93,13 @@ void Configuration_Options::Parse_Configuration_File()
     // Iterate over nodes
     for (pugi::xml_node_iterator cit = root.begin(); cit != root.end(); cit++ ){
 
+        // Parse the core configuration
+        if( std::string(cit->name()) == "core" ){
+            Parse_Core_Configuration( *cit );
+        }
+
         // Parse the render configuration
-        if( std::string(cit->name()) == "render" ){
+        else if( std::string(cit->name()) == "render" ){
             Parse_Render_Configuration( *cit );
         }
 
@@ -112,6 +118,29 @@ void Configuration_Options::Parse_Configuration_File()
             std::cerr << "error: Unknown node in geo-render-utility node (" << cit->name() << ")." << std::endl;
             std::exit(-1);
         }
+    }
+
+}
+
+
+/******************************************************/
+/*              Parse the Core Configuration          */
+/******************************************************/
+void Configuration_Options::Parse_Core_Configuration( pugi::xml_node& core_config_node )
+{
+
+    // Iterate over nodes
+    pugi::xml_node_iterator cit = core_config_node.begin();
+    pugi::xml_node_iterator cit_end = core_config_node.end();
+    for( ; cit != cit_end; cit++ )
+    {
+
+        // Check if max threads
+        if( std::string(cit->name()) == "max-threads" ){
+            m_max_thread_count = cit->attribute("value").as_int();
+        }
+
+
     }
 
 }

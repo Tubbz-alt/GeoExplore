@@ -39,6 +39,16 @@ class Configuration_Options{
         */
         void Initialize( int argc, char* argv[] );
 
+        
+        /**
+         * @brief Get the number of max threads to use.
+         *
+         * @return Number of threads.
+        */
+        inline int Get_Max_Threads()const{
+            return m_max_thread_count;
+        }
+
 
         /**
          * @brief Get the render center coordinate.
@@ -95,6 +105,12 @@ class Configuration_Options{
 
         
         /**
+         * @brief Parse the Core Configuration
+        */
+        void Parse_Core_Configuration( pugi::xml_node& core_config_node );
+
+
+        /**
          * @brief Parse the Render Configuration
         */
         void Parse_Render_Configuration( pugi::xml_node& render_config_node );
@@ -117,6 +133,8 @@ class Configuration_Options{
         */
         void Usage()const;
 
+        /// Max Thread Count
+        int m_max_thread_count;
 
         /// Configuration File Path
         boost::filesystem::path m_configuration_path;

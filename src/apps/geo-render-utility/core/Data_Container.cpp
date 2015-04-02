@@ -10,7 +10,8 @@
 
 // GeoExplore Libraries
 #include <coordinate/CoordinateUTM.hpp>
-
+#include <image/transforms/ImageTransformColorMap.hpp>
+#include <io/opencv_utils/OpenCV_Utilities.hpp>
 
 
 /******************************************/
@@ -73,7 +74,26 @@ void Data_Container::Load_Data( const Configuration_Options& options )
                                                                                           gsd,
                                                                                           status );
 
+    // Check the status
+    if( status.Get_Status_Type() != StatusType::SUCCESS ){
+        std::cerr << "error: Problem creating tile: Details: " << status << std::endl;
+        std::exit(-1);
+    }
 
+    // Build the color map
+    IMG::A_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8> color_map;
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4350), IMG::PixelRGBA_u8(255, 0, 0));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4400), IMG::PixelRGBA_u8(0, 255, 0));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4412), IMG::PixelRGBA_u8(0, 0, 255));
+
+    // Create a Color Mapper
+    IMG::Image<IMG::PixelGray_df>::ptr_t elevation_image = elevation_tile->Get_Image_Ptr();
+    status = IMG::Compute_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8>( elevation_image,
+                                                                          temp_image,
+                                                                          color_map,
+                                                                          options.Get_Max_Threads() );
+
+    m_image_list.push_back(temp_image);
 }
 
 
