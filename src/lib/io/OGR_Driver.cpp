@@ -46,8 +46,8 @@ void convert_UTM2Geographic( int const&    fromZone,
                            Datum const&  toDatum,
                            double&       toLatitude, 
                            double&       toLongitude, 
-                           double&       toAltitude ){
- 
+                           double&       toAltitude )
+{ 
 
     // create a pair of spatial reference objects
     OGRSpatialReference sourceSRS, targetSRS;
@@ -80,6 +80,51 @@ void convert_UTM2Geographic( int const&    fromZone,
     toAltitude  = z;
 }
 
+
+/**
+ * Convert From UTM to geographic
+ */
+void convert_UTM2Geographic_list( int const& number_points,
+                                  int  const& fromZone,
+                                  bool const& fromHemi,
+                                  Datum const& fromDatum,
+                                  Datum const& toDatum,
+                                  double*& x,
+                                  double*& y,
+                                  double*& z )
+{
+
+    // Make sure the inputs are not null
+    if( x == NULL || x == nullptr ||
+        y == NULL || y == nullptr ||
+        z == NULL || z == nullptr  ){
+        return;
+    }
+
+    // Create the OGR Reference Object
+    OGRSpatialReference sourceSRS, targetSRS;
+
+    // Set the datums
+    sourceSRS.SetWellKnownGeogCS( Datum2WKT_string(fromDatum).c_str());
+    targetSRS.SetWellKnownGeogCS( Datum2WKT_string(toDatum).c_str());
+
+    // set the source UTM Components
+    sourceSRS.SetUTM( fromZone, fromHemi );
+    
+    // Create the Coordinate Transformation
+    OGRCoordinateTransformation *poTransform = OGRCreateCoordinateTransformation( &sourceSRS, &targetSRS );
+    if( poTransform == NULL ){
+        throw std::runtime_error("ERROR: call failed");
+    }
+
+    if( !poTransform->Transform( number_points, x, y, z ) )
+        throw std::runtime_error("ERROR: transform failed");
+   
+    OCTDestroyCoordinateTransformation( poTransform );
+
+}
+
+
 /**
  * Convert from Geographic to UTM
 */
@@ -92,7 +137,8 @@ void convert_Geographic2UTM( double const& fromLatitude,
                            double&       toEasting,
                            double&       toNorthing,
                            double&       toAltitude
-                           ){
+                           )
+{
 
 
     /// create the spatial references objects
@@ -139,8 +185,8 @@ void convert_Geographic2UTM_fixedZone( double const& fromLatitude,
                                      double&       toEasting,
                                      double&       toNorthing,
                                      double&       toAltitude
-                                    ){
-
+                                    )
+{
 
     /// create the spatial references objects
     OGRSpatialReference sourceSRS, targetSRS;

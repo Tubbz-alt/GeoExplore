@@ -8,6 +8,8 @@
 
 
 /// GeoExplore Libraries
+#include "../coordinate/CoordinateConversion.hpp"
+#include "../coordinate/CoordinateGeographic.hpp"
 #include "../coordinate/CoordinateUTM.hpp"
 #include "An_Elevation_Tile.hpp"
 #include "A_DEM_IO_Driver_Base.hpp"
@@ -58,11 +60,17 @@ class DEM_Manager{
             // Compute max corner
             CoordinateType max_corner = min_corner + sum_coordinate;
 
+            // @todo allow driver to support utm grid coverage checks.
+            CRD::CoordinateGeographic_d min_corner_geographic = CRD::convert_coordinate<CRD::CoordinateGeographic_d>( min_corner );
+            CRD::CoordinateGeographic_d max_corner_geographic = CRD::convert_coordinate<CRD::CoordinateGeographic_d>( max_corner );
+
             // Iterate over drivers
             for( int didx=0; didx<m_drivers.size(); didx++ ){
 
                 // Check if driver has coverage
-                if( m_drivers[didx]->Coverage( min_corner, max_corner ) == true ){
+                if( m_drivers[didx]->Coverage( min_corner_geographic, 
+                                               max_corner_geographic ) == true )
+                {
                     return m_drivers[didx]->Create_Elevation_Tile(  min_corner, 
                                                                     image_size, 
                                                                     gsd,

@@ -34,7 +34,29 @@ class An_Elevation_Tile {
         /// Pointer Type
         typedef std::shared_ptr<An_Elevation_Tile> ptr_t;
 
-        
+        /// PixelType
+        typedef IMG::PixelGray_df pixel_type;
+
+        /// Resource Type
+        typedef IMG::MemoryResource<pixel_type> resource_type;
+       
+        /**
+         * @brief Constructor
+         *
+         * @param[in] bottom_left_corner Bottom-left corner coordinate.
+         * @param[in] gsd Ground-Sampling-Distance in meters-per-pixel.
+         * @param[in] elevation_tile Elevation tile to set.
+         */
+        An_Elevation_Tile( const CoordinateType&   bottom_left_corner,
+                           const double& gsd, 
+                           IMG::Image_<pixel_type,resource_type>::ptr_t& elevation_tile )
+            : m_elevation_data( elevation_tile),
+              m_gsd(gsd),
+              m_bottom_left_corner(bottom_left_corner)
+        {
+        }
+
+
         /**
          * @brief Constructor
          *
@@ -186,7 +208,16 @@ class An_Elevation_Tile {
         {
             return m_elevation_data->operator()(row,col)[0];
         }
-    
+        
+
+        /**
+         * @brief Get the Image Pointer Reference.
+         *
+         * @return Pointer to Image Buffer.
+        */
+        IMG::Image<IMG::PixelGray_df>::ptr_t Get_Image_Ptr()const{
+            return m_elevation_data;
+        }
 
     private:
 

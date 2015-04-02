@@ -7,6 +7,7 @@
 
 // GeoExplore Library
 #include "../../lib/dem/A_DEM_IO_Driver_SRTM.hpp"
+#include "../../lib/image/Image_Utilities.hpp"
 
 using namespace GEO;
 
@@ -261,4 +262,58 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_utm ){
 
 
 }
+
+
+/**********************************************************/
+/*          Test the SRTM Dem Driver Create Tile          */
+/**********************************************************/
+TEST(  A_DEM_IO_Driver_SRTM, Create_Elevation_Tile_utm )
+{
+    // Status
+    Status status;
+
+    // Set our desired tile size
+    const A_Size<int> tile_size(500,500);
+
+    // Set our desired GSD
+    const double gsd = 1;
+ 
+    // EPS
+    const double eps = 10;
+
+    // Define our SRTM path
+    FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
+
+    // Build the drivers
+    DEM::A_DEM_IO_Driver_SRTM  driver( srtm_file_path );
+    
+    // Check that the initialization method passes.
+    ASSERT_EQ( driver.Initialize().Get_Status_Type(), StatusType::SUCCESS );
+
+    // Make sure that we have 2 files loaded
+    ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
+
+    // Set our utm coordinate
+    CRD::CoordinateUTM_d  center_coordinate( 11, true, 384409, 4048901 );
+    CRD::CoordinateUTM_d  min_coordinate = center_coordinate;
+    min_coordinate.easting_meters()  -= (tile_size.Width()  * gsd)/2.0;
+    min_coordinate.northing_meters() -= (tile_size.Height() * gsd)/2.0;
+
+    // Create the elevation tile
+    DEM::ElevationTileUTM_d::ptr_t  elevation_tile = driver.Create_Elevation_Tile( min_coordinate,
+                                                                                   tile_size,
+                                                                                   gsd, 
+                                                                                   status );
+
+    // make sure the operation succeeded
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+
+    // check the elevation range
+    IMG::PixelGray_df minPix, maxPix;
+    status = IMG::MinMax( *elevation_tile->Get_Image_Ptr(), minPix, maxPix );
+
+    ASSERT_NEAR( maxPix[0], 4412, 0.00001 );
+    ASSERT_NEAR( minPix[0], 3872, 0.00001 );
+}
+
 

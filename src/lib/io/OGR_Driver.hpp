@@ -42,7 +42,7 @@ class OGR_Driver {
 int compute_UTM_Zone( const double& longitude );
 
 /**
- * Convert a coordinate from UTM to Geographic
+ * @brief Convert a coordinate from UTM to Geographic
  *
  * @param[in] fromZone Input UTM Zone
  * @param[in] fromEasting  Input UTM Easting (x)
@@ -65,6 +65,27 @@ void convert_UTM2Geographic( int const&    fromZone,
                              double&       toLatitude, 
                              double&       toLongitude, 
                              double&       toAltitude );
+
+/**
+ * @brief Convert a list of coordinates from UTM to Geographic.
+ *
+ * @param[in] number_points Number of points to process.
+ * @param[in] fromZone UTM Zone of all coordinates.
+ * @param[in] fromHemi True if all points in northern, false if southern.
+ * @param[in] fromDatum Datum to convert from.
+ * @param[in] toDatum Datum to convert to.
+ * @param[in/out] x List of input eastings,  output longitudes.
+ * @param[in/out] y List of input northings, output latitudes.
+ * @param[in/out] z List of input/output altitudes.
+*/
+void convert_UTM2Geographic_list( int const& number_points,
+                                  int  const& fromZone,
+                                  bool const& fromHemi,
+                                  Datum const& fromDatum,
+                                  Datum const& toDatum,
+                                  double*& x,
+                                  double*& y,
+                                  double*& z );
 
 /**
  * Convert a coordinate from Geographic to UTM
@@ -93,7 +114,7 @@ void convert_Geographic2UTM_fixedZone( double const& fromLatitude,
  
  
 /**
- * Convert a coordinate from Geographic to UTM
+ * @brief Convert a coordinate from Geographic to UTM
  *
  * @param[in]  fromLatitude  Input Geographic Latitude
  * @param[in]  fromLongitude Input Geographic Longitude

@@ -198,18 +198,27 @@ typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typenam
   * @return UTM Coordinate output
  */
 template <typename OutputCoordinateType>
-typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typename OutputCoordinateType::datatype>>::value, CoordinateUTM<typename OutputCoordinateType::datatype> >::type
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typename OutputCoordinateType::datatype>>::value, 
+                        CoordinateUTM<typename OutputCoordinateType::datatype> >::type
     convert_coordinate( CoordinateGeographic<typename OutputCoordinateType::datatype> const& coordinate ){
     return convert_coordinate<OutputCoordinateType>(coordinate, coordinate.datum());
 }
 
 
 /**
- * Convert from UTM to Geographic
+ * @brief Convert from UTM to Geographic.
+ *
+ * @param[in] coordinate UTM coordinate to convert.
+ * @param[in] datum Datum to convert to.
+ *
+ * @return Geographic coordinate.
 */
 template <typename OutputCoordinateType>
-typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
-        convert_coordinate( CoordinateUTM<typename OutputCoordinateType::datatype> const& coordinate, const Datum& outputDatum ){
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, 
+                        CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
+        convert_coordinate( CoordinateUTM<typename OutputCoordinateType::datatype> const& coordinate, 
+                            const Datum& outputDatum )
+{
     
     // create the output coordinate
     CoordinateGeographic<typename OutputCoordinateType::datatype> output;
@@ -232,10 +241,15 @@ typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<
 
 
 /**
- * Convert from UTM to geodetic with a forced datum
+ * @brief Convert from UTM to geographic with a forced datum.
+ *
+ * @param[in] coordinate UTM coordinate to convert.
+ *
+ * @return Geographic coordinate.
 */
 template <typename OutputCoordinateType>
-typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
+typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<typename OutputCoordinateType::datatype>>::value, 
+                            CoordinateGeographic<typename OutputCoordinateType::datatype> >::type
          convert_coordinate( CoordinateUTM<typename OutputCoordinateType::datatype> const& coordinate ){
     return convert_coordinate<OutputCoordinateType>(coordinate, coordinate.datum());
 }

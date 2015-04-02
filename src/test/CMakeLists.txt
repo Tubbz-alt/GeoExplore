@@ -115,6 +115,7 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
 set( GEOEXPLORE_IO_MODULE_TESTS 
     io/TEST_GDAL_Driver.cpp
     io/TEST_Image_IO.cpp
+    io/TEST_OGR_Driver.cpp
     io/TEST_OpenCV_Driver.cpp
 )
 

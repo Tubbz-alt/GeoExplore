@@ -31,8 +31,13 @@ class A_DEM_IO_Driver_SRTM : public A_DEM_IO_Driver_Base{
         /// Pixel Type
         typedef IMG::PixelGray_df pixel_type;
 
+
         /// Driver Type
         typedef IO::GDAL::ImageDriverGDAL<resource_type> io_driver_type;
+
+        
+        /// Pointer Type
+        typedef std::shared_ptr<A_DEM_IO_Driver_SRTM> ptr_t;
 
 
         /**

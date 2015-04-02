@@ -192,7 +192,7 @@ bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateUTM_d const& coordinate )con
 bool A_DEM_IO_Driver_SRTM::Coverage( CRD::CoordinateGeographic_d const& min_coordinate,
                                      CRD::CoordinateGeographic_d const& max_coordinate )const
 {
-
+    
     // Overlap area eps
     const double eps = 0.0001;
 
@@ -311,10 +311,56 @@ ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::Coo
                                                                         Status&                      status )
 {
 
-    
-    status = Status(StatusType::FAILURE, CoreStatusReason::NOT_IMPLEMENTED, "Not Implemented");
+    // Create the tile
+    IMG::Image<IMG::PixelGray_df>::ptr_t image_data(new IMG::Image<IMG::PixelGray_df>(tile_size));
 
-    return nullptr;
+    // Compute the max corner
+    CRD::CoordinateUTM_d max_corner = min_corner + MATH::A_Point2d(tile_size.Width()  * gsd,
+                                                                   tile_size.Height() * gsd );
+
+    // Create large list of coordinate components
+    double* x_values = new double[tile_size.Width() * tile_size.Height()];
+    double* y_values = new double[tile_size.Width() * tile_size.Height()];
+    double* z_values = new double[tile_size.Width() * tile_size.Height()];
+
+    // Iterate over the tile
+    uint64_t counter = 0;
+    for( int r=0; r<tile_size.Height(); r++ )
+    for( int c=0; c<tile_size.Width();  c++ ){
+        x_values[counter] = min_corner.easting_meters()  + (c * gsd);
+        y_values[counter] = max_corner.northing_meters() - (r * gsd);
+        z_values[counter] = 0;
+        counter++;
+    }
+
+    // Convert
+    OGR::convert_UTM2Geographic_list( tile_size.Width() * tile_size.Height(),
+                                      min_corner.zone(),
+                                      min_corner.Is_Northern_Hemisphere(),
+                                      min_corner.datum(),
+                                      Datum::WGS84,
+                                      x_values,
+                                      y_values,
+                                      z_values );
+    
+    // Iterate over the tile
+    counter = 0;
+    for( int r=0; r<tile_size.Height(); r++ )
+    for( int c=0; c<tile_size.Width();  c++ ){
+
+        // @todo Fix this to not be quite so bad.  First find the tiles, then convert coordinates, finally get
+        image_data->operator()(r,c)[0] = Query_Elevation_Meters( CRD::CoordinateGeographic_d( y_values[counter], x_values[counter]), status);
+        counter++;
+    }
+
+    // Delete
+    delete [] x_values;
+    delete [] y_values;
+    delete [] z_values;
+    
+    // Return success
+    status = Status(StatusType::SUCCESS );
+    return ElevationTileUTM_d::ptr_t(new ElevationTileUTM_d(min_corner, gsd, image_data));
 }
 
         
