@@ -1,0 +1,61 @@
+namespace GEO{
+
+/// CONFIG (Configuration) Module Namespace
+namespace CONFIG{
+}
+
+/// CRD (Coordinate) Module Namespace
+namespace CRD{
+}
+
+/// IMG (Image) Module Namespace
+namespace IMG{
+}
+
+/// DEM (Digital Elevation Model) Namespace
+namespace DEM{
+
+    /// SRTM (Shuttle Reconnaissance Topography Mission) Namespace
+    namespace SRTM{
+    }
+}
+
+/// FS (Filesystem Management) Namespace
+namespace FS{
+}
+
+/// IO Namespace
+namespace IO{
+
+    /// GDAL (Geospatial Data Abstraction Library) Utility Namespace
+    namespace GDAL{
+    }
+
+    /// NETPBM Utility Namespace
+    namespace NETPBM{
+    }
+
+    /// OpenCV Utility Namespace
+    namespace OPENCV{
+    }
+
+    /// OGR Utility Namespace
+    namespace OGR{
+    }
+}
+
+/// LOG Logging Namespace
+namespace LOG{
+}
+
+/// MATH Namespace
+namespace MATH{
+    
+    /// EIGEN3 Utility Namespace
+    namespace EIGEN3{
+    }
+}
+
+
+}
+

@@ -13,6 +13,7 @@
 
 
 namespace GEO{
+namespace IO{
 namespace OGR{
 
 /**
@@ -138,7 +139,8 @@ void convert_Geographic2UTM( double const& fromLatitude,
                              double&       toAltitude );
 
 
-} /// End of OGR Namespace
-} /// End of GEO Namespace
+} // End of OGR Namespace
+} // End of IO  Namespace
+} // End of GEO Namespace
 
 #endif

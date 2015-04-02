@@ -14,6 +14,7 @@
 #include <stdexcept>
 
 namespace  GEO {
+namespace  IO  {
 namespace  OGR {
 
 /**
@@ -220,5 +221,6 @@ void convert_Geographic2UTM_fixedZone( double const& fromLatitude,
 
 
 
-}  /// End of OGR Namespace
-}  /// End of GEO Namespace
+}  // End of OGR Namespace
+}  // End of IO  Namespace
+}  // End of GEO Namespace

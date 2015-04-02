@@ -45,8 +45,8 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
         typename CoordinateUTM<DATATYPE>::ptr_t output( new CoordinateUTM<DATATYPE>(output_datum));
 
         // convert
-        GEO::OGR::convert_Geographic2UTM( input->latitude_degrees(), 
-                                          input->longitude_degrees(), 
+        GEO::IO::OGR::convert_Geographic2UTM( input->latitude_degrees(), 
+                                              input->longitude_degrees(), 
                                           input->altitude_meters(), 
                                           input->datum(), 
                                           output->datum(), 
@@ -69,15 +69,15 @@ typename CoordinateBase<DATATYPE>::ptr_t  convert_coordinate( typename Coordinat
         typename CoordinateGeographic<DATATYPE>::ptr_t output( new CoordinateGeographic<DATATYPE>(output_datum));
 
         // convert
-        GEO::OGR::convert_UTM2Geographic( input->zone(), 
-                                          input->easting_meters(), 
-                                          input->northing_meters(), 
-                                          input->altitude_meters(), 
-                                          input->datum(), 
-                                          output->datum(),
-                                          output->latitude_degrees(), 
-                                        output->longitude_degrees(), 
-                                        output->altitude_meters() );
+        GEO::IO::OGR::convert_UTM2Geographic( input->zone(), 
+                                              input->easting_meters(), 
+                                              input->northing_meters(), 
+                                              input->altitude_meters(), 
+                                              input->datum(), 
+                                              output->datum(),
+                                              output->latitude_degrees(), 
+                                              output->longitude_degrees(), 
+                                              output->altitude_meters() );
 
         return output;
 
@@ -125,15 +125,15 @@ typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateUTM<typenam
     output.datum() = output_datum;
 
     // pass the inputs to the OGR converter
-    GEO::OGR::convert_Geographic2UTM( coordinate.latitude_degrees(), 
-                                    coordinate.longitude_degrees(), 
-                                    coordinate.altitude_meters(), 
-                                    coordinate.datum(),
-                                    output.datum(), 
-                                    output.zone(), 
-                                    output.easting_meters(), 
-                                    output.northing_meters(),  
-                                    output.altitude_meters() );
+    GEO::IO::OGR::convert_Geographic2UTM( coordinate.latitude_degrees(), 
+                                          coordinate.longitude_degrees(), 
+                                          coordinate.altitude_meters(), 
+                                          coordinate.datum(),
+                                          output.datum(), 
+                                          output.zone(), 
+                                          output.easting_meters(), 
+                                          output.northing_meters(),  
+                                          output.altitude_meters() );
 
 
     return output;
@@ -160,16 +160,16 @@ CoordinateUTM<DATATYPE> convert_coordinate( CoordinateGeographic<DATATYPE> const
     output.zone() = zone;
 
     // pass the inputs to the OGR converter
-    GEO::OGR::convert_Geographic2UTM_fixedZone( coordinate.latitude_degrees(),
-                                              coordinate.longitude_degrees(),
-                                              coordinate.altitude_meters(),
-                                              coordinate.datum(),
-                                              output.datum(),
-                                              zone,
-                                              output.easting_meters(),
-                                              output.northing_meters(),
-                                              output.altitude_meters()
-                                            );
+    GEO::IO::OGR::convert_Geographic2UTM_fixedZone( coordinate.latitude_degrees(),
+                                                    coordinate.longitude_degrees(),
+                                                    coordinate.altitude_meters(),
+                                                    coordinate.datum(),
+                                                    output.datum(),
+                                                    zone,
+                                                    output.easting_meters(),
+                                                    output.northing_meters(),
+                                                    output.altitude_meters()
+                                                  );
 
     return output;
 }
@@ -225,16 +225,16 @@ typename std::enable_if<std::is_same<OutputCoordinateType, CoordinateGeographic<
     output.datum() = outputDatum;
 
     // pass inputs to the ogr converter
-    GEO::OGR::convert_UTM2Geographic( coordinate.zone(), 
-                                      coordinate.easting_meters(), 
-                                      coordinate.northing_meters(), 
-                                      coordinate.altitude_meters(),
-                                      coordinate.datum(), 
-                                      output.datum(), 
-                                      output.latitude_degrees(), 
-                                      output.longitude_degrees(), 
-                                      output.altitude_meters()
-                                  );
+    GEO::IO::OGR::convert_UTM2Geographic( coordinate.zone(), 
+                                          coordinate.easting_meters(), 
+                                          coordinate.northing_meters(), 
+                                          coordinate.altitude_meters(),
+                                          coordinate.datum(), 
+                                          output.datum(), 
+                                          output.latitude_degrees(), 
+                                          output.longitude_degrees(), 
+                                          output.altitude_meters()
+                                        );
 
     return output;
 }

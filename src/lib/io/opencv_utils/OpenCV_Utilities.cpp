@@ -7,12 +7,8 @@
 
 
 namespace GEO{
-namespace UTILS{
-namespace OCV{
 
 
 
-} // End of OCV   Namespace
-} // End of UTILS Namespace
 } // End of GEO   Namespace
 

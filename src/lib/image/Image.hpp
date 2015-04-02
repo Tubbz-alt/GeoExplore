@@ -1,5 +1,5 @@
 /**
- *    @file    Image.hpp
+ *    @file    image/Image.hpp
  *    @author  Marvin Smith
  *    @date    5/6/2014
 */

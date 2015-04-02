@@ -32,7 +32,7 @@ TP str2num( std::string const& in ){
 /**
  * Convert a number into a string
  *
- * @param[in] an input number
+ * @param[in] value Input number
  *
  * @return   string representation
  */

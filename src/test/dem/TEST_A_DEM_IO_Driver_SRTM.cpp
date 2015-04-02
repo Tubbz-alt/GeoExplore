@@ -278,9 +278,6 @@ TEST(  A_DEM_IO_Driver_SRTM, Create_Elevation_Tile_utm )
     // Set our desired GSD
     const double gsd = 1;
  
-    // EPS
-    const double eps = 10;
-
     // Define our SRTM path
     FS::FilesystemPath srtm_file_path = "data/unit-tests/dems/srtm";
 

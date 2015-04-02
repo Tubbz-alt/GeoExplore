@@ -334,14 +334,14 @@ ElevationTileUTM_d::ptr_t  A_DEM_IO_Driver_SRTM::Create_Elevation_Tile( CRD::Coo
     }
 
     // Convert
-    OGR::convert_UTM2Geographic_list( tile_size.Width() * tile_size.Height(),
-                                      min_corner.zone(),
-                                      min_corner.Is_Northern_Hemisphere(),
-                                      min_corner.datum(),
-                                      Datum::WGS84,
-                                      x_values,
-                                      y_values,
-                                      z_values );
+    IO::OGR::convert_UTM2Geographic_list( tile_size.Width() * tile_size.Height(),
+                                          min_corner.zone(),
+                                          min_corner.Is_Northern_Hemisphere(),
+                                          min_corner.datum(),
+                                          Datum::WGS84,
+                                          x_values,
+                                          y_values,
+                                          z_values );
     
     // Iterate over the tile
     counter = 0;
