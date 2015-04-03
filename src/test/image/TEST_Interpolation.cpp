@@ -72,6 +72,10 @@ TEST( Interpolation, Interpolate_Nearest_Neighbor ){
     // Test Interpolation
     ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  0  ,  0  ))[0],   0, eps );
     ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  0.5,  0.5))[0],   0, eps );
+    ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  1.0,  1.0))[0],   2, eps );
+    ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  1.0,  1.5))[0],   2, eps );
+    ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  1.5,  1.0))[0],   2, eps );
+    ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d(  1.5,  1.5))[0],   2, eps );
     ASSERT_NEAR( IMG::Interpolate_Nearest_Neighbor( image, MATH::A_Point2d( 99  , 99  ))[0], 198, eps );
 
 }
@@ -136,6 +140,10 @@ TEST( Interpolation, Interpolate_Bilinear ){
     ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d(  0.5,  0.5))[0],   1, eps );
     ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d( 98.5, 98.5))[0], 197, eps );
     ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d( 99  , 99  ))[0], 198, eps );
+    ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d(  1.0,  1.0))[0],   2, eps );
+    ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d(  1.0,  1.5))[0], 2.5, eps );
+    ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d(  1.5,  1.0))[0], 2.5, eps );
+    ASSERT_NEAR( IMG::Interpolate_Bilinear( image, MATH::A_Point2d(  1.5,  1.5))[0],   3, eps );
 
 }
 

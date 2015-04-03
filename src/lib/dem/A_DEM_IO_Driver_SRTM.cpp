@@ -273,7 +273,7 @@ double A_DEM_IO_Driver_SRTM::Query_Elevation_Meters( CRD::CoordinateGeographic_d
             }
             
             // Interpolate
-            return IMG::Interpolate_Nearest_Neighbor( *m_cached_tiles[i], pixel )[0]; 
+            return IMG::Interpolate_Bilinear( *m_cached_tiles[i], pixel )[0]; 
             
         }
     }

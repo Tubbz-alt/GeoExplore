@@ -164,8 +164,8 @@ TEST( DEM_Manager, Create_Elevation_Tile_utm )
     IMG::PixelGray_df minPix, maxPix;
     status = IMG::MinMax( *elevation_tile->Get_Image_Ptr(), minPix, maxPix );
 
-    ASSERT_NEAR( maxPix[0], 4412, 0.00001 );
-    ASSERT_NEAR( minPix[0], 3872, 0.00001 );
+    ASSERT_NEAR( maxPix[0], 4412, 0.1 );
+    ASSERT_NEAR( minPix[0], 3867.2505663045958, 0.1 );
 }
 
 

@@ -214,7 +214,7 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_geographic )
     ASSERT_EQ( driver.Get_SRTM_File_List().size(), 2);
 
     // Define the coordinates
-    const CRD::CoordinateGeographic_d  test_coordinate_01( 36.578581, -118.291995, 4400, Datum::WGS84 );
+    const CRD::CoordinateGeographic_d  test_coordinate_01( 36.578581, -118.291995, 4377.5470712011584, Datum::WGS84 );
 
     // Query the tile
     double elevation_meters = driver.Query_Elevation_Meters( test_coordinate_01, status );
@@ -251,7 +251,7 @@ TEST( A_DEM_IO_Driver_SRTM, Query_Elevation_Meters_utm ){
 
 
     // Define the coordinates 
-    const CRD::CoordinateUTM_d   test_coordinate_01( 11, true, 384409, 4048901, 4400, Datum::WGS84 );
+    const CRD::CoordinateUTM_d   test_coordinate_01( 11, true, 384409, 4048901, 4377.5470712011584, Datum::WGS84 );
 
     // Query the tile
     double elevation_meters = driver.Query_Elevation_Meters( test_coordinate_01, status );
@@ -309,8 +309,8 @@ TEST(  A_DEM_IO_Driver_SRTM, Create_Elevation_Tile_utm )
     IMG::PixelGray_df minPix, maxPix;
     status = IMG::MinMax( *elevation_tile->Get_Image_Ptr(), minPix, maxPix );
 
-    ASSERT_NEAR( maxPix[0], 4412, 0.00001 );
-    ASSERT_NEAR( minPix[0], 3872, 0.00001 );
+    ASSERT_NEAR( maxPix[0], 4411.9998906675364, 0.00001 );
+    ASSERT_NEAR( minPix[0], 3867.2505663045958, 0.00001 );
 }
 
 

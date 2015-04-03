@@ -14,6 +14,7 @@
 // GeoExplore Libraries
 #include "Image.hpp"
 #include "../math/A_Point.hpp"
+#include "../math/Common_Equations.hpp"
 
 namespace GEO{
 namespace IMG{
@@ -69,12 +70,12 @@ PixelType Interpolate_Bilinear( IMG::Image_<PixelType,ResourceType> const& image
     // Check if values
     double x, y;
     int dx, dy;
-    x = std::max( 0, (int)point.x());
-    y = std::max( 0, (int)point.y());
-    x = std::min( image.Cols()-1, (int)x);
-    y = std::min( image.Rows()-1, (int)y);
+    x = std::max( 0.0, point.x());
+    y = std::max( 0.0, point.y());
+    x = std::min( (double)image.Cols()-1, x);
+    y = std::min( (double)image.Rows()-1, y);
     
-    if( std::fabs(x - std::floor(x+0.5)) < 0.0001 ||
+    if( std::fabs(x - std::floor(x+0.5)) < 0.0001 &&
         std::fabs(y - std::floor(y+0.5)) < 0.0001 )
     {
         // set the pixel value
@@ -85,17 +86,30 @@ PixelType Interpolate_Bilinear( IMG::Image_<PixelType,ResourceType> const& image
         return image( dy, dx );
     }
 
-    // Compute Range
-    PixelType output;
-    std::vector<double> min_row(output.Dims(), 0);
-    std::vector<double> max_row(output.Dims(), 0);
-    std::vector<double> min_col(output.Dims(), 0);
-    for( int i=0; i<(int)min_row.size(); i++ ){
-        //min_row[i] = image(0, 
-        //max_row[i] = image(image.Rows()-1,0)
+    // Compute adjacent pixel positions
+    int ax, bx, ay, by;
+    ax = std::floor(x);
+    ay = std::floor(y);
+    bx = std::ceil(x);
+    by = std::ceil(y);
+    
+    // Compute ratios
+    double r_x = (point.x() - ax);
+    double r_y = (point.y() - ay);
+    
+    // Interpolate
+    PixelType topRow, botRow, output;
+    for( int i=0; i<topRow.Dims(); i++ ){
+        topRow[i] = MATH::LERP( image(ay, ax)[i], image(ay, bx)[i], r_x);
+        botRow[i] = MATH::LERP( image(by, ax)[i], image(by, bx)[i], r_x);
+    }
+    
+    // Interpolate output
+    for( int i=0; i<output.Dims(); i++ ){
+        output[i] = MATH::LERP( topRow[i], botRow[i], r_y );
     }
 
-    return image(dy,dx);
+    return output;
 }
 
 

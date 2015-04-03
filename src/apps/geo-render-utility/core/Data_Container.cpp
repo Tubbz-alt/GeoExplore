@@ -58,8 +58,8 @@ void Data_Container::Load_Data( const Configuration_Options& options )
     double gsd = options.Get_Render_GSD();
 
     // Subtract the offset to get the min corner
-    MATH::A_Point3d offset( image_size.Width()  * gsd, 
-                            image_size.Height() * gsd );
+    MATH::A_Point3d offset( image_size.Width()/2.0  * gsd, 
+                            image_size.Height()/2.0 * gsd );
 
     
     CRD::CoordinateUTM_d min_coordinate = center_coordinate - offset;
@@ -92,7 +92,7 @@ void Data_Container::Load_Data( const Configuration_Options& options )
                                                                           temp_image,
                                                                           color_map,
                                                                           options.Get_Max_Threads() );
-
+    
     m_image_list.push_back(temp_image);
 }
 
