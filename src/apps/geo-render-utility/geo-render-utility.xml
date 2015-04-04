@@ -18,6 +18,8 @@
     <viewer-window>
         <name value="Geo-Explore Render Utility"/>
         <size width="1920" height="1080" />
+        <vertex-shader   path="src/apps/geo-render-utility/shaders/TransformVertexShader.glsl" />
+        <fragment-shader path="src/apps/geo-render-utility/shaders/ColorFragmentShader.glsl" />
     </viewer-window>
 
     <!-- Terrain Data Configuration -->

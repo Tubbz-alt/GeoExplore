@@ -196,6 +196,26 @@ class An_Elevation_Tile {
 
 
         /**
+         * @brief Get the Coordinate at the specified row and column.
+         *
+         * @param[in] row Row to fetch.
+         * @param[in] col Column to fetch.
+         *
+         * @return Coordinate at position
+         */
+        CoordinateType Get_Coordinate( const int& row,
+                                       const int& col ) const
+        {
+            CoordinateType add_coord;
+            add_coord.x() = col * Get_GSD();
+            add_coord.y() = row * Get_GSD();
+
+            // Interpolate
+            return (m_bottom_left_corner + add_coord);
+        }
+
+
+        /**
          * @brief Get a pixel value.
          * 
          * @param[in] row Row value in pixels.

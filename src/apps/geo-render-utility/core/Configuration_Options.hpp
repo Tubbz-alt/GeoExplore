@@ -88,6 +88,26 @@ class Configuration_Options{
         inline std::vector<DEM::A_DEM_IO_Driver_Base::ptr_t> Get_DEM_Driver_List()const{
             return m_dem_driver_list;
         }
+        
+
+        /**
+         * @brief Get the Vertex Shader Path 
+         *
+         * @return Vertex Shader Path.
+         */
+        inline FS::FilesystemPath Get_Vertex_Shader_Path()const{
+            return m_vertex_shader_path;
+        }
+
+
+        /**
+         * @brief Get the Fragment Shader Path
+         *
+         * @return Fragment Shader Path.
+        */
+        inline FS::FilesystemPath Get_Fragment_Shader_Path()const{
+            return m_fragment_shader_path;
+        }
 
 
     private:
@@ -153,6 +173,12 @@ class Configuration_Options{
         
         /// Terrain Driver List
         std::vector<DEM::A_DEM_IO_Driver_Base::ptr_t> m_dem_driver_list;
+
+        /// Fragment Shader Path
+        FS::FilesystemPath m_fragment_shader_path;
+
+        /// Vertex Shader Path
+        FS::FilesystemPath m_vertex_shader_path;
 
 
 }; // End of Configuration_Options Class

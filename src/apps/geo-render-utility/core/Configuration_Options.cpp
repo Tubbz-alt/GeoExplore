@@ -208,7 +208,12 @@ void Configuration_Options::Parse_Viewer_Configuration( pugi::xml_node& viewer_c
 
     // Set the size
     m_viewer_window_size = A_Size<int>(width,height);
-
+    
+    // Get the vertex shader
+    m_vertex_shader_path = viewer_config_node.child("vertex-shader").attribute("path").as_string();
+    
+    // Get the fragment shader
+    m_fragment_shader_path = viewer_config_node.child("fragment-shader").attribute("path").as_string();
 }
 
 

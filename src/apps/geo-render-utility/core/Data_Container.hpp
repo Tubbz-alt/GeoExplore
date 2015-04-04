@@ -48,6 +48,37 @@ class Data_Container{
             return m_dem_manager;
         }
 
+
+        /**
+         * @brief Get Terrain Buffer
+         */
+        inline int Get_Terrain_Buffer( float*& terrain_buffer )const
+        {
+            terrain_buffer = m_terrain_buffer;
+            return m_terrain_buffer_size;
+        }
+        
+        
+        /**
+         * @brief Get Terrain Buffer
+         */
+        inline int Get_Terrain_Color_Buffer( float*& terrain_color_buffer )const
+        {
+            terrain_color_buffer = m_terrain_color_buffer;
+            return m_terrain_buffer_size;
+        }
+
+
+        /**
+         * @brief Get Tile Center
+         *
+         * @return Tile Center Coordinate.
+        */
+        inline CRD::CoordinateUTM_d Get_Tile_Center()const{
+            return m_tile_center_coordinate;
+        }
+
+
     private:
         
         /// Class Name
@@ -58,6 +89,18 @@ class Data_Container{
 
         /// List of images
         std::vector<IMG::Image<IMG::PixelRGBA_u8>::ptr_t>  m_image_list;
+
+        /// Terrain Vertex Buffer
+        float* m_terrain_buffer;
+
+        /// Terrain Vertex Buffer Size
+        int m_terrain_buffer_size;
+
+        /// Terrain Color Buffer
+        float* m_terrain_color_buffer;
+
+        /// Tile Center Coordinate
+        CRD::CoordinateUTM_d m_tile_center_coordinate;
 
 }; // End of Data_Container Class
 

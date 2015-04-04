@@ -37,6 +37,20 @@ void Run_Render_Program();
 */
 void Finalize_Context();
 
+/**
+ * @brief GLFW Keyboard Callback Handler.
+ *
+ * @param[in] window Window to manage.
+ * @param[in] key Keyboard key pressed.
+ * @param[in] scancode
+ * @param[in] action
+ * @param[in] mods
+*/
+void Keyboard_Callback( GLFWwindow* window, 
+                        int key, 
+                        int scancode, 
+                        int action, 
+                        int mods );
 
 /**
  * Main Function
@@ -77,6 +91,9 @@ void Initialize_Context( Configuration_Options const& options )
     // Initialize
     gl_context->Initialize_Viewer( options );
 
+    // Set the callback
+    glfwSetKeyCallback( gl_context->Get_GLFW_Window(),
+                        Keyboard_Callback);
 }
 
 
@@ -86,18 +103,7 @@ void Initialize_Context( Configuration_Options const& options )
 void Run_Render_Program()
 {
 
-    // Start main loop
-    do{
-
-
-        
-        // Poll for Events
-		glfwPollEvents();
-
-    }
-	while( glfwGetKey(gl_context->Get_GLFW_Window(), GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(gl_context->Get_GLFW_Window()) == 0 );
-
+    gl_context->Run_Viewer(); 
 }
 
 
@@ -109,6 +115,74 @@ void Finalize_Context()
 
     // Close up
     gl_context->Finalize_Viewer();
+
+}
+
+
+/**
+ * Keyboard Callback
+*/
+void Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+
+    const float horizontal_distance = 100;
+    const float zoom_distance = 100;
+
+    // Zoom out
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+    {
+        gl_context->Get_Camera().Zoom(-zoom_distance);
+        gl_context->Update_Projection();
+    }
+
+    // Zoom In
+    if( key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+    {
+        gl_context->Get_Camera().Zoom(zoom_distance);
+        gl_context->Update_Projection();
+    }
+
+    // Left
+    if( key == GLFW_KEY_A && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pan( -horizontal_distance, 0);
+        gl_context->Update_Projection();
+    }
+    
+    // Right
+    if( key == GLFW_KEY_D && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pan( horizontal_distance, 0);
+        gl_context->Update_Projection();
+    }
+    
+    // Up
+    if( key == GLFW_KEY_W && action == GLFW_PRESS )
+        gl_context->Get_Camera().Pan( 0, horizontal_distance);
+        gl_context->Update_Projection();
+    {
+    }
+    
+    // Down
+    if( key == GLFW_KEY_S && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pan( 0, -horizontal_distance);
+        gl_context->Update_Projection();
+    }
+
+    // Rotate Up
+    if(key == GLFW_KEY_I && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pitch(0.1);
+        gl_context->Update_Projection();
+    }
+    
+    // Rotate Up
+    if(key == GLFW_KEY_K && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pitch(-0.1);
+        gl_context->Update_Projection();
+    }
 
 }
 
