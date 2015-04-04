@@ -20,6 +20,7 @@
         <size width="1920" height="1080" />
         <vertex-shader   path="src/apps/geo-render-utility/shaders/TransformVertexShader.glsl" />
         <fragment-shader path="src/apps/geo-render-utility/shaders/ColorFragmentShader.glsl" />
+        <perspective fov-degrees-angles="45"  aspect-ratio="1.6"  min-clipping="0.1" max-clipping="10000" />
     </viewer-window>
 
     <!-- Terrain Data Configuration -->

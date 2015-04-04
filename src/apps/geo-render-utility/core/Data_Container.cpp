@@ -85,12 +85,14 @@ void Data_Container::Load_Data( const Configuration_Options& options )
 
     // Build the color map
     IMG::A_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8> color_map;
-    color_map.Add_Color_Pair( IMG::PixelGray_df(3767), IMG::PixelRGBA_u8( 100, 230, 100));
-    color_map.Add_Color_Pair( IMG::PixelGray_df(3900), IMG::PixelRGBA_u8( 110, 220, 110));
-    color_map.Add_Color_Pair( IMG::PixelGray_df(4150), IMG::PixelRGBA_u8( 240, 250, 160));
-    color_map.Add_Color_Pair( IMG::PixelGray_df(4225), IMG::PixelRGBA_u8( 230, 220, 170));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(3800), IMG::PixelRGBA_u8( 200, 130, 130));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4000), IMG::PixelRGBA_u8( 100, 230, 100));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4100), IMG::PixelRGBA_u8( 110, 220, 110));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4220), IMG::PixelRGBA_u8( 240, 250, 160));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4325), IMG::PixelRGBA_u8( 230, 220, 170));
     color_map.Add_Color_Pair( IMG::PixelGray_df(4375), IMG::PixelRGBA_u8( 220, 220, 220));
-    color_map.Add_Color_Pair( IMG::PixelGray_df(4412), IMG::PixelRGBA_u8( 250, 250, 250));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4400), IMG::PixelRGBA_u8( 250, 250, 250));
+    color_map.Add_Color_Pair( IMG::PixelGray_df(4412), IMG::PixelRGBA_u8( 245, 245, 255));
 
     // Create a Color Mapper
     IMG::Image<IMG::PixelGray_df>::ptr_t elevation_image = elevation_tile->Get_Image_Ptr();

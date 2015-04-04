@@ -129,60 +129,89 @@ void Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, in
     const float zoom_distance = 100;
 
     // Zoom out
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
     {
         gl_context->Get_Camera().Zoom(-zoom_distance);
         gl_context->Update_Projection();
     }
 
     // Zoom In
-    if( key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+    if( key == GLFW_KEY_E && action == GLFW_PRESS)
     {
         gl_context->Get_Camera().Zoom(zoom_distance);
         gl_context->Update_Projection();
     }
 
-    // Left
-    if( key == GLFW_KEY_A && action == GLFW_PRESS )
-    {
-        gl_context->Get_Camera().Pan( -horizontal_distance, 0);
-        gl_context->Update_Projection();
-    }
-    
-    // Right
-    if( key == GLFW_KEY_D && action == GLFW_PRESS )
+    // Pan Left
+    if( key == GLFW_KEY_LEFT && action == GLFW_PRESS )
     {
         gl_context->Get_Camera().Pan( horizontal_distance, 0);
         gl_context->Update_Projection();
     }
     
-    // Up
-    if( key == GLFW_KEY_W && action == GLFW_PRESS )
-        gl_context->Get_Camera().Pan( 0, horizontal_distance);
+    // Pan Right
+    if( key == GLFW_KEY_RIGHT && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Pan( -horizontal_distance, 0);
+        gl_context->Update_Projection();
+    }
+    
+    // Pan Up
+    if( key == GLFW_KEY_UP && action == GLFW_PRESS )
+        gl_context->Get_Camera().Pan( 0,horizontal_distance);
         gl_context->Update_Projection();
     {
     }
     
-    // Down
-    if( key == GLFW_KEY_S && action == GLFW_PRESS )
+    // Pan Down
+    if( key == GLFW_KEY_DOWN && action == GLFW_PRESS )
     {
         gl_context->Get_Camera().Pan( 0, -horizontal_distance);
         gl_context->Update_Projection();
     }
 
-    // Rotate Up
-    if(key == GLFW_KEY_I && action == GLFW_PRESS )
+    // Pitch Up
+    if(key == GLFW_KEY_W && action == GLFW_PRESS )
     {
-        gl_context->Get_Camera().Pitch(0.1);
+        gl_context->Get_Camera().Pitch(0.2);
         gl_context->Update_Projection();
     }
     
-    // Rotate Up
-    if(key == GLFW_KEY_K && action == GLFW_PRESS )
+    // Pitch Down
+    if(key == GLFW_KEY_S && action == GLFW_PRESS )
     {
-        gl_context->Get_Camera().Pitch(-0.1);
+        gl_context->Get_Camera().Pitch(-0.2);
         gl_context->Update_Projection();
     }
+
+    // Yaw Left
+    if( key == GLFW_KEY_A && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Yaw(-0.1);
+        gl_context->Update_Projection();
+    }
+
+    // Yaw Right
+    if( key == GLFW_KEY_D && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Yaw(0.1);
+        gl_context->Update_Projection();
+    }
+    
+    // Roll Left
+    if( key == GLFW_KEY_J && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Roll(-0.1);
+        gl_context->Update_Projection();
+    }
+
+    // Roll Right
+    if( key == GLFW_KEY_L && action == GLFW_PRESS )
+    {
+        gl_context->Get_Camera().Roll(0.1);
+        gl_context->Update_Projection();
+    }
+
 
 }
 

@@ -109,6 +109,46 @@ class Configuration_Options{
             return m_fragment_shader_path;
         }
 
+        
+        /**
+         * @brief Get the Viewer FOV Angle in Degrees.
+         *
+         * @return FOV Angle in Degrees.
+        */
+        inline double Get_Viewer_FOV_Angle_Degrees()const{
+            return m_viewer_fov_angle_degrees;
+        }
+
+
+        /**
+         * @brief Get the Viewer Aspect Ratio.
+         *
+         * @return Viewer aspect ratio.
+         */
+        inline double Get_Viewer_Aspect_Ratio()const{
+            return m_viewer_aspect_ratio;
+        }
+
+
+        /**
+         * @brief Get the Viewer Min Clipping Distance.
+         *
+         * @return Viewer min clipping distance.
+        */
+        inline double Get_Viewer_Min_Clipping()const{
+            return m_viewer_min_clipping;
+        }
+
+
+        /**
+         * @brief Get the Viewer Max Clipping Distance.
+         *
+         * @return Viewer max clipping distance.
+        */
+        inline double Get_Viewer_Max_Clipping()const{
+            return m_viewer_max_clipping;
+        }
+
 
     private:
 
@@ -179,6 +219,18 @@ class Configuration_Options{
 
         /// Vertex Shader Path
         FS::FilesystemPath m_vertex_shader_path;
+
+        /// FOV Angle
+        double m_viewer_fov_angle_degrees;
+
+        /// Aspect ratio 
+        double m_viewer_aspect_ratio;
+
+        /// Min Clipping Distance
+        double m_viewer_min_clipping;
+
+        /// Max Clipping
+        double m_viewer_max_clipping;
 
 
 }; // End of Configuration_Options Class

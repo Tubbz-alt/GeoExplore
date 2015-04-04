@@ -90,6 +90,27 @@ class OpenGL_Camera{
          * @param[in] Rotation angle.
         */
         void Pitch( const float& pitch_angle );
+        
+        /**
+         * @brief Roll the Camera
+         *
+         * @param[in] Roll Angle
+        */
+        void Roll( const float& yaw_angle );
+
+
+        /**
+         * @brief Yaw the Camera
+         *
+         * @param[in] Yaw Angle
+        */
+        void Yaw( const float& yaw_angle );
+        
+
+        /**
+         * @brief Print Camera Axes
+         */
+        void Print_Camera_Axes()const;
 
 
     private:
@@ -215,6 +236,15 @@ class OpenGL_Context{
 
         /// Field of View
         float m_field_of_view;
+    
+        /// Aspect Ratio
+        float m_aspect_ratio;
+
+        /// Min Clipping Distance
+        float m_min_clipping_distance;
+
+        /// Max Clipping Distance
+        float m_max_clipping_distance;
 
 }; // End of OpenGL_Context Class
 

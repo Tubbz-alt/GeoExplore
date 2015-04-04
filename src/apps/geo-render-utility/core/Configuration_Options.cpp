@@ -214,6 +214,14 @@ void Configuration_Options::Parse_Viewer_Configuration( pugi::xml_node& viewer_c
     
     // Get the fragment shader
     m_fragment_shader_path = viewer_config_node.child("fragment-shader").attribute("path").as_string();
+
+    // Get the perspective node
+    pugi::xml_node perspective_node = viewer_config_node.child("perspective");
+
+    m_viewer_fov_angle_degrees = perspective_node.attribute("fov-degrees-angles").as_double();
+    m_viewer_aspect_ratio      = perspective_node.attribute("aspect-ratio").as_double();
+    m_viewer_min_clipping      = perspective_node.attribute("min-clipping").as_double();
+    m_viewer_max_clipping      = perspective_node.attribute("max-clipping").as_double();
 }
 
 

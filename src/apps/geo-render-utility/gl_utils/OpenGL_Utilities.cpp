@@ -20,7 +20,7 @@ namespace GL{
 OpenGL_Camera::OpenGL_Camera()
  : m_class_name("OpenGL_Camera"),
    m_camera_origin(0, 0, 4),
-   m_camera_lookat(0, 0,   0),
+   m_camera_lookat(0, 0, 3),
    m_camera_axis(0, -1, 0)
 {
 }
@@ -34,10 +34,12 @@ void OpenGL_Camera::Set_Camera_Position( glm::vec3 const& tile_position,
 {
     // set the camera lookat point
     m_camera_lookat = tile_position;
+    m_camera_lookat[2] += camera_elevation - 1;
 
     // Set the camera origin
     m_camera_origin = tile_position;
     m_camera_origin[2] += camera_elevation;
+    m_camera_origin[2] += 1;
 
 }
 
@@ -61,8 +63,11 @@ void OpenGL_Camera::Zoom( const float& distance )
     // Compute the direction of the camera 
     glm::vec3 principle_axis = glm::normalize(m_camera_lookat - m_camera_origin);
 
+    glm::vec3 offset = distance * principle_axis;
+
     // Add to origin
-    m_camera_origin += distance * principle_axis;
+    m_camera_origin += offset;
+    m_camera_lookat += offset; 
 }
 
 
@@ -73,16 +78,17 @@ void OpenGL_Camera::Pan( const float& x_distance,
                          const float& y_distance )
 {
     // Compute the direction of the camera
-    glm::vec3 principle_axis = glm::normalize(m_camera_origin - m_camera_lookat);
-
+    glm::vec3 principle_axis = glm::normalize(m_camera_lookat - m_camera_origin);
+    
     // Up axis
-    glm::vec3 up_axis = glm::normalize(-1.0f * m_camera_axis);
-
+    glm::vec3 up_axis = glm::normalize(m_camera_axis);
+    
     // Compute Result
     glm::vec3 right_axis = glm::normalize(glm::cross( up_axis, principle_axis ));
-    
+
     // Add to origin and lookat
     glm::vec3 result = (y_distance * up_axis) + (x_distance * right_axis);
+
     m_camera_origin += result;
     m_camera_lookat += result;
 }
@@ -95,25 +101,71 @@ void OpenGL_Camera::Pitch( const float& angle )
 {
     
     // Compute the direction of the camera
-    glm::vec3 principle_axis = glm::normalize(m_camera_origin - m_camera_lookat);
-
-    // Up axis
-    glm::vec3 up_axis = glm::normalize(-1.0f * m_camera_axis);
+    glm::vec3 principle_axis = glm::normalize(m_camera_lookat - m_camera_origin);
 
     // Compute Result
-    glm::vec3 right_axis = glm::normalize(glm::cross( up_axis, principle_axis ));
+    glm::vec3 right_axis = glm::normalize(glm::cross( m_camera_axis, principle_axis));
+    glm::vec3 rp = glm::rotate( principle_axis, angle, right_axis );
     
-    // Compute difference vector
-    glm::vec3 axis = m_camera_origin - m_camera_lookat;
-
     // Rotate the difference vector
-    glm::vec3 rotated_axis = glm::rotate( axis, angle, right_axis );
+    m_camera_axis = glm::rotate( m_camera_axis, angle, right_axis );
     
-    // Compute the new offset
-    glm::vec3 offset = axis - rotated_axis;
+    // Rotate the diff vector
+    m_camera_lookat = m_camera_origin + rp; //glm::rotate( principle_axis, angle, right_axis );
 
-    // Add to the origin
-    m_camera_origin += offset;
+
+}
+
+
+/**
+ * @brief Roll the Camera
+*/
+void OpenGL_Camera::Roll( const float& angle ){
+
+    
+    // Compute the direction of the camera
+    glm::vec3 principle_axis = glm::normalize(m_camera_origin - m_camera_lookat);
+
+    // Rotate the camera axis by the principle axis
+    m_camera_axis = glm::normalize(glm::rotate( m_camera_axis, angle, principle_axis ));
+
+}
+
+
+/**
+ * @brief Yaw the Camera
+*/
+void OpenGL_Camera::Yaw( const float& angle ){
+
+    
+    // Compute the direction of the camera
+    glm::vec3 principle_axis = glm::normalize(m_camera_lookat - m_camera_origin);
+    
+    // Update the lookat point
+    m_camera_lookat = m_camera_origin + glm::rotate( principle_axis, angle, m_camera_axis );
+}
+
+
+/**
+ *  Print Camera Axes
+*/
+void OpenGL_Camera::Print_Camera_Axes()const
+{
+    
+    glm::vec3 principle_axis = glm::normalize(m_camera_lookat - m_camera_origin);
+    glm::vec3 right_axis = glm::normalize(glm::cross( m_camera_axis, principle_axis));
+    
+    std::cout << std::fixed;
+    std::cout << "Camera Axes" << std::endl;
+    std::cout << "-----------" << std::endl;
+    std::cout << " Origin: " << m_camera_origin[0] << ", " << m_camera_origin[1] << ", " << m_camera_origin[2] << std::endl;
+    std::cout << " Lookat: " << m_camera_lookat[0] << ", " << m_camera_lookat[1] << ", " << m_camera_lookat[2] << std::endl;
+    std::cout << std::endl;
+    std::cout << " Principle: " << principle_axis[0] << ", " << principle_axis[1] << ", " << principle_axis[2] << std::endl;
+    std::cout << "       Up : " << m_camera_axis[0] << ", " << m_camera_axis[1] << ", " << m_camera_axis[2] << std::endl;
+    std::cout << "    Right : " << right_axis[0] << ", " << right_axis[1] << ", " << right_axis[2] << std::endl;
+    std::cout << std::endl;
+
 }
 
 
@@ -127,7 +179,9 @@ OpenGL_Context::OpenGL_Context()
    m_viewer_window(nullptr),
    m_viewer_window_size(GEO::A_Size<int>(2000,1000)),
    m_viewer_window_name("Geo-Explore Render Utility"),
-   m_field_of_view(45)
+   m_field_of_view(45),
+   m_min_clipping_distance(0.1),
+   m_max_clipping_distance(5000)
 {
 }
 
@@ -205,6 +259,12 @@ void OpenGL_Context::Initialize_Viewer( Configuration_Options const& options )
     m_vertex_position_model_space_id = glGetAttribLocation( m_program_id, "vertexPosition_modelspace");
     m_vertex_color_id = glGetAttribLocation( m_program_id, "vertexColor");
     
+    // Initialize the perspective values
+    m_field_of_view = options.Get_Viewer_FOV_Angle_Degrees();
+    m_aspect_ratio = options.Get_Viewer_Aspect_Ratio();
+    m_min_clipping_distance = options.Get_Viewer_Min_Clipping();
+    m_max_clipping_distance = options.Get_Viewer_Max_Clipping();
+
     // Get the tile center coordinate
     CRD::CoordinateUTM_d tile_center_coordinate = data_container->Get_Tile_Center();
     glm::vec3 tile_center( (float)tile_center_coordinate.easting_meters(),
@@ -213,6 +273,8 @@ void OpenGL_Context::Initialize_Viewer( Configuration_Options const& options )
     float camera_elevation = 500;
     m_camera.Set_Camera_Position( tile_center, camera_elevation );
 
+
+    // Set the buffer data.
     m_vertex_buffer_size = data_container->Get_Terrain_Buffer( m_terrain_data );
     m_color_buffer_size  = data_container->Get_Terrain_Color_Buffer( m_terrain_color_data );
     
@@ -237,7 +299,11 @@ void OpenGL_Context::Initialize_Viewer( Configuration_Options const& options )
 glm::mat4 OpenGL_Context::Update_Projection(){
     
     // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(m_field_of_view, 4.0f / 3.0f, 0.1f, 1000.0f);
+	glm::mat4 Projection = glm::perspective( m_field_of_view, 
+                                             m_aspect_ratio,
+                                             m_min_clipping_distance, 
+                                             m_max_clipping_distance );
+    
 	
     // Camera matrix
 	glm::mat4 View  = m_camera.Update_Camera_Transform();
