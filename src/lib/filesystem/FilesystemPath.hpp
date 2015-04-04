@@ -13,6 +13,7 @@
 #include <string>
 
 // GeoExplore Libraries
+#include "../core/A_Status.hpp"
 #include "PathFormatType.hpp"
 
 namespace GEO{
@@ -163,6 +164,21 @@ class FilesystemPath{
          * @return List of items found.
         */
         std::vector<FilesystemPath> Get_Contents( PathFormatType const& path_format )const;
+        
+
+        /**
+         * @brief Delete the file.
+         *
+         * @return Status of the operation.
+        */
+        Status Delete()const;
+        
+        /**
+         * @brief Delete the contents..
+         *
+         * @return Status of the operation.
+        */
+        Status Delete_All()const;
 
 
         /**

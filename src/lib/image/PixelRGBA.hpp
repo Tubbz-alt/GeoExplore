@@ -233,6 +233,48 @@ class PixelRGBA : public PixelBase<PixelRGBA<ChannelType>,ChannelType>{
                                            ChannelType::maxValue );
         }
         
+
+        /**
+         * @brief Return a Red Pixel.
+         *
+         * @return Red Pixel.
+        */
+        static PixelRGBA<ChannelType> Red()
+        {
+            return PixelRGBA<ChannelType>( ChannelType::maxValue,
+                                           ChannelType::minValue,
+                                           ChannelType::minValue,
+                                           ChannelType::maxValue);
+        }
+
+
+        /**
+         * @brief Return a Green Pixel.
+         *
+         * @return Green Pixel.
+        */
+        static PixelRGBA<ChannelType> Green()
+        {
+            return PixelRGBA<ChannelType>( ChannelType::minValue,
+                                           ChannelType::maxValue,
+                                           ChannelType::minValue,
+                                           ChannelType::maxValue);
+        }
+
+        /**
+         * @brief Return a Blue Pixel.
+         *
+         * @return Blue Pixel.
+        */
+        static PixelRGBA<ChannelType> Blue()
+        {
+            return  PixelRGBA<ChannelType>( ChannelType::minValue,
+                                            ChannelType::minValue,
+                                            ChannelType::maxValue,
+                                            ChannelType::maxValue);
+        }
+
+
         /**
          * @brief Return a white pixel
          *

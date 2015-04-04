@@ -32,8 +32,8 @@ MATH::A_Point2d Coordinate_To_SRTM_Pixel( CRD::CoordinateGeographic_d const& coo
     }
 
     // Compute the pixel size
-    double pixel_size_x = extent.Width() / cols;
-    double pixel_size_y = extent.Height() / rows;
+    //double pixel_size_x = extent.Width() / cols;
+    //double pixel_size_y = extent.Height() / rows;
 
     // Get the ratio
     double ratioX = (coordinate.longitude_degrees() - extent.BL().x()) / extent.Width();

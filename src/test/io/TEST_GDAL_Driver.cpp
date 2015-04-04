@@ -12,6 +12,7 @@
 #include "../lib/image/MemoryResource.hpp"
 #include "../lib/image/Pixel_Types.hpp"
 #include "../lib/io/GDAL_Driver.hpp"
+#include "../lib/io/OpenCV_Driver.hpp"
 
 using namespace GEO;
 
@@ -385,6 +386,89 @@ TEST( ImageDriverGDAL, Compute_Image_Extent_valid_data ){
     ASSERT_NEAR( rectangle01_geographic.TR().latitude_degrees(),  exp_path01_geographic_max.latitude_degrees(),  eps );
     ASSERT_NEAR( rectangle01_geographic.TR().longitude_degrees(), exp_path01_geographic_max.longitude_degrees(), eps );
     ASSERT_EQ( rectangle01_geographic.BL().datum(), Datum::WGS84 );
+
+}
+
+/**
+ * Test the Read Image with TIF image
+*/
+TEST( ImageDriverGDAL, Read_Image_gray_u8_tif_test01 )
+{
+    // Status of the operation
+    Status status;
+
+    // Define the pixel type
+    typedef IMG::PixelGray_u8 pixel_type;
+
+    // Define the resource type
+    typedef IMG::MemoryResource<pixel_type> resource_type;
+
+    // Define an image to load
+    FS::FilesystemPath image_path("data/unit-tests/images/geotiff/cea.tif");
+
+    // Load the image
+    IMG::Image<IMG::PixelGray_u8>::ptr_t image;
+    status = IO::GDAL::ImageDriverGDAL<resource_type>::Read_Image( image_path, image );
+
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_EQ( image->Rows(), 515 );
+    ASSERT_EQ( image->Cols(), 514 );
+
+}
+
+
+/**
+ * Test the Read Image with TIF image
+*/
+TEST( ImageDriverGDAL, Read_Image_rgb_u8_tif_test01 )
+{
+    // Status of the operation
+    Status status;
+
+    // Define the pixel type
+    typedef IMG::PixelRGB_u8 pixel_type;
+
+    // Define the resource type
+    typedef IMG::MemoryResource<pixel_type> resource_type;
+
+    // Define an image to load
+    FS::FilesystemPath image_path("data/unit-tests/images/geotiff/cea.tif");
+
+    // Load the image
+    IMG::Image<IMG::PixelRGB_u8>::ptr_t image;
+    status = IO::GDAL::ImageDriverGDAL<resource_type>::Read_Image( image_path, image );
+
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_EQ( image->Rows(), 515 );
+    ASSERT_EQ( image->Cols(), 514 );
+
+}
+
+/**
+ * Test the Read Image with TIF image
+*/
+TEST( ImageDriverGDAL, Read_Image_rgba_u8_tif_test01 )
+{
+    // Status of the operation
+    Status status;
+
+    // Define the pixel type
+    typedef IMG::PixelRGBA_u8 pixel_type;
+
+    // Define the resource type
+    typedef IMG::MemoryResource<pixel_type> resource_type;
+
+    // Define an image to load
+    FS::FilesystemPath image_path("data/unit-tests/images/geotiff/cea.tif");
+
+    // Load the image
+    IMG::Image<IMG::PixelRGBA_u8>::ptr_t image;
+    status = IO::GDAL::ImageDriverGDAL<resource_type>::Read_Image( image_path, image );
+
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_EQ( image->Rows(), 515 );
+    ASSERT_EQ( image->Cols(), 514 );
+
 
 }
 

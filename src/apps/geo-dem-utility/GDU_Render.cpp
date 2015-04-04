@@ -5,6 +5,11 @@
 */
 #include "GDU_Render.hpp"
 
+/// GeoExplore Libraries
+#include <image/Image.hpp>
+#include <image/MemoryResource.hpp>
+#include <image/Pixel_Types.hpp>
+#include <image/transforms.hpp>
 
 /**
  * Render the terrain
@@ -18,13 +23,16 @@ void Render_Terrain( GDU_Options& options )
     Status status;
 
     // Get the center coordinate
-    const CRD::CoordinateUTM_d center_coordinate = options.Get_Render_Center_Coordinate();
+    const CRD::CoordinateUTM_d center_coordinate = options.Get_Render_Configuration()->center_coordinate;
 
     // Get the GSD
-    const double gsd = options.Get_Render_GSD();
+    const double gsd = options.Get_Render_Configuration()->gsd;
 
     // Get the Image Size
-    A_Size<int> image_size = options.Get_Render_Image_Size();
+    A_Size<int> image_size = options.Get_Render_Configuration()->image_size;
+
+    // Color Map
+    IMG::A_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8> color_map = options.Get_Render_Configuration()->color_relief_map;
 
     // Compute the Min Corner
     CRD::CoordinateUTM_d min_corner = center_coordinate - MATH::A_Point3d( (image_size.Width()/2.0)  * gsd, 
@@ -39,12 +47,21 @@ void Render_Terrain( GDU_Options& options )
                                                                                          image_size,
                                                                                          gsd,
                                                                                          status );
+    IMG::Image<IMG::PixelGray_df>::ptr_t elevation_data = elevation_tile->Get_Image_Ptr();
 
     // make sure the operation succeeded
     if( status.Get_Status_Type() != StatusType::SUCCESS ){
         std::cerr << "error: Operation failed. Details: " << status.Get_Status_Details() << std::endl;
         std::exit(-1);
     }
+
+    // Generate Color Map
+    IMG::Image<IMG::PixelRGBA_u8>::ptr_t color_relief_image;
+    IMG::Compute_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8>( elevation_data,
+                                                                 color_relief_image,
+                                                                 color_map );
+   
+    // Write Image to File
 
 }
 

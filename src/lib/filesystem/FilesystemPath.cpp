@@ -230,6 +230,59 @@ std::vector<FilesystemPath> FilesystemPath::Get_Contents( std::string const& pat
     return output;
 }
 
+
+/****************************************/
+/*          Delete the file             */
+/****************************************/
+Status FilesystemPath::Delete()const
+{
+    // Make sure file exists
+    if( Exists() == false ){
+        return Status(StatusType::FAILURE,
+                      CoreStatusReason::PATH_DOES_NOT_EXIST,
+                      "Path does not exist.");
+    }
+
+    // Delete 
+    boost::system::error_code ec;
+    bool result = boost::filesystem::remove(m_pathname, ec);
+    if( result == false ){
+        return Status( StatusType::FAILURE,
+                       CoreStatusReason::PATH_UNABLE_TO_DELETE,
+                       std::string("Unable to delete file. Details: ") + ec.message());
+    }
+
+    // return status
+    return Status(StatusType::SUCCESS);
+}
+
+
+/****************************************/
+/*          Delete the path             */
+/****************************************/
+Status FilesystemPath::Delete_All()const
+{
+    // Make sure file exists
+    if( Exists() == false ){
+        return Status(StatusType::FAILURE,
+                      CoreStatusReason::PATH_DOES_NOT_EXIST,
+                      "Path does not exist.");
+    }
+
+    // Delete 
+    boost::system::error_code ec;
+    bool result = boost::filesystem::remove_all(m_pathname, ec);
+    if( result == false ){
+        return Status( StatusType::FAILURE,
+                       CoreStatusReason::PATH_UNABLE_TO_DELETE,
+                       std::string("Unable to delete file. Details: ") + ec.message());
+    }
+
+    // return status
+    return Status(StatusType::SUCCESS);
+}
+
+
 /****************************************/
 /*            Print to String           */
 /****************************************/

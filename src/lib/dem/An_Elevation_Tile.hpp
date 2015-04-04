@@ -235,7 +235,8 @@ class An_Elevation_Tile {
          *
          * @return Pointer to Image Buffer.
         */
-        IMG::Image<IMG::PixelGray_df>::ptr_t Get_Image_Ptr()const{
+        IMG::Image<IMG::PixelGray_df>::ptr_t Get_Image_Ptr()const
+        {
             return m_elevation_data;
         }
 

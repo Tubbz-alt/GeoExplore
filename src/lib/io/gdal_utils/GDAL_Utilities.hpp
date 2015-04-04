@@ -14,16 +14,48 @@
 #include <ogr_spatialref.h>
 
 
-// IPL Libraries
+// GeoExplore Libraries
 #include "../../coordinate/CoordinateUTM.hpp"
 #include "../../core/Enumerations.hpp"
 #include "../../filesystem.hpp"
+#include "../../image/ChannelType.hpp"
 #include "../../math/A_Point.hpp"
 #include "../../math/A_Rectangle.hpp"
 
 namespace GEO{
 namespace IO{
 namespace GDAL{
+
+
+/**
+ * @brief Convert generic ChannelType to a GDAL Type.
+*/
+template<typename CType>
+GDALDataType ctype2gdaltype(){
+    if( std::is_same<CType,IMG::ChannelTypeUInt8>::value ){
+        return GDT_Byte;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeUInt12>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeUInt14>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeUInt16>::value ){
+        return GDT_UInt16;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeUInt32>::value ){
+        return GDT_UInt32;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeDouble>::value ){
+        return GDT_Float64;
+    }
+    if( std::is_same<CType,IMG::ChannelTypeDoubleFree>::value ){
+        return GDT_Float64;
+    }
+
+    return GDT_Unknown;
+}
 
 
 /**

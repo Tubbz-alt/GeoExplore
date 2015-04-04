@@ -43,6 +43,7 @@ find_package( Boost
                 COMPONENTS
                     system
                     filesystem
+                    log
                     regex
                 REQUIRED )
 

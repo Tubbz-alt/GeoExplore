@@ -25,6 +25,38 @@ enum class GDU_Mode{
     RENDER,
 };
 
+
+/**
+ * @class GDU_Render_Configuration
+*/
+class GDU_Render_Configuration{
+
+    public:
+
+        /// Pointer Type
+        typedef std::shared_ptr<GDU_Render_Configuration> ptr_t;
+        
+        /// Elevation Type
+        typedef IMG::A_Color_Map<IMG::PixelGray_df,IMG::PixelRGBA_u8> ColorMapType;
+        
+        /// Color Map
+        ColorMapType color_relief_map;
+        
+        /// Render Center Coordinate
+        CRD::CoordinateUTM_d center_coordinate;
+        
+        /// Render GSD
+        double gsd;
+
+        // Render Image Size
+        A_Size<int> image_size;
+
+        /// Output Image Path
+        FS::FilesystemPath output_path;
+
+}; /// End of GDU_Render_Configuration Class
+
+
 /**
  * @class GDU_Options
 */
@@ -83,27 +115,12 @@ class GDU_Options{
             return m_gdu_mode;
         }
 
-        /** 
-         * @brief Get render center coordinate.
-         */
-        inline CRD::CoordinateUTM_d Get_Render_Center_Coordinate()const{
-            return m_render_center_coordinate;
-        }
-
-
+        
         /**
-         * @brief Get the Render GSD
+         * @brief Get the GDU Render Configuration
         */
-        inline double Get_Render_GSD()const{
-            return m_render_gsd;
-        }
-
-
-        /**
-         * @brief Get the Render Image Size
-        */
-        inline A_Size<int> Get_Render_Image_Size()const{
-            return m_render_image_size;
+        inline GDU_Render_Configuration::ptr_t Get_Render_Configuration()const{
+            return m_render_configuration;
         }
 
     private:
@@ -123,6 +140,12 @@ class GDU_Options{
         */
         void Parse_Render_Node( pugi::xml_node& render_node );
 
+        /**
+         * @brief Parse the color node.
+         */
+        void Parse_Color_Node( pugi::xml_node& color_node );
+
+
         /// Application Name
         std::string m_application_name;
         
@@ -138,14 +161,9 @@ class GDU_Options{
         /// Configuration File to Generate
         boost::filesystem::path m_configuration_file_to_generate;
     
-        /// Render Center Coordinate
-        CRD::CoordinateUTM_d m_render_center_coordinate;
+        /// Render Configuration
+        GDU_Render_Configuration::ptr_t m_render_configuration;
 
-        /// Render GSD
-        double m_render_gsd;
-
-        /// Render Image Size
-        A_Size<int> m_render_image_size;
 
 }; // End of GDU_Options class
 

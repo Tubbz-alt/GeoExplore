@@ -71,7 +71,9 @@ class GDU_Command_Line_Arguments{
 /**
  * Constructor
 */
-GDU_Options::GDU_Options(){
+GDU_Options::GDU_Options()
+ : m_render_configuration(new GDU_Render_Configuration())
+{
 
     // Set default options
     Set_Defaults();
@@ -213,6 +215,10 @@ void GDU_Options::Parse_Configuration_File(){
     pugi::xml_node render_node = root_node.child("render");
     Parse_Render_Node( render_node );
 
+    // Get the color node
+    pugi::xml_node color_node = root_node.child("color-map");
+    Parse_Color_Node( color_node );
+
 
 }
 
@@ -299,45 +305,118 @@ void GDU_Options::Parse_Terrain_Sources_Node( pugi::xml_node& terrain_node ){
 void GDU_Options::Parse_Render_Node( pugi::xml_node& render_node )
 {
 
-    // Get the render coordinate
-    pugi::xml_node center_node = render_node.child("center-coordinate");
-
-    // Check the type
-    std::string coord_type = center_node.attribute("type").as_string();
+    // Iterate over nodes
+    pugi::xml_node_iterator rit = render_node.begin();
+    for( ; rit != render_node.end(); rit++ )
+    {
     
-    if( coord_type == "utm" ){
-        m_render_center_coordinate.zone() = center_node.attribute("zone").as_int();
-        m_render_center_coordinate.Is_Northern_Hemisphere() = center_node.attribute("is_northern").as_bool();
-        m_render_center_coordinate.easting_meters()         = center_node.attribute("easting_meters").as_double();
-        m_render_center_coordinate.northing_meters()        = center_node.attribute("northing_meters").as_double();
-    }   
+        // Get the render coordinate
+        if( std::string(rit->name()) == "center-coordinate" )
+        {
+            // Get the node
+            pugi::xml_node center_node = *rit;
 
-    // Geographic coordinate
-    else if( coord_type == "geographic" ){
+            // Check the type
+            std::string coord_type = center_node.attribute("type").as_string();
+    
+            if( coord_type == "utm" ){
+                m_render_configuration->center_coordinate.zone() = center_node.attribute("zone").as_int();
+                m_render_configuration->center_coordinate.Is_Northern_Hemisphere() = center_node.attribute("is_northern").as_bool();
+                m_render_configuration->center_coordinate.easting_meters()         = center_node.attribute("easting_meters").as_double();
+                m_render_configuration->center_coordinate.northing_meters()        = center_node.attribute("northing_meters").as_double();
+            }   
+
+            // Geographic coordinate
+            else if( coord_type == "geographic" ){
         
-        CRD::CoordinateGeographic_d coord;
-        coord.latitude_degrees()  = center_node.attribute("latitude_degrees").as_double();
-        coord.longitude_degrees() = center_node.attribute("longitude_degrees").as_double();
+                CRD::CoordinateGeographic_d coord;
+                coord.latitude_degrees()  = center_node.attribute("latitude_degrees").as_double();
+                coord.longitude_degrees() = center_node.attribute("longitude_degrees").as_double();
     
-        // Convert to UTM
-        m_render_center_coordinate = CRD::convert_coordinate<CRD::CoordinateUTM_d>(coord);
+                // Convert to UTM
+                m_render_configuration->center_coordinate = CRD::convert_coordinate<CRD::CoordinateUTM_d>(coord);
 
+            }
+
+            // Otherwise, we have an unknown type
+            else{
+                std::cerr << "error: Unknown coordinate type (" << coord_type << ")." << std::endl;
+                Usage(-1);
+            }
+        }
+
+        // Get the GSD
+        else if( std::string(rit->name()) == "gsd" )
+        {
+            m_render_configuration->gsd = rit->attribute("value").as_double();
+        }
+
+
+        // Get the image size
+        else if( std::string(rit->name()) == "image-size" )
+        {
+            m_render_configuration->image_size = A_Size<int>( rit->attribute("cols").as_int(),
+                                                              rit->attribute("rows").as_int());
+
+        }
+
+        // Get the output
+        else if( std::string(rit->name()) == "output" )
+        {
+            // Get the output node
+            pugi::xml_node output_node = *rit;
+
+            // Get the path
+            m_render_configuration->output_path = FS::FilesystemPath(output_node.attribute("output-image-path").as_string());
+
+        }
+
+        // Otherwise, there is an error
+        else{
+            std::cerr << "error: Unknown node (" << rit->name() << ")" << std::endl;
+            std::exit(-1);
+        }
     }
-
-    // Otherwise, we have an unknown type
-    else{
-        std::cerr << "error: Unknown coordinate type (" << coord_type << ")." << std::endl;
-        Usage(-1);
-    }
-
-    // Get the gsd
-    m_render_gsd = render_node.child("gsd").attribute("value").as_double();
-
-    // Get the image size
-    m_render_image_size = A_Size<int>( render_node.child("image-size").attribute("cols").as_int(),
-                                       render_node.child("image-size").attribute("rows").as_int());
-
 }
+
+/**
+ * Parse the Color Node
+*/
+void GDU_Options::Parse_Color_Node( pugi::xml_node& color_node )
+{
+
+    // Get the color list 
+    pugi::xml_node colors = color_node.child("color-pairs");
+
+    // Iterate over each color pair
+    for( pugi::xml_node_iterator cit = colors.begin();
+         cit != colors.end();
+         cit++ )
+    {
+
+        // Check the name
+        if( std::string(cit->name()) != "color-pair" ){
+            std::cerr << "error: Invalid node found in color pair list (" << cit->name() << ")" << std::endl;
+            std::exit(-1);
+        }   
+
+        // Get the elevation and color components
+        double elevation = cit->attribute("elevation_meters").as_double();
+        int red   = cit->attribute("red_uint8").as_int();
+        int green = cit->attribute("green_uint8").as_int();
+        int blue  = cit->attribute("blue_uint8").as_int();
+        int alpha = cit->attribute("alpha_uint8").as_int();
+
+        // Add to pair list
+        m_render_configuration->color_relief_map.Add_Color_Pair( IMG::PixelGray_df(elevation),
+                                                                 IMG::PixelRGBA_u8( red, 
+                                                                                    green, 
+                                                                                    blue, 
+                                                                                    alpha));
+
+    }
+}
+
 
 /**
  * Generate the configuration file
@@ -380,6 +459,70 @@ void GDU_Options::Generate_Configuration_File( )
     render_size.append_attribute("cols").set_value(2000);
     render_size.append_attribute("rows").set_value(2000);
 
+    // Add the output information
+    pugi::xml_node output_node = render_node.append_child("output");
+    output_node.append_attribute("output-image-path").set_value("dem-output.tif");
+    
+    
+    /**************************************************/
+    /*               Color Configuration              */
+    /**************************************************/
+    pugi::xml_node color_node = root_node.append_child("color-map");
+
+    // add the colors node
+    pugi::xml_node colors_node = color_node.append_child("color-pairs");
+
+    // Add each color
+    pugi::xml_node color_pair01 = colors_node.append_child("color-pair");
+    color_pair01.append_attribute("elevation-meters").set_value(3700);
+    color_pair01.append_attribute("red_uint8").set_value(200);
+    color_pair01.append_attribute("green_uint8").set_value(130);
+    color_pair01.append_attribute("blue_uint8").set_value(130);
+    color_pair01.append_attribute("alpha_uint8").set_value(255);
+    
+    pugi::xml_node color_pair02 = colors_node.append_child("color-pair");
+    color_pair02.append_attribute("elevation-meters").set_value(3800);
+    color_pair02.append_attribute("red_uint8").set_value(110);
+    color_pair02.append_attribute("green_uint8").set_value(220);
+    color_pair02.append_attribute("blue_uint8").set_value(110);
+    color_pair02.append_attribute("alpha_uint8").set_value(255);
+
+    pugi::xml_node color_pair03 = colors_node.append_child("color-pair");
+    color_pair03.append_attribute("elevation-meters").set_value(3900);
+    color_pair03.append_attribute("red_uint8").set_value(240);
+    color_pair03.append_attribute("green_uint8").set_value(250);
+    color_pair03.append_attribute("blue_uint8").set_value(160);
+    color_pair03.append_attribute("alpha_uint8").set_value(255);
+
+    pugi::xml_node color_pair04 = colors_node.append_child("color-pair");
+    color_pair04.append_attribute("elevation-meters").set_value(4050);
+    color_pair04.append_attribute("red_uint8").set_value(230);
+    color_pair04.append_attribute("green_uint8").set_value(220);
+    color_pair04.append_attribute("blue_uint8").set_value(170);
+    color_pair04.append_attribute("alpha_uint8").set_value(255);
+
+    pugi::xml_node color_pair05 = colors_node.append_child("color-pair");
+    color_pair05.append_attribute("elevation-meters").set_value(4150);
+    color_pair05.append_attribute("red_uint8").set_value(220);
+    color_pair05.append_attribute("green_uint8").set_value(220);
+    color_pair05.append_attribute("blue_uint8").set_value(220);
+    color_pair05.append_attribute("alpha_uint8").set_value(255);
+
+    pugi::xml_node color_pair06 = colors_node.append_child("color-pair");
+    color_pair06.append_attribute("elevation-meters").set_value(4290);
+    color_pair06.append_attribute("red_uint8").set_value(250);
+    color_pair06.append_attribute("green_uint8").set_value(250);
+    color_pair06.append_attribute("blue_uint8").set_value(250);
+    color_pair06.append_attribute("alpha_uint8").set_value(255);
+
+    pugi::xml_node color_pair07 = colors_node.append_child("color-pair");
+    color_pair07.append_attribute("elevation-meters").set_value(4420);
+    color_pair07.append_attribute("red_uint8").set_value(245);
+    color_pair07.append_attribute("green_uint8").set_value(245);
+    color_pair07.append_attribute("blue_uint8").set_value(255);
+    color_pair07.append_attribute("alpha_uint8").set_value(255);
+
+
     // Save the file
     doc.save_file(m_configuration_file_to_generate.c_str());
 
@@ -421,6 +564,8 @@ void GDU_Options::Usage( const int& exit_code )
     std::cerr << std::endl;
 
     std::cerr << "-gen-config  -c <config-path>  : Generate configuration file and write to <config-path>." << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "-render -c <config-path>  : Render DEM image." << std::endl;
     std::cerr << std::endl;
 
     // Exit

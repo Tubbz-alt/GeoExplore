@@ -48,6 +48,7 @@ enum class CoreStatusReason : uint32_t {
     FILE_NOT_SUPPORTED  = 4 /*< Path is not valid file type.*/,
     GENERAL_IO_ERROR    = 5 /*< Problem parsing file.*/,
     NOT_IMPLEMENTED     = 6 /*< Method or object not implemented yet.*/,
+    PATH_UNABLE_TO_DELETE = 16,
 }; // End of CoreStatusReason Enumeration
 
 

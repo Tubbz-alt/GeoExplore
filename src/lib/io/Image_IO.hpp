@@ -47,15 +47,14 @@ template <typename ResourceType>
 typename ImageDriverBase<ResourceType>::ptr_t  Get_Read_Driver( const FS::FilesystemPath& pathname, 
                                                                 const DriverOptions& options = DriverOptions::NONE )    
 {
+    // GDAL Drivers
+    if( GDAL::ImageDriverGDAL<ResourceType>::Is_Read_Supported(pathname) == true ){
+        return typename ImageDriverBase<ResourceType>::ptr_t( new GDAL::ImageDriverGDAL<ResourceType>());
+    }
     
     // opencv drivers
     if( OPENCV::ImageDriverOpenCV<ResourceType>::Is_Read_Supported(pathname) == true ){
         return typename ImageDriverBase<ResourceType>::ptr_t( new OPENCV::ImageDriverOpenCV<ResourceType>());
-    }
-
-    // GDAL Drivers
-    if( GDAL::ImageDriverGDAL<ResourceType>::Is_Read_Supported(pathname) == true ){
-        return typename ImageDriverBase<ResourceType>::ptr_t( new GDAL::ImageDriverGDAL<ResourceType>());
     }
 
     // Return null
@@ -76,15 +75,14 @@ template <typename ResourceType>
 typename ImageDriverBase<ResourceType>::ptr_t  Get_Write_Driver( const FS::FilesystemPath& pathname, 
                                                                  const DriverOptions& options = DriverOptions::NONE )
 {
-    
-    // opencv drivers
-    if( OPENCV::ImageDriverOpenCV<ResourceType>::Is_Write_Supported(pathname) == true ){
-        return typename ImageDriverBase<ResourceType>::ptr_t( new OPENCV::ImageDriverOpenCV<ResourceType>());
-    }
-
     // GDAL Drivers
     if( GDAL::ImageDriverGDAL<ResourceType>::Is_Write_Supported(pathname) == true ){
         return typename ImageDriverBase<ResourceType>::ptr_t( new GDAL::ImageDriverGDAL<ResourceType>());
+    }
+
+    // opencv drivers
+    if( OPENCV::ImageDriverOpenCV<ResourceType>::Is_Write_Supported(pathname) == true ){
+        return typename ImageDriverBase<ResourceType>::ptr_t( new OPENCV::ImageDriverOpenCV<ResourceType>());
     }
 
     // Return null

@@ -5,11 +5,41 @@
 */
 #include <gtest/gtest.h>
 
+// C++ Standard Libraries
+#include <fstream>
+#include <iostream>
+
 // GeoExplore Libraries
 #include <filesystem/FilesystemPath.hpp>
 #include <utilities.hpp>
 
+// Boost Libraries
+#include <boost/filesystem.hpp>
+
+
 using namespace GEO;
+
+/**
+ * Create the requested file
+*/
+void Create_File( std::string const& pathname )
+{
+    std::ofstream fout;
+    fout.open(pathname.c_str());
+    fout << "Hello World" << std::endl;
+    fout.close();
+
+}
+
+/**
+ * Create the requested directory.
+*/
+void Create_Directory( std::string const& pathname )
+{
+    boost::filesystem::create_directory(boost::filesystem::path(pathname));
+}
+
+
 
 /**
  * Test the default constructor
@@ -308,6 +338,80 @@ TEST( FilesystemPath, Get_Current_Path ){
     FS::FilesystemPath exp_path(system_cwd);
     FS::FilesystemPath act_path = FS::FilesystemPath::Get_Current_Path();
     ASSERT_TRUE( exp_path == act_path );
+}
+
+/**
+ * Test the Delete Method
+*/
+TEST( FilesystemPath, Delete )
+{
+    
+    // Status
+    Status status;
+
+    // TEST 01 (Delete file that does not exist.)
+    FS::FilesystemPath test01("path-that-does-not-exist.txt");
+    status = test01.Delete();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), static_cast<int>(CoreStatusReason::PATH_DOES_NOT_EXIST) );
+
+    // TEST 02 (Delete file that does exist.)
+    FS::FilesystemPath test02("test02-file.txt");
+    Create_File( test02.ToString() );
+
+    // Make sure file exists
+    ASSERT_TRUE( test02.Exists() );
+    status = test02.Delete();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_FALSE( test02.Exists() );
+
+    // TEST 03 (Delete Directory)
+    FS::FilesystemPath test03("test03-directory");
+    Create_Directory( test03.ToString() );
+    Create_File( test03.Append("file.txt").ToString() );
+    ASSERT_TRUE( test03.Exists() );
+    status = test03.Delete();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), static_cast<int>(CoreStatusReason::PATH_UNABLE_TO_DELETE) );
+    ASSERT_TRUE( test03.Exists() );
+    test03.Delete_All();
+    ASSERT_FALSE( test03.Exists() );
+    
+}
+
+
+/**
+ * Test the Delete Method
+*/
+TEST( FilesystemPath, Delete_All )
+{
+    // Status
+    Status status;
+
+    // TEST 01 (Delete file that does not exist.)
+    FS::FilesystemPath test01("path-that-does-not-exist.txt");
+    status = test01.Delete_All();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), static_cast<int>(CoreStatusReason::PATH_DOES_NOT_EXIST) );
+
+    // TEST 02 (Delete file that does exist.)
+    FS::FilesystemPath test02("test02-file.txt");
+    Create_File( test02.ToString() );
+
+    // Make sure file exists
+    ASSERT_TRUE( test02.Exists() );
+    status = test02.Delete_All();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_FALSE( test02.Exists() );
+
+    // TEST 03 (Delete Directory)
+    FS::FilesystemPath test03("test03-directory");
+    Create_Directory( test03.ToString() );
+    Create_File( test03.Append("file.txt").ToString() );
+    ASSERT_TRUE( test03.Exists() );
+    status = test03.Delete_All();
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_FALSE( test03.Exists() );
 }
 
 

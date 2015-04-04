@@ -343,7 +343,8 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
         void Write_Image( IMG::Image_<pixel_type,ResourceType>const& output_image, 
                           FS::FilesystemPath const& pathname )
         {
-            
+           
+            std::cout << "OpenCV Driver" << std::endl;
             // convert the output image to an opencv structure
             cv::Mat_<cv::Vec3b> image( output_image.Rows(), output_image.Cols());
     

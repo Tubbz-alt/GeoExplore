@@ -33,36 +33,12 @@ namespace IO{
 namespace GDAL{
 
 
-/**
- * @brief Convert generic ChannelType to a GDAL Type.
-*/
-template<typename CType>
-GDALDataType ctype2gdaltype(){
-    if( std::is_same<CType,IMG::ChannelTypeUInt8>::value ){
-        return GDT_Byte;
-    }
-    if( std::is_same<CType,IMG::ChannelTypeUInt12>::value ){
-        return GDT_UInt16;
-    }
-    if( std::is_same<CType,IMG::ChannelTypeUInt14>::value ){
-        return GDT_UInt16;
-    }
-    if( std::is_same<CType,IMG::ChannelTypeUInt16>::value ){
-        return GDT_UInt16;
-    }
-    if( std::is_same<CType,IMG::ChannelTypeUInt32>::value ){
-        return GDT_UInt32;
-    }
-    if( std::is_same<CType,IMG::ChannelTypeDouble>::value ){
-        return GDT_Float64;
-    }
-
-    return GDT_Unknown;
-}
 
 
 /**
  * @class ImageDriverGDAL
+ *
+ * @brief GDAL Implementation of the ImageDriver type.
 */
 template <typename ResourceType>
 class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
@@ -456,7 +432,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                         }
 
 
-                        if( m_dataset->GetRasterCount() == 1 && (*image_data)[0].Dims() == 3 ){
+                        if( m_dataset->GetRasterCount() == 1 && 
+                            ((*image_data)[0].Dims() == 3 || (*image_data)[0].Dims() == 4))
+                        {
                             (*image_data)[r*xsize + c] = value;
                         }
                         else {
@@ -541,7 +519,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             typename IMG::MemoryResource<pixel_type>::ptr_t output(new IMG::MemoryResource<pixel_type>());
 
             // Open the dataset
-            Open();
+            Open(pathname);
 
             // Make sure we had no major issues
             if( Is_Open() == false ){
@@ -592,6 +570,10 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             // Create a driver
             ImageDriverGDAL<ResourceType> driver(pathname);
 
+            // Make sure the image is not null
+            if( image == nullptr ){
+                image = typename IMG::Image<pixel_type>::ptr_t(new IMG::Image<pixel_type>());
+            }
             
             // Load the memory resource
             image->Set_Resource( driver.Read_Image(pathname));
@@ -612,6 +594,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                           FS::FilesystemPath const& pathname )
         {
 
+            // Register GDAL
+            GDALAllRegister();
+            
             // Identify the driver
             std::string driverShortName = Get_Short_Driver_From_Filename(pathname);
             if( driverShortName == "" ){
@@ -620,10 +605,11 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
             // Get the gdal driver
             GDALDriver* gdal_driver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
-    
+            
+
             // make sure the driver can create images
-            if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATE, FALSE )){
-                if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATECOPY, FALSE )){
+            if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATE, FALSE ) == false ){
+                if( CSLFetchBoolean( gdal_driver->GetMetadata(), GDAL_DCAP_CREATECOPY, FALSE ) == false ){
                     throw std::runtime_error(driverShortName + " Driver cannot create or copy images.");
                 }
                 throw std::runtime_error(driverShortName + " Driver cannot write images.");
@@ -631,9 +617,9 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
     
             // run create
             GDALDataset* dataset = gdal_driver->Create( pathname.ToString().c_str(), 
-                                                        100,//output_image.cols(), 
-                                                        100,//output_image.rows(), 
-                                                        1,//output_image.channels(),
+                                                        output_image.Cols(), 
+                                                        output_image.Rows(), 
+                                                        output_image.Channels(),
                                                         GDT_Byte,
                                                         NULL
                                                        );

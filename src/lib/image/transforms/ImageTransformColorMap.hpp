@@ -343,6 +343,13 @@ Status Compute_Color_Map( typename Image<InputPixelType>::ptr_t&              in
                           const A_Color_Map<InputPixelType,OutputPixelType>&  color_map,
                           const int&                                          number_threads = 1 )
 {
+    
+    // Check if output image exists, create otherwise
+    if( output_image == nullptr )
+    {
+        output_image = typename Image<OutputPixelType>::ptr_t( new IMG::Image<OutputPixelType>( input_image->Rows(),
+                                                                                                input_image->Cols()));
+    }
 
     // Create the transform
     ImageTransformColorMap<InputPixelType,OutputPixelType> color_map_transform( input_image,

@@ -4,6 +4,7 @@
  * @date    3/21/2015
 */
 #include "GDAL_Utilities.hpp"
+#include "../../utilities/FilesystemUtilities.hpp"
 #include "../../utilities/StringUtilities.hpp"
 
 namespace GEO{
@@ -15,23 +16,27 @@ namespace GDAL{
 */
 std::string Get_Short_Driver_From_Filename( const FS::FilesystemPath& filename ){
 
-    // pull the extension
-    std::string ext = filename.Get_Extension().ToString();
-    std::string extl = string_toLower(ext);
-
+    // Get the File Type
+    FS::FileType file_type = FS::Get_File_Type( filename );
+    
     // png images
-    if( extl == ".png" ){
+    if( file_type == FS::FileType::PNG ){
         return "PNG";
     }
     
     // ntf images
-    if( extl == ".ntf" || extl == ".ntif" ){
+    if( file_type == FS::FileType::NITF ){
         return "NITF";
     }
     
     // jpeg images
-    if( extl == ".jpg" || extl == "jpeg" ){
+    if( file_type == FS::FileType::JPEG ){
         return "JPEG";
+    }
+
+    // Tiff
+    if( file_type == FS::FileType::TIFF ){
+        return "GTiff";
     }
 
     return "";
