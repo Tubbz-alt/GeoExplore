@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
+#include <coordinate/CoordinateGeographic.hpp>
+#include <coordinate/CoordinateUTM.hpp>
 #include <image/ChannelType.hpp>
 #include <io/gdal_utils/GDAL_Utilities.hpp>
 
@@ -59,12 +61,110 @@ TEST( GDAL_Utilities, Get_Short_Driver_From_Filename )
 
 }
 
+
+/**
+ * Test the Compute Geo Transform with invalid inputs
+*/
+TEST( GDAL_Utilities, Compute_Geo_Transform_invalid )
+{
+    // Status
+    Status status;
+    double * adfGeoTransform = new double[6];
+
+    // Create coordinate and pixel lists
+    std::vector<CRD::CoordinateUTM_d>         utm_coordinate_list;
+    std::vector<CRD::CoordinateGeographic_d>  geog_coordinate_list;
+    std::vector<MATH::A_Point2d>              pixel_list;
+
+    // Test 01 (Run with no input coordinates)
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, geog_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, utm_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+
+    // Test 02 (Invalid number of coordinates)
+    pixel_list.push_back(MATH::A_Point2d(0,0));
+    pixel_list.push_back(MATH::A_Point2d(40,0));
+    pixel_list.push_back(MATH::A_Point2d(0,50));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 0, 0));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 40, 0));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 0, 50));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, geog_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, utm_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+    
+    // Test 03 (Pixels don't match the input coordinates
+    pixel_list.push_back(MATH::A_Point2d(0,0));
+    pixel_list.push_back(MATH::A_Point2d(40,0));
+    pixel_list.push_back(MATH::A_Point2d(0,50));
+    pixel_list.push_back(MATH::A_Point2d(90,50));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 0, 0));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 40, 0));
+    utm_coordinate_list.push_back(CRD::CoordinateUTM_d( 11, false, 0, 50));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    geog_coordinate_list.push_back(CRD::CoordinateGeographic_d( 11, 12 ));
+    
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, geog_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+
+    status = IO::GDAL::Compute_Geo_Transform( pixel_list, utm_coordinate_list, adfGeoTransform );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::FAILURE );
+    ASSERT_EQ( (int)status.Get_Status_Reason(), (int)GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES );
+    
+
+    // Clean Up
+    delete [] adfGeoTransform;
+}
+
 /**
  * Test the Compute Geo Transform Method.
  */
 TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
 {
-    FAIL();
+    // EPS
+    const double eps = 0.0001;
+
+    // Status
+    Status status;
+
+    // Create a set of coordinate pairs to test
+    std::vector<CRD::CoordinateGeographic_d> coordinates;
+    std::vector<MATH::A_Point2d> pixels;
+
+    coordinates.push_back(CRD::CoordinateGeographic_d(39.7, -119.7));
+    pixels.push_back(MATH::A_Point2d(0,0));
+
+    coordinates.push_back(CRD::CoordinateGeographic_d(39.7, -119.2));
+    pixels.push_back(MATH::A_Point2d(750,0));
+    
+    coordinates.push_back(CRD::CoordinateGeographic_d(39.2, -119.7));
+    pixels.push_back(MATH::A_Point2d(0,1200));
+    
+    coordinates.push_back(CRD::CoordinateGeographic_d(39.2, -119.2));
+    pixels.push_back(MATH::A_Point2d(750,1200));
+    
+    // Compute the Geo Transform
+    double* adfGeoTransform = new double[6];
+    status = IO::GDAL::Compute_Geo_Transform( pixels, coordinates, adfGeoTransform );
+
+    // Check the results
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( adfGeoTransform[0], 39.7, eps );
+    
+    delete [] adfGeoTransform;
 }
 
 /**

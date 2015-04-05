@@ -104,6 +104,17 @@ A_Matrix_Eigen A_Matrix_Eigen::operator* ( A_Matrix_Eigen const& other )const{
 }
 
 
+/**********************************************/
+/*              Matrix Transpose              */
+/**********************************************/
+A_Matrix_Eigen A_Matrix_Eigen::Transpose()const
+{
+    // Create output
+    A_Matrix_Eigen output;
+    output.m_matrix->m_matrix = (m_matrix->m_matrix.transpose());
+    return output;
+}
+
 /************************************/
 /*              Inverse             */
 /************************************/
@@ -131,9 +142,9 @@ A_Matrix_Eigen A_Matrix_Eigen::Inverse( const double& eps )const
     matrix_type Ut = svd.matrixU().transpose();
    
     // Compute D
-    matrix_type D(3,3);
-    for( int i=0; i<3; i++ )
-    for( int j=0; j<3; j++ )
+    matrix_type D(V.rows(),Ut.rows());
+    for( int i=0; i<D.rows(); i++ )
+    for( int j=0; j<D.cols(); j++ )
         D(i,j) = 0;
 
     for( int i=0; i<S.rows(); i++ ){

@@ -114,6 +114,14 @@ class A_Matrix_Eigen{
         */
         A_Matrix_Eigen operator* ( A_Matrix_Eigen const& other )const;
     
+        
+        /**
+         * @brief Compute the matrix transpose.
+         *
+         * @return Transpose of the matrix.
+         */
+        A_Matrix_Eigen Transpose()const;
+
 
         /**
          * @brief Compute the Matrix Inverse.

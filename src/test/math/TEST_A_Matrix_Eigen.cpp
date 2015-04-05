@@ -93,6 +93,53 @@ TEST( A_Matrix_Eigen, Multiplication_Operator ){
 }
 
 /******************************************************/
+/*             Test the Transpose Function            */
+/******************************************************/
+TEST( A_Matrix_Eigen, Transpose )
+{
+
+    // Eps
+    const double eps = 0.0001;
+
+    // Test 01 ( Empty Matrix )
+    MATH::A_Matrix_Eigen test01;
+    MATH::A_Matrix_Eigen trans01 = test01.Transpose();
+    ASSERT_EQ( trans01.Rows(), 0 );
+    ASSERT_EQ( trans01.Cols(), 0 );
+
+    // Test 02 ( NxN matrix )
+    MATH::A_Matrix_Eigen test02(3,3);
+    for( int i=0; i<9; i++ ){ test02[i] = i+1; }
+
+    MATH::A_Matrix_Eigen trans02 = test02.Transpose();
+    ASSERT_EQ( trans02.Rows(), 3 );
+    ASSERT_EQ( trans02.Cols(), 3 );
+    
+    // Test 03 ( NxM matrix N>M)
+    MATH::A_Matrix_Eigen test03(4,3);
+    for( int i=0; i<12; i++ ){ test03[i] = i+1; }
+
+    MATH::A_Matrix_Eigen trans03 = test03.Transpose();
+    ASSERT_EQ( trans03.Rows(), 3 );
+    ASSERT_EQ( trans03.Cols(), 4 );
+    for( int i=0; i<4; i++ )
+    for( int j=0; j<3; j++ )
+        ASSERT_NEAR( trans03(j,i), test03(i,j), eps );
+
+    // Test 04 ( NxM matrix N<M)
+    MATH::A_Matrix_Eigen test04(3,4);
+    for( int i=0; i<12; i++ ){ test04[i] = i+1; }
+
+    MATH::A_Matrix_Eigen trans04 = test04.Transpose();
+    ASSERT_EQ( trans04.Rows(), 4 );
+    ASSERT_EQ( trans04.Cols(), 3 );
+    for( int i=0; i<4; i++ )
+    for( int j=0; j<3; j++ )
+        ASSERT_NEAR( trans04(i,j), test04(j,i), eps );
+
+}
+
+/******************************************************/
 /*             Test the Inverse Function              */
 /******************************************************/
 TEST( A_Matrix_Eigen, Inverse )
@@ -116,6 +163,29 @@ TEST( A_Matrix_Eigen, Inverse )
     ASSERT_NEAR( inv01(2,0),  0.52778, eps );
     ASSERT_NEAR( inv01(2,1),  0.16667, eps );
     ASSERT_NEAR( inv01(2,2), -0.19444, eps );
+
+    // Test 02 (4x3)
+    MATH::A_Matrix_Eigen test02(4,3);
+    for( int i=0; i<12; i++ ){
+        test02[i] = i+1;
+    }
+
+    // Check results
+    MATH::A_Matrix_Eigen inv02 = test02.Inverse();
+    ASSERT_EQ( inv02.Rows(), 3);
+    ASSERT_EQ( inv02.Cols(), 4);
+    ASSERT_NEAR( inv02(0,0), -0.48333, eps );
+    ASSERT_NEAR( inv02(0,1), -0.24444, eps );
+    ASSERT_NEAR( inv02(0,2), -0.00556, eps );
+    ASSERT_NEAR( inv02(0,3),  0.23333, eps );
+    ASSERT_NEAR( inv02(1,0), -0.03333, eps );
+    ASSERT_NEAR( inv02(1,1), -0.01111, eps );
+    ASSERT_NEAR( inv02(1,2),  0.01111, eps );
+    ASSERT_NEAR( inv02(1,3),  0.03333, eps );
+    ASSERT_NEAR( inv02(2,0),  0.41667, eps );
+    ASSERT_NEAR( inv02(2,1),  0.22222, eps );
+    ASSERT_NEAR( inv02(2,2),  0.02778, eps );
+    ASSERT_NEAR( inv02(2,3), -0.16667, eps );
 }
 
 
