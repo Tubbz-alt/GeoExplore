@@ -90,6 +90,21 @@ class ImageDriverBase{
         */
         virtual void Open( const FS::FilesystemPath& pathname ) = 0;
         
+
+        /**
+         * @brief Read Image Metdata.
+         *
+         * @param[in] pathname Image pathname.
+         *
+         * @return Image Metadata Container.
+         */
+        virtual IMG::MetadataContainer::ptr_t Read_Image_Metadata( FS::FilesystemPath const& pathname, Status& status )
+        {
+            status = Status(StatusType::SUCCESS);
+            return nullptr;
+        }
+
+
         /**
          * @brief Read an image from file.
          *

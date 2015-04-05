@@ -84,6 +84,26 @@ class A_Matrix_Eigen{
         double& operator()( const int& row,
                             const int& col );
         
+        
+        /**
+         * @brief Bracket Value Operator
+         *
+         * @param[in] index Index position (Row-Major)
+         *
+         * @return Value of matrix at position.
+         */
+        double operator[]( const int& index )const;
+        
+        
+        /**
+         * @brief Bracket Value Operator
+         *
+         * @param[in] index Index position (Row-Major)
+         *
+         * @return Value of matrix at position.
+         */
+        double& operator[]( const int& index );
+
 
         /**
          * @brief Matrix Multiplication
@@ -94,6 +114,14 @@ class A_Matrix_Eigen{
         */
         A_Matrix_Eigen operator* ( A_Matrix_Eigen const& other )const;
     
+
+        /**
+         * @brief Compute the Matrix Inverse.
+         *
+         * @return Inverse of the current matrix.
+        */
+        A_Matrix_Eigen Inverse( const double& eps = 0.000001 )const;
+
         
         /**
          * @brief Print to pretty string.

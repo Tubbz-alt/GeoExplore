@@ -30,6 +30,10 @@ class A_Matrix_Eigen_Impl{
         /// Pointer Type
         typedef std::shared_ptr<A_Matrix_Eigen_Impl> ptr_t;
         
+        /// Matrix Type
+        typedef Eigen::MatrixXd matrix_type;
+
+
         /**
          * @brief Constructor.
          *

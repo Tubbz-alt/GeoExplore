@@ -59,3 +59,19 @@ TEST( GDAL_Utilities, Get_Short_Driver_From_Filename )
 
 }
 
+/**
+ * Test the Compute Geo Transform Method.
+ */
+TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
+{
+    FAIL();
+}
+
+/**
+ * Test the Compute Geo Transform Method.
+ */
+TEST( GDAL_Utilities, Compute_Geo_Transform_utm )
+{
+    FAIL();
+}
+

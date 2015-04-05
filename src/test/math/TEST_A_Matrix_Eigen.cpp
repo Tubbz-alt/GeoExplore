@@ -28,6 +28,35 @@ TEST( A_Matrix_Eigen, Constructor )
 
 }
 
+/**
+ * Test the Operators
+*/
+TEST( A_Matrix_Eigen, Accessors ){
+
+    MATH::A_Matrix_Eigen matrix(3,3);
+
+    // Test the setters
+    int counter = 0;
+    for( int i=0; i<3; i++ ){
+    for( int j=0; j<3; j++ ){
+        matrix(i,j) = counter++;
+    }}
+
+    // Check values
+    for( int i=0; i<9; i++ )
+        ASSERT_NEAR( matrix[i], i, 0.0001 );
+    
+    // Set new values
+    for( int i=0; i<9; i++ )
+        matrix[i] = -i;
+
+
+    counter = 0;
+    for( int i=0; i<3; i++ )
+    for( int j=0; j<3; j++ )
+        ASSERT_NEAR( matrix(i,j), counter--, 0.0001 );
+
+}
 
 /** 
  * Test Matrix Multiplication
@@ -62,4 +91,31 @@ TEST( A_Matrix_Eigen, Multiplication_Operator ){
     ASSERT_NEAR( matrix_result_01(2,2),150, eps );
 
 }
+
+/******************************************************/
+/*             Test the Inverse Function              */
+/******************************************************/
+TEST( A_Matrix_Eigen, Inverse )
+{
+    // EPS
+    const double eps = 0.0001;
+
+    // TEST 01 (Simple Matrix)
+    MATH::A_Matrix_Eigen test01(3,3);
+    for( int i=0; i<9; i++ ){  test01[i] = i+1; }
+        
+    MATH::A_Matrix_Eigen inv01 = test01.Inverse();
+    ASSERT_EQ( inv01.Rows(), 3 );
+    ASSERT_EQ( inv01.Cols(), 3 );
+    ASSERT_NEAR( inv01(0,0), -0.63889, eps );
+    ASSERT_NEAR( inv01(0,1), -0.16667, eps );
+    ASSERT_NEAR( inv01(0,2),  0.30556, eps );
+    ASSERT_NEAR( inv01(1,0), -0.05556, eps );
+    ASSERT_NEAR( inv01(1,1),  0,       eps );
+    ASSERT_NEAR( inv01(1,2),  0.05556, eps );
+    ASSERT_NEAR( inv01(2,0),  0.52778, eps );
+    ASSERT_NEAR( inv01(2,1),  0.16667, eps );
+    ASSERT_NEAR( inv01(2,2), -0.19444, eps );
+}
+
 

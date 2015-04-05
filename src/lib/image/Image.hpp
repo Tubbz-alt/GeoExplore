@@ -9,7 +9,7 @@
 /// GeoExplore Libraries
 #include "../core/A_Size.hpp"
 #include "../math/A_Point.hpp"
-#include "MetadataContainerBase.hpp"
+#include "MetadataContainer.hpp"
 
 
 namespace GEO{
@@ -80,7 +80,8 @@ class Image_{
          Image_( const int& rows,
                  const int& cols,
                  const PixelType& pixel )
-           : m_resource(rows, cols, pixel)
+           : m_resource(rows, cols, pixel),
+             m_metadata(nullptr)
         {
         }
         
@@ -93,7 +94,8 @@ class Image_{
          */
         Image_( const A_Size<int>& size,
                 const PixelType& pixel )
-          : m_resource( size, pixel )
+          : m_resource( size, pixel ),
+            m_metadata(nullptr)
         {
         }
 
@@ -213,13 +215,34 @@ class Image_{
         }
 
 
+        /**
+         * @brief Get the Metadata
+         *
+         * @return Metadata Container.
+        */
+        MetadataContainer::ptr_t Get_Metadata()const{
+            return m_metadata;
+        }
+
+
+        /**
+         * @brief Set the metadata
+         *
+         * @param[in] metadata Image metadata container.
+         */
+        void Set_Metadata( MetadataContainer::ptr_t const& metadata )
+        {
+            m_metadata = metadata;
+        }
+
+
         private:
 
             /// internal pixel data
             ResourceType  m_resource;    
             
             /// Internal Metadata
-            MetadataContainerBase::ptr_t m_metadata;
+            MetadataContainer::ptr_t m_metadata;
 
 };  /// End of BaseImage Class
 

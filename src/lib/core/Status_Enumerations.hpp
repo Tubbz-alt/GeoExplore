@@ -69,6 +69,7 @@ enum class GDALStatusReason : uint32_t {
     UNKNOWN_PROJECTION_TYPE = 7 /*< Unknown OGR Coordinate Type */,
     DATASET_INITIALIZATION_ERROR = 14 /*< Error opening dataset. */,
     RASTER_CONTAINS_NO_PIXEL_DATA = 15 /*< Image is empty.*/,
+    TRANSFORM_NOT_ENOUGH_COORDINATES = 17,
 }; // End of GDALStatusReason
 
 

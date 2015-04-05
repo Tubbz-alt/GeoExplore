@@ -506,6 +506,50 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
 
 
         /**
+         * @brief Read the image metadata.
+         *
+         * @param[in] pathname Image pathname.
+         *
+         * @return image metadata.
+        */
+        virtual IMG::MetadataContainer::ptr_t Read_Image_Metadata( FS::FilesystemPath const& pathname, 
+                                                                   Status& status )
+        {
+
+            // Create metadata container
+            IMG::MetadataContainer::ptr_t metadata;
+
+            // Open the dataset
+            Open(pathname);
+
+            std::cout << "a" << std::endl;
+            // Make sure we had no major issues
+            if( Is_Open() == false ){
+                return metadata;
+            }
+            std::cout << "b" << std::endl;
+
+            // Initialize
+            metadata = IMG::MetadataContainer::ptr_t(new IMG::MetadataContainer());
+            
+            // Get the Projection
+            OGRSpatialReference oSRS;
+            Get_OGR_Spatial_Reference( oSRS );
+
+            // Fetch the image metdata
+            char** papzMetadata = m_driver->GetMetadata();
+
+            // Set the Datum
+
+
+            // Close the dataset
+            Close();
+
+            return metadata;
+        }
+
+
+        /**
          * @brief Read an image from file.
          *
          * @param[in] pathname Image pathname.
@@ -614,7 +658,8 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 }
                 throw std::runtime_error(driverShortName + " Driver cannot write images.");
             }
-    
+   
+
             // run create
             GDALDataset* dataset = gdal_driver->Create( pathname.ToString().c_str(), 
                                                         output_image.Cols(), 
@@ -623,15 +668,53 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                                                         GDT_Byte,
                                                         NULL
                                                        );
-    
+            
+            // Process Image Metadata
+            /*
+            OGRSpatialReference oSRS;
+            char *pszSRS_WKT = NULL;
+            GDALRasterBand *poBand;
+            GByte abyRaster[512*512];
+
+            poDstDS->SetGeoTransform( adfGeoTransform );
+
+            
+            oSRS.SetUTM( 11, TRUE );
+            oSRS.SetWellKnownGeogCS( "NAD27" );
+            oSRS.exportToWkt( &pszSRS_WKT );
+            poDstDS->SetProjection( pszSRS_WKT );
+            CPLFree( pszSRS_WKT );*/
+
+            // Create temp image structure
+            uint8_t* temp_buffer = new uint8_t[output_image.Cols()];
+
             // iterate over each channel
             for( size_t i=0; i<output_image.Channels(); i++ ){
+    
+                // Fetch the raster band
                 GDALRasterBand* band = dataset->GetRasterBand(i+1);
-                for( size_t x=0; x<output_image.Cols(); x++ )
-                for( size_t y=0; y<output_image.Rows(); y++ ){
-                    band->RasterIO( GF_Write, 0, 0, x, y, &output_image(y,x)[i], 1, 1, GDT_Byte, 0, 0);
+                
+                // Iterate over each row
+                for( int r=0; r<output_image.Rows(); r++ ){
+                
+                    // Copy data to buffer
+                    for( int c=0; c<output_image.Cols(); c++ ){
+                        temp_buffer[c] = output_image(r,c)[i];
+                    }
+
+                    // Write
+                    band->RasterIO( GF_Write, 
+                                    0, r, 
+                                    output_image.Cols(), 1, 
+                                    temp_buffer,    
+                                    output_image.Cols(), 1, 
+                                    GDT_Byte, 0, 0);
                 }
             }
+
+            // Clear the temp buffer
+            delete [] temp_buffer;
+            temp_buffer = nullptr;
 
             // close the dataset
             GDALClose(dataset);

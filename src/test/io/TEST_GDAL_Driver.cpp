@@ -472,3 +472,31 @@ TEST( ImageDriverGDAL, Read_Image_rgba_u8_tif_test01 )
 
 }
 
+
+/**
+ * Test the Read Image Metadata Method.
+ */
+TEST( ImageDriverGDAL, Read_Image_Metadata_geotiff )
+{
+    // Define the pixel type
+    typedef IMG::PixelRGBA_u8 pixel_type;
+
+    // Define the resource type
+    typedef IMG::MemoryResource<pixel_type> resource_type;
+
+    // Status of the operation
+    Status status;
+
+    // Set the path
+    FS::FilesystemPath image_path("data/unit-test/images/geotiff/cea.tif");
+
+    // Build the driver
+    IO::GDAL::ImageDriverGDAL<resource_type>::ptr_t driver(new IO::GDAL::ImageDriverGDAL<resource_type>());
+    
+    // Read the image metadata
+    IMG::MetadataContainer::ptr_t metadata = driver->Read_Image_Metadata( image_path, status );
+    
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NE( metadata, nullptr );
+}
+

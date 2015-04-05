@@ -19,6 +19,7 @@
 #include "../../core/Enumerations.hpp"
 #include "../../filesystem.hpp"
 #include "../../image/ChannelType.hpp"
+#include "../../math/A_Matrix.hpp"
 #include "../../math/A_Point.hpp"
 #include "../../math/A_Rectangle.hpp"
 
@@ -77,6 +78,54 @@ MATH::A_Point2d GDAL_Pixel_To_World( MATH::A_Point2d const& pixel,
  * @brief Convert GDAL Datum String to Datum Types
 */
 Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string );
+
+
+/**
+ * @brief Compute Geo Transform from Coordinates.
+ *
+ * @param[in] coordinates Coordinate list.
+ * @param[in] adfGeoTransform Geo Transform.
+ *
+ * @return Status of the operation.
+ */
+ template <typename CoordinateType>
+Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordinates,
+                               std::vector<CoordinateType>  const& output_coordinates,
+                               double*& adfGeoTransform )
+{
+    // Check the coordinate list
+    if( input_coordinates.size() != output_coordinates.size() ||
+        input_coordinates.size() < 4 ){
+        return Status( StatusType::FAILURE, 
+                       GDALStatusReason::TRANSFORM_NOT_ENOUGH_COORDINATES,
+                       "Must have more than 4 coordinates.");
+    }
+
+    // Create the input matrix
+    MATH::A_Matrix input_matrix(input_coordinates.size(), 3);
+    for( int i=0; i<input_coordinates.size(); i++ ){
+        input_matrix(i,0) = input_coordinates[i].x();
+        input_matrix(i,1) = input_coordinates[i].y();
+        input_matrix(i,2) = 1;
+    }
+
+    // Create output matrices
+    MATH::A_Matrix output_x(output_coordinates.size(),1);
+    MATH::A_Matrix output_y(output_coordinates.size(),1);
+    for( int i=0; i<output_coordinates.size(); i++ ){
+        output_x(i,0) = output_coordinates[i].x();
+        output_y(i,0) = output_coordinates[i].y();
+    }
+
+    // Create matrices to solve
+    MATH::A_Matrix x_estimates(3,1);
+    MATH::A_Matrix y_estimates(3,1);
+    
+    // Compute solution
+
+    // return success
+    return Status(StatusType::SUCCESS);
+}
 
 
 /** 

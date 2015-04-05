@@ -101,6 +101,9 @@ void Read_Image( FS::FilesystemPath const& pathname,
                  IMG::Image_<PixelType, IMG::MemoryResource<PixelType>>& output_image )
 {
 
+    // Status
+    Status status;
+
     // make sure the file exists
     if( pathname.Exists() == false ){
         throw std::runtime_error(std::string(std::string("error: File \"") + pathname.ToString() + std::string("\" does not exist.")).c_str());
@@ -114,8 +117,11 @@ void Read_Image( FS::FilesystemPath const& pathname,
         throw std::runtime_error("Unknown driver.");
     }
     
-    // Load the Driver
+    // Load the Pixel Data
     output_image.Set_Resource( driver->Read_Image(pathname));
+    
+    // Load the Metadata
+    output_image.Set_Metadata( driver->Read_Image_Metadata(pathname, status));
 }
 
 

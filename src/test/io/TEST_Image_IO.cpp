@@ -59,7 +59,7 @@ TEST( Image_IO, Write_Image_tif_rgb_u8_test_01 ){
     }
 
     // Define the output path
-    FS::FilesystemPath output_path("output-test.tif");
+    FS::FilesystemPath output_path("imageio-output-test.tif");
 
     // Write Image
     IO::Write_Image( image, output_path );
@@ -91,6 +91,7 @@ TEST( Image_IO, Write_Image_tif_rgb_u8_test_01 ){
 */
 TEST( Image_IO, Write_Image_tif_rgba_u8_test_01 ){
 
+    FAIL();
     // Define the desired image size
     const A_Size<int> image_size(1000,1000);
     const int block_size = 100;

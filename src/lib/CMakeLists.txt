@@ -107,6 +107,7 @@ set( GEOEXPLORE_IMAGE_HEADERS
     image/MemoryResource.hpp
     image/MetadataContainerBase.hpp
     image/MetadataContainer.hpp
+    image/MetadataItem.hpp
     image/PixelBase.hpp
     image/PixelGray.hpp
     image/PixelRGB.hpp
@@ -230,6 +231,7 @@ set( GEOEXPLORE_IMAGE_SOURCES
     image/ChannelType.cpp
     image/MetadataContainer.cpp
     image/MetadataContainerBase.cpp
+    image/MetadataItem.cpp
 )
 
 #   IO Module

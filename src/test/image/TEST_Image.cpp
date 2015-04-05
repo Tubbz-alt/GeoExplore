@@ -47,5 +47,9 @@ TEST( Image, Memory_Resource_Constructors )
             ASSERT_EQ( image_gray_u8(r,c)[0], IMG::ChannelTypeUInt8::minValue );
         }
     }
+
+    // Check the metadata
+    ASSERT_EQ( image_gray_u8.Get_Metadata(), nullptr );
+
 }
 
