@@ -165,7 +165,7 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
     ASSERT_NEAR( adfGeoTransform[0], -119.7, eps );
     ASSERT_NEAR( adfGeoTransform[1], 0.0007, eps );
     ASSERT_NEAR( adfGeoTransform[2],      0, eps );
-    ASSERT_NEAR( adfGeoTransform[3],  39.69, eps );
+    ASSERT_NEAR( adfGeoTransform[3],  39.70, eps );
     ASSERT_NEAR( adfGeoTransform[4],      0, eps );
     ASSERT_NEAR( adfGeoTransform[5],      0, eps );
     
@@ -209,7 +209,7 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_utm )
     ASSERT_NEAR( adfGeoTransform[0], -119.7, eps );
     ASSERT_NEAR( adfGeoTransform[1], 0.0007, eps );
     ASSERT_NEAR( adfGeoTransform[2],      0, eps );
-    ASSERT_NEAR( adfGeoTransform[3],  39.69, eps );
+    ASSERT_NEAR( adfGeoTransform[3],  39.70, eps );
     ASSERT_NEAR( adfGeoTransform[4],      0, eps );
     ASSERT_NEAR( adfGeoTransform[5],      0, eps );
     
