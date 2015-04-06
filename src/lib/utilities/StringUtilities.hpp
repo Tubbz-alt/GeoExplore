@@ -6,6 +6,7 @@
 #ifndef __SRC_CORE_STRINGUTILITIES_HPP__
 #define __SRC_CORE_STRINGUTILITIES_HPP__
 
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -43,6 +44,23 @@ std::string num2str( TP const& value ){
     sin << value;
     return sin.str();
 }
+
+
+/**
+ * Convert a number into a string
+ *
+ * @param[in] value Input number
+ *
+ * @return   string representation
+ */
+template <typename TP>
+std::string num2str( TP const& value, const int& precision ){
+
+    std::stringstream sin;
+    sin << std::setprecision(precision) << value;
+    return sin.str();
+}
+
 
 /**
  * @brief Trim a string.

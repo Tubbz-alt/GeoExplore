@@ -19,6 +19,7 @@
 #include "../../core/Enumerations.hpp"
 #include "../../filesystem.hpp"
 #include "../../image/ChannelType.hpp"
+#include "../../image/MetadataContainer.hpp"
 #include "../../math/A_Matrix.hpp"
 #include "../../math/A_Point.hpp"
 #include "../../math/A_Rectangle.hpp"
@@ -81,6 +82,19 @@ Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string );
 
 
 /**
+ * @brief Construct an OGR Spatial Reference from Image Metadata.
+ *
+ * @param[in] image_metadata
+ * @param[out] oSRS OGR Spatial Reference object.
+ * @param[out] adfGeoTransform GDAL Transform.
+ *
+ * @return True if we should use it, false otherwise.
+ */
+bool GDAL_Process_OGR_From_Metadata( IMG::MetadataContainer::ptr_t image_metadata,
+                                     OGRSpatialReference&          oSRS,
+                                     double*&                      adfGeoTransform );
+
+/**
  * @brief Compute Geo Transform from Coordinates.
  *
  * @param[in] coordinates Coordinate list.
@@ -102,7 +116,6 @@ Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordin
     }
 
     // Create the input matrix
-    std::cout << "a" << std::endl;
     MATH::A_Matrix input_matrix(input_coordinates.size(), 3);
     for( int i=0; i<input_coordinates.size(); i++ ){
         input_matrix(i,0) = input_coordinates[i].x();
@@ -112,7 +125,6 @@ Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordin
     MATH::A_Matrix inputInv = input_matrix.Inverse();
 
     // Create output matrices
-    std::cout << "b" << std::endl;
     MATH::A_Matrix output_x(output_coordinates.size(),1);
     MATH::A_Matrix output_y(output_coordinates.size(),1);
     for( int i=0; i<output_coordinates.size(); i++ ){
@@ -125,13 +137,15 @@ Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordin
     MATH::A_Matrix y_estimates(3,1);
     
     // Compute solution
-    std::cout << "c" << std::endl;
     x_estimates = inputInv * output_x;
     y_estimates = inputInv * output_y;
 
-    std::cout << "d" << std::endl;
-    std::cout << x_estimates.ToPrettyString() << std::endl;
-    std::cout << y_estimates.ToPrettyString() << std::endl;
+    adfGeoTransform[0] = x_estimates(2,0);
+    adfGeoTransform[1] = x_estimates(0,0);
+    adfGeoTransform[2] = x_estimates(1,0);
+    adfGeoTransform[3] = y_estimates(2,0);
+    adfGeoTransform[4] = y_estimates(0,0);
+    adfGeoTransform[5] = y_estimates(1,0);
 
     // return success
     return Status(StatusType::SUCCESS);

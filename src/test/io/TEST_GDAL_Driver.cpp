@@ -478,6 +478,23 @@ TEST( ImageDriverGDAL, Read_Image_rgba_u8_tif_test01 )
  */
 TEST( ImageDriverGDAL, Read_Image_Metadata_geotiff )
 {
+    // Misc variables
+    std::string value;
+    double value_dbl;
+    
+    // EPS
+    const double eps = 0.001;
+
+    // Expected values
+    const double exp_tl_x = -28493.167;
+    const double exp_tl_y = 4255884.544;
+    const double exp_tr_x = 2358.212;
+    const double exp_tr_y = 4255884.544;
+    const double exp_bl_x = -28493.167;
+    const double exp_bl_y = 4224973.143; 
+    const double exp_br_x = 2358.212;
+    const double exp_br_y = 4224973.143;
+
     // Define the pixel type
     typedef IMG::PixelRGBA_u8 pixel_type;
 
@@ -488,15 +505,48 @@ TEST( ImageDriverGDAL, Read_Image_Metadata_geotiff )
     Status status;
 
     // Set the path
-    FS::FilesystemPath image_path("data/unit-test/images/geotiff/cea.tif");
+    FS::FilesystemPath image_path("data/unit-tests/images/geotiff/cea.tif");
 
     // Build the driver
     IO::GDAL::ImageDriverGDAL<resource_type>::ptr_t driver(new IO::GDAL::ImageDriverGDAL<resource_type>());
     
     // Read the image metadata
     IMG::MetadataContainer::ptr_t metadata = driver->Read_Image_Metadata( image_path, status );
-    
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
     ASSERT_NE( metadata, nullptr );
+    
+    // Check if the corner coordinates are present
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_TL_X", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_tl_x, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_TL_Y", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_tl_y, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_TR_X", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_tr_x, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_TR_Y", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_tr_y, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_BL_X", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_bl_x, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_BL_Y", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_bl_y, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_BR_X", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_br_x, eps );
+    
+    ASSERT_TRUE( metadata->Query_Metadata("CORNER_COORDINATE_BR_Y", value_dbl ) );
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( value_dbl, exp_br_y, eps );
+
 }
 

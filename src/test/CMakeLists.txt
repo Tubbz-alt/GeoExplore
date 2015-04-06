@@ -100,6 +100,8 @@ set( GEOEXPLORE_IMAGE_MODULE_TESTS
     image/TEST_Image_Utilities.cpp
     image/TEST_Interpolation.cpp
     image/TEST_MemoryResource.cpp
+    image/TEST_MetadataContainer.cpp
+    image/TEST_MetadataItem.cpp
     image/TEST_PixelGray.cpp
     image/TEST_PixelRGB.cpp
     image/TEST_PixelRGBA.cpp

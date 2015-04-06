@@ -8,6 +8,10 @@
 
 // C++ Standard Library
 #include <string>
+#include <type_traits>
+
+// GeoExplore Libraries
+#include "../utilities/StringUtilities.hpp"
 
 namespace GEO{
 namespace IMG{
@@ -36,8 +40,51 @@ class MetadataItem{
         */
         MetadataItem( std::string const& key, 
                       std::string const& value );
+        
+        
+        /**
+         * @brief MetadataItem Constructor given key/value pair.
+         *
+         * @param[in] key Key value.
+         * @param[in] value Value tag.
+        */
+        MetadataItem( std::string const&  key, 
+                      double      const&  value );
+
+        
+        /**
+         * @brief Get the Key Value
+         *
+         * @return Key Value.
+         */
+        inline std::string Key()const{
+            return m_key;
+        }
 
 
+        /**
+         * @brief Get the Value.
+         *
+         * @return Value.
+         */
+        template <typename ValueType>
+        typename std::enable_if<std::is_same<ValueType,std::string>::value, std::string>::type
+            Value()const{
+            return m_value;
+        }
+        
+        
+        /**
+         * @brief Get the Value.
+         *
+         * @return Value.
+         */
+        template <typename ValueType>
+        typename std::enable_if<std::is_arithmetic<ValueType>::value,ValueType>::type
+            Value()const{
+            return str2num<ValueType>(m_value);
+        }
+        
 
     private:
         

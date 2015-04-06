@@ -73,6 +73,19 @@ Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string ){
 }
 
 
+
+/**************************************************************************/
+/*        Construct an OGR Spatial Reference from Image Metadata.         */
+/**************************************************************************/
+bool GDAL_Process_OGR_From_Metadata( IMG::MetadataContainer::ptr_t image_metadata,
+                                     OGRSpatialReference&          oSRS,
+                                     double*&                      adfGeoTransform )
+{
+
+    return false;
+}
+
+
 } // End of GDAL Namespace
 } // End of IO   Namespace
 } // End of GEO  Namespace

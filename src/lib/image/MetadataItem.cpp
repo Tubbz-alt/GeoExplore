@@ -5,6 +5,9 @@
 */
 #include "MetadataItem.hpp"
 
+// GeoExplore Libraries
+#include "../utilities/StringUtilities.hpp"
+
 namespace GEO{
 namespace IMG{
 
@@ -18,15 +21,27 @@ MetadataItem::MetadataItem()
 }
 
 
-/**
- * Constructor
-*/
+/****************************************/
+/*            Constructor               */
+/****************************************/
 MetadataItem::MetadataItem( std::string const& key, 
                             std::string const& value )
   : m_key(key),
     m_value(value)
 {
 }
+
+
+/****************************************/
+/*            Constructor               */
+/****************************************/
+MetadataItem::MetadataItem( std::string const& key, 
+                            double      const& value )
+  : m_key(key),
+    m_value(num2str(value, 16))
+{
+}
+
 
 
 } // End of IMG Namespace

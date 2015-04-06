@@ -522,12 +522,11 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             // Open the dataset
             Open(pathname);
 
-            std::cout << "a" << std::endl;
             // Make sure we had no major issues
             if( Is_Open() == false ){
+                status = m_current_status; 
                 return metadata;
             }
-            std::cout << "b" << std::endl;
 
             // Initialize
             metadata = IMG::MetadataContainer::ptr_t(new IMG::MetadataContainer());
@@ -536,11 +535,59 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             OGRSpatialReference oSRS;
             Get_OGR_Spatial_Reference( oSRS );
 
-            // Fetch the image metdata
-            char** papzMetadata = m_driver->GetMetadata();
+            // Check if Projected
+            if( oSRS.IsProjected() == true ){
+                metadata->Add_Metadata_Entry("IS_PROJECTED","TRUE");
+            }else{
+                metadata->Add_Metadata_Entry("IS_PROJECTED","FALSE");
+            }
 
-            // Set the Datum
+            // Check if Geographic
+            if( oSRS.IsGeographic() == true ){
+                metadata->Add_Metadata_Entry("IS_GEOGRAPHIC","TRUE");
+            }else{
+                metadata->Add_Metadata_Entry("IS_GEOGRAPHIC","FALSE");
+            }
 
+            // Process UTM
+            int isNorth;
+            int zn = oSRS.GetUTMZone(&isNorth);
+            if( zn != 0 ){
+
+                // Add Flag
+                metadata->Add_Metadata_Entry("IS_UTM","TRUE");
+                
+                // Check if northern
+                if( isNorth == true ){
+                    metadata->Add_Metadata_Entry("UTM_IS_NORTHERN", "TRUE");
+                }else{
+                    metadata->Add_Metadata_Entry("UTM_IS_NORTHERN", "FALSE");
+                }
+
+                // Process Zone
+                metadata->Add_Metadata_Entry("UTM_ZONE", zn);
+            }
+
+            // Get the Projection
+            double adfGeoTransform[6];
+            if( Get_GDAL_Geo_Transform( adfGeoTransform ) == true )
+            {
+                // Compute the corners
+                MATH::A_Point2d corner_tl = GDAL_Pixel_To_World( MATH::A_Point2d(     0,     0), adfGeoTransform );  
+                MATH::A_Point2d corner_tr = GDAL_Pixel_To_World( MATH::A_Point2d(Cols(),     0), adfGeoTransform );  
+                MATH::A_Point2d corner_bl = GDAL_Pixel_To_World( MATH::A_Point2d(     0,Rows()), adfGeoTransform );  
+                MATH::A_Point2d corner_br = GDAL_Pixel_To_World( MATH::A_Point2d(Cols(),Rows()), adfGeoTransform ); 
+
+                // Set the Corner Coordinates
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_X", corner_tl.x());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_Y", corner_tl.y());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_X", corner_tr.x());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_Y", corner_tr.y());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_X", corner_bl.x());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_Y", corner_bl.y());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_X", corner_br.x());
+                metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_Y", corner_br.y());
+            }
 
             // Close the dataset
             Close();
@@ -669,22 +716,45 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                                                         NULL
                                                        );
             
-            // Process Image Metadata
-            /*
-            OGRSpatialReference oSRS;
-            char *pszSRS_WKT = NULL;
-            GDALRasterBand *poBand;
-            GByte abyRaster[512*512];
+            // Get the metadata 
+            IMG::MetadataContainer::ptr_t image_metadata = output_image.Get_Metadata();
 
-            poDstDS->SetGeoTransform( adfGeoTransform );
+            // Process Image Metadata
+            if( image_metadata != nullptr ){
+                
+                // Build the OGR Spatial Reference Object
+                OGRSpatialReference oSRS;
+                double* adfGeoTransform = new double[6];
+                bool use_srs = GDAL_Process_OGR_From_Metadata( image_metadata, 
+                                                               oSRS, 
+                                                               adfGeoTransform );
+                
+                // Set the Projection
+                if( use_srs == true ){
+                    
+                    // Export to Well-Known Text
+                    char* pszSRS_WKT = NULL;
+                    oSRS.exportToWkt( &pszSRS_WKT );
+
+                    // Set the projection
+                    dataset->SetProjection( pszSRS_WKT );
+                    CPLFree( pszSRS_WKT );
+                }
+                delete [] adfGeoTransform;
+
+                /*
+                poDstDS->SetGeoTransform( adfGeoTransform );
 
             
-            oSRS.SetUTM( 11, TRUE );
-            oSRS.SetWellKnownGeogCS( "NAD27" );
-            oSRS.exportToWkt( &pszSRS_WKT );
-            poDstDS->SetProjection( pszSRS_WKT );
-            CPLFree( pszSRS_WKT );*/
+                oSRS.SetUTM( 11, TRUE );
+                oSRS.SetWellKnownGeogCS( "NAD27" );
+                oSRS.exportToWkt( &pszSRS_WKT );
+                poDstDS->SetProjection( pszSRS_WKT );
+                CPLFree( pszSRS_WKT );*/
 
+
+            }
+            
             // Create temp image structure
             uint8_t* temp_buffer = new uint8_t[output_image.Cols()];
 

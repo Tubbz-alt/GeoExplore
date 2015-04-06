@@ -135,7 +135,7 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_invalid )
 TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
 {
     // EPS
-    const double eps = 0.0001;
+    const double eps = 0.01;
 
     // Status
     Status status;
@@ -162,7 +162,12 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
 
     // Check the results
     ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
-    ASSERT_NEAR( adfGeoTransform[0], 39.7, eps );
+    ASSERT_NEAR( adfGeoTransform[0], -119.7, eps );
+    ASSERT_NEAR( adfGeoTransform[1], 0.0007, eps );
+    ASSERT_NEAR( adfGeoTransform[2],      0, eps );
+    ASSERT_NEAR( adfGeoTransform[3],  39.69, eps );
+    ASSERT_NEAR( adfGeoTransform[4],      0, eps );
+    ASSERT_NEAR( adfGeoTransform[5],      0, eps );
     
     delete [] adfGeoTransform;
 }
@@ -172,6 +177,52 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_geographic )
  */
 TEST( GDAL_Utilities, Compute_Geo_Transform_utm )
 {
-    FAIL();
+    
+    // EPS
+    const double eps = 0.01;
+
+    // Status
+    Status status;
+
+    // Create a set of coordinate pairs to test
+    std::vector<CRD::CoordinateUTM_d> coordinates;
+    std::vector<MATH::A_Point2d> pixels;
+
+    coordinates.push_back(CRD::CoordinateUTM_d(11, false, -119.7, 39.7));
+    pixels.push_back(MATH::A_Point2d(0,0));
+
+    coordinates.push_back(CRD::CoordinateUTM_d(11, false, -119.2, 39.7));
+    pixels.push_back(MATH::A_Point2d(750,0));
+    
+    coordinates.push_back(CRD::CoordinateUTM_d(11, false, -119.7, 39.2));
+    pixels.push_back(MATH::A_Point2d(0,1200));
+    
+    coordinates.push_back(CRD::CoordinateUTM_d(11, false, -119.2, 39.2));
+    pixels.push_back(MATH::A_Point2d(750,1200));
+    
+    // Compute the Geo Transform
+    double* adfGeoTransform = new double[6];
+    status = IO::GDAL::Compute_Geo_Transform( pixels, coordinates, adfGeoTransform );
+
+    // Check the results
+    ASSERT_EQ( status.Get_Status_Type(), StatusType::SUCCESS );
+    ASSERT_NEAR( adfGeoTransform[0], -119.7, eps );
+    ASSERT_NEAR( adfGeoTransform[1], 0.0007, eps );
+    ASSERT_NEAR( adfGeoTransform[2],      0, eps );
+    ASSERT_NEAR( adfGeoTransform[3],  39.69, eps );
+    ASSERT_NEAR( adfGeoTransform[4],      0, eps );
+    ASSERT_NEAR( adfGeoTransform[5],      0, eps );
+    
+    delete [] adfGeoTransform;
+
 }
 
+/**************************************************************/
+/*      Test the GDAL Process OGR from Metadata Method        */
+/**************************************************************/
+TEST( GDAL_Utilities, GDAL_Process_OGR_From_Metadata )
+{
+
+    FAIL();
+
+}
