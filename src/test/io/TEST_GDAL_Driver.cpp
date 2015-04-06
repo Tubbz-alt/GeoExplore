@@ -442,6 +442,8 @@ TEST( ImageDriverGDAL, Read_Image_rgb_u8_tif_test01 )
     ASSERT_EQ( image->Rows(), 515 );
     ASSERT_EQ( image->Cols(), 514 );
 
+
+
 }
 
 /**
@@ -469,13 +471,12 @@ TEST( ImageDriverGDAL, Read_Image_rgba_u8_tif_test01 )
     ASSERT_EQ( image->Rows(), 515 );
     ASSERT_EQ( image->Cols(), 514 );
 
-
 }
 
 
-/**
- * Test the Read Image Metadata Method.
- */
+/****************************************************/
+/*        Test the Read Image Metadata Method.      */
+/****************************************************/
 TEST( ImageDriverGDAL, Read_Image_Metadata_geotiff )
 {
     // Misc variables

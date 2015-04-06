@@ -80,6 +80,12 @@ class MetadataContainer : public MetadataContainerBase{
             return m_metadata_list;
         }
 
+
+        /**
+         * @brief Clear the Container.
+         */
+        void Clear();
+
     private:
         
         /// Metadata Container

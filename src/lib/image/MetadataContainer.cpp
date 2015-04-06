@@ -16,6 +16,15 @@ MetadataContainer::MetadataContainer(){
 
 }
 
+
+/*********************************************/
+/*              Clear the Container          */
+/*********************************************/
+void MetadataContainer::Clear()
+{
+    m_metadata_list.clear();
+}
+
 } /// End of IMG Namespace
 } /// End of GEO Namespace
 

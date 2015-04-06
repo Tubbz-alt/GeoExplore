@@ -10,9 +10,10 @@
 
 using namespace GEO;
 
-/**
- * TEst the Metadata Constructor
-*/
+
+/*******************************************/
+/*      Test the Metadata Constructor      */
+/*******************************************/
 TEST( MetadataContainer, Constructors )
 {
 
@@ -22,9 +23,9 @@ TEST( MetadataContainer, Constructors )
 
 }
    
-/**
- * Test the Add Metadata Entry Method
-*/
+/********************************************************/
+/*            Test the Add Metadata Entry Method        */
+/********************************************************/
 TEST( MetadataContainer, Add_Metadata_Entry )
 {
     // Create list
@@ -36,9 +37,28 @@ TEST( MetadataContainer, Add_Metadata_Entry )
 
 }
 
-/**
- * Test the Query Metadata Value
-*/
+/*******************************************/
+/*          Test the Clear Method          */
+/*******************************************/
+TEST( MetadataContainer, Clear )
+{
+    // Create list
+    IMG::MetadataContainer container;
+    
+    // Test 01 (Add string set)
+    container.Add_Metadata_Entry("CORNER_TL_X", "120");
+    container.Add_Metadata_Entry("CORNER_TL_Y", "130");
+    ASSERT_EQ( container.Get_Metadata_List().size(), 2 );
+    
+    container.Clear();
+    ASSERT_EQ( container.Get_Metadata_List().size(), 0 );
+
+
+}
+
+/********************************************************/
+/*             Test the Query Metadata Value            */
+/********************************************************/
 TEST( MetadataContainer, Query_Metadata_Value )
 {
     // Variables

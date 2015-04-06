@@ -725,9 +725,11 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                 // Build the OGR Spatial Reference Object
                 OGRSpatialReference oSRS;
                 double* adfGeoTransform = new double[6];
+                A_Size<int> image_size(Cols(), Rows());
                 bool use_srs = GDAL_Process_OGR_From_Metadata( image_metadata, 
+                                                               image_size,
                                                                oSRS, 
-                                                               adfGeoTransform );
+                                                               adfGeoTransform);
                 
                 // Set the Projection
                 if( use_srs == true ){
@@ -739,19 +741,11 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                     // Set the projection
                     dataset->SetProjection( pszSRS_WKT );
                     CPLFree( pszSRS_WKT );
+
+                    // Set the Transform
+                    dataset->SetGeoTransform( adfGeoTransform );
                 }
                 delete [] adfGeoTransform;
-
-                /*
-                poDstDS->SetGeoTransform( adfGeoTransform );
-
-            
-                oSRS.SetUTM( 11, TRUE );
-                oSRS.SetWellKnownGeogCS( "NAD27" );
-                oSRS.exportToWkt( &pszSRS_WKT );
-                poDstDS->SetProjection( pszSRS_WKT );
-                CPLFree( pszSRS_WKT );*/
-
 
             }
             

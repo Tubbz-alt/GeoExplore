@@ -78,11 +78,83 @@ Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string ){
 /*        Construct an OGR Spatial Reference from Image Metadata.         */
 /**************************************************************************/
 bool GDAL_Process_OGR_From_Metadata( IMG::MetadataContainer::ptr_t image_metadata,
+                                     A_Size<int>const&             image_size,
                                      OGRSpatialReference&          oSRS,
                                      double*&                      adfGeoTransform )
 {
+    // Temp Variables
+    Status status;
+    std::string value_str;
+    int zone, isNorth;
 
-    return false;
+    // If Metadata is null, then return false
+    if( image_metadata == nullptr ){
+        return false;
+    }
+
+    // Check if we are geographic
+    if( image_metadata->Query_Metadata("IS_GEOGRAPHIC", value_str) == true &&
+        value_str == "TRUE" )
+    {
+    }
+
+    // Check if we are projected
+    else if( image_metadata->Query_Metadata("IS_PROJECTED", value_str) == true &&
+        value_str == "TRUE" )
+    {
+        // Check if UTM
+        if( image_metadata->Query_Metadata("IS_UTM", value_str) == true &&
+            value_str == "TRUE" )
+        {
+            // Get zone
+            if( image_metadata->Query_Metadata("UTM_ZONE", zone) == true &&
+                image_metadata->Query_Metadata("UTM_IS_NORTHERN", value_str) == true )
+            {
+                // Set the zone
+                if( value_str == "TRUE" || value_str == "true" ){ isNorth = true; }
+                else{ isNorth = false; }
+                
+                oSRS.SetUTM( zone, isNorth);
+            }
+
+        }
+
+    }
+    
+    // Otherwise, error
+    else{
+        return false;
+    }
+    
+    // Set the Geog CS
+    oSRS.SetWellKnownGeogCS( "WGS84" );
+    
+    // Find the corners
+    double tl_x, tl_y, tr_x, tr_y, bl_x, bl_y, br_x, br_y;
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_TL_X", tl_x) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_TL_Y", tl_y) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_TR_X", tr_x) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_TR_Y", tr_y) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_BL_X", bl_x) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_BL_Y", bl_y) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_BR_X", br_x) == false ){ return false; }
+    if( image_metadata->Query_Metadata("CORNER_COORDINATE_BR_Y", br_y) == false ){ return false; }
+
+    // Compute the ADF Geo Transform
+    int w = image_size.Width();
+    int h = image_size.Height();
+    std::vector<MATH::A_Point2d> pixels, coordinates;
+    pixels.push_back(MATH::A_Point2d(0,0));  coordinates.push_back( MATH::A_Point2d(tl_x, tl_y));
+    pixels.push_back(MATH::A_Point2d(w,0));  coordinates.push_back( MATH::A_Point2d(tr_x, tr_y));
+    pixels.push_back(MATH::A_Point2d(0,h));  coordinates.push_back( MATH::A_Point2d(bl_x, bl_y));
+    pixels.push_back(MATH::A_Point2d(w,h));  coordinates.push_back( MATH::A_Point2d(br_x, br_y));
+
+    // Construct the ADF Geo Transform
+    status = Compute_Geo_Transform( pixels, coordinates, adfGeoTransform );
+    if( status.Get_Status_Type() != StatusType::SUCCESS ){ return false; }
+
+    // Return Success
+    return true;
 }
 
 

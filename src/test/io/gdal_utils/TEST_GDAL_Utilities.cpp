@@ -222,7 +222,61 @@ TEST( GDAL_Utilities, Compute_Geo_Transform_utm )
 /**************************************************************/
 TEST( GDAL_Utilities, GDAL_Process_OGR_From_Metadata )
 {
+    // EPS
+    const double eps = 0.01;
+    
+    // Misc Variables
+    int zone, isNorth;
+    double* adfGeoTransform = new double[6];
+    IMG::MetadataContainer::ptr_t metadata(new IMG::MetadataContainer());
+    OGRSpatialReference oSRS;
+    A_Size<int> image_size(100,100);
 
-    FAIL();
+    // TEST 01 (Run method on null metadata container)
+    ASSERT_FALSE( IO::GDAL::GDAL_Process_OGR_From_Metadata( nullptr,
+                                                            image_size,
+                                                            oSRS,
+                                                            adfGeoTransform ));
+
+    // TEST 02 (Empty Metadata Container )
+    ASSERT_FALSE( IO::GDAL::GDAL_Process_OGR_From_Metadata( metadata,
+                                                            image_size,
+                                                            oSRS,
+                                                            adfGeoTransform ));
+
+    // TEST 03 (4 corners, UTM)
+    // 11, true, 384409, 4048901
+    metadata->Clear();
+    metadata->Add_Metadata_Entry("IS_PROJECTED", "TRUE");
+    metadata->Add_Metadata_Entry("IS_UTM", "TRUE");
+    metadata->Add_Metadata_Entry("UTM_ZONE", 11);
+    metadata->Add_Metadata_Entry("UTM_IS_NORTHERN", "TRUE" );
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_X", 384409);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_Y", 4048901);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_X", 384459);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_Y", 4048901);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_X", 384409);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_Y", 4048801);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_X", 384459);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_Y", 4048801);
+    ASSERT_TRUE( IO::GDAL::GDAL_Process_OGR_From_Metadata( metadata,
+                                                           image_size,
+                                                           oSRS,
+                                                           adfGeoTransform ));
+    
+    ASSERT_EQ( oSRS.GetUTMZone(&isNorth), 11);
+    ASSERT_EQ( isNorth, 1);
+    ASSERT_NEAR( adfGeoTransform[0], 384409, eps );
+    ASSERT_NEAR( adfGeoTransform[1], 0.49999999999954525, eps );
+    ASSERT_NEAR( adfGeoTransform[2], 0, eps );
+    ASSERT_NEAR( adfGeoTransform[3], 4048901, eps );
+    ASSERT_NEAR( adfGeoTransform[4], 0, eps );
+    ASSERT_NEAR( adfGeoTransform[5], -0.99999999998544808, eps );
+
+
+    // Clean up
+    delete [] adfGeoTransform;
 
 }
+
+

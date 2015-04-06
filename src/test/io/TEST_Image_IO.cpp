@@ -61,9 +61,28 @@ TEST( Image_IO, Write_Image_tif_rgb_u8_test_01 ){
     // Define the output path
     FS::FilesystemPath output_path("imageio-output-test.tif");
 
+    // Build the image metadata
+    IMG::MetadataContainer::ptr_t metadata(new IMG::MetadataContainer());
+    metadata->Clear();
+    metadata->Add_Metadata_Entry("IS_PROJECTED", "TRUE");
+    metadata->Add_Metadata_Entry("IS_UTM", "TRUE");
+    metadata->Add_Metadata_Entry("UTM_ZONE", 11);
+    metadata->Add_Metadata_Entry("UTM_IS_NORTHERN", "TRUE" );
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_X", 384409);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TL_Y", 4048901);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_X", 384459);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_TR_Y", 4048901);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_X", 384409);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BL_Y", 4048801);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_X", 384459);
+    metadata->Add_Metadata_Entry("CORNER_COORDINATE_BR_Y", 4048801);
+
+    
     // Write Image
     IO::Write_Image( image, output_path );
     ASSERT_TRUE( output_path.Exists() );
+    std::cout << "Image Written" << std::endl;
+    std::cin.get();
 
     // Check image information
     IMG::Image<IMG::PixelRGB_u8> result_image;

@@ -16,6 +16,7 @@
 
 // GeoExplore Libraries
 #include "../../coordinate/CoordinateUTM.hpp"
+#include "../../core/A_Size.hpp"
 #include "../../core/Enumerations.hpp"
 #include "../../filesystem.hpp"
 #include "../../image/ChannelType.hpp"
@@ -84,13 +85,15 @@ Datum GDAL_Datum_String_To_DatumType( std::string const& datum_string );
 /**
  * @brief Construct an OGR Spatial Reference from Image Metadata.
  *
- * @param[in] image_metadata
+ * @param[in] image_metadata Metadata container.
+ * @param[in] image_size Image size in pixels.
  * @param[out] oSRS OGR Spatial Reference object.
  * @param[out] adfGeoTransform GDAL Transform.
  *
  * @return True if we should use it, false otherwise.
  */
 bool GDAL_Process_OGR_From_Metadata( IMG::MetadataContainer::ptr_t image_metadata,
+                                     A_Size<int>const&             image_size,
                                      OGRSpatialReference&          oSRS,
                                      double*&                      adfGeoTransform );
 
