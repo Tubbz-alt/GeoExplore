@@ -418,7 +418,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
                     band->RasterIO( GF_Read, 0, r, xsize, 1, pafScanline, xsize, 1, GDT_Float32, 0, 0);
 
                     //add data to vector
-                    for( size_t c=0; c<xsize; c++ ){
+                    for( int c=0; c<xsize; c++ ){
                         
                         /// Convert datatypes
                         if( gdalDataType == GDT_Byte ){
@@ -753,7 +753,7 @@ class ImageDriverGDAL : public ImageDriverBase<ResourceType>{
             uint8_t* temp_buffer = new uint8_t[output_image.Cols()];
 
             // iterate over each channel
-            for( size_t i=0; i<output_image.Channels(); i++ ){
+            for( int i=0; i<output_image.Channels(); i++ ){
     
                 // Fetch the raster band
                 GDALRasterBand* band = dataset->GetRasterBand(i+1);

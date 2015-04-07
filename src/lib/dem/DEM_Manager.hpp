@@ -65,7 +65,7 @@ class DEM_Manager{
             CRD::CoordinateGeographic_d max_corner_geographic = CRD::convert_coordinate<CRD::CoordinateGeographic_d>( max_corner );
 
             // Iterate over drivers
-            for( int didx=0; didx<m_drivers.size(); didx++ ){
+            for( size_t didx=0; didx<m_drivers.size(); didx++ ){
 
                 // Check if driver has coverage
                 if( m_drivers[didx]->Coverage( min_corner_geographic, 

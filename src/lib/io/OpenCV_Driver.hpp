@@ -349,8 +349,8 @@ class ImageDriverOpenCV : public ImageDriverBase<ResourceType>
             cv::Mat_<cv::Vec3b> image( output_image.Rows(), output_image.Cols());
     
             // start loading the output image
-            for( size_t y=0; y<output_image.Rows(); y++ )
-            for( size_t x=0; x<output_image.Cols(); x++ ){
+            for( int y=0; y<output_image.Rows(); y++ )
+            for( int x=0; x<output_image.Cols(); x++ ){
                 Pixel2OpenCVType<IMG::PixelRGB_u8>::Pix2CV( IMG::pixel_cast<IMG::PixelRGB_u8>( output_image(y,x)), 
                                                                                                image(y,x) );
             }

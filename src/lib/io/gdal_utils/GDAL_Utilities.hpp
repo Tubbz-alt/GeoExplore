@@ -120,7 +120,7 @@ Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordin
 
     // Create the input matrix
     MATH::A_Matrix input_matrix(input_coordinates.size(), 3);
-    for( int i=0; i<input_coordinates.size(); i++ ){
+    for( int i=0; i<(int)input_coordinates.size(); i++ ){
         input_matrix(i,0) = input_coordinates[i].x();
         input_matrix(i,1) = input_coordinates[i].y();
         input_matrix(i,2) = 1;
@@ -130,7 +130,7 @@ Status  Compute_Geo_Transform( std::vector<MATH::A_Point2d> const& input_coordin
     // Create output matrices
     MATH::A_Matrix output_x(output_coordinates.size(),1);
     MATH::A_Matrix output_y(output_coordinates.size(),1);
-    for( int i=0; i<output_coordinates.size(); i++ ){
+    for( int i=0; i<(int)output_coordinates.size(); i++ ){
         output_x(i,0) = output_coordinates[i].x();
         output_y(i,0) = output_coordinates[i].y();
     }

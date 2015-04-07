@@ -103,3 +103,9 @@ To run unit tests, run the script
 
 To see examples of using GeoExplore binaries, see the items in scripts.
 
+
+## Ubuntu Packages ##
+* __libgdal-dev__
+* __libopencv-dev__
+* __libboost-all-dev__
+

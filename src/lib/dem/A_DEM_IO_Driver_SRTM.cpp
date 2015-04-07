@@ -95,7 +95,7 @@ Status A_DEM_IO_Driver_SRTM::Initialize(){
             
             // Get list of files
             std::vector<FS::FilesystemPath> pathlist = m_srtm_pathnames[i].Get_Contents(".*\\.hgt", true, FS::PathFormatType::ABSOLUTE);
-            for( int pidx=0; pidx<pathlist.size(); pidx++ ){
+            for( int pidx=0; pidx<(int)pathlist.size(); pidx++ ){
                 Check_And_Add_SRTM_File( pathlist[pidx] );
             }
 
