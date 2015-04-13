@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/math/A_Matrix_Eigen.hpp"
+#include <GeoExplore/math/A_Matrix_Eigen.hpp>
 
 using namespace GEO;
 

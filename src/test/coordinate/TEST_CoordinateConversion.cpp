@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/coordinate/CoordinateConversion.hpp"
+#include <GeoExplore/coordinate/CoordinateConversion.hpp>
 #include "../Unit_Testing_Only/Coordinate_Test_Harness.hpp"
 
 using namespace GEO;

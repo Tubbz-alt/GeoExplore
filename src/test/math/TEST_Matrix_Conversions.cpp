@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/math/Matrix_Conversions.hpp"
+#include <GeoExplore/math/Matrix_Conversions.hpp>
 
 using namespace GEO;
 

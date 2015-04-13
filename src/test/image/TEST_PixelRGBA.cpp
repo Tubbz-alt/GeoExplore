@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/image/PixelRGBA.hpp"
+#include <GeoExplore/image/PixelRGBA.hpp>
 
 using namespace GEO;
 

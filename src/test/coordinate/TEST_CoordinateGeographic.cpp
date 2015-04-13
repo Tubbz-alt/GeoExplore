@@ -6,8 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/core/Enumerations.hpp"
-#include "../../lib/coordinate/CoordinateGeographic.hpp"
+#include <GeoExplore/core/Enumerations.hpp>
+#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
 
 
 using namespace GEO;
@@ -104,4 +104,38 @@ TEST( CoordinateGeographic, Subtraction_Operator ){
     ASSERT_EQ( coordinate03.datum(), Datum::WGS84 );
 }
 
+/**
+ * Test the Vincenty Distance
+ */
+TEST( CoordinateGeographic, Distance_Vincenty )
+{
+    // EPS 
+    const double eps = 0.001;
+
+    // TEST 01 - Same Coordinate
+    CRD::CoordinateGeographic_d coordinate01( 39.53699, -119.814475, 9000 );
+    CRD::CoordinateGeographic_d coordinate02( 39.53699, -119.814475, 9000 );
+    double dist01 = CRD::CoordinateGeographic_d::Distance_Vincenty( coordinate01, coordinate02 );
+
+    const double exp_dist01 = 0;
+    ASSERT_NEAR( dist01, exp_dist01, eps );
+
+    // TEST 02 - Same Coordinate, different elevations
+    CRD::CoordinateGeographic_d coordinate03( 39.53699, -119.814475, 9000 );
+    CRD::CoordinateGeographic_d coordinate04( 39.53699, -119.814475, 8000 );
+    double dist02 = CRD::CoordinateGeographic_d::Distance_Vincenty( coordinate03, coordinate04 );
+
+    const double exp_dist02 = 1000;
+    ASSERT_NEAR( dist02, exp_dist02, eps );
+
+
+    // TEST 03 - Different Coordinates
+    CRD::CoordinateGeographic_d coordinate05( 39.53699, -119.814475, 9000 );
+    CRD::CoordinateGeographic_d coordinate06( 39.404099, -119.746498, 9000 );
+    double dist03 = CRD::CoordinateGeographic_d::Distance_Vincenty( coordinate05, coordinate06 );
+
+    const double exp_dist03 = 15871.374;
+    ASSERT_NEAR( dist03, exp_dist03, eps );
+
+}
 

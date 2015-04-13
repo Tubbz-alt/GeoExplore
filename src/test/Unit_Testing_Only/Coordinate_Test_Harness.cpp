@@ -9,7 +9,7 @@
 #include <iostream>
 
 // GeoExplore Libraries
-#include "../../lib/thirdparty/pugixml/pugixml.hpp"
+#include <GeoExplore/thirdparty/pugixml/pugixml.hpp>
 
 using namespace GEO;
 

@@ -9,10 +9,10 @@
 #include <iostream>
 
 // GeoExplore Libraries
-#include "../../../lib/image/MemoryResource.hpp"
-#include "../../../lib/image/Pixel_Types.hpp"
-#include "../../../lib/image/transforms/ImageTransformInvert.hpp"
-#include "../../../lib/io/opencv_utils/OpenCV_Utilities.hpp"
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
+#include <GeoExplore/image/transforms/ImageTransformInvert.hpp>
+#include <GeoExplore/io/opencv_utils/OpenCV_Utilities.hpp>
 
 
 using namespace GEO;

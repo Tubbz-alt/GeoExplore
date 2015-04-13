@@ -9,34 +9,31 @@
 #define __GEOEXPLORE_HPP__
 
 /// Config Module
-#include "config.hpp"
+#include "GeoExplore/config.hpp"
 
 /// Core Module
-#include "core.hpp"
+#include "GeoExplore/core.hpp"
 
 /// Coordinate Module
-#include "coordinate/CoordinateBase.hpp"
-#include "coordinate/CoordinateConversion.hpp"
-#include "coordinate/CoordinateGeographic.hpp"
-#include "coordinate/CoordinateUTM.hpp"
+#include "GeoExplore/coordinate.hpp"
 
 /// Dem Module
-#include "dem.hpp"
+#include "GeoExplore/dem.hpp"
 
 // Filesystem Module
-#include "filesystem.hpp"
+#include "GeoExplore/filesystem.hpp"
 
 /// Image Module
-#include "image.hpp"
+#include "GeoExplore/image.hpp"
 
 /// IO Module
-#include "io.hpp"
+#include "GeoExplore/io.hpp"
 
 /// Math Module
-#include "math.hpp"
+#include "GeoExplore/math.hpp"
 
 /// Utility Module
-#include "utilities.hpp"
+#include "GeoExplore/utilities.hpp"
 
 
 #endif

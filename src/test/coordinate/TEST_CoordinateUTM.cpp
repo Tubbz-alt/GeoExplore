@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/coordinate/CoordinateUTM.hpp"
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
 
 using namespace GEO;
 

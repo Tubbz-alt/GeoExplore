@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore
-#include "../../lib/core/A_Status.hpp"
+#include <GeoExplore/core/A_Status.hpp>
 
 using namespace GEO;
 

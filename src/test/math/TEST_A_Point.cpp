@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/math/A_Point.hpp"
+#include <GeoExplore/math/A_Point.hpp>
 
 using namespace GEO;
 

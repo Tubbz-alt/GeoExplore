@@ -6,10 +6,10 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <coordinate/CoordinateGeographic.hpp>
-#include <coordinate/CoordinateUTM.hpp>
-#include <image/ChannelType.hpp>
-#include <io/gdal_utils/GDAL_Utilities.hpp>
+#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/image/ChannelType.hpp>
+#include <GeoExplore/io/gdal_utils/GDAL_Utilities.hpp>
 
 using namespace GEO;
 

@@ -203,31 +203,31 @@ copy_headers(){
 
     #  Copy Core Module
     mkdir -p $BASE_DIR/core
-    cp -p src/lib/core/*.hpp        $BASE_DIR/core/
+    cp -p src/lib/GeoExplore/GeoExplore/core/*.hpp        $BASE_DIR/GeoExplore/core
 
     #  Copy Coordinate Module
     mkdir -p $BASE_DIR/coordinate
-    cp -p src/lib/coordinate/*.hpp  $BASE_DIR/coordinate/
+    cp -p src/lib/GeoExplore/coordinate/*.hpp  $BASE_DIR/GeoExplore/coordinate/
 
     #  Copy Dem Module
     mkdir -p $BASE_DIR/dem      
-    cp -p src/lib/dem/*.hpp         $BASE_DIR/dem/
+    cp -p src/lib/GeoExplore/dem/*.hpp         $BASE_DIR/GeoExplore/dem/
 
     #  Copy Image Module
     mkdir -p $BASE_DIR/image      
-    cp -p src/lib/image/*.hpp       $BASE_DIR/image/
+    cp -p src/lib/GeoExplore/image/*.hpp       $BASE_DIR/GeoExplore/image/
     
     #  Copy IO Module
     mkdir -p $BASE_DIR/io
-    cp -p src/lib/io/*.hpp          $BASE_DIR/io/
+    cp -p src/lib/GeoExplore/io/*.hpp          $BASE_DIR/GeoExplore/io/
 
     #  Copy Math Module
     mkdir -p $BASE_DIR/math
-    cp -p src/lib/math/*.hpp        $BASE_DIR/math
+    cp -p src/lib/GeoExplore/math/*.hpp        $BASE_DIR/GeoExplore/math
 
     #  Copy Utilities Module
     mkdir -p $BASE_DIR/utilities
-    cp -p src/cpp/utilities/*.hpp   $BASE_DIR/utilities/
+    cp -p src/lib/GeoExplore/utilities/*.hpp   $BASE_DIR/GeoExplore/utilities/
 
 }
 

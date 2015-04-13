@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <io/OGR_Driver.hpp>
+#include <GeoExplore/io/OGR_Driver.hpp>
 
 using namespace GEO;
 

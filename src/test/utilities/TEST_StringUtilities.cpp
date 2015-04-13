@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <utilities/StringUtilities.hpp>
+#include <GeoExplore/utilities/StringUtilities.hpp>
 
 using namespace GEO;
 

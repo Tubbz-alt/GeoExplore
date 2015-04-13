@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/image/ChannelType.hpp"
+#include <GeoExplore/image/ChannelType.hpp>
 
 using namespace GEO;
 

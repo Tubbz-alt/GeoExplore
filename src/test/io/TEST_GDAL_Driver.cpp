@@ -6,13 +6,13 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../lib/coordinate/CoordinateGeographic.hpp"
-#include "../lib/coordinate/CoordinateUTM.hpp"
-#include "../lib/image/DiskResource.hpp"
-#include "../lib/image/MemoryResource.hpp"
-#include "../lib/image/Pixel_Types.hpp"
-#include "../lib/io/GDAL_Driver.hpp"
-#include "../lib/io/OpenCV_Driver.hpp"
+#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/image/DiskResource.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
+#include <GeoExplore/io/GDAL_Driver.hpp>
+#include <GeoExplore/io/OpenCV_Driver.hpp>
 
 using namespace GEO;
 

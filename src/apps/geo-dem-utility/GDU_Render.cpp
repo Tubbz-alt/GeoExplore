@@ -6,10 +6,10 @@
 #include "GDU_Render.hpp"
 
 /// GeoExplore Libraries
-#include <image/Image.hpp>
-#include <image/MemoryResource.hpp>
-#include <image/Pixel_Types.hpp>
-#include <image/transforms.hpp>
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
+#include <GeoExplore/image/transforms.hpp>
 
 /**
  * Render the terrain

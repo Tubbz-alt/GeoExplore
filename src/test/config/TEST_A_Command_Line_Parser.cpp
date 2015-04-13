@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/config/A_Command_Line_Parser.hpp"
+#include <GeoExplore/config/A_Command_Line_Parser.hpp>
 
 using namespace GEO;
 

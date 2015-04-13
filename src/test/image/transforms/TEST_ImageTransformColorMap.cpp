@@ -6,12 +6,12 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../../lib/math/A_Point.hpp"
-#include "../../../lib/image/Image.hpp"
-#include "../../../lib/image/MemoryResource.hpp"
-#include "../../../lib/image/Pixel_Types.hpp"
-#include "../../../lib/image/transforms/ImageTransformColorMap.hpp"
-#include "../../../lib/io/opencv_utils/OpenCV_Utilities.hpp"
+#include <GeoExplore/math/A_Point.hpp>
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
+#include <GeoExplore/image/transforms/ImageTransformColorMap.hpp>
+#include <GeoExplore/io/opencv_utils/OpenCV_Utilities.hpp>
 
 
 using namespace GEO;

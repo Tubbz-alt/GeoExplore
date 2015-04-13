@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <filesystem/PathFormatType.hpp>
+#include <GeoExplore/filesystem/PathFormatType.hpp>
 
 using namespace GEO;
 

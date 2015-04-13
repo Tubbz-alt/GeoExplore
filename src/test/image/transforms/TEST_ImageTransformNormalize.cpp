@@ -6,9 +6,9 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../../lib/image/PixelCast.hpp"
-#include "../../../lib/image/Pixel_Types.hpp"
-#include "../../../lib/image/transforms/ImageTransformNormalize.hpp"
+#include <GeoExplore/image/PixelCast.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
+#include <GeoExplore/image/transforms/ImageTransformNormalize.hpp>
 
 using namespace GEO;
 

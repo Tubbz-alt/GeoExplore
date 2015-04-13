@@ -23,7 +23,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 // GeoExplore Libraries
-#include "../../../lib/core.hpp"
+#include <GeoExplore/core.hpp>
 
 // Render Utility Libraries
 #include "../core/Configuration_Options.hpp"

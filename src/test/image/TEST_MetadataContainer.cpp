@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <image/MetadataContainer.hpp>
+#include <GeoExplore/image/MetadataContainer.hpp>
 
 using namespace GEO;
 

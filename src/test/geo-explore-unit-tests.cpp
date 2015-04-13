@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../lib/core/A_Status.hpp"
+#include <GeoExplore/core/A_Status.hpp>
 
 // Unit Test Libraries
 #include "Unit_Testing_Only/Coordinate_Test_Harness.hpp"

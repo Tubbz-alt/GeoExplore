@@ -10,8 +10,8 @@
 #include <iostream>
 
 // GeoExplore Libraries
-#include <filesystem/FilesystemPath.hpp>
-#include <utilities.hpp>
+#include <GeoExplore/filesystem/FilesystemPath.hpp>
+#include <GeoExplore/utilities.hpp>
 
 // Boost Libraries
 #include <boost/filesystem.hpp>

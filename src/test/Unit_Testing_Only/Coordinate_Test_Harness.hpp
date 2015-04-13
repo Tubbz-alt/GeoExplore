@@ -13,10 +13,10 @@
 #include <memory>
 
 // GeoExplore Libraries
-#include "../../lib/coordinate/CoordinateGeographic.hpp"
-#include "../../lib/coordinate/CoordinateUTM.hpp"
-#include "../../lib/core/A_Status.hpp"
-#include "../../lib/core/Enumerations.hpp"
+#include <GeoExplore/coordinate/CoordinateGeographic.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/core/A_Status.hpp>
+#include <GeoExplore/core/Enumerations.hpp>
 
 /**
  * @class Coordinate_Test_Set

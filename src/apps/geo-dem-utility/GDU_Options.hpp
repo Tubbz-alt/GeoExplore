@@ -13,7 +13,7 @@
 #include <GeoExplore.hpp>
 
 // PugiXML
-#include <thirdparty/pugixml/pugixml.hpp>
+#include <GeoExplore/thirdparty/pugixml/pugixml.hpp>
 
 using namespace GEO;
 

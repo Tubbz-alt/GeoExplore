@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/image/PixelGray.hpp"
+#include <GeoExplore/image/PixelGray.hpp>
 
 using namespace GEO;
 

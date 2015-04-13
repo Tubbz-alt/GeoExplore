@@ -6,10 +6,10 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <core/A_Size.hpp>
-#include <image/Interpolation.hpp>
-#include <image/MemoryResource.hpp>
-#include <image/Pixel_Types.hpp>
+#include <GeoExplore/core/A_Size.hpp>
+#include <GeoExplore/image/Interpolation.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
 
 
 using namespace GEO;

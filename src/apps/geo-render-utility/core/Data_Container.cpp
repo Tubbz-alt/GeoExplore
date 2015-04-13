@@ -9,10 +9,10 @@
 #include <cstdlib>
 
 // GeoExplore Libraries
-#include <coordinate/CoordinateUTM.hpp>
-#include <image/Image_Utilities.hpp>
-#include <image/transforms/ImageTransformColorMap.hpp>
-#include <io/opencv_utils/OpenCV_Utilities.hpp>
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/image/Image_Utilities.hpp>
+#include <GeoExplore/image/transforms/ImageTransformColorMap.hpp>
+#include <GeoExplore/io/opencv_utils/OpenCV_Utilities.hpp>
 
 
 /******************************************/

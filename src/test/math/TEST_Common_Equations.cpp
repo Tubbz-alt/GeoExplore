@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/math/Common_Equations.hpp"
+#include <GeoExplore/math/Common_Equations.hpp>
 
 using namespace GEO;
 

@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <dem/SRTM_Utilities.hpp>
+#include <GeoExplore/dem/SRTM_Utilities.hpp>
 
 using namespace GEO;
 

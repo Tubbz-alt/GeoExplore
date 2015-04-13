@@ -13,12 +13,12 @@
 #include <string>
 
 // Pugixml
-#include "../../../lib/thirdparty/pugixml/pugixml.hpp"
+#include <GeoExplore/thirdparty/pugixml/pugixml.hpp>
 
 // GeoExplore
-#include <coordinate/CoordinateUTM.hpp>
-#include "../../../lib/core.hpp"
-#include "../../../lib/dem/A_DEM_IO_Driver_SRTM.hpp"
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/core.hpp>
+#include <GeoExplore/dem/A_DEM_IO_Driver_SRTM.hpp>
 
 using namespace GEO;
 

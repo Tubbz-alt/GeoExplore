@@ -10,7 +10,7 @@
 #include <boost/filesystem.hpp>
 
 // GeoExplore Libraries
-#include "../../lib/thirdparty/pugixml/pugixml.hpp"
+#include <GeoExplore/thirdparty/pugixml/pugixml.hpp>
 #include <GeoExplore.hpp>
 
 /**

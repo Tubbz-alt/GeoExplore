@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // Filesystem Utilities
-#include "../../lib/utilities/FilesystemUtilities.hpp"
+#include <GeoExplore/utilities/FilesystemUtilities.hpp>
 
 using namespace GEO;
 

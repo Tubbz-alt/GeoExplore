@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/dem/DEM_IO_Driver_Types.hpp"
+#include <GeoExplore/dem/DEM_IO_Driver_Types.hpp>
 
 using namespace GEO;
 

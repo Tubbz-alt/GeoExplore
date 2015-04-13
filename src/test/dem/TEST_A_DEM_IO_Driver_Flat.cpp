@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <dem/A_DEM_IO_Driver_Flat.hpp>
+#include <GeoExplore/dem/A_DEM_IO_Driver_Flat.hpp>
 
 using namespace GEO;
 

@@ -6,9 +6,9 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/image/Image.hpp"
-#include "../../lib/image/MemoryResource.hpp"
-#include "../../lib/image/Pixel_Types.hpp"
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/MemoryResource.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
 
 using namespace GEO;
 

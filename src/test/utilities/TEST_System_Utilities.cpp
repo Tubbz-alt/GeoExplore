@@ -6,8 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include <utilities/StringUtilities.hpp>
-#include <utilities/System_Utilities.hpp>
+#include <GeoExplore/utilities/StringUtilities.hpp>
+#include <GeoExplore/utilities/System_Utilities.hpp>
 
 using namespace GEO;
 

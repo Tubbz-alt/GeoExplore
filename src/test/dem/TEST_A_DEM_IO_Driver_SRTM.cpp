@@ -6,8 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Library
-#include "../../lib/dem/A_DEM_IO_Driver_SRTM.hpp"
-#include "../../lib/image/Image_Utilities.hpp"
+#include <GeoExplore/dem/A_DEM_IO_Driver_SRTM.hpp>
+#include <GeoExplore/image/Image_Utilities.hpp>
 
 using namespace GEO;
 

@@ -6,8 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/math/A_Point.hpp"
-#include "../../lib/math/A_Rectangle.hpp"
+#include <GeoExplore/math/A_Point.hpp>
+#include <GeoExplore/math/A_Rectangle.hpp>
 
 using namespace GEO;
 

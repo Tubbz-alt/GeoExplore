@@ -6,8 +6,8 @@
 #include <gtest/gtest.h>
 
 // GeoExplore Libraries
-#include "../../lib/coordinate/CoordinateUTM.hpp"
-#include "../../lib/dem/An_Elevation_Tile.hpp"
+#include <GeoExplore/coordinate/CoordinateUTM.hpp>
+#include <GeoExplore/dem/An_Elevation_Tile.hpp>
 
 using namespace GEO;
 

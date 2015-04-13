@@ -7,9 +7,9 @@
 #define __GEOEXPLORE_APP_GEO_RENDER_DATA_CONTAINER_HPP__
 
 // GeoExplore Libraries
-#include "../../../lib/dem/DEM_Manager.hpp"
-#include "../../../lib/image/Image.hpp"
-#include "../../../lib/image/Pixel_Types.hpp"
+#include <GeoExplore/dem/DEM_Manager.hpp>
+#include <GeoExplore/image/Image.hpp>
+#include <GeoExplore/image/Pixel_Types.hpp>
 
 // Render Utility Libraries
 #include "Configuration_Options.hpp"
